@@ -15,11 +15,11 @@ int point_to_sphere (float p[3],
                   c[1] - p[1],
                   c[2] - p[2] };
 
-   float A = linalg::norm_squared (u, 3);
+   float A = linalg::norm_squared<float> (u, 3);
 
-   float B = -2.0f * linalg::summation (a, 3);
+   float B = -2.0f * linalg::summation<float> (a, 3);
 
-   float C = linalg::norm_squared (a, 3);
+   float C = linalg::norm_squared<float> (a, 3);
 
    float discriminant = B * B - 4.0f * A * C;
 
