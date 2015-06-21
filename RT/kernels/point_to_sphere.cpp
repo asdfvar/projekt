@@ -6,9 +6,9 @@ namespace geo {
 /*
  * Function NAME: point_to_sphere
  */
-int point_to_sphere (float *p,
-                     float *u,
-                     float *c,
+int point_to_sphere (float p[3],
+                     float u[3],
+                     float c[3],
                      float *v)
 {
    float a[3] = { c[0] - p[0],
