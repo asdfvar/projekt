@@ -12,6 +12,14 @@ namespace geometry {
  * returns the point 'v' where the vector first intersects
  * the circle.
  *
+ * The algorithm is derived as follows:
+ * d(c, v) = Radius
+ * where v = p + u*t
+ * and d( ) is the euclidean distance
+ *
+ * Then squaring both sides and solving for t, v
+ * can now be determined.
+ *
  * [I ] p - Starting point of the vector
  * [I ] u - Direction of the vector
  * [I ] c - Center of the circle

@@ -1,27 +1,21 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-class shape
+#include "ray.h"
+
+/*
+ * Class NAME: Shape
+ */
+
+class Shape
 {
 
    public:
 
-      shape( float center[3] );
-      ~shape (void);
+      Shape( float center[3] );
+      ~Shape (void);
 
       float center[3];
-
-};
-
-class sphere : public shape
-{
-
-   public:
-
-      sphere( float center[3],
-              float radius );
-
-      float radius;
 
 };
 
