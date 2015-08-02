@@ -5,6 +5,8 @@ class Ray
 {
    public:
 
+      Ray (void);
+
       Ray (float position[3],
            float direction[3],
            float intensity[3]);

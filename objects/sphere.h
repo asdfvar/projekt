@@ -18,7 +18,9 @@ class Sphere : public Shape
 
       float radius;
 
-      bool intersect( Ray );
+      bool intersect( Ray    incomming_ray,
+                      Ray   *new_ray,
+                      float *distance );
 
 };
 

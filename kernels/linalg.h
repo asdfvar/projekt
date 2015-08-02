@@ -78,11 +78,25 @@ namespace linalg
       }
    }
  
+   /*
+   ** Function NAME: cross_product
+   ** c = a x b
+   */
+
+   template <class T>
+   void cross_product (T *c,
+                       T *a,
+                       T *b)
+   {
+      c[0] = a[1]*b[2] - a[2]*b[1];
+      c[1] = a[2]*b[0] - a[0]*b[2];
+      c[2] = a[0]*b[1] - a[1]*b[0];
+   }
  
   /*
    * Function NAME: project
    *
-   * Project b onto a
+   * c = Project b onto a
    */
    template <class T>
    void project (T   *a,
@@ -103,6 +117,24 @@ namespace linalg
       {
          c[k] *= mag;
       }
+   }
+
+   /*
+   ** Function NAME: reflect
+   **
+   ** reflected = reflection of u off of normal
+   */
+
+   template <class T>
+   void reflect (T *u,
+                 T *normal,
+                 T *reflected,
+                 int N)
+   {
+      T two = (T)2;
+      project<T> (normal, u, reflected);
+      for (int k = 0; k < N; k++) reflected[k] *= two;
+      for (int k = 0; k < N; k++) reflected[k] = u[k] - reflected[k];
    }
  
 }

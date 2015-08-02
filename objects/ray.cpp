@@ -1,5 +1,12 @@
 #include "ray.h"
 
+Ray::Ray( void )
+{
+   for (int k = 0; k < 3; k++) position[k]  = 0.0f;
+   for (int k = 0; k < 3; k++) direction[k] = 0.0f;
+   for (int k = 0; k < 3; k++) intensity[k] = 0.0f;
+}
+
 Ray::Ray( float position_in[3],
           float direction_in[3],
           float intensity_in[3])

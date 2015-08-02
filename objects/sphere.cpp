@@ -12,16 +12,18 @@ Sphere::Sphere ( float center_in[3],
    radius = radius_in;
 }
 
-bool Sphere::intersect (Ray ray)
+bool Sphere::intersect (Ray    incomming_ray,
+                        Ray   *new_ray,
+                        float *distance)
 {
 
-   float p[3] = {ray.get_position(0),
-                 ray.get_position(1),
-                 ray.get_position(2)};
+   float p[3] = {incomming_ray.get_position(0),
+                 incomming_ray.get_position(1),
+                 incomming_ray.get_position(2)};
 
-   float u[3] = {ray.get_direction(0),
-                 ray.get_direction(1),
-                 ray.get_direction(2)};
+   float u[3] = {incomming_ray.get_direction(0),
+                 incomming_ray.get_direction(1),
+                 incomming_ray.get_direction(2)};
 
    bool intersection = geometry::intersect_sphere (
                                   p,
