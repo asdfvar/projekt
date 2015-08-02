@@ -2,7 +2,7 @@ CPPC = g++
 CL = ar rcs
 FLAGS = -O3 -Wall
 
-BASE = ../..
+BASE = ..
 KERNELS = $(BASE)/kernels
 
 INC = -I$(KERNELS)
