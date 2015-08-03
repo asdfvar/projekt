@@ -4,12 +4,13 @@ FLAGS = -O3 -Wall
 
 BASE = ..
 KERNELS = $(BASE)/kernels
+RT = $(BASE)/RT
 
-INC = -I$(KERNELS)
+INC = -I$(KERNELS) -I$(RT)
 
 LIBEXE = libshapes.a
 
-OBJ = shape.o sphere.o assembly.o ray.o
+OBJ = shape.o sphere.o assembly.o
 
 all: $(OBJ)
 	$(CL) $(LIBEXE) $^
@@ -25,6 +26,3 @@ sphere.o: sphere.cpp
 
 assembly.o: assembly.cpp
 	$(CPPC) $^ -c $(INC) $(FLAGS)
-
-ray.o: ray.cpp
-	$(CPPC) $^ -c $(FLAGS)
