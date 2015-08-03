@@ -62,6 +62,36 @@ bool Assembly::intersect (
    ** Loop through the assemblies
    */
 
+   bool intersect_this_assembly = false;
+
+   for (std::list<Assembly>::iterator assembly_it = assembly_elements.begin();
+        assembly_it != assembly_elements.end();
+        assembly_it++)
+   {
+      intersect_this_assembly |= assembly_it->intersect(  
+                                                 incomming_ray,
+                                                &local_ray,
+                                                &local_distance);
+      if (intersect_this_assembly)
+      {
+         if (first_intersection)
+         {
+            first_intersection = false;
+            min_distance = local_distance;
+           *distance = local_distance;
+           *new_ray = local_ray;
+         }
+         else if (local_distance < min_distance)
+         {
+            min_distance = local_distance;
+           *distance = local_distance;
+           *new_ray = local_ray;
+         }
+      }
+   }
+
+   intersection |= intersect_this_assembly;
+
    /*
    ** Loop through the spheres
    */
@@ -84,6 +114,12 @@ bool Assembly::intersect (
             *distance = local_distance;
             *new_ray = local_ray;
          }
+         else if (local_distance < min_distance)
+         {
+            min_distance = local_distance;
+           *distance = local_distance;
+           *new_ray = local_ray;
+         }
       }
    }
 
@@ -91,6 +127,7 @@ bool Assembly::intersect (
 
    /*
    ** Reset the position to the absolute coordinates
+   ** (absolute from this assembly's perspective anyways).
    */
 
    position[0] += center[0];
