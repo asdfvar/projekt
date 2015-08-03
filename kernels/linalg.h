@@ -132,7 +132,7 @@ namespace linalg
                  int N)
    {
       T two = (T)2;
-      project<T> (normal, u, reflected);
+      project<T> (normal, u, reflected, N);
       for (int k = 0; k < N; k++) reflected[k] *= two;
       for (int k = 0; k < N; k++) reflected[k] = u[k] - reflected[k];
    }

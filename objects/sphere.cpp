@@ -1,3 +1,4 @@
+#include "linalg.h"
 #include "shape.h"
 #include "sphere.h"
 
@@ -17,20 +18,44 @@ bool Sphere::intersect (Ray    incomming_ray,
                         float *distance)
 {
 
-   float p[3] = {incomming_ray.get_position(0),
-                 incomming_ray.get_position(1),
-                 incomming_ray.get_position(2)};
+   float position[3] = {incomming_ray.get_position(0),
+                        incomming_ray.get_position(1),
+                        incomming_ray.get_position(2)};
 
-   float u[3] = {incomming_ray.get_direction(0),
-                 incomming_ray.get_direction(1),
-                 incomming_ray.get_direction(2)};
+   float direction[3] = {incomming_ray.get_direction(0),
+                         incomming_ray.get_direction(1),
+                         incomming_ray.get_direction(2)};
 
-   bool intersection = geometry::intersect_sphere (
-                                  p,
-                                  u,
-                                  center,
-                                  radius);
+   bool intersect = geometry::intersect_sphere (
+                                     position,
+                                     direction,
+                                     center,
+                                     radius);
 
-   return intersection;
+   float normal[3], intersection[3];
+   float new_direction[3];
+
+   if (intersect)
+   {
+      intersect |= geometry::point_to_sphere (
+                                     position,
+                                     direction,
+                                     center,
+                                     radius,
+                                     1,
+                                     normal,
+                                     intersection);
+
+      if (intersect)
+      {
+          linalg::reflect<float> (direction, normal, new_direction, 3);
+          new_ray->set_position (intersection);
+          new_ray->set_direction (new_direction);
+      }
+                                     
+   }
+
+
+   return intersect;
 
 }

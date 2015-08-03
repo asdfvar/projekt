@@ -1,6 +1,9 @@
 #include <list>
 #include "assembly.h"
 
+/*
+** Constructor NAME: Assembly
+*/
 Assembly::Assembly (float center_in[3])
 {
    center[0] = center_in[0];
@@ -8,19 +11,29 @@ Assembly::Assembly (float center_in[3])
    center[2] = center_in[2];
 }
 
+/*
+** Function NAME: insert
+*/
 void Assembly::insert (Assembly assembly_object)
 {
    assembly_elements.push_back (assembly_object);
 }
 
+/*
+** Function NAME: insert
+*/
 void Assembly::insert (Sphere sphere_object)
 {
    sphere_elements.push_back (sphere_object);
 }
 
-bool Assembly::intersect (Ray    incomming_ray,
-                          Ray   *new_ray,
-                          float *distance)
+/*
+** Function NAME: intersect
+*/
+bool Assembly::intersect (
+    /* [I ] */     Ray    incomming_ray,
+    /* [ O] */     Ray   *new_ray,
+    /* [ O] */     float *distance)
 {
 
    bool  intersection = false;
@@ -85,6 +98,7 @@ bool Assembly::intersect (Ray    incomming_ray,
    position[2] += center[2];
 
    *distance = min_distance;
+   if (!intersection) *new_ray = incomming_ray;
 
    return intersection;
 
