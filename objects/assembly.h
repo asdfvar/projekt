@@ -18,7 +18,8 @@ class Assembly
       void insert (Assembly assembly_object);
       void insert (Sphere   sphere_object);
 
-      bool intersect( Ray    incomming_ray,
+      bool intersect( float light_source[3],
+                      Ray    incomming_ray,
                       Ray   *new_ray,
                       float *distance);
 
