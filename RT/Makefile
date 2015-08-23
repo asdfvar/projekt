@@ -4,8 +4,9 @@ FLAGS = -O3 -Wall
 
 BASE = ..
 KERNELS = $(BASE)/kernels
+SHAPES = $(BASE)/objects
 
-INC = -I$(KERNELS)
+INC = -I. -I$(KERNELS) -I$(SHAPES)
 
 LIBEXE = libraytrace.a
 
@@ -17,8 +18,8 @@ all: $(OBJ)
 clean:
 	rm $(OBJ) $(LIBEXE)
 
-ray.o: ray_trace.cpp
-	$(CPPC) $^ -c $(FLAGS)
+ray_trace.o: ray_trace.cpp
+	$(CPPC) $^ -c $(INC) $(FLAGS)
 
 ray.o: ray.cpp
-	$(CPPC) $^ -c $(FLAGS)
+	$(CPPC) $^ -c $(INC) $(FLAGS)

@@ -1,5 +1,7 @@
 #include "ray_trace.h"
 #include "ray.h"
+#include "sphere.h"
+#include <cmath>
 
 RayTrace::RayTrace (float start_position[3],
                     float start_look_direction[3],
@@ -26,9 +28,23 @@ RayTrace::RayTrace (float start_position[3],
    if (nx % 2 == 0) bottom_end = ((float)(-ny / 2) + 0.5f) * dy;
    else             bottom_end =  (float)(-ny / 2) * dy;
 
-   float look_theta, look_phi, look_gamma;
+   float look_theta, look_phi;
+   float ray_theta, ray_phi;
+   float absolute_theta, absolute_phi;
+   float direction[3];
+
+   look_theta = atan2( start_look_direction[1], start_look_direction[0] );
+   look_phi   = atan2( start_look_direction[2], start_look_direction[0] );
+
+   /*
+   ** Establish the grid of rays
+   */
 
    grid = new Ray[nxy];
+
+   /*
+   ** Build the grid of rays
+   */
 
    float xp, yp;
 
@@ -41,7 +57,17 @@ RayTrace::RayTrace (float start_position[3],
          xp = left_end   + j * dx;
          yp = bottom_end + i * dy;
 
-//         grid[k].set_direction(
+         ray_phi   = atan2( yp, window_distance );
+         ray_theta = atan2( xp, window_distance );
+
+         absolute_theta = look_theta + ray_theta;
+         absolute_phi   = look_phi   + ray_phi;
+
+         direction[0] = cos( absolute_theta );
+         direction[1] = sin( absolute_theta );
+         direction[2] = sin( absolute_phi   );
+
+         grid[k].set_direction( direction );
       }
    }
 

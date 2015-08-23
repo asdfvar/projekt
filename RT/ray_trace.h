@@ -7,8 +7,6 @@ class RayTrace {
 
    public:
 
-      Ray *grid;
-
       RayTrace (
              float start_position[3],
              float start_look_direction[3],
@@ -20,7 +18,13 @@ class RayTrace {
 
       ~RayTrace (void);
 
+      void insert_sphere (
+             float position[3],
+             float radius);
+
    private:
+
+      Ray *grid;
 
 };
 
