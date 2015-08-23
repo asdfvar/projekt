@@ -22,6 +22,8 @@ class RayTrace {
              float position[3],
              float radius);
 
+      void execute (unsigned int num_threads);
+
    private:
 
       Ray *grid;
