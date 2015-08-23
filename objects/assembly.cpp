@@ -31,7 +31,6 @@ void Assembly::insert (Sphere sphere_object)
 ** Function NAME: intersect
 */
 bool Assembly::intersect (
-    /* [I ] */     float light_source[3],
     /* [I ] */     Ray    incomming_ray,
     /* [ O] */     Ray   *new_ray,
     /* [ O] */     float *distance)
@@ -49,9 +48,9 @@ bool Assembly::intersect (
    ** relative to the assembly.
    */
 
-   float position[3] = {incomming_ray.get_position(0),
-                        incomming_ray.get_position(1),
-                        incomming_ray.get_position(2)};
+   float position[3] = { incomming_ray.get_position(0),
+                         incomming_ray.get_position(1),
+                         incomming_ray.get_position(2) };
 
    position[0] -= center[0];
    position[1] -= center[1];
@@ -70,7 +69,6 @@ bool Assembly::intersect (
         assembly_it++)
    {
       intersect_this_assembly |= assembly_it->intersect(  
-                                                 light_source,
                                                  incomming_ray,
                                                 &local_ray,
                                                 &local_distance);

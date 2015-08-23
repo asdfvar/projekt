@@ -9,13 +9,16 @@ INC = -I$(KERNELS)
 
 LIBEXE = libraytrace.a
 
-OBJ = ray.o
+OBJ = ray_trace.o ray.o
 
 all: $(OBJ)
 	$(CL) $(LIBEXE) $^
 
 clean:
 	rm $(OBJ) $(LIBEXE)
+
+ray.o: ray_trace.cpp
+	$(CPPC) $^ -c $(FLAGS)
 
 ray.o: ray.cpp
 	$(CPPC) $^ -c $(FLAGS)
