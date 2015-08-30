@@ -4,6 +4,16 @@
 /*
 ** Constructor NAME: Assembly
 */
+Assembly::Assembly ( void )
+{
+   center[0] = 0.0f;
+   center[1] = 0.0f;
+   center[2] = 0.0f;
+}
+
+/*
+** Constructor NAME: Assembly
+*/
 Assembly::Assembly (float center_in[3])
 {
    center[0] = center_in[0];

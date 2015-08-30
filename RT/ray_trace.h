@@ -2,6 +2,7 @@
 #define RAY_TRACE_H
 
 #include "ray.h"
+#include "assembly.h"
 
 class RayTrace {
 
@@ -22,11 +23,18 @@ class RayTrace {
              float position[3],
              float radius);
 
+      void run ( unsigned int num_threads );
+
       void execute (unsigned int num_threads);
 
    private:
 
-      Ray *grid;
+      float     position[3];
+      Ray      *grid;
+      Assembly  all_objects;
+
+      void sub_run (Ray *grid,
+                    unsigned int num_points);
 
 };
 

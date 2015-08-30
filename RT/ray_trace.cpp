@@ -3,7 +3,10 @@
 #include "sphere.h"
 #include <cmath>
 
-RayTrace::RayTrace (float start_position[3],
+/*
+** Constructor NAME: RayTrace
+*/
+RayTrace::RayTrace (float start_position_in[3],
                     float start_look_direction[3],
                     float window_width,
                     float window_height,
@@ -11,6 +14,10 @@ RayTrace::RayTrace (float start_position[3],
                     float dx,
                     float dy)
 {
+
+   position[0] = start_position_in[0];
+   position[1] = start_position_in[1];
+   position[2] = start_position_in[2];
 
    int i,j,k;
 
@@ -52,7 +59,7 @@ RayTrace::RayTrace (float start_position[3],
    {
       for (j = 0; j < nx; j++, k++)
       {
-         grid[k].set_position( start_position );
+         grid[k].set_position( position );
 
          xp = left_end   + j * dx;
          yp = bottom_end + i * dy;
@@ -73,7 +80,18 @@ RayTrace::RayTrace (float start_position[3],
 
 }
 
+/*
+** Destructor NAME: RayTrace
+*/
 RayTrace::~RayTrace(void)
 {
    delete[] grid;
+}
+
+
+void RayTrace::insert_sphere (
+       float position[3],
+       float radius)
+{
+   all_objects.insert( Sphere( position, radius) );
 }

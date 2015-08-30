@@ -11,6 +11,7 @@ class Assembly
 
    public:
 
+      Assembly ( void );
       Assembly (float center[3]);
 
       float center[3];
