@@ -10,3 +10,5 @@ Shape::Shape (float center_in[3] )
    center[1] = center_in[1];
    center[2] = center_in[2];
 }
+
+Shape::~Shape ( void ) { }

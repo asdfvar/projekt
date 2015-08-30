@@ -1,9 +1,10 @@
 #include "linalg.h"
 
+namespace geometry {
+
 /*
  * Function NAME: intersect_sphere
  */
-
 bool intersect_sphere (
                float p[3],
                float u[3],
@@ -42,3 +43,5 @@ bool intersect_sphere (
   }
 
 }
+
+} // namespace geometry
