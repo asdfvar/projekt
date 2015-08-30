@@ -4,7 +4,7 @@ BASE = ../..
 
 INC = -I$(BASE)/RT -I$(BASE)/objects -I$(BASE)/kernels
 
-LIBS = -lraytrace -lshapes -lkernels
+LIBS = -lraytrace -lshapes -lkernels -pthread
 LIBPATH = -L$(BASE)/RT -L$(BASE)/objects -L$(BASE)/kernels
 
 OBJ = test.o
