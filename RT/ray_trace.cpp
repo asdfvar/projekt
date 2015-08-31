@@ -23,7 +23,7 @@ RayTrace::RayTrace (float start_position_in[3],
 
    int nx = (int) (window_width  / dx);
    int ny = (int) (window_height / dy);
-   int nxy = nx * ny;
+   nxy = nx * ny;
 
    float left_end;
 

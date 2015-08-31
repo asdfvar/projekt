@@ -4,13 +4,15 @@
 
 #define MAX_THREADS 20
 
+/*
+** Declare local functions and structs
+*/
 struct ARGS
 {
-   Ray *grid;
+   unsigned int thread_id;
    unsigned int num_points;
+   Ray *grid;
 };
-
-
 
 void *sub_run_wrapper ( void* );
 
@@ -18,9 +20,10 @@ void sub_run (
                Ray *grid,
                unsigned int num_points);
 
-
 /*
 ** Function NAME: sub_run
+**
+** Main body of algorithms
 */
 void sub_run (
                Ray *grid,
@@ -60,14 +63,27 @@ void RayTrace::run ( unsigned int num_threads )
    */
    for (unsigned int id = 0; id < num_threads; id++)
    {
+
+      args[id].thread_id = id;
+
+      if (id == num_threads)
+      {
+         args[id].num_points = nxy / num_threads + nxy % num_threads;
+      }
+      else
+      {
+         args[id].num_points = nxy / num_threads;
+      }
+
       args[id].grid = grid;
-      args[id].num_points = 10; // function of num_threads
 
       std::cout << "creating thread " << id << std::endl;
+
       int stat = pthread_create (&threads[id], NULL, sub_run_wrapper, (void*)&args[id]);
       if (stat == 0) std::cout << "stat = " << stat << std::endl;
    }
 
+std::cout << "waiting for threads to finish" << std::endl;
    /*
    ** Wait for threads to finish
    */
@@ -75,6 +91,7 @@ void RayTrace::run ( unsigned int num_threads )
    {
       pthread_join(threads[id], NULL); /* Wait until thread is finished */
    }
+std::cout << "threads finished" << std::endl;
 
    pthread_exit (NULL);
 

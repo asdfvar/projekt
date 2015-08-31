@@ -32,6 +32,7 @@ class RayTrace {
       float     position[3];
       Ray      *grid;
       Assembly  all_objects;
+      int nxy;
 
 };
 
