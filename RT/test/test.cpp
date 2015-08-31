@@ -14,5 +14,7 @@ int main()
                0.01f,
                0.01f);
 
+   RT.run( 4 );
+
    return 0;
 }

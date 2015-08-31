@@ -33,9 +33,6 @@ class RayTrace {
       Ray      *grid;
       Assembly  all_objects;
 
-      void sub_run (Ray *grid,
-                    unsigned int num_points);
-
 };
 
 #endif
