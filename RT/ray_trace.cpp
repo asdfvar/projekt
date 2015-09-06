@@ -95,3 +95,8 @@ void RayTrace::insert_sphere (
 {
    all_objects.insert( Sphere( position, radius) );
 }
+
+int RayTrace::get_nxy ( void )
+{
+   return nxy;
+}

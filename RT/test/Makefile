@@ -3,16 +3,16 @@ CPPC=g++
 BASE = ../..
 
 INC = -I$(BASE)/RT -I$(BASE)/objects -I$(BASE)/kernels
-
 LIBS = -lraytrace -lshapes -lkernels -pthread
 LIBPATH = -L$(BASE)/RT -L$(BASE)/objects -L$(BASE)/kernels
+FLAGS = -std=c++11
 
 OBJ = test.o
 
 EXE = rt
 
 all: $(OBJ)
-	$(CPPC) $^ $(INC) $(LIBS) $(LIBPATH) -o $(EXE)
+	$(CPPC) $(FLAGS) $^ $(INC) $(LIBS) $(LIBPATH) -o $(EXE)
 
 clean:
 	rm $(OBJ) $(EXE)

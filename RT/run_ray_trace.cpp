@@ -10,27 +10,40 @@
 struct ARGS
 {
    unsigned int thread_id;
-   unsigned int num_points;
-   Ray *grid;
+   unsigned int num_threads;
+   RayTrace *RT;
 };
 
 void *sub_run_wrapper ( void* );
 
-void sub_run (
-               Ray *grid,
-               unsigned int num_points);
+void sub_run ( unsigned int thread_id,
+               unsigned int num_threads,
+               RayTrace *RT);
 
 /*
 ** Function NAME: sub_run
 **
 ** Main body of algorithms
 */
-void sub_run (
-               Ray *grid,
-               unsigned int num_points)
+void sub_run ( unsigned int thread_id,
+               unsigned int num_threads,
+               RayTrace *RT)
 {
-   // run on the specified grid
-   std::cout << "output from thread" << std::endl;
+
+   int nxy = RT->get_nxy();
+   int num_points;
+
+   if (thread_id == num_threads - 1)
+   {
+      num_points = nxy / num_threads + nxy % num_threads;
+   }
+   else
+   {
+      num_points = nxy / num_threads;
+   }
+
+   Ray *grid_alias = RT->grid + nxy / num_threads * thread_id;
+
 }
 
 /*
@@ -40,8 +53,9 @@ void *sub_run_wrapper ( void *args_in)
 {
    struct ARGS *args = (ARGS*)args_in;
 
-   sub_run (args->grid,
-            args->num_points);
+   sub_run (args->thread_id,
+            args->num_threads,
+            args->RT);
 
    return NULL;
 }
@@ -64,23 +78,18 @@ void RayTrace::run ( unsigned int num_threads )
    for (unsigned int id = 0; id < num_threads; id++)
    {
 
-      args[id].thread_id = id;
-
-      if (id == num_threads)
-      {
-         args[id].num_points = nxy / num_threads + nxy % num_threads;
-      }
-      else
-      {
-         args[id].num_points = nxy / num_threads;
-      }
-
-      args[id].grid = grid;
+      args[id].thread_id   = id;
+      args[id].num_threads = num_threads;
+      args[id].RT          = this;
 
       std::cout << "creating thread " << id << std::endl;
 
       int stat = pthread_create (&threads[id], NULL, sub_run_wrapper, (void*)&args[id]);
-      if (stat == 0) std::cout << "stat = " << stat << std::endl;
+
+      if (stat != 0)
+      {
+         std::cout << "Error creating thread" << std::endl;
+      }
    }
 
 std::cout << "waiting for threads to finish" << std::endl;

@@ -27,10 +27,13 @@ class RayTrace {
 
       void execute (unsigned int num_threads);
 
+      int get_nxy ( void );
+
+      Ray      *grid;
+
    private:
 
       float     position[3];
-      Ray      *grid;
       Assembly  all_objects;
       int nxy;
 
