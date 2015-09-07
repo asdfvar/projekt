@@ -21,15 +21,39 @@ void sub_run ( unsigned int thread_id,
                RayTrace *RT);
 
 /*
+** Function NAME: execute
+*/
+void RayTrace::execute (unsigned int thread_id,
+                        unsigned int num_threads)
+{
+
+   int num_points;
+
+   if (thread_id == num_threads - 1)
+   {
+      num_points = nxy / num_threads + nxy % num_threads;
+   }
+   else
+   {
+      num_points = nxy / num_threads;
+   }
+
+   Ray *grid_alias = grid + nxy / num_threads * thread_id;
+
+}
+
+/*
 ** Function NAME: sub_run
-**
-** Main body of algorithms
 */
 void sub_run ( unsigned int thread_id,
                unsigned int num_threads,
                RayTrace *RT)
 {
 
+   RT->execute (thread_id,
+                num_threads);
+
+#if 0
    int nxy = RT->get_nxy();
    int num_points;
 
@@ -43,6 +67,7 @@ void sub_run ( unsigned int thread_id,
    }
 
    Ray *grid_alias = RT->grid + nxy / num_threads * thread_id;
+#endif
 
 }
 

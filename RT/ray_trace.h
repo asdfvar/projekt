@@ -25,13 +25,17 @@ class RayTrace {
 
       void run ( unsigned int num_threads );
 
-      void execute (unsigned int num_threads);
+      void execute (unsigned int thread_id,
+                    unsigned int num_threads);
 
       int get_nxy ( void );
 
       Ray      *grid;
 
    private:
+
+      bool intersect_objects (
+                  Ray );
 
       float     position[3];
       Assembly  all_objects;

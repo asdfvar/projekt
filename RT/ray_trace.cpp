@@ -100,3 +100,16 @@ int RayTrace::get_nxy ( void )
 {
    return nxy;
 }
+
+bool RayTrace::intersect_objects ( Ray  ray)
+{
+
+   Ray new_ray;
+   float distance;
+
+   return all_objects.intersect (
+                 ray,
+                &new_ray,
+                &distance);
+
+}
