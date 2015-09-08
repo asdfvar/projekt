@@ -44,7 +44,12 @@ void RayTrace::execute (unsigned int thread_id,
    for (int k = 0; k < num_points; k++)
    {
 
-      bool intersect = intersect_objects ( grid_alias[k] );
+      Ray output_ray;
+      float distance;
+      bool intersect = intersect_objects (
+                            grid_alias[k],
+                           &output_ray,
+                           &distance);
 
 #ifdef DEBUG_1
       if (k % 10 == 0) std::cout << std::endl;

@@ -35,7 +35,9 @@ class RayTrace {
    private:
 
       bool intersect_objects (
-                  Ray );
+                  Ray    in_ray,
+                  Ray   *new_ray,
+                  float *distance);
 
       float     position[3];
       Assembly  all_objects;

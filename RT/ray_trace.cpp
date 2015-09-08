@@ -88,7 +88,9 @@ RayTrace::~RayTrace(void)
    delete[] grid;
 }
 
-
+/*
+** Function NAME: insert_sphere
+*/
 void RayTrace::insert_sphere (
        float position[3],
        float radius)
@@ -96,20 +98,26 @@ void RayTrace::insert_sphere (
    all_objects.insert( Sphere( position, radius) );
 }
 
+/*
+** Function NAME: get_nxy
+*/
 int RayTrace::get_nxy ( void )
 {
    return nxy;
 }
 
-bool RayTrace::intersect_objects ( Ray  ray)
+/*
+** Function NAME: intersect_objects
+*/
+bool RayTrace::intersect_objects (
+                  Ray    ray,
+                  Ray   *new_ray,
+                  float *distance)
 {
-
-   Ray new_ray;
-   float distance;
 
    return all_objects.intersect (
                  ray,
-                &new_ray,
-                &distance);
+                 new_ray,
+                 distance);
 
 }
