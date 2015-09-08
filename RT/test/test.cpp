@@ -21,7 +21,7 @@ int main()
 
    RT.insert_sphere ( position, 1.0f );
 
-   RT.run( 4 );
+   RT.run( 1 );
 
    return 0;
 }

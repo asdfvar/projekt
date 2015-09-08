@@ -1,4 +1,5 @@
 #include "ray_trace.h"
+#include "debug_rt.h"
 #include <pthread.h>
 #include <iostream>
 
@@ -39,6 +40,24 @@ void RayTrace::execute (unsigned int thread_id,
    }
 
    Ray *grid_alias = grid + nxy / num_threads * thread_id;
+
+   for (int k = 0; k < num_points; k++)
+   {
+
+      bool intersect = intersect_objects ( grid_alias[k] );
+
+#ifdef DEBUG_1
+      if (k % 10 == 0) std::cout << std::endl;
+      if (intersect)
+      {
+      std::cout << "1";
+      }
+      else {
+      std::cout << " ";
+      }
+#endif
+
+   }
 
 }
 
