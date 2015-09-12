@@ -44,7 +44,7 @@ bool point_to_sphere (
 
    float A  = linalg::norm_squared<float> (line_direction, 3);
 
-   float B  = -2.0f * linalg::summation<float> (a, 3);
+   float B  = -2.0f * linalg::dot_product<float> (line_direction, a, 3);
 
    float C  = linalg::norm_squared<float> (a, 3);
          C -= radius * radius;
@@ -58,7 +58,7 @@ bool point_to_sphere (
 
       discriminant = sqrtf( discriminant );
 
-      float t = -B - discriminant;
+      float t;
 
       if (pick == 1)
       {
@@ -75,7 +75,7 @@ bool point_to_sphere (
       }
 
       /*
-      ** Often, during refraction, the ray be be interior to the sphere.
+      ** Often, during refraction, the ray may be interior to the sphere.
       */
       if (t < 0)
       {

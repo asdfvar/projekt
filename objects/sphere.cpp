@@ -2,11 +2,11 @@
 #include "linalg.h"
 #include "shape.h"
 #include "sphere.h"
+#include <iostream>
 
 /*
  * Constructor NAME: sphere
  */
-
 Sphere::Sphere ( float center_in[3],
                  float radius_in )
                : Shape (center_in)
