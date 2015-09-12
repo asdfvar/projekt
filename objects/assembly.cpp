@@ -1,5 +1,6 @@
 #include <list>
 #include "assembly.h"
+#include <iostream>
 
 /*
 ** Constructor NAME: Assembly
@@ -82,6 +83,7 @@ bool Assembly::intersect (
                                                  incomming_ray,
                                                 &local_ray,
                                                 &local_distance);
+
       if (intersect_this_assembly)
       {
          if (first_intersection)

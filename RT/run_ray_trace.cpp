@@ -55,7 +55,8 @@ void RayTrace::execute (unsigned int thread_id,
       if (k % 10 == 0) std::cout << std::endl;
       if (intersect)
       {
-      std::cout << "1";
+//      std::cout << "1";
+      std::cout << distance << " ";
       }
       else {
       std::cout << " ";

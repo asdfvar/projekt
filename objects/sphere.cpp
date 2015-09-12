@@ -1,3 +1,4 @@
+#include <cmath>
 #include "linalg.h"
 #include "shape.h"
 #include "sphere.h"
@@ -13,10 +14,15 @@ Sphere::Sphere ( float center_in[3],
    radius = radius_in;
 }
 
+/*
+** Function NAME: intersect
+*/
 bool Sphere::intersect (Ray    incomming_ray,
                         Ray   *new_ray,
                         float *distance)
 {
+
+  *distance = -1.0f;
 
    float position[3] = {incomming_ray.get_position(0),
                         incomming_ray.get_position(1),
@@ -51,10 +57,13 @@ bool Sphere::intersect (Ray    incomming_ray,
           linalg::reflect<float> (direction, normal, new_direction, 3);
           new_ray->set_position (intersection);
           new_ray->set_direction (new_direction);
-      }
-                                     
-   }
 
+         *distance = sqrt((position[0] - intersection[0]) * (position[0] - intersection[0]) +
+                          (position[1] - intersection[1]) * (position[1] - intersection[1]) +
+                          (position[2] - intersection[2]) * (position[2] - intersection[2]));
+
+      }
+   }
 
    return intersect;
 
