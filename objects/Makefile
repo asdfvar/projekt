@@ -10,7 +10,7 @@ INC = -I$(KERNELS) -I$(RT)
 
 LIBEXE = libshapes.a
 
-OBJ = shape.o sphere.o assembly.o
+OBJ = shape.o sphere.o assembly.o light_source.o
 
 all: $(OBJ)
 	$(CL) $(LIBEXE) $^
@@ -25,4 +25,7 @@ sphere.o: sphere.cpp
 	$(CPPC) $^ -c $(INC) $(FLAGS)
 
 assembly.o: assembly.cpp
+	$(CPPC) $^ -c $(INC) $(FLAGS)
+
+light_source.o: light_source.cpp
 	$(CPPC) $^ -c $(INC) $(FLAGS)

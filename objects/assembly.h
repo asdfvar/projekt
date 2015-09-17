@@ -6,6 +6,9 @@
 #include "shape.h"
 #include "sphere.h"
 
+/*
+** Class NAME: Assembly
+*/
 class Assembly
 {
 

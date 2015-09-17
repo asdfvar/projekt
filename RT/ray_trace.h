@@ -1,8 +1,10 @@
 #ifndef RAY_TRACE_H
 #define RAY_TRACE_H
 
+#include <list>
 #include "ray.h"
 #include "assembly.h"
+#include "light_source.h"
 
 class RayTrace {
 
@@ -18,6 +20,10 @@ class RayTrace {
              float dy);
 
       ~RayTrace (void);
+
+      void insert_light (
+             float position[3],
+             float intensity[3]);
 
       void insert_sphere (
              float position[3],
@@ -39,8 +45,9 @@ class RayTrace {
                   Ray   *new_ray,
                   float *distance);
 
-      float     position[3];
-      Assembly  all_objects;
+      float                   position[3];
+      Assembly                all_objects;
+      std::list<Light_source> lights;
       int nxy;
 
 };

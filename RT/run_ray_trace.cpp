@@ -2,6 +2,7 @@
 #include "debug_rt.h"
 #include <pthread.h>
 #include <iostream>
+#include <list>
 
 #define MAX_THREADS 20
 
@@ -28,20 +29,20 @@ void RayTrace::execute (unsigned int thread_id,
                         unsigned int num_threads)
 {
 
-   int num_points;
+   int num_rays;
 
    if (thread_id == num_threads - 1)
    {
-      num_points = nxy / num_threads + nxy % num_threads;
+      num_rays = nxy / num_threads + nxy % num_threads;
    }
    else
    {
-      num_points = nxy / num_threads;
+      num_rays = nxy / num_threads;
    }
 
    Ray *grid_alias = grid + nxy / num_threads * thread_id;
 
-   for (int k = 0; k < num_points; k++)
+   for (int k = 0; k < num_rays; k++)
    {
 
       Ray output_ray;
@@ -63,6 +64,16 @@ void RayTrace::execute (unsigned int thread_id,
       }
 #endif
 
+      if (intersect)
+      {
+         for (std::list<Light_source> ::iterator light_it = lights.begin();
+              light_it != lights.end();
+              light_it++)
+         {
+
+         }
+      }
+
    }
 
 }
@@ -77,22 +88,6 @@ void sub_run ( unsigned int thread_id,
 
    RT->execute (thread_id,
                 num_threads);
-
-#if 0
-   int nxy = RT->get_nxy();
-   int num_points;
-
-   if (thread_id == num_threads - 1)
-   {
-      num_points = nxy / num_threads + nxy % num_threads;
-   }
-   else
-   {
-      num_points = nxy / num_threads;
-   }
-
-   Ray *grid_alias = RT->grid + nxy / num_threads * thread_id;
-#endif
 
 }
 

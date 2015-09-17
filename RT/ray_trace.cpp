@@ -99,6 +99,16 @@ void RayTrace::insert_sphere (
 }
 
 /*
+** Function NAME: insert_light
+*/
+void RayTrace::insert_light (
+       float position[3],
+       float intensity[3])
+{
+   lights.push_back( Light_source( position, intensity ));
+}
+
+/*
 ** Function NAME: get_nxy
 */
 int RayTrace::get_nxy ( void )
