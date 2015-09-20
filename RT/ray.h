@@ -36,6 +36,8 @@ class Ray
 
       void set_intensity( float Int[3] );
 
+      void increment_intensity( float Int[3] );
+
    private:
 
       float position[3];

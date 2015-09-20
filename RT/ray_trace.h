@@ -36,6 +36,8 @@ class RayTrace {
 
       int get_nxy ( void );
 
+      void print_grid ( void );
+
       Ray      *grid;
 
    private:
@@ -48,7 +50,7 @@ class RayTrace {
       float                   position[3];
       Assembly                all_objects;
       std::list<Light_source> lights;
-      int nxy;
+      int nx, ny;
 
 };
 

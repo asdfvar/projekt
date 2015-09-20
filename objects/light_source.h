@@ -10,6 +10,9 @@ class Light_source {
 
      ~Light_source( void );
 
+      float get_position( int index );
+      float get_intensity( int index );
+
    private:
 
       float position[3];

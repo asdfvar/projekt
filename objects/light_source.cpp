@@ -16,3 +16,19 @@ Light_source::Light_source( float position_in[3],
 }
 
 Light_source::~Light_source() {};
+
+/*
+** Function NAME: get_position
+*/
+float Light_source::get_position( int index )
+{
+   return position[index];
+}
+
+/*
+** Function NAME: get_intensity
+*/
+float Light_source::get_intensity( int index )
+{
+   return intensity[index];
+}

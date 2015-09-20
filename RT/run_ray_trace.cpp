@@ -2,6 +2,7 @@
 #include "debug_rt.h"
 #include <pthread.h>
 #include <iostream>
+#include "linalg.h"
 #include <list>
 
 #define MAX_THREADS 20
@@ -29,7 +30,10 @@ void RayTrace::execute (unsigned int thread_id,
                         unsigned int num_threads)
 {
 
-   int num_rays;
+   int   num_rays;
+   float direction[3];
+
+   int nxy = nx * ny;
 
    if (thread_id == num_threads - 1)
    {
@@ -70,6 +74,30 @@ void RayTrace::execute (unsigned int thread_id,
               light_it != lights.end();
               light_it++)
          {
+
+            // direction to light source = light source position - output ray position
+            direction[0] = light_it->get_position(0) - output_ray.get_position(0);
+            direction[1] = light_it->get_position(1) - output_ray.get_position(1);
+            direction[2] = light_it->get_position(2) - output_ray.get_position(2);
+
+            // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
+            float output_direction[3];
+
+            output_direction[0] = output_ray.get_direction(0);
+            output_direction[1] = output_ray.get_direction(1);
+            output_direction[2] = output_ray.get_direction(2);
+
+            float num  = linalg::dot_product<float>( output_direction, direction, 3);
+            float den  = linalg::norm<float>(output_direction, 3);
+                  den *= linalg::norm<float>(direction, 3);
+            float costh = num / den;
+            float theta = acos(costh);
+            float th_range = theta / 3.14159265358979323846264f;
+
+            float score = 1.0f - th_range;
+            float intensity[3] = { score, score, score };
+
+            grid_alias[k].increment_intensity( intensity );
 
          }
       }
@@ -137,7 +165,8 @@ void RayTrace::run ( unsigned int num_threads )
       }
    }
 
-std::cout << "waiting for threads to finish" << std::endl;
+   std::cout << "waiting for threads to finish" << std::endl;
+
    /*
    ** Wait for threads to finish
    */
@@ -145,8 +174,9 @@ std::cout << "waiting for threads to finish" << std::endl;
    {
       pthread_join(threads[id], NULL); /* Wait until thread is finished */
    }
-std::cout << "threads finished" << std::endl;
 
-   pthread_exit (NULL);
+   std::cout << "threads finished" << std::endl;
+
+//   pthread_exit (NULL);
 
 }

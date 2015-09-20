@@ -1,7 +1,8 @@
 #include "ray_trace.h"
-#include "ray.h"
 #include "sphere.h"
+#include <iostream>
 #include <cmath>
+#include "ray.h"
 
 /*
 ** Constructor NAME: RayTrace
@@ -13,17 +14,16 @@ RayTrace::RayTrace (float start_position_in[3],
                     float window_distance,
                     float dx,
                     float dy)
-{
-
+{ 
    position[0] = start_position_in[0];
    position[1] = start_position_in[1];
    position[2] = start_position_in[2];
 
    int i,j,k;
 
-   int nx = (int) (window_width  / dx);
-   int ny = (int) (window_height / dy);
-   nxy = nx * ny;
+   nx = (int) (window_width  / dx);
+   ny = (int) (window_height / dy);
+   int nxy = nx * ny;
 
    float left_end;
 
@@ -113,7 +113,7 @@ void RayTrace::insert_light (
 */
 int RayTrace::get_nxy ( void )
 {
-   return nxy;
+   return nx*ny;
 }
 
 /*
@@ -130,4 +130,26 @@ bool RayTrace::intersect_objects (
                  new_ray,
                  distance);
 
+}
+
+/*
+** Function NAME: print_grid
+*/
+void RayTrace::print_grid ( void )
+{
+
+   int i,j,k;
+
+   for (k = 0, i = 0; i < ny; i++)
+   {
+
+      std::cout << std::endl;
+
+      for (j = 0; j < nx; j++, k++)
+      {
+         std::cout << grid[k].get_intensity(0) << ", ";
+      }
+   }
+
+   std::cout << std::endl;
 }
