@@ -8,8 +8,8 @@ int main()
    float look_direction[3] = { 1.0f, 0.0f, 0.0f };
    float intensity[3];
 
-   float dx = 0.1f;
-   float dy = 0.1f;
+   float dx = 0.01f;
+   float dy = 0.01f;
 
    RayTrace RT(position,
                look_direction,
@@ -37,7 +37,7 @@ int main()
 
    RT.run( 6 );
 
-   RT.print_grid ();
+//   RT.print_grid ();
 
    RT.write_grid ();
 
