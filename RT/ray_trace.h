@@ -38,6 +38,8 @@ class RayTrace {
 
       void print_grid ( void );
 
+      void write_grid ( void );
+
       Ray      *grid;
 
    private:

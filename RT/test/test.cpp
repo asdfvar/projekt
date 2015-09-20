@@ -39,5 +39,7 @@ int main()
 
    RT.print_grid ();
 
+   RT.write_grid ();
+
    return 0;
 }

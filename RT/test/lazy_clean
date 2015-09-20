@@ -20,6 +20,12 @@ if [ -e libshapes.a ]; then
 fi
 cd -
 
+cd $BASE_DIR/utilities
+if [ -e libutils.a ]; then
+   make clean
+fi
+cd -
+
 if [ -e rt ]; then
    make clean
 fi

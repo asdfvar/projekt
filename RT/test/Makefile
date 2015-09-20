@@ -2,9 +2,9 @@ CPPC=g++
 
 BASE = ../..
 
-INC = -I$(BASE)/RT -I$(BASE)/objects -I$(BASE)/kernels
-LIBS = -lraytrace -lshapes -lkernels -pthread
-LIBPATH = -L$(BASE)/RT -L$(BASE)/objects -L$(BASE)/kernels
+INC = -I$(BASE)/RT -I$(BASE)/objects -I$(BASE)/kernels -I$(BASE)/utilities
+LIBS = -lraytrace -lshapes -lkernels -pthread -lutils
+LIBPATH = -L$(BASE)/RT -L$(BASE)/objects -L$(BASE)/kernels -L$(BASE)/utilities
 FLAGS = -std=c++11
 
 OBJ = test.o

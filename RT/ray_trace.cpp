@@ -1,5 +1,6 @@
 #include "ray_trace.h"
 #include "sphere.h"
+#include "fileio.h"
 #include <iostream>
 #include <cmath>
 #include "ray.h"
@@ -152,4 +153,27 @@ void RayTrace::print_grid ( void )
    }
 
    std::cout << std::endl;
+}
+
+/*
+** Function NAME: write_grid
+*/
+void RayTrace::write_grid ( void )
+{
+
+    int nxy = nx * ny;
+
+    float *data = new float[nxy];
+
+    for (int k = 0; k < nxy; k++)
+    {
+       data[k] = grid[k].get_intensity(0);
+    }
+
+    fio::write_bin_float ("./result.r",
+                           data,
+                           false,
+                           nxy);
+
+    delete[] data;
 }

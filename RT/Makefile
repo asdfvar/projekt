@@ -5,8 +5,9 @@ FLAGS = -O3 -Wall
 BASE = ..
 KERNELS = $(BASE)/kernels
 SHAPES = $(BASE)/objects
+UTILITIES = $(BASE)/utilities
 
-INC = -I. -I$(KERNELS) -I$(SHAPES)
+INC = -I. -I$(KERNELS) -I$(SHAPES) -I$(UTILITIES)
 
 LIBEXE = libraytrace.a
 
