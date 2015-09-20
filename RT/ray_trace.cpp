@@ -170,9 +170,19 @@ void RayTrace::write_grid ( void )
        data[k] = grid[k].get_intensity(0);
     }
 
+    fio::write_bin_int ("./result.r",
+                        &nx,
+                         false,
+                         1);
+
+    fio::write_bin_int ("./result.r",
+                        &ny,
+                         true,
+                         1);
+
     fio::write_bin_float ("./result.r",
                            data,
-                           false,
+                           true,
                            nxy);
 
     delete[] data;
