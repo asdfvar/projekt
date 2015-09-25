@@ -5,21 +5,21 @@ int main()
 {
 
    float position[3] = { 0.0f, 0.0f, 0.0f };
-   float look_direction[3] = { 1.0f, 0.0f, 0.0f };
+   float look_rotation[3] = { 10.0f, 10.0f, 10.0f };
    float intensity[3];
 
    float dx = 0.001f;
    float dy = 0.001f;
 
    RayTrace RT(position,
-               look_direction,
+               look_rotation,
                1.0f,
                1.0f,
                1.0f,
                dx,
                dy);
 
-   position[0] = -1.0f;
+   position[0] = -99.0f;
    position[1] = 1.0f;
    position[2] = 1.0f;
 

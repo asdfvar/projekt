@@ -124,7 +124,6 @@ namespace linalg
    **
    ** reflected = reflection of u off of normal
    */
-
    template <class T>
    void reflect (T *u,
                  T *normal,
@@ -135,6 +134,29 @@ namespace linalg
       project<T> (normal, u, reflected, N);
       for (int k = 0; k < N; k++) reflected[k] *= two;
       for (int k = 0; k < N; k++) reflected[k] = u[k] - reflected[k];
+   }
+
+   /*
+   ** Function NAME: linear_transform
+   */
+   template <class T>
+   void linear_transform (T *input,
+                          T *Matrix,
+                          T *output,
+                          int dim_in,
+                          int dim_out)
+   {
+      int k = 0;
+      for (int i = 0; i < dim_out; i++)
+      {
+
+         output[i] = 0.0f;
+
+         for (int j = 0; j < dim_in; j++, k++)
+         {
+            output[i] += input[j] * Matrix[k];
+         }
+      }
    }
  
 }
