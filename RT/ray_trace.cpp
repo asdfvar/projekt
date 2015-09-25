@@ -215,5 +215,45 @@ void RayTrace::write_grid ( void )
                            true,
                            nxy);
 
+    for (int k = 0; k < nxy; k++)
+    {
+       data[k] = grid[k].get_intensity(1);
+    }
+
+    fio::write_bin_int ("./result.g",
+                        &nx,
+                         false,
+                         1);
+
+    fio::write_bin_int ("./result.g",
+                        &ny,
+                         true,
+                         1);
+
+    fio::write_bin_float ("./result.g",
+                           data,
+                           true,
+                           nxy);
+
+    for (int k = 0; k < nxy; k++)
+    {
+       data[k] = grid[k].get_intensity(2);
+    }
+
+    fio::write_bin_int ("./result.b",
+                        &nx,
+                         false,
+                         1);
+
+    fio::write_bin_int ("./result.b",
+                        &ny,
+                         true,
+                         1);
+
+    fio::write_bin_float ("./result.b",
+                           data,
+                           true,
+                           nxy);
+
     delete[] data;
 }

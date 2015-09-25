@@ -56,18 +56,6 @@ void RayTrace::execute (unsigned int thread_id,
                            &output_ray,
                            &distance);
 
-#ifdef DEBUG_1
-      if (k % 10 == 0) std::cout << std::endl;
-      if (intersect)
-      {
-//      std::cout << "1";
-      std::cout << distance << " ";
-      }
-      else {
-      std::cout << " ";
-      }
-#endif
-
       if (intersect)
       {
          for (std::list<Light_source> ::iterator light_it = lights.begin();
@@ -96,6 +84,10 @@ void RayTrace::execute (unsigned int thread_id,
 
             float score = 1.0f - th_range;
             float intensity[3] = { score, score, score };
+
+            intensity[0] *= light_it->get_intensity(0);
+            intensity[1] *= light_it->get_intensity(1);
+            intensity[2] *= light_it->get_intensity(2);
 
             grid_alias[k].increment_intensity( intensity );
 
