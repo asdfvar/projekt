@@ -138,6 +138,10 @@ namespace linalg
 
    /*
    ** Function NAME: linear_transform
+   **
+   ** apply the linear tranform 'Matrix' to
+   ** the input 'input' of dimension 'dim_in'
+   ** to produce an output of dimension 'dim_out'
    */
    template <class T>
    void linear_transform (T *input,
@@ -157,6 +161,28 @@ namespace linalg
             output[i] += input[j] * Matrix[k];
          }
       }
+   }
+
+   /*
+   ** Function NAME: angle_offset
+   **
+   ** Compute the angle offset between two vectors
+   ** 'vec1' and 'vec2' of dimension 'N'
+   **
+   ** RESTRICTION:
+   ** whatever restriction is imposed by acos from cmath
+   */
+   template <class T>
+   T angle_offset (T *vec1,
+                   T *vec2,
+                   int N)
+   {
+      T num   = linalg::dot_product<T>( vec1, vec2, N);
+      T den   = linalg::norm<T>(vec1, N) * linalg::norm<T>(vec2, N);
+      T costh = num / den;
+      T theta = acos(costh);
+
+      return theta;
    }
  
 }

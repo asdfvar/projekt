@@ -1,3 +1,4 @@
+#include "math_constants.h"
 #include "ray_trace.h"
 #include "debug_rt.h"
 #include <pthread.h>
@@ -31,8 +32,6 @@ void RayTrace::execute (unsigned int thread_id,
 {
 
    int   num_rays;
-   float direction[3];
-
    int nxy = nx * ny;
 
    if (thread_id == num_threads - 1)
@@ -46,52 +45,70 @@ void RayTrace::execute (unsigned int thread_id,
 
    Ray *grid_alias = grid + nxy / num_threads * thread_id;
 
-   for (int k = 0; k < num_rays; k++)
+   /*
+   ** Loop through all the rays
+   */
+   for (int ray_ind = 0; ray_ind < num_rays; ray_ind++)
    {
 
-      Ray output_ray;
-      float distance;
-      bool intersect = intersect_objects (
-                            grid_alias[k],
-                           &output_ray,
-                           &distance);
-
-      if (intersect)
+      if ( grid_alias[ray_ind].is_valid() )
       {
-         for (std::list<Light_source> ::iterator light_it = lights.begin();
-              light_it != lights.end();
-              light_it++)
+
+         float *reflection_table_x;
+         float *reflection_table_y;
+         int    reflection_table_N;
+
+         Ray output_ray;
+         float distance;
+         bool intersect = intersect_objects (
+                               grid_alias[ray_ind],
+                              &output_ray,
+                              &distance,
+                               reflection_table_x,
+                               reflection_table_y,
+                              &reflection_table_N);
+
+         if (intersect)
          {
+            for (std::list<Light_source> ::iterator light_it = lights.begin();
+                 light_it != lights.end();
+                 light_it++)
+            {
 
-            // direction to light source = light source position - output ray position
-            direction[0] = light_it->get_position(0) - output_ray.get_position(0);
-            direction[1] = light_it->get_position(1) - output_ray.get_position(1);
-            direction[2] = light_it->get_position(2) - output_ray.get_position(2);
+               float light_source_direction[3];
 
-            // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
-            float output_direction[3];
+               // direction to light source = light source position - output ray position
+               light_source_direction[0] = light_it->get_position(0) - output_ray.get_position(0);
+               light_source_direction[1] = light_it->get_position(1) - output_ray.get_position(1);
+               light_source_direction[2] = light_it->get_position(2) - output_ray.get_position(2);
 
-            output_direction[0] = output_ray.get_direction(0);
-            output_direction[1] = output_ray.get_direction(1);
-            output_direction[2] = output_ray.get_direction(2);
+               // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
+               float output_direction[3];
 
-            float num  = linalg::dot_product<float>( output_direction, direction, 3);
-            float den  = linalg::norm<float>(output_direction, 3);
-                  den *= linalg::norm<float>(direction, 3);
-            float costh = num / den;
-            float theta = acos(costh);
-            float th_range = theta / 3.14159265358979323846264f;
+               output_direction[0] = output_ray.get_direction(0);
+               output_direction[1] = output_ray.get_direction(1);
+               output_direction[2] = output_ray.get_direction(2);
 
-            float score = 1.0f - th_range;
-            float intensity[3] = { score, score, score };
+               float theta = linalg::angle_offset<float>( output_direction, light_source_direction, 3);
 
-            intensity[0] *= light_it->get_intensity(0);
-            intensity[1] *= light_it->get_intensity(1);
-            intensity[2] *= light_it->get_intensity(2);
+               float th_range = theta / PI;
 
-            grid_alias[k].increment_intensity( intensity );
+               float score = 1.0f - th_range;
+               float intensity[3] = { score, score, score };
 
+               intensity[0] *= light_it->get_intensity(0);
+               intensity[1] *= light_it->get_intensity(1);
+               intensity[2] *= light_it->get_intensity(2);
+
+               grid_alias[ray_ind].increment_intensity( intensity );
+
+            }
          }
+         else
+         {
+            grid_alias[ray_ind].set_invalid();
+         }
+
       }
 
    }

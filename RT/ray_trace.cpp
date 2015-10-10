@@ -153,13 +153,19 @@ int RayTrace::get_nxy ( void )
 bool RayTrace::intersect_objects (
                   Ray    ray,
                   Ray   *new_ray,
-                  float *distance)
+                  float *distance,
+                  float *reflection_table_x,
+                  float *reflection_table_y,
+                  int   *reflection_table_N)
 {
 
    return all_objects.intersect (
                  ray,
                  new_ray,
-                 distance);
+                 distance,
+                 reflection_table_x,
+                 reflection_table_y,
+                 reflection_table_N);
 
 }
 

@@ -33,16 +33,17 @@ class Ray
    */
 
       float get_intensity( int );
-
       void set_intensity( float Int[3] );
-
       void increment_intensity( float Int[3] );
+      bool is_valid( void );
+      void set_invalid( void );
 
    private:
 
       float position[3];
       float direction[3];
       float intensity[3];
+      bool  valid;
 };
 
 #endif

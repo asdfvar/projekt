@@ -8,6 +8,8 @@ Ray::Ray( void )
    for (int k = 0; k < 3; k++) position[k]  = 0.0f;
    for (int k = 0; k < 3; k++) direction[k] = 0.0f;
    for (int k = 0; k < 3; k++) intensity[k] = 0.0f;
+
+   valid = true;
 }
 
 /*
@@ -29,6 +31,8 @@ Ray::Ray( float position_in[3],
    intensity[0] = intensity_in[0];
    intensity[1] = intensity_in[1];
    intensity[2] = intensity_in[2];
+
+   valid = true;
 
 }
 
@@ -64,6 +68,22 @@ void Ray::set_position( float pos[3] )
    position[0] = pos[0];
    position[1] = pos[1];
    position[2] = pos[2];
+}
+
+/*
+** Function NAME: is_valid
+*/
+bool Ray::is_valid( void )
+{
+   return valid;
+}
+
+/*
+** Function NAME: set_invalid
+*/
+void Ray::set_invalid( void )
+{
+   valid = false;
 }
 
 /*

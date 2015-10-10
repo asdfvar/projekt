@@ -47,7 +47,10 @@ class RayTrace {
       bool intersect_objects (
                   Ray    in_ray,
                   Ray   *new_ray,
-                  float *distance);
+                  float *distance,
+                  float *reflection_table_x,
+                  float *reflection_table_y,
+                  int   *reflection_table_N);
 
       float                   position[3];
       Assembly                all_objects;

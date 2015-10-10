@@ -25,7 +25,10 @@ class Assembly
       bool intersect(
                   Ray    incomming_ray,
                   Ray   *new_ray,
-                  float *distance);
+                  float *distance,
+                  float *reflection_table_x,
+                  float *reflection_table_y,
+                  int   *reflection_table_N);
 
    private:
 

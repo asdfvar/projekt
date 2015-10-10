@@ -44,7 +44,10 @@ void Assembly::insert (Sphere sphere_object)
 bool Assembly::intersect (
     /* [I ] */     Ray    incomming_ray,
     /* [ O] */     Ray   *new_ray,
-    /* [ O] */     float *distance)
+    /* [ O] */     float *distance,
+                   float *reflection_table_x,
+                   float *reflection_table_y,
+                   int   *reflection_table_N)
 {
 
    bool  intersection = false;
@@ -82,7 +85,10 @@ bool Assembly::intersect (
       intersect_this_assembly |= assembly_it->intersect(  
                                                  incomming_ray,
                                                 &local_ray,
-                                                &local_distance);
+                                                &local_distance,
+                                                 reflection_table_x,
+                                                 reflection_table_y,
+                                                 reflection_table_N);
 
       if (intersect_this_assembly)
       {
@@ -116,7 +122,11 @@ bool Assembly::intersect (
    {
       intersect_this_sphere |= sphere_it->intersect(  incomming_ray,
                                                      &local_ray,
-                                                     &local_distance);
+                                                     &local_distance,
+                                                      reflection_table_x,
+                                                      reflection_table_y,
+                                                      reflection_table_N);
+
       if (intersect_this_sphere)
       {
          if (first_intersection)
