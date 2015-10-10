@@ -4,69 +4,54 @@ import struct
 import numpy as np
 import pylab as pl
 
-fid = open("../test/result.r", 'rb')
+def read_data_size( file_name ):
 
-raw_data = fid.read(8)
+   fid = open( file_name, 'rb')
 
-num = struct.unpack( 'i', raw_data[0:4] )
-nx = num[0]
-num = struct.unpack( 'i', raw_data[4:8] )
-ny = num[0]
+   raw_data = fid.read(8)
 
-data_red = np.zeros(nx*ny)
+   num = struct.unpack( 'i', raw_data[0:4] )
+   nx  = num[0]
+   num = struct.unpack( 'i', raw_data[4:8] )
+   ny  = num[0]
 
-raw_data = fid.read()
-fid.close()
+   fid.close()
 
-for k in range(nx*ny):
-   num = struct.unpack( 'f', raw_data[k*4:k*4+4] )
-   data_red[k] = num[0]
+   return [nx, ny]
 
-data_red = np.reshape(data_red, (ny,nx))
+def read_data( file_name ):
+
+   fid = open( file_name, 'rb')
+
+   raw_data = fid.read(8)
+
+   num = struct.unpack( 'i', raw_data[0:4] )
+   nx  = num[0]
+   num = struct.unpack( 'i', raw_data[4:8] )
+   ny  = num[0]
+
+   data = np.zeros(nx*ny)
+
+   raw_data = fid.read()
+   fid.close()
+
+   for k in range(nx*ny):
+      num = struct.unpack( 'f', raw_data[k*4:k*4+4] )
+      data[k] = num[0]
+
+   data = np.reshape(data, (ny,nx))
+
+   return data
 
 
-fid = open("../test/result.g", 'rb')
+data_red   = read_data( "../test/result.r" )
+data_green = read_data( "../test/result.g" )
+data_blue  = read_data( "../test/result.b" )
 
-raw_data = fid.read(8)
-
-num = struct.unpack( 'i', raw_data[0:4] )
-nx = num[0]
-num = struct.unpack( 'i', raw_data[4:8] )
-ny = num[0]
-
-data_green = np.zeros(nx*ny)
-
-raw_data = fid.read()
-fid.close()
-
-for k in range(nx*ny):
-   num = struct.unpack( 'f', raw_data[k*4:k*4+4] )
-   data_green[k] = num[0]
-
-data_green = np.reshape(data_green, (ny,nx))
-
-fid = open("../test/result.b", 'rb')
-
-raw_data = fid.read(8)
-
-num = struct.unpack( 'i', raw_data[0:4] )
-nx = num[0]
-num = struct.unpack( 'i', raw_data[4:8] )
-ny = num[0]
-
-data_blue = np.zeros(nx*ny)
-
-raw_data = fid.read()
-fid.close()
-
-for k in range(nx*ny):
-   num = struct.unpack( 'f', raw_data[k*4:k*4+4] )
-   data_blue[k] = num[0]
-
-data_blue = np.reshape(data_blue, (ny,nx))
+nxy = read_data_size( "../test/result.r" )
 
 #image = np.array([data_red, data_green, data_blue])
-image = np.zeros((nx,ny,3))
+image = np.zeros((nxy[0],nxy[1],3))
 image[:,:,0] = data_red
 image[:,:,1] = data_green
 image[:,:,2] = data_blue
