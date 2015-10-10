@@ -51,7 +51,7 @@ data_blue  = read_data( "../test/result.b" )
 nxy = read_data_size( "../test/result.r" )
 
 #image = np.array([data_red, data_green, data_blue])
-image = np.zeros((nxy[0],nxy[1],3))
+image = np.zeros((nxy[1],nxy[0],3))
 image[:,:,0] = data_red
 image[:,:,1] = data_green
 image[:,:,2] = data_blue

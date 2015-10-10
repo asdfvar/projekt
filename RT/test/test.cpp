@@ -5,11 +5,11 @@ int main()
 {
 
    float position[3] = { 0.0f, 0.0f, 0.0f };
-   float look_rotation[3] = { 10.0f, 10.0f, 10.0f };
+   float look_rotation[3] = { 0.0f, 0.0f, 0.0f };
    float intensity[3];
 
-   float dx = 0.001f;
-   float dy = 0.001f;
+   float dx = 0.000625f;
+   float dy = 0.001111111111f;
 
    RayTrace RT(position,
                look_rotation,
@@ -30,14 +30,18 @@ int main()
    RT.insert_light ( position, intensity );
 
    position[0] = 3.0f;
-   position[1] = 0.0f;
-   position[2] = 0.0f;
+   position[1] = -1.0f;
+   position[2] = 0.5f;
 
-   RT.insert_sphere ( position, 1.0f );
+   RT.insert_sphere ( position, 1.4f );
+
+   position[0] = 3.0f;
+   position[1] = 1.0f;
+   position[2] = -0.5f;
+
+   RT.insert_sphere ( position, 1.4f );
 
    RT.run( 6 );
-
-//   RT.print_grid ();
 
    RT.write_grid ();
 
