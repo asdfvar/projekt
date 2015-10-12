@@ -42,12 +42,12 @@ void Assembly::insert (Sphere *sphere_object)
 ** Function NAME: intersect
 */
 bool Assembly::intersect (
-    /* [I ] */     Ray    incomming_ray,
-    /* [ O] */     Ray   *new_ray,
-    /* [ O] */     float *distance,
-                   float *reflection_table_x,
-                   float *reflection_table_y,
-                   int   *reflection_table_N)
+    /* [I ] */     Ray     incomming_ray,
+    /* [ O] */     Ray    *new_ray,
+    /* [ O] */     float  *distance,
+                   float **reflection_table_x,
+                   float **reflection_table_y,
+                   int    *reflection_table_N)
 {
 
    bool  intersection = false;
@@ -56,6 +56,10 @@ bool Assembly::intersect (
 
    Ray local_ray;
    float local_distance;
+
+   float *local_reflection_table_x;
+   float *local_reflection_table_y;
+   int    local_reflection_table_N;
 
    /*
    ** Convert incoming ray to coordinates that are
@@ -86,24 +90,30 @@ bool Assembly::intersect (
                                                  incomming_ray,
                                                 &local_ray,
                                                 &local_distance,
-                                                 reflection_table_x,
-                                                 reflection_table_y,
-                                                 reflection_table_N);
+                                                &local_reflection_table_x,
+                                                &local_reflection_table_y,
+                                                &local_reflection_table_N);
 
       if (intersect_this_assembly)
       {
          if (first_intersection)
          {
             first_intersection = false;
-            min_distance = local_distance;
-           *distance = local_distance;
-           *new_ray = local_ray;
+            min_distance       = local_distance;
+           *distance           = local_distance;
+           *new_ray            = local_ray;
+           *reflection_table_x = local_reflection_table_x;
+           *reflection_table_y = local_reflection_table_y;
+           *reflection_table_N = local_reflection_table_N;
          }
          else if (local_distance < min_distance)
          {
-            min_distance = local_distance;
-           *distance = local_distance;
-           *new_ray = local_ray;
+            min_distance       = local_distance;
+           *distance           = local_distance;
+           *new_ray            = local_ray;
+           *reflection_table_x = local_reflection_table_x;
+           *reflection_table_y = local_reflection_table_y;
+           *reflection_table_N = local_reflection_table_N;
          }
       }
    }
@@ -123,24 +133,30 @@ bool Assembly::intersect (
       intersect_this_sphere |= sphere_it->intersect(  incomming_ray,
                                                      &local_ray,
                                                      &local_distance,
-                                                      reflection_table_x,
-                                                      reflection_table_y,
-                                                      reflection_table_N);
+                                                     &local_reflection_table_x,
+                                                     &local_reflection_table_y,
+                                                     &local_reflection_table_N);
 
       if (intersect_this_sphere)
       {
          if (first_intersection)
          {
-             first_intersection = false;
-             min_distance = local_distance;
-            *distance = local_distance;
-            *new_ray = local_ray;
+             first_intersection  = false;
+             min_distance        = local_distance;
+            *distance            = local_distance;
+            *new_ray             = local_ray;
+            *reflection_table_x  = local_reflection_table_x;
+            *reflection_table_y  = local_reflection_table_y;
+            *reflection_table_N  = local_reflection_table_N;
          }
          else if (local_distance < min_distance)
          {
-            min_distance = local_distance;
-           *distance = local_distance;
-           *new_ray = local_ray;
+            min_distance       = local_distance;
+           *distance           = local_distance;
+           *new_ray            = local_ray;
+           *reflection_table_x = local_reflection_table_x;
+           *reflection_table_y = local_reflection_table_y;
+           *reflection_table_N = local_reflection_table_N;
          }
       }
    }

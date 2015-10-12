@@ -1,4 +1,5 @@
 #include "math_constants.h"
+#include "interpolate.h"
 #include "ray_trace.h"
 #include "debug_rt.h"
 #include <pthread.h>
@@ -64,13 +65,13 @@ void RayTrace::execute (unsigned int thread_id,
                                grid_alias[ray_ind],
                               &output_ray,
                               &distance,
-                               reflection_table_x,
-                               reflection_table_y,
+                              &reflection_table_x,
+                              &reflection_table_y,
                               &reflection_table_N);
 
          if (intersect)
          {
-            for (std::list<Light_source> ::iterator light_it = lights.begin();
+            for (std::list<Light_source>::iterator light_it = lights.begin();
                  light_it != lights.end();
                  light_it++)
             {
@@ -89,11 +90,20 @@ void RayTrace::execute (unsigned int thread_id,
                output_direction[1] = output_ray.get_direction(1);
                output_direction[2] = output_ray.get_direction(2);
 
-               float theta = linalg::angle_offset<float>( output_direction, light_source_direction, 3);
+               float theta = linalg::angle_offset<float>(
+                                          output_direction,
+                                          light_source_direction,
+                                          3);
 
                float th_range = theta / PI;
 
-               float score = 1.0f - th_range;
+               float score = tools::linear_interpolate(
+                                          reflection_table_x,
+                                          reflection_table_y,
+                                          th_range,
+                                          reflection_table_N);
+
+
                float intensity[3] = { score, score, score };
 
                intensity[0] *= light_it->get_intensity(0);

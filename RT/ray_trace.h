@@ -35,9 +35,7 @@ class RayTrace {
                     unsigned int num_threads);
 
       int get_nxy ( void );
-
       void print_grid ( void );
-
       void write_grid ( void );
 
       Ray      *grid;
@@ -45,12 +43,12 @@ class RayTrace {
    private:
 
       bool intersect_objects (
-                  Ray    in_ray,
-                  Ray   *new_ray,
-                  float *distance,
-                  float *reflection_table_x,
-                  float *reflection_table_y,
-                  int   *reflection_table_N);
+                  Ray     in_ray,
+                  Ray    *new_ray,
+                  float  *distance,
+                  float **reflection_table_x,
+                  float **reflection_table_y,
+                  int    *reflection_table_N);
 
       float                   position[3];
       Assembly                all_objects;

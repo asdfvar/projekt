@@ -152,12 +152,12 @@ int RayTrace::get_nxy ( void )
 ** Function NAME: intersect_objects
 */
 bool RayTrace::intersect_objects (
-                  Ray    ray,
-                  Ray   *new_ray,
-                  float *distance,
-                  float *reflection_table_x,
-                  float *reflection_table_y,
-                  int   *reflection_table_N)
+                  Ray     ray,
+                  Ray    *new_ray,
+                  float  *distance,
+                  float **reflection_table_x,
+                  float **reflection_table_y,
+                  int    *reflection_table_N)
 {
 
    return all_objects.intersect (

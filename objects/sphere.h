@@ -18,12 +18,12 @@ class Sphere : public Shape
 
       float radius;
 
-      bool intersect( Ray    incomming_ray,
-                      Ray   *new_ray,
-                      float *distance,
-                      float *reflection_table_x,
-                      float *reflection_table_y,
-                      int   *reflection_table_N);
+      bool intersect( Ray     incomming_ray,
+                      Ray    *new_ray,
+                      float  *distance,
+                      float **reflection_table_x,
+                      float **reflection_table_y,
+                      int    *reflection_table_N);
 
 };
 

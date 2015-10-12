@@ -17,13 +17,13 @@ namespace tools
                        int N)
  {
 
-    int index = 0;
+    int index;
 
-    for (int k = 0; x[k+1] > p && k+1 < N; k++) {}
+    for (index = 0; x[index+1] < p && index+1 < N; index++) {}
 
-    if (x[k+1] > p)
+    if (x[index+1] >= p)
     {
-        return (p - x[k]) / (x[k+1] - x[k]) * (y[k+1] - y[k]) + y[k];
+        return (p - x[index]) / (x[index+1] - x[index]) * (y[index+1] - y[index]) + y[index];
     }
     else
     {

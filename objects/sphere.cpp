@@ -20,10 +20,14 @@ Sphere::Sphere ( float center_in[3],
 bool Sphere::intersect (Ray    incomming_ray,
                         Ray   *new_ray,
                         float *distance,
-                        float *reflection_table_x,
-                        float *reflection_table_y,
-                        int   *reflection_table_N)
+                        float **reflection_table_x_in,
+                        float **reflection_table_y_in,
+                        int   *reflection_table_N_in)
 {
+
+  *reflection_table_x_in = reflection_table_x;
+  *reflection_table_y_in = reflection_table_y;
+  *reflection_table_N_in = reflection_table_N;
 
   *distance = -1.0f;
 
