@@ -19,8 +19,8 @@ class Assembly
 
       float center[3];
 
-      void insert (Assembly assembly_object);
-      void insert (Sphere   sphere_object);
+      void insert (Assembly *assembly_object);
+      void insert (Sphere   *sphere_object);
 
       bool intersect(
                   Ray    incomming_ray,

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "shape.h"
 
 /*
@@ -6,14 +7,17 @@
 
 Shape::Shape (float center_in[3] )
 {
+
    center[0] = center_in[0];
    center[1] = center_in[1];
    center[2] = center_in[2];
 
    reflection_table_N = 11;
 
+   reflection_table_x = new float[reflection_table_N];
+   reflection_table_y = new float[reflection_table_N];
+
    // let this be a dead weight for the time being
-   /*
    reflection_table_x[0]  = 0.0f;
    reflection_table_x[1]  = 0.1f;
    reflection_table_x[2]  = 0.2f;
@@ -37,7 +41,11 @@ Shape::Shape (float center_in[3] )
    reflection_table_y[8]  = 0.2f;
    reflection_table_y[9]  = 0.1f;
    reflection_table_y[10] = 0.0f;
-   */
+
 }
 
-Shape::~Shape ( void ) { }
+Shape::~Shape ( void )
+{
+   delete[] reflection_table_x;
+   delete[] reflection_table_y;
+}

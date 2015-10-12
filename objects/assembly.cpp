@@ -25,17 +25,17 @@ Assembly::Assembly (float center_in[3])
 /*
 ** Function NAME: insert
 */
-void Assembly::insert (Assembly assembly_object)
+void Assembly::insert (Assembly *assembly_object)
 {
-   assembly_elements.push_back (assembly_object);
+   assembly_elements.push_back (*assembly_object);
 }
 
 /*
 ** Function NAME: insert
 */
-void Assembly::insert (Sphere sphere_object)
+void Assembly::insert (Sphere *sphere_object)
 {
-   sphere_elements.push_back (sphere_object);
+   sphere_elements.push_back (*sphere_object);
 }
 
 /*

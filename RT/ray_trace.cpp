@@ -126,7 +126,8 @@ void RayTrace::insert_sphere (
        float position[3],
        float radius)
 {
-   all_objects.insert( Sphere( position, radius) );
+   Sphere *sphere = new Sphere( position, radius);
+   all_objects.insert( sphere );
 }
 
 /*
