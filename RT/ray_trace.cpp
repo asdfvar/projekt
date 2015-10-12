@@ -124,9 +124,10 @@ RayTrace::~RayTrace(void)
 */
 void RayTrace::insert_sphere (
        float position[3],
-       float radius)
+       float radius,
+       float color[3])
 {
-   Sphere *sphere = new Sphere( position, radius);
+   Sphere *sphere = new Sphere( position, radius, color);
    all_objects.insert( sphere );
 }
 

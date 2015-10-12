@@ -5,12 +5,16 @@
  * Constructor NAME: shape
  */
 
-Shape::Shape (float center_in[3] )
+Shape::Shape (float center_in[3], float color_in[3] )
 {
 
    center[0] = center_in[0];
    center[1] = center_in[1];
    center[2] = center_in[2];
+
+   color[0] = color_in[0];
+   color[1] = color_in[1];
+   color[2] = color_in[2];
 
    reflection_table_N = 11;
 

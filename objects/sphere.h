@@ -14,7 +14,8 @@ class Sphere : public Shape
    public:
 
       Sphere( float center[3],
-              float radius );
+              float radius,
+              float color[3] );
 
       float radius;
 

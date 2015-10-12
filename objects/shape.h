@@ -12,10 +12,11 @@ class Shape
 
    public:
 
-      Shape( float center[3] );
+      Shape( float center[3], float color[3] );
       ~Shape (void);
 
       float center[3];
+      float color[3];
 
       float *reflection_table_x;
       float *reflection_table_y;

@@ -8,8 +8,10 @@
  * Constructor NAME: sphere
  */
 Sphere::Sphere ( float center_in[3],
-                 float radius_in )
-               : Shape (center_in)
+                 float radius_in,
+                 float color_in[3])
+               : Shape (center_in,
+                        color_in)
 {
    radius = radius_in;
 }

@@ -7,6 +7,7 @@ int main()
    float position[3] = { 0.0f, 0.0f, 0.0f };
    float look_rotation[3] = { 0.0f, 0.0f, 0.0f };
    float intensity[3];
+   float color[3];
 
    float dx = 0.000625f;
    float dy = 0.001111111111f;
@@ -33,13 +34,21 @@ int main()
    position[1] = -1.0f;
    position[2] = 0.5f;
 
-   RT.insert_sphere ( position, 1.4f );
+   color[0] = 1.0f;
+   color[1] = 1.0f;
+   color[2] = 1.0f;
+
+   RT.insert_sphere ( position, 1.4f, color );
 
    position[0] = 3.0f;
    position[1] = 1.0f;
    position[2] = -0.5f;
 
-   RT.insert_sphere ( position, 1.4f );
+   color[0] = 1.0f;
+   color[1] = 1.0f;
+   color[2] = 1.0f;
+
+   RT.insert_sphere ( position, 1.4f, color );
 
    RT.run( 6 );
 
