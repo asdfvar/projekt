@@ -22,10 +22,15 @@ Sphere::Sphere ( float center_in[3],
 bool Sphere::intersect (Ray    incomming_ray,
                         Ray   *new_ray,
                         float *distance,
+                        float  color_intensities[],
                         float **reflection_table_x_in,
                         float **reflection_table_y_in,
                         int   *reflection_table_N_in)
 {
+
+   color_intensities[0] = color[0];
+   color_intensities[1] = color[1];
+   color_intensities[2] = color[2];
 
   *reflection_table_x_in = reflection_table_x;
   *reflection_table_y_in = reflection_table_y;

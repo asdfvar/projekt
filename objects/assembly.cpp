@@ -45,6 +45,7 @@ bool Assembly::intersect (
     /* [I ] */     Ray     incomming_ray,
     /* [ O] */     Ray    *new_ray,
     /* [ O] */     float  *distance,
+                   float   color_intensities[],
                    float **reflection_table_x,
                    float **reflection_table_y,
                    int    *reflection_table_N)
@@ -60,6 +61,7 @@ bool Assembly::intersect (
    float *local_reflection_table_x;
    float *local_reflection_table_y;
    int    local_reflection_table_N;
+   float  local_color_intensities[3] = {0.0f, 0.0f, 0.0f};
 
    /*
    ** Convert incoming ray to coordinates that are
@@ -86,39 +88,35 @@ bool Assembly::intersect (
         assembly_it != assembly_elements.end();
         assembly_it++)
    {
-      intersect_this_assembly |= assembly_it->intersect(  
+      intersect_this_assembly = assembly_it->intersect(  
                                                  incomming_ray,
                                                 &local_ray,
                                                 &local_distance,
+                                                 local_color_intensities,
                                                 &local_reflection_table_x,
                                                 &local_reflection_table_y,
                                                 &local_reflection_table_N);
 
       if (intersect_this_assembly)
       {
-         if (first_intersection)
+         if (first_intersection || local_distance < min_distance)
          {
-            first_intersection = false;
-            min_distance       = local_distance;
-           *distance           = local_distance;
-           *new_ray            = local_ray;
-           *reflection_table_x = local_reflection_table_x;
-           *reflection_table_y = local_reflection_table_y;
-           *reflection_table_N = local_reflection_table_N;
-         }
-         else if (local_distance < min_distance)
-         {
-            min_distance       = local_distance;
-           *distance           = local_distance;
-           *new_ray            = local_ray;
-           *reflection_table_x = local_reflection_table_x;
-           *reflection_table_y = local_reflection_table_y;
-           *reflection_table_N = local_reflection_table_N;
+            first_intersection   = false;
+            min_distance         = local_distance;
+           *distance             = local_distance;
+            color_intensities[0] = local_color_intensities[0];
+            color_intensities[1] = local_color_intensities[1];
+            color_intensities[2] = local_color_intensities[2];
+           *new_ray              = local_ray;
+           *reflection_table_x   = local_reflection_table_x;
+           *reflection_table_y   = local_reflection_table_y;
+           *reflection_table_N   = local_reflection_table_N;
          }
       }
-   }
 
-   intersection |= intersect_this_assembly;
+      intersection |= intersect_this_assembly;
+
+   }
 
    /*
    ** Loop through the spheres
@@ -130,38 +128,35 @@ bool Assembly::intersect (
         sphere_it != sphere_elements.end();
         sphere_it++)
    {
-      intersect_this_sphere |= sphere_it->intersect(  incomming_ray,
+      intersect_this_sphere = sphere_it->intersect(  incomming_ray,
                                                      &local_ray,
                                                      &local_distance,
+                                                      local_color_intensities,
                                                      &local_reflection_table_x,
                                                      &local_reflection_table_y,
                                                      &local_reflection_table_N);
 
       if (intersect_this_sphere)
       {
-         if (first_intersection)
+         if (first_intersection || local_distance < min_distance)
          {
-             first_intersection  = false;
-             min_distance        = local_distance;
-            *distance            = local_distance;
-            *new_ray             = local_ray;
-            *reflection_table_x  = local_reflection_table_x;
-            *reflection_table_y  = local_reflection_table_y;
-            *reflection_table_N  = local_reflection_table_N;
-         }
-         else if (local_distance < min_distance)
-         {
-            min_distance       = local_distance;
-           *distance           = local_distance;
-           *new_ray            = local_ray;
-           *reflection_table_x = local_reflection_table_x;
-           *reflection_table_y = local_reflection_table_y;
-           *reflection_table_N = local_reflection_table_N;
+             first_intersection   = false;
+             min_distance         = local_distance;
+            *distance             = local_distance;
+             color_intensities[0] = local_color_intensities[0];
+             color_intensities[1] = local_color_intensities[1];
+             color_intensities[2] = local_color_intensities[2];
+            *new_ray              = local_ray;
+            *reflection_table_x   = local_reflection_table_x;
+            *reflection_table_y   = local_reflection_table_y;
+            *reflection_table_N   = local_reflection_table_N;
          }
       }
+
+      intersection |= intersect_this_sphere;
+
    }
 
-   intersection |= intersect_this_sphere;
 
    /*
    ** Find if the new ray has a direct line of sight

@@ -47,6 +47,7 @@ class RayTrace {
                   Ray     in_ray,
                   Ray    *new_ray,
                   float  *distance,
+                  float   color_intensities[],
                   float **reflection_table_x,
                   float **reflection_table_y,
                   int    *reflection_table_N);

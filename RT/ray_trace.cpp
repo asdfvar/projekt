@@ -156,6 +156,7 @@ bool RayTrace::intersect_objects (
                   Ray     ray,
                   Ray    *new_ray,
                   float  *distance,
+                  float   color_intensity[],
                   float **reflection_table_x,
                   float **reflection_table_y,
                   int    *reflection_table_N)
@@ -165,6 +166,7 @@ bool RayTrace::intersect_objects (
                  ray,
                  new_ray,
                  distance,
+                 color_intensity,
                  reflection_table_x,
                  reflection_table_y,
                  reflection_table_N);

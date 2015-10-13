@@ -33,10 +33,10 @@ class Ray
    */
 
       float get_intensity( int );
-      void set_intensity( float Int[3] );
-      void increment_intensity( float Int[3] );
-      bool is_valid( void );
-      void set_invalid( void );
+      void  set_intensity( float Int[3] );
+      void  increment_intensity( float Int[3] );
+      bool  is_valid( void );
+      void  set_invalid( void );
 
    private:
 

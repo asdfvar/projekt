@@ -22,6 +22,7 @@ class Sphere : public Shape
       bool intersect( Ray     incomming_ray,
                       Ray    *new_ray,
                       float  *distance,
+                      float   color_intensities[],
                       float **reflection_table_x,
                       float **reflection_table_y,
                       int    *reflection_table_N);

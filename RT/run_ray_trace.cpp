@@ -46,6 +46,8 @@ void RayTrace::execute (unsigned int thread_id,
 
    Ray *grid_alias = grid + nxy / num_threads * thread_id;
 
+   float color_intensity[3] = {0.0f, 0.0f, 0.0f};
+
    /*
    ** Loop through all the rays
    */
@@ -62,9 +64,10 @@ void RayTrace::execute (unsigned int thread_id,
          Ray output_ray;
          float distance;
          bool intersect = intersect_objects (
-                               grid_alias[ray_ind],
+                              grid_alias[ray_ind],
                               &output_ray,
                               &distance,
+                              color_intensity,
                               &reflection_table_x,
                               &reflection_table_y,
                               &reflection_table_N);
@@ -109,6 +112,10 @@ void RayTrace::execute (unsigned int thread_id,
                intensity[0] *= light_it->get_intensity(0);
                intensity[1] *= light_it->get_intensity(1);
                intensity[2] *= light_it->get_intensity(2);
+
+               intensity[0] *= color_intensity[0];
+               intensity[1] *= color_intensity[1];
+               intensity[2] *= color_intensity[2];
 
                grid_alias[ray_ind].increment_intensity( intensity );
 

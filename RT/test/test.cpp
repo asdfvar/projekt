@@ -24,9 +24,9 @@ int main()
    position[1] = 1.0f;
    position[2] = 1.0f;
 
-   intensity[0] = 0.0f;
+   intensity[0] = 1.0f;
    intensity[1] = 1.0f;
-   intensity[2] = 0.0f;
+   intensity[2] = 1.0f;
 
    RT.insert_light ( position, intensity );
 
@@ -35,8 +35,8 @@ int main()
    position[2] = 0.5f;
 
    color[0] = 1.0f;
-   color[1] = 1.0f;
-   color[2] = 1.0f;
+   color[1] = 0.0f;
+   color[2] = 0.0f;
 
    RT.insert_sphere ( position, 1.4f, color );
 
@@ -44,11 +44,11 @@ int main()
    position[1] = 1.0f;
    position[2] = -0.5f;
 
-   color[0] = 1.0f;
+   color[0] = 0.0f;
    color[1] = 1.0f;
-   color[2] = 1.0f;
+   color[2] = 0.0f;
 
-   RT.insert_sphere ( position, 1.4f, color );
+   RT.insert_sphere ( position, 1.0f, color );
 
    RT.run( 6 );
 
