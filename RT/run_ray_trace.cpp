@@ -63,7 +63,8 @@ void RayTrace::execute (unsigned int thread_id,
 
          Ray output_ray;
          float distance;
-         bool intersect = intersect_objects (
+
+         bool intersect = all_objects.intersect (
                               grid_alias[ray_ind],
                               &output_ray,
                               &distance,

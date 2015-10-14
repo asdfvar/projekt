@@ -150,30 +150,6 @@ int RayTrace::get_nxy ( void )
 }
 
 /*
-** Function NAME: intersect_objects
-*/
-bool RayTrace::intersect_objects (
-                  Ray     ray,
-                  Ray    *new_ray,
-                  float  *distance,
-                  float   color_intensity[],
-                  float **reflection_table_x,
-                  float **reflection_table_y,
-                  int    *reflection_table_N)
-{
-
-   return all_objects.intersect (
-                 ray,
-                 new_ray,
-                 distance,
-                 color_intensity,
-                 reflection_table_x,
-                 reflection_table_y,
-                 reflection_table_N);
-
-}
-
-/*
 ** Function NAME: print_grid
 */
 void RayTrace::print_grid ( void )
