@@ -50,7 +50,7 @@ void RayTrace::execute (unsigned int thread_id,
 
    float color_intensity[3] = {0.0f, 0.0f, 0.0f};
 
-   for (int iteration = 0; iteration < 2; iteration++)
+   for (int iteration = 0; iteration < 20; iteration++)
    {
 
    /*
@@ -114,6 +114,7 @@ void RayTrace::execute (unsigned int thread_id,
                                           th_range,
                                           reflection_table_N);
 
+               score *= 1.0f / (float)(iteration + 1);
 
                intensity[0] = score;
                intensity[1] = score;
