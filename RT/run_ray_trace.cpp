@@ -53,98 +53,94 @@ void RayTrace::execute (unsigned int thread_id,
    for (int iteration = 0; iteration < 20; iteration++)
    {
 
-   /*
-   ** Loop through all the rays
-   */
-   for (int ray_ind = 0; ray_ind < num_rays; ray_ind++)
-   {
-
-      if ( grid_alias[ray_ind].is_valid() )
+      /*
+      ** Loop through all the rays
+      */
+      for (int ray_ind = 0; ray_ind < num_rays; ray_ind++)
       {
-
-         float *reflection_table_x;
-         float *reflection_table_y;
-         int    reflection_table_N;
-
-         Ray output_ray;
-         float distance;
-
-         bool intersect = all_objects.intersect (
-                              grid_alias[ray_ind],
-                              &output_ray,
-                              &distance,
-                              color_intensity,
-                              &reflection_table_x,
-                              &reflection_table_y,
-                              &reflection_table_N);
-
-         if (intersect)
+   
+         if ( grid_alias[ray_ind].is_valid() )
          {
-            for (std::list<Light_source>::iterator light_it = lights.begin();
-                 light_it != lights.end();
-                 light_it++)
+   
+            float *reflection_table_x;
+            float *reflection_table_y;
+            int    reflection_table_N;
+   
+            Ray output_ray;
+            float distance;
+   
+            bool intersect = all_objects.intersect (
+                                 grid_alias[ray_ind],
+                                 &output_ray,
+                                 &distance,
+                                 color_intensity,
+                                 &reflection_table_x,
+                                 &reflection_table_y,
+                                 &reflection_table_N);
+   
+            if (intersect)
             {
+               for (std::list<Light_source>::iterator light_it = lights.begin();
+                    light_it != lights.end();
+                    light_it++)
+               {
+   
+                  float light_source_direction[3];
+   
+                  // direction to light source = light source position - output ray position
+                  light_source_direction[0] = light_it->get_position(0) - output_ray.get_position(0);
+                  light_source_direction[1] = light_it->get_position(1) - output_ray.get_position(1);
+                  light_source_direction[2] = light_it->get_position(2) - output_ray.get_position(2);
+   
+                  // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
+                  direction[0] = output_ray.get_direction(0);
+                  direction[1] = output_ray.get_direction(1);
+                  direction[2] = output_ray.get_direction(2);
+   
+                  position[0] = output_ray.get_position(0);
+                  position[1] = output_ray.get_position(1);
+                  position[2] = output_ray.get_position(2);
+   
+                  float theta = linalg::angle_offset<float>(
+                                             direction,
+                                             light_source_direction,
+                                             3);
+   
+                  float th_range = theta / PI;
+   
+                  float score = tools::linear_interpolate(
+                                             reflection_table_x,
+                                             reflection_table_y,
+                                             th_range,
+                                             reflection_table_N);
+   
+                  score *= 1.0f / (float)(iteration + 1);
+   
+                  intensity[0] = score;
+                  intensity[1] = score;
+                  intensity[2] = score;
+   
+                  intensity[0] *= light_it->get_intensity(0);
+                  intensity[1] *= light_it->get_intensity(1);
+                  intensity[2] *= light_it->get_intensity(2);
+   
+                  intensity[0] *= color_intensity[0];
+                  intensity[1] *= color_intensity[1];
+                  intensity[2] *= color_intensity[2];
+   
+                  grid_alias[ray_ind].increment_intensity( intensity );
+   
+                  grid_alias[ray_ind].set_position( position );
+                  grid_alias[ray_ind].set_direction( direction );
 
-               float light_source_direction[3];
-
-               // direction to light source = light source position - output ray position
-               light_source_direction[0] = light_it->get_position(0) - output_ray.get_position(0);
-               light_source_direction[1] = light_it->get_position(1) - output_ray.get_position(1);
-               light_source_direction[2] = light_it->get_position(2) - output_ray.get_position(2);
-
-               // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
-               direction[0] = output_ray.get_direction(0);
-               direction[1] = output_ray.get_direction(1);
-               direction[2] = output_ray.get_direction(2);
-
-               position[0] = output_ray.get_position(0);
-               position[1] = output_ray.get_position(1);
-               position[2] = output_ray.get_position(2);
-
-               float theta = linalg::angle_offset<float>(
-                                          direction,
-                                          light_source_direction,
-                                          3);
-
-               float th_range = theta / PI;
-
-               float score = tools::linear_interpolate(
-                                          reflection_table_x,
-                                          reflection_table_y,
-                                          th_range,
-                                          reflection_table_N);
-
-               score *= 1.0f / (float)(iteration + 1);
-
-               intensity[0] = score;
-               intensity[1] = score;
-               intensity[2] = score;
-
-               intensity[0] *= light_it->get_intensity(0);
-               intensity[1] *= light_it->get_intensity(1);
-               intensity[2] *= light_it->get_intensity(2);
-
-               intensity[0] *= color_intensity[0];
-               intensity[1] *= color_intensity[1];
-               intensity[2] *= color_intensity[2];
-
-               grid_alias[ray_ind].increment_intensity( intensity );
-
-               grid_alias[ray_ind].set_position( position );
-               grid_alias[ray_ind].set_direction( direction );
-
+               }
+            }
+            else
+            {
+               grid_alias[ray_ind].set_invalid();
             }
          }
-         else
-         {
-            grid_alias[ray_ind].set_invalid();
-         }
-
       }
-
-   }
-
-
    }
 
    for (int ray_ind = 0; ray_ind < num_rays; ray_ind++)
