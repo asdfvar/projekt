@@ -46,8 +46,7 @@ bool point_to_sphere (
 
    float B  = -2.0f * linalg::dot_product<float> (line_direction, a, 3);
 
-   float C  = linalg::norm_squared<float> (a, 3);
-         C -= radius * radius;
+   float C  = linalg::norm_squared<float> (a, 3) - radius * radius;
 
    float discriminant = B * B - 4.0f * A * C;
 
