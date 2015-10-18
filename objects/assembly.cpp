@@ -46,6 +46,7 @@ bool Assembly::intersect (
     /* [ O] */     Ray    *new_ray,
     /* [ O] */     float  *distance,
                    float   color_intensities[],
+                   float  *reflectivity,
                    float **reflection_table_x,
                    float **reflection_table_y,
                    int    *reflection_table_N)
@@ -62,6 +63,7 @@ bool Assembly::intersect (
    float *local_reflection_table_y;
    int    local_reflection_table_N;
    float  local_color_intensities[3] = {0.0f, 0.0f, 0.0f};
+   float  local_reflectivity;
 
    /*
    ** Convert incoming ray to coordinates that are
@@ -93,6 +95,7 @@ bool Assembly::intersect (
                                                 &local_ray,
                                                 &local_distance,
                                                  local_color_intensities,
+                                                &local_reflectivity,
                                                 &local_reflection_table_x,
                                                 &local_reflection_table_y,
                                                 &local_reflection_table_N);
@@ -107,6 +110,7 @@ bool Assembly::intersect (
             color_intensities[0] = local_color_intensities[0];
             color_intensities[1] = local_color_intensities[1];
             color_intensities[2] = local_color_intensities[2];
+           *reflectivity         = local_reflectivity;
            *new_ray              = local_ray;
            *reflection_table_x   = local_reflection_table_x;
            *reflection_table_y   = local_reflection_table_y;
@@ -133,6 +137,7 @@ int itt = 0;
                                                    &local_ray,
                                                    &local_distance,
                                                     local_color_intensities,
+                                                   &local_reflectivity,
                                                    &local_reflection_table_x,
                                                    &local_reflection_table_y,
                                                    &local_reflection_table_N);
@@ -148,6 +153,7 @@ int itt = 0;
              color_intensities[0] = local_color_intensities[0];
              color_intensities[1] = local_color_intensities[1];
              color_intensities[2] = local_color_intensities[2];
+           *reflectivity         = local_reflectivity;
             *new_ray              = local_ray;
             *reflection_table_x   = local_reflection_table_x;
             *reflection_table_y   = local_reflection_table_y;

@@ -12,7 +12,10 @@ class Shape
 
    public:
 
-      Shape( float center[3], float color[3] );
+      Shape( float center[3],
+             float color[3],
+             float reflectivity);
+
       ~Shape (void);
 
       float center[3];
@@ -22,9 +25,10 @@ class Shape
       float *reflection_table_y;
       int    reflection_table_N;
 
-   private:
+   protected:
 
-      float *reflection_table;
+      float reflectivity;
+
 };
 
 #endif

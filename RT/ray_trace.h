@@ -28,7 +28,8 @@ class RayTrace {
       void insert_sphere (
              float position[3],
              float radius,
-             float color[3]);
+             float color[3],
+             float reflectivity);
 
       void run ( unsigned int num_threads );
 

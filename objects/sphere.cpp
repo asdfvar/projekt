@@ -11,9 +11,11 @@
  */
 Sphere::Sphere ( float center_in[3],
                  float radius_in,
-                 float color_in[3])
+                 float color_in[3],
+                 float reflectivity_in)
                : Shape (center_in,
-                        color_in)
+                        color_in,
+                        reflectivity_in)
 {
    radius = radius_in;
 }
@@ -25,6 +27,7 @@ bool Sphere::intersect ( Ray    incomming_ray,
                          Ray   *new_ray,
                          float *distance,
                          float  color_intensities[],
+                         float *reflectivity_out,
                          float **reflection_table_x_in,
                          float **reflection_table_y_in,
                          int   *reflection_table_N_in)
@@ -33,6 +36,8 @@ bool Sphere::intersect ( Ray    incomming_ray,
    color_intensities[0] = color[0];
    color_intensities[1] = color[1];
    color_intensities[2] = color[2];
+
+  *reflectivity_out = reflectivity;
 
   *reflection_table_x_in = reflection_table_x;
   *reflection_table_y_in = reflection_table_y;

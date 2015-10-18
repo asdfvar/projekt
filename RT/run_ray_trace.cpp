@@ -36,6 +36,7 @@ void RayTrace::execute (unsigned int thread_id,
    int nxy = nx * ny;
 
    float position[3], direction[3], intensity[3];
+   float reflectivity;
 
    if (thread_id == num_threads - 1)
    {
@@ -73,7 +74,8 @@ void RayTrace::execute (unsigned int thread_id,
                                  grid_alias[ray_ind],
                                  &output_ray,
                                  &distance,
-                                 color_intensity,
+                                  color_intensity,
+                                 &reflectivity,
                                  &reflection_table_x,
                                  &reflection_table_y,
                                  &reflection_table_N);
@@ -114,7 +116,7 @@ void RayTrace::execute (unsigned int thread_id,
                                              th_range,
                                              reflection_table_N);
    
-                  score *= 1.0f / (float)(iteration + 1);
+                  score *= grid_alias[ray_ind].get_energy();
    
                   intensity[0] = score;
                   intensity[1] = score;
@@ -128,7 +130,7 @@ void RayTrace::execute (unsigned int thread_id,
                   intensity[1] *= color_intensity[1];
                   intensity[2] *= color_intensity[2];
    
-                  grid_alias[ray_ind].increment_intensity( intensity );
+                  grid_alias[ray_ind].increment_intensity( intensity, reflectivity);
    
                   grid_alias[ray_ind].set_position( position );
                   grid_alias[ray_ind].set_direction( direction );

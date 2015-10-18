@@ -15,7 +15,8 @@ class Sphere : public Shape
 
       Sphere( float center[3],
               float radius,
-              float color[3] );
+              float color[3],
+              float reflectivity);
 
       float radius;
 
@@ -23,6 +24,7 @@ class Sphere : public Shape
                       Ray    *new_ray,
                       float  *distance,
                       float   color_intensities[],
+                      float  *reflectivity,
                       float **reflection_table_x,
                       float **reflection_table_y,
                       int    *reflection_table_N);

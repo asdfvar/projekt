@@ -9,6 +9,8 @@ Ray::Ray( void )
    for (int k = 0; k < 3; k++) direction[k] = 0.0f;
    for (int k = 0; k < 3; k++) intensity[k] = 0.0f;
 
+   energy = 1.0f;
+
    valid = true;
 }
 
@@ -31,6 +33,8 @@ Ray::Ray( float position_in[3],
    intensity[0] = intensity_in[0];
    intensity[1] = intensity_in[1];
    intensity[2] = intensity_in[2];
+
+   energy = 1.0f;
 
    valid = true;
 
@@ -93,11 +97,22 @@ void Ray::set_intensity( float Int[3] )
 /*
 ** Function NAME: increment_intensity
 */
-void Ray::increment_intensity( float Int[3] )
+void Ray::increment_intensity( float Int[3],
+                               float reflectivity)
 {
    intensity[0] += Int[0];
    intensity[1] += Int[1];
    intensity[2] += Int[2];
+
+   energy *= reflectivity;
+}
+
+/*
+** Function NAME: get_energy
+*/
+float Ray::get_energy( void )
+{
+   return energy;
 }
 
 /*
