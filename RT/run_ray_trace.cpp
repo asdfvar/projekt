@@ -35,6 +35,8 @@ void RayTrace::execute (unsigned int thread_id,
    int   num_rays;
    int nxy = nx * ny;
 
+   float position[3], direction[3], intensity[3];
+
    if (thread_id == num_threads - 1)
    {
       num_rays = nxy / num_threads + nxy % num_threads;
@@ -47,6 +49,9 @@ void RayTrace::execute (unsigned int thread_id,
    Ray *grid_alias = grid + nxy / num_threads * thread_id;
 
    float color_intensity[3] = {0.0f, 0.0f, 0.0f};
+
+   for (int iteration = 0; iteration < 2; iteration++)
+   {
 
    /*
    ** Loop through all the rays
@@ -88,14 +93,16 @@ void RayTrace::execute (unsigned int thread_id,
                light_source_direction[2] = light_it->get_position(2) - output_ray.get_position(2);
 
                // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
-               float output_direction[3];
+               direction[0] = output_ray.get_direction(0);
+               direction[1] = output_ray.get_direction(1);
+               direction[2] = output_ray.get_direction(2);
 
-               output_direction[0] = output_ray.get_direction(0);
-               output_direction[1] = output_ray.get_direction(1);
-               output_direction[2] = output_ray.get_direction(2);
+               position[0] = output_ray.get_position(0);
+               position[1] = output_ray.get_position(1);
+               position[2] = output_ray.get_position(2);
 
                float theta = linalg::angle_offset<float>(
-                                          output_direction,
+                                          direction,
                                           light_source_direction,
                                           3);
 
@@ -108,7 +115,9 @@ void RayTrace::execute (unsigned int thread_id,
                                           reflection_table_N);
 
 
-               float intensity[3] = { score, score, score };
+               intensity[0] = score;
+               intensity[1] = score;
+               intensity[2] = score;
 
                intensity[0] *= light_it->get_intensity(0);
                intensity[1] *= light_it->get_intensity(1);
@@ -120,6 +129,9 @@ void RayTrace::execute (unsigned int thread_id,
 
                grid_alias[ray_ind].increment_intensity( intensity );
 
+               grid_alias[ray_ind].set_position( position );
+               grid_alias[ray_ind].set_direction( direction );
+
             }
          }
          else
@@ -130,6 +142,20 @@ void RayTrace::execute (unsigned int thread_id,
       }
 
    }
+
+
+   }
+
+   for (int ray_ind = 0; ray_ind < num_rays; ray_ind++)
+   {
+      intensity[0] = grid_alias[ray_ind].get_intensity(0);
+      intensity[1] = grid_alias[ray_ind].get_intensity(1);
+      intensity[2] = grid_alias[ray_ind].get_intensity(2);
+
+
+      grid_alias[ray_ind].set_intensity( intensity );
+   }
+
 
 }
 

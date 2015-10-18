@@ -71,22 +71,6 @@ void Ray::set_position( float pos[3] )
 }
 
 /*
-** Function NAME: is_valid
-*/
-bool Ray::is_valid( void )
-{
-   return valid;
-}
-
-/*
-** Function NAME: set_invalid
-*/
-void Ray::set_invalid( void )
-{
-   valid = false;
-}
-
-/*
 ** Function NAME: set_direction
 */
 void Ray::set_direction( float dir[3] )
@@ -114,4 +98,20 @@ void Ray::increment_intensity( float Int[3] )
    intensity[0] += Int[0];
    intensity[1] += Int[1];
    intensity[2] += Int[2];
+}
+
+/*
+** Function NAME: is_valid
+*/
+bool Ray::is_valid( void )
+{
+   return valid;
+}
+
+/*
+** Function NAME: set_invalid
+*/
+void Ray::set_invalid( void )
+{
+   valid = false;
 }

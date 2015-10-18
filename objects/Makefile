@@ -1,6 +1,6 @@
 CPPC = g++
 CL = ar rcs
-FLAGS = -O3 -Wall
+FLAGS = -O3 -Wall -g
 
 BASE = ..
 KERNELS = $(BASE)/kernels

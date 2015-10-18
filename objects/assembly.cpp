@@ -99,7 +99,7 @@ bool Assembly::intersect (
 
       if (intersect_this_assembly)
       {
-         if (first_intersection || local_distance < min_distance)
+         if (first_intersection || (local_distance < min_distance && local_distance > EPS))
          {
             first_intersection   = false;
             min_distance         = local_distance;
@@ -124,21 +124,23 @@ bool Assembly::intersect (
 
    bool intersect_this_sphere = false;
 
+int itt = 0;
    for (std::list<Sphere>::iterator sphere_it = sphere_elements.begin();
         sphere_it != sphere_elements.end();
         sphere_it++)
    {
-      intersect_this_sphere = sphere_it->intersect(  incomming_ray,
-                                                     &local_ray,
-                                                     &local_distance,
-                                                      local_color_intensities,
-                                                     &local_reflection_table_x,
-                                                     &local_reflection_table_y,
-                                                     &local_reflection_table_N);
+      intersect_this_sphere = sphere_it->intersect( incomming_ray,
+                                                   &local_ray,
+                                                   &local_distance,
+                                                    local_color_intensities,
+                                                   &local_reflection_table_x,
+                                                   &local_reflection_table_y,
+                                                   &local_reflection_table_N);
 
       if (intersect_this_sphere)
       {
-         if (first_intersection || local_distance < min_distance)
+
+         if (first_intersection || (local_distance < min_distance && local_distance > EPS))
          {
              first_intersection   = false;
              min_distance         = local_distance;
@@ -155,6 +157,7 @@ bool Assembly::intersect (
 
       intersection |= intersect_this_sphere;
 
+itt++;
    }
 
 

@@ -4,6 +4,8 @@
 #include "sphere.h"
 #include <iostream>
 
+#define EPS 0.00001f
+
 /*
  * Constructor NAME: sphere
  */
@@ -19,13 +21,13 @@ Sphere::Sphere ( float center_in[3],
 /*
 ** Function NAME: intersect
 */
-bool Sphere::intersect (Ray    incomming_ray,
-                        Ray   *new_ray,
-                        float *distance,
-                        float  color_intensities[],
-                        float **reflection_table_x_in,
-                        float **reflection_table_y_in,
-                        int   *reflection_table_N_in)
+bool Sphere::intersect ( Ray    incomming_ray,
+                         Ray   *new_ray,
+                         float *distance,
+                         float  color_intensities[],
+                         float **reflection_table_x_in,
+                         float **reflection_table_y_in,
+                         int   *reflection_table_N_in)
 {
 
    color_intensities[0] = color[0];
@@ -57,7 +59,7 @@ bool Sphere::intersect (Ray    incomming_ray,
 
    if (intersect)
    {
-      intersect |= geometry::point_to_sphere (
+      intersect = geometry::point_to_sphere (
                                      position,
                                      direction,
                                      center,
@@ -75,6 +77,12 @@ bool Sphere::intersect (Ray    incomming_ray,
          *distance = sqrt((position[0] - intersection[0]) * (position[0] - intersection[0]) +
                           (position[1] - intersection[1]) * (position[1] - intersection[1]) +
                           (position[2] - intersection[2]) * (position[2] - intersection[2]));
+
+         if (*distance < EPS)
+         {
+           *distance = -1.0f;
+            intersect = false;
+         }
 
       }
    }

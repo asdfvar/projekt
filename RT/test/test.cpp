@@ -50,7 +50,7 @@ int main()
 
    RT.insert_sphere ( position, 1.0f, color );
 
-   RT.run( 6 );
+   RT.run( 1 );
 
    RT.write_grid ();
 
