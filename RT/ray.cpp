@@ -97,13 +97,19 @@ void Ray::set_intensity( float Int[3] )
 /*
 ** Function NAME: increment_intensity
 */
-void Ray::increment_intensity( float Int[3],
-                               float reflectivity)
+void Ray::increment_intensity( float Int[3])
 {
    intensity[0] += Int[0];
    intensity[1] += Int[1];
    intensity[2] += Int[2];
 
+}
+
+/*
+** Function NAME: update_energy
+*/
+void Ray::update_energy( float reflectivity)
+{
    energy *= reflectivity;
 }
 

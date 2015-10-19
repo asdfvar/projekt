@@ -187,3 +187,29 @@ itt++;
    return intersection;
 
 }
+
+/*
+** Function NAME: intersect
+*/
+bool Assembly::intersect (
+    /* [I ] */     Ray   incomming_ray,
+                   float *distance)
+{
+
+   Ray new_ray;
+   float color_intensities[3];
+   float reflectivity;
+   float *reflection_table_x;
+   float *reflection_table_y;
+   int    reflection_table_N;
+
+   return intersect (
+              incomming_ray,
+             &new_ray,
+              distance,
+              color_intensities,
+             &reflectivity,
+             &reflection_table_x,
+             &reflection_table_y,
+             &reflection_table_N);
+}

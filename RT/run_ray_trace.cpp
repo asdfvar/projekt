@@ -36,7 +36,7 @@ void RayTrace::execute (unsigned int thread_id,
    int nxy = nx * ny;
 
    float position[3], direction[3], intensity[3];
-   float reflectivity;
+   float reflectivity, score;
 
    if (thread_id == num_threads - 1)
    {
@@ -51,7 +51,7 @@ void RayTrace::execute (unsigned int thread_id,
 
    float color_intensity[3] = {0.0f, 0.0f, 0.0f};
 
-   for (int iteration = 0; iteration < 20; iteration++)
+   for (int iteration = 0; iteration < 4; iteration++)
    {
 
       /*
@@ -93,28 +93,51 @@ void RayTrace::execute (unsigned int thread_id,
                   light_source_direction[0] = light_it->get_position(0) - output_ray.get_position(0);
                   light_source_direction[1] = light_it->get_position(1) - output_ray.get_position(1);
                   light_source_direction[2] = light_it->get_position(2) - output_ray.get_position(2);
-   
-                  // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
-                  direction[0] = output_ray.get_direction(0);
-                  direction[1] = output_ray.get_direction(1);
-                  direction[2] = output_ray.get_direction(2);
-   
+                  
                   position[0] = output_ray.get_position(0);
                   position[1] = output_ray.get_position(1);
                   position[2] = output_ray.get_position(2);
-   
-                  float theta = linalg::angle_offset<float>(
+
+                  direction[0] = output_ray.get_direction(0);
+                  direction[1] = output_ray.get_direction(1);
+                  direction[2] = output_ray.get_direction(2);
+
+                  // distance to light source
+                  float x = light_it->get_position(0) - position[0];
+                  float y = light_it->get_position(1) - position[1];
+                  float z = light_it->get_position(2) - position[2];
+
+                  float light_source_dist = sqrt( x*x + y*y + z*z );
+
+                  Ray ray_to_light_source;
+                  ray_to_light_source.set_position( position );
+                  ray_to_light_source.set_direction( direction );
+
+                  float dist_to_object = light_source_dist + 1.0f;
+                  bool path_closed = all_objects.intersect( ray_to_light_source, &dist_to_object );
+
+                  // reflected ray does not intersect an object before the light source
+                  if ( !path_closed || light_source_dist < dist_to_object )
+                  {
+                     // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
+                     
+                     float theta = linalg::angle_offset<float>(
                                              direction,
                                              light_source_direction,
                                              3);
+                  
+                     float th_range = theta / PI;
    
-                  float th_range = theta / PI;
-   
-                  float score = tools::linear_interpolate(
-                                             reflection_table_x,
-                                             reflection_table_y,
-                                             th_range,
-                                             reflection_table_N);
+                     score = tools::linear_interpolate(
+                                                reflection_table_x,
+                                                reflection_table_y,
+                                                th_range,
+                                                reflection_table_N);
+                  }
+                  else
+                  {
+                     score = 0.0f;
+                  }
    
                   score *= grid_alias[ray_ind].get_energy();
    
@@ -130,12 +153,13 @@ void RayTrace::execute (unsigned int thread_id,
                   intensity[1] *= color_intensity[1];
                   intensity[2] *= color_intensity[2];
    
-                  grid_alias[ray_ind].increment_intensity( intensity, reflectivity);
+                  grid_alias[ray_ind].increment_intensity( intensity );
    
                   grid_alias[ray_ind].set_position( position );
                   grid_alias[ray_ind].set_direction( direction );
 
                }
+               grid_alias[ray_ind].update_energy( reflectivity );
             }
             else
             {

@@ -26,6 +26,10 @@ class Assembly
       void insert (Sphere   *sphere_object);
 
       bool intersect(
+                  Ray    incomming_ray,
+                  float *distance);
+
+      bool intersect(
                   Ray     incomming_ray,
                   Ray    *new_ray,
                   float *distance,

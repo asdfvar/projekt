@@ -34,8 +34,8 @@ class Ray
 
       float get_intensity( int );
       void  set_intensity( float Int[3] );
-      void  increment_intensity( float Int[3],
-                                 float reflectivity);
+      void  increment_intensity( float Int[3]);
+      void  update_energy( float reflectivity );
 
       float get_energy( void );
 
