@@ -30,8 +30,9 @@ class Assembly
                   float *distance);
 
       bool intersect(
-                  Ray     incomming_ray,
-                  Ray    *new_ray,
+                  Ray    incomming_ray,
+                  Ray   *new_ray,
+                  float *normal,
                   float *distance,
                   float *color_intensities,
                   float *reflectivity,

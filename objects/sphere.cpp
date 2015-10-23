@@ -25,6 +25,7 @@ Sphere::Sphere ( float center_in[3],
 */
 bool Sphere::intersect ( Ray    incomming_ray,
                          Ray   *new_ray,
+                         float *normal,
                          float *distance,
                          float  color_intensities[],
                          float *reflectivity_out,
@@ -59,7 +60,7 @@ bool Sphere::intersect ( Ray    incomming_ray,
                                      center,
                                      radius);
 
-   float normal[3], intersection[3];
+   float intersection[3];
    float new_direction[3];
 
    if (intersect)

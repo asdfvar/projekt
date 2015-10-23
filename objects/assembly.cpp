@@ -44,6 +44,7 @@ void Assembly::insert (Sphere *sphere_object)
 bool Assembly::intersect (
     /* [I ] */     Ray     incomming_ray,
     /* [ O] */     Ray    *new_ray,
+                   float  *normal,
     /* [ O] */     float  *distance,
                    float   color_intensities[],
                    float  *reflectivity,
@@ -64,6 +65,7 @@ bool Assembly::intersect (
    int    local_reflection_table_N;
    float  local_color_intensities[3] = {0.0f, 0.0f, 0.0f};
    float  local_reflectivity;
+   float  local_normal[3];
 
    /*
    ** Convert incoming ray to coordinates that are
@@ -93,6 +95,7 @@ bool Assembly::intersect (
       intersect_this_assembly = assembly_it->intersect(  
                                                  incomming_ray,
                                                 &local_ray,
+                                                 local_normal,
                                                 &local_distance,
                                                  local_color_intensities,
                                                 &local_reflectivity,
@@ -112,6 +115,9 @@ bool Assembly::intersect (
             color_intensities[2] = local_color_intensities[2];
            *reflectivity         = local_reflectivity;
            *new_ray              = local_ray;
+            normal[0]            = local_normal[0];
+            normal[1]            = local_normal[1];
+            normal[2]            = local_normal[2];
            *reflection_table_x   = local_reflection_table_x;
            *reflection_table_y   = local_reflection_table_y;
            *reflection_table_N   = local_reflection_table_N;
@@ -135,6 +141,7 @@ int itt = 0;
    {
       intersect_this_sphere = sphere_it->intersect( incomming_ray,
                                                    &local_ray,
+                                                    local_normal,
                                                    &local_distance,
                                                     local_color_intensities,
                                                    &local_reflectivity,
@@ -153,8 +160,11 @@ int itt = 0;
              color_intensities[0] = local_color_intensities[0];
              color_intensities[1] = local_color_intensities[1];
              color_intensities[2] = local_color_intensities[2];
-           *reflectivity         = local_reflectivity;
+           *reflectivity          = local_reflectivity;
             *new_ray              = local_ray;
+             normal[0]            = local_normal[0];
+             normal[1]            = local_normal[1];
+             normal[2]            = local_normal[2];
             *reflection_table_x   = local_reflection_table_x;
             *reflection_table_y   = local_reflection_table_y;
             *reflection_table_N   = local_reflection_table_N;
@@ -202,10 +212,12 @@ bool Assembly::intersect (
    float *reflection_table_x;
    float *reflection_table_y;
    int    reflection_table_N;
+   float  normal[3];
 
    return intersect (
               incomming_ray,
              &new_ray,
+              normal,
               distance,
               color_intensities,
              &reflectivity,

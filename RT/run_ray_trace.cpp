@@ -36,6 +36,7 @@ void RayTrace::execute (unsigned int thread_id,
    int nxy = nx * ny;
 
    float position[3], direction[3], intensity[3];
+   float normal[3];
    float reflectivity, score;
 
    if (thread_id == num_threads - 1)
@@ -73,6 +74,7 @@ void RayTrace::execute (unsigned int thread_id,
             bool intersect = all_objects.intersect (
                                  grid_alias[ray_ind],
                                  &output_ray,
+                                  normal,
                                  &distance,
                                   color_intensity,
                                  &reflectivity,
@@ -102,6 +104,8 @@ void RayTrace::execute (unsigned int thread_id,
                   direction[1] = output_ray.get_direction(1);
                   direction[2] = output_ray.get_direction(2);
 
+                  if ( linalg::dot_product<float>( normal, light_source_direction, 3 ) > 0.0f )
+                  {
                   // distance to light source
                   float x = light_it->get_position(0) - position[0];
                   float y = light_it->get_position(1) - position[1];
@@ -136,6 +140,9 @@ void RayTrace::execute (unsigned int thread_id,
                   }
                   else
                   {
+                     score = 0.0f;
+                  }
+                  } else {
                      score = 0.0f;
                   }
    
