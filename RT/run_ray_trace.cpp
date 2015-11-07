@@ -52,7 +52,7 @@ void RayTrace::execute (unsigned int thread_id,
 
    float color_intensity[3] = {0.0f, 0.0f, 0.0f};
 
-   for (int iteration = 0; iteration < 4; iteration++)
+   for (int iteration = 0; iteration < 8; iteration++)
    {
 
       /*
@@ -159,7 +159,7 @@ void RayTrace::execute (unsigned int thread_id,
                   intensity[0] *= color_intensity[0];
                   intensity[1] *= color_intensity[1];
                   intensity[2] *= color_intensity[2];
-   
+
                   grid_alias[ray_ind].increment_intensity( intensity );
    
                   grid_alias[ray_ind].set_position( position );

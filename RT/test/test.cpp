@@ -29,7 +29,7 @@ int main()
    intensity[1] = 1.0f;
    intensity[2] = 1.0f;
 
-//   RT.insert_light ( position, intensity );
+   RT.insert_light ( position, intensity );
 
    position[0] = -8.0f;
    position[1] = 0.0f;
