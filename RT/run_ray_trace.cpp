@@ -106,42 +106,41 @@ void RayTrace::execute (unsigned int thread_id,
 
                   if ( linalg::dot_product<float>( normal, light_source_direction, 3 ) > 0.0f )
                   {
-                  // distance to light source
-                  float x = light_it->get_position(0) - position[0];
-                  float y = light_it->get_position(1) - position[1];
-                  float z = light_it->get_position(2) - position[2];
+                     // distance to light source
+                     float x = light_it->get_position(0) - position[0];
+                     float y = light_it->get_position(1) - position[1];
+                     float z = light_it->get_position(2) - position[2];
 
-                  float light_source_dist = sqrt( x*x + y*y + z*z );
+                     float light_source_dist = sqrt( x*x + y*y + z*z );
 
-                  Ray ray_to_light_source;
-                  ray_to_light_source.set_position( position );
-                  ray_to_light_source.set_direction( direction );
+                     Ray ray_to_light_source;
+                     ray_to_light_source.set_position( position );
+                     ray_to_light_source.set_direction( direction );
 
-                  float dist_to_object = light_source_dist + 1.0f;
-                  bool path_closed = all_objects.intersect( ray_to_light_source, &dist_to_object );
+                     float dist_to_object = light_source_dist + 1.0f;
+                     bool path_closed = all_objects.intersect( ray_to_light_source, &dist_to_object );
 
-                  // reflected ray does not intersect an object before the light source
-                  if ( !path_closed || light_source_dist < dist_to_object )
-                  {
-                     // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
+                     // reflected ray does not intersect an object before the light source
+                     if ( !path_closed || light_source_dist < dist_to_object )
+                     {
+                        // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
                      
-                     float theta = linalg::angle_offset<float>(
-                                             direction,
-                                             light_source_direction,
-                                             3);
+                        float theta = linalg::angle_offset<float>(
+                                                direction,
+                                                light_source_direction,
+                                                3);
                   
-                     float th_range = theta / PI;
-   
-                     score = tools::linear_interpolate(
-                                                reflection_table_x,
-                                                reflection_table_y,
-                                                th_range,
-                                                reflection_table_N);
-                  }
-                  else
-                  {
-                     score = 0.0f;
-                  }
+                        float th_range = theta / PI;
+    
+                        score = tools::linear_interpolate(
+                                                   reflection_table_x,
+                                                   reflection_table_y,
+                                                   th_range,
+                                                   reflection_table_N);
+                     }
+                     else {
+                        score = 0.0f;
+                     }
                   } else {
                      score = 0.0f;
                   }
