@@ -1,8 +1,9 @@
 #include <cmath>
-#include "linalg.h"
+#include <iostream>
 #include "shape.h"
 #include "sphere.h"
-#include <iostream>
+#include "linalg.h"
+#include "ray.h"
 
 #define EPS 0.00001f
 

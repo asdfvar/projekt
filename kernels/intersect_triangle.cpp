@@ -3,6 +3,8 @@
 
 #define EPS 0.00001f
 
+namespace geometry {
+
 bool intersect_triangle (
         /* [I ] */        float line_position[3],
         /* [I ] */        float line_direction[3],
@@ -71,3 +73,5 @@ bool intersect_triangle (
       return false;
    }
 }
+
+} // namspace geometry

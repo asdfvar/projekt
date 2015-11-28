@@ -18,6 +18,14 @@ bool intersect_sphere (
                float center[3],
                float radius);
 
+bool intersect_triangle (
+        /* [I ] */        float line_position[3],
+        /* [I ] */        float line_direction[3],
+        /* [I ] */        float triangle_pos_0[3],
+        /* [I ] */        float triangle_pos_1[3],
+        /* [I ] */        float triangle_pos_2[3],
+        /* [ O] */        float *intersection,
+        /* [ O] */        float *normal);
 }
 
 #endif

@@ -134,7 +134,6 @@ bool Assembly::intersect (
 
    bool intersect_this_sphere = false;
 
-int itt = 0;
    for (std::list<Sphere>::iterator sphere_it = sphere_elements.begin();
         sphere_it != sphere_elements.end();
         sphere_it++)
@@ -173,7 +172,16 @@ int itt = 0;
 
       intersection |= intersect_this_sphere;
 
-itt++;
+   }
+
+   /*
+   ** Loop through the planes
+   */
+
+   for (std::list<Sphere>::iterator sphere_it = sphere_elements.begin();
+        sphere_it != sphere_elements.end();
+        sphere_it++)
+   {
    }
 
 
