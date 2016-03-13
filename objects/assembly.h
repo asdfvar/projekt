@@ -5,6 +5,7 @@
 #include "ray.h"
 #include "shape.h"
 #include "sphere.h"
+#include "plane.h"
 
 #define EPS 0.00001f
 #define ABS(A) ((A) > 0.0f) ? (A) : -(A)
@@ -24,6 +25,7 @@ class Assembly
 
       void insert (Assembly *assembly_object);
       void insert (Sphere   *sphere_object);
+      void insert (Plane    *plane_object);
 
       bool intersect(
                   Ray    incomming_ray,
@@ -42,8 +44,9 @@ class Assembly
 
    private:
 
-      std::list<Sphere>   sphere_elements;
       std::list<Assembly> assembly_elements;
+      std::list<Sphere>   sphere_elements;
+      std::list<Plane>    plane_elements;
 
 };
 

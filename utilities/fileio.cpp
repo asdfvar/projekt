@@ -32,9 +32,9 @@ namespace fio {
  ** Write float data to file
  */
  void write_bin_int (const std::string  path,
-                     int             *data,
-                     bool             append,
-                     int              N)
+                     int               *data,
+                     bool               append,
+                     int                N)
  {
 
     std::ofstream OF;

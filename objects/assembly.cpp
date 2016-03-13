@@ -39,6 +39,14 @@ void Assembly::insert (Sphere *sphere_object)
 }
 
 /*
+** Function NAME: insert
+*/
+void Assembly::insert (Plane *plane_object)
+{
+   plane_elements.push_back (*plane_object);
+}
+
+/*
 ** Function NAME: intersect
 */
 bool Assembly::intersect (
@@ -85,13 +93,11 @@ bool Assembly::intersect (
    ** Loop through the assemblies
    */
 
-   bool intersect_this_assembly = false;
-
    for (std::list<Assembly>::iterator assembly_it = assembly_elements.begin();
         assembly_it != assembly_elements.end();
         assembly_it++)
    {
-      intersect_this_assembly = assembly_it->intersect(  
+      bool intersect_this_assembly = assembly_it->intersect(  
                                                  incomming_ray,
                                                 &local_ray,
                                                  local_normal,
@@ -130,14 +136,11 @@ bool Assembly::intersect (
    /*
    ** Loop through the spheres
    */
-
-   bool intersect_this_sphere = false;
-
    for (std::list<Sphere>::iterator sphere_it = sphere_elements.begin();
         sphere_it != sphere_elements.end();
         sphere_it++)
    {
-      intersect_this_sphere = sphere_it->intersect( incomming_ray,
+      bool intersect_this_sphere = sphere_it->intersect( incomming_ray,
                                                    &local_ray,
                                                     local_normal,
                                                    &local_distance,
@@ -176,11 +179,43 @@ bool Assembly::intersect (
    /*
    ** Loop through the planes
    */
-
-   for (std::list<Sphere>::iterator sphere_it = sphere_elements.begin();
-        sphere_it != sphere_elements.end();
-        sphere_it++)
+   for (std::list<Plane>::iterator plane_it = plane_elements.begin();
+        plane_it != plane_elements.end();
+        plane_it++)
    {
+      bool intersect_this_plane = plane_it->intersect( incomming_ray,
+                                                   &local_ray,
+                                                    local_normal,
+                                                   &local_distance,
+                                                    local_color_intensities,
+                                                   &local_reflectivity,
+                                                   &local_reflection_table_x,
+                                                   &local_reflection_table_y,
+                                                   &local_reflection_table_N);
+
+      if (intersect_this_plane)
+      {
+
+         if (first_intersection || (local_distance < min_distance && local_distance > EPS))
+         {
+             first_intersection   = false;
+             min_distance         = local_distance;
+            *distance             = local_distance;
+             color_intensities[0] = local_color_intensities[0];
+             color_intensities[1] = local_color_intensities[1];
+             color_intensities[2] = local_color_intensities[2];
+           *reflectivity          = local_reflectivity;
+            *new_ray              = local_ray;
+             normal[0]            = local_normal[0];
+             normal[1]            = local_normal[1];
+             normal[2]            = local_normal[2];
+            *reflection_table_x   = local_reflection_table_x;
+            *reflection_table_y   = local_reflection_table_y;
+            *reflection_table_N   = local_reflection_table_N;
+         }
+      }
+
+      intersection |= intersect_this_plane;
    }
 
 
@@ -213,7 +248,7 @@ bool Assembly::intersect (
                    float *distance)
 {
 
-   Ray new_ray;
+   Ray   new_ray;
    float color_intensities[3];
    float reflectivity;
    float *reflection_table_x;

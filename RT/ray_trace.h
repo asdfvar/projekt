@@ -25,6 +25,13 @@ class RayTrace {
              float position[3],
              float intensity[3]);
 
+      void insert_plane (
+             float position_1[3],
+             float position_2[3],
+             float position_3[3],
+             float color[3],
+             float reflectivity);
+
       void insert_sphere (
              float position[3],
              float radius,

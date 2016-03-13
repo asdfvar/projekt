@@ -1,6 +1,7 @@
 #include "ray_trace.h"
 #include "linalg.h"
 #include "sphere.h"
+#include "plane.h"
 #include "fileio.h"
 #include <iostream>
 #include <cmath>
@@ -130,6 +131,26 @@ void RayTrace::insert_sphere (
 {
    Sphere *sphere = new Sphere( position, radius, color, reflectivity);
    all_objects.insert( sphere );
+}
+
+/*
+** Function NAME: insert_sphere
+*/
+void RayTrace::insert_plane (
+       float position_1[3],
+       float position_2[3],
+       float position_3[3],
+       float color[3],
+       float reflectivity)
+{
+   Plane *plane = new Plane( position_1,
+                             position_2,
+                             position_3,
+                             color,
+                             reflectivity);
+
+   all_objects.insert( plane );
+
 }
 
 /*

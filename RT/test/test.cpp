@@ -5,6 +5,9 @@ int main()
 {
 
    float position[3] = { 0.0f, 0.0f, 0.0f };
+   float position_1[3] = { 0.0f, 0.0f, 0.0f };
+   float position_2[3] = { 0.0f, 0.0f, 0.0f };
+   float position_3[3] = { 0.0f, 0.0f, 0.0f };
    float look_rotation[3] = { 0.0f, 0.0f, 0.0f };
    float intensity[3];
    float color[3];
@@ -64,6 +67,30 @@ int main()
    reflectivity = 0.2;
 
    RT.insert_sphere ( position, 1.0f, color, reflectivity);
+
+   position_1[0] = 3.0f;
+   position_1[1] = 1.0f;
+   position_1[2] = -0.5f;
+
+   position_2[0] = 3.0f;
+   position_2[1] = 1.0f;
+   position_2[2] = 0.5f;
+
+   position_3[0] = 3.0f;
+   position_3[1] = -1.0f;
+   position_3[2] = 0.5f;
+
+   color[0] = 0.0f;
+   color[1] = 1.0f;
+   color[2] = 0.0f;
+
+   reflectivity = 0.2;
+
+   RT.insert_plane ( position_1,
+                     position_2,
+                     position_3,
+                     color,
+                     reflectivity);
 
    RT.run( 6 );
 

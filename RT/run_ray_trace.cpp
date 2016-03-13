@@ -123,10 +123,15 @@ void RayTrace::execute (unsigned int thread_id,
 
                      Ray  ray_to_light_source( position, direction );
 
+                     /*
+                     ** Initiate a distance to object value with an acceptable upper bound
+                     */
                      float dist_to_object = light_source_dist + 1.0f;
-                     bool path_closed = all_objects.intersect( ray_to_light_source, &dist_to_object );
+                     bool  path_closed    = all_objects.intersect( ray_to_light_source, &dist_to_object );
 
-                     // reflected ray does not intersect an object before the light source
+                     /*
+                     ** if the reflected ray does not intersect an object before the light source
+                     */
                      if ( !path_closed || light_source_dist < dist_to_object )
                      {
                         // angle of reflected ray towards light source cos(th) = a . b / (|a||b|)
