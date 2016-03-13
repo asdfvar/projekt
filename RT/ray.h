@@ -8,6 +8,9 @@ class Ray
       Ray (void);
 
       Ray (float position[3],
+           float direction[3]);
+
+      Ray (float position[3],
            float direction[3],
            float intensity[3]);
 

@@ -4,26 +4,26 @@ BASE_DIR=../..
 
 cd $BASE_DIR/RT
 if [ ! -e libraytrace.a ]; then
-   make
+   make -j8
 fi
 cd -
 
 cd $BASE_DIR/kernels
 if [ ! -e libkernels.a ]; then
-   make
+   make -j8
 fi
 cd -
 
 cd $BASE_DIR/objects
 if [ ! -e libshapes.a ]; then
-   make
+   make -j8
 fi
 cd -
 
 cd $BASE_DIR/utilities
 if [ ! -e libutils.a ]; then
-   make
+   make -j8
 fi
 cd -
 
-make
+make -j8

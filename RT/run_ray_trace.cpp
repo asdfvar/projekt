@@ -8,6 +8,7 @@
 #include <list>
 
 #define MAX_THREADS 20
+#define MAX_ITERATIONS 8
 
 /*
 ** Declare local functions and structs
@@ -52,7 +53,7 @@ void RayTrace::execute (unsigned int thread_id,
 
    float color_intensity[3] = {0.0f, 0.0f, 0.0f};
 
-   for (int iteration = 0; iteration < 8; iteration++)
+   for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++)
    {
 
       /*
@@ -82,8 +83,15 @@ void RayTrace::execute (unsigned int thread_id,
                                  &reflection_table_y,
                                  &reflection_table_N);
    
+            /*
+            ** If this ray intersects an object
+            */
             if (intersect)
             {
+
+               /*
+               ** Determine the intensity over all the light sources
+               */
                for (std::list<Light_source>::iterator light_it = lights.begin();
                     light_it != lights.end();
                     light_it++)
@@ -111,11 +119,9 @@ void RayTrace::execute (unsigned int thread_id,
                      float y = light_it->get_position(1) - position[1];
                      float z = light_it->get_position(2) - position[2];
 
-                     float light_source_dist = sqrt( x*x + y*y + z*z );
+                     float light_source_dist = sqrtf( x*x + y*y + z*z );
 
-                     Ray ray_to_light_source;
-                     ray_to_light_source.set_position( position );
-                     ray_to_light_source.set_direction( direction );
+                     Ray  ray_to_light_source( position, direction );
 
                      float dist_to_object = light_source_dist + 1.0f;
                      bool path_closed = all_objects.intersect( ray_to_light_source, &dist_to_object );

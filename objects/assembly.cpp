@@ -53,11 +53,11 @@ bool Assembly::intersect (
                    int    *reflection_table_N)
 {
 
-   bool  intersection = false;
+   bool  intersection       = false;
    bool  first_intersection = true;
-   float min_distance = -1.0f;
+   float min_distance       = -1.0f;
 
-   Ray local_ray;
+   Ray   local_ray;
    float local_distance;
 
    float *local_reflection_table_x;
@@ -71,7 +71,6 @@ bool Assembly::intersect (
    ** Convert incoming ray to coordinates that are
    ** relative to the assembly.
    */
-
    float position[3] = { incomming_ray.get_position(0),
                          incomming_ray.get_position(1),
                          incomming_ray.get_position(2) };

@@ -10,8 +10,27 @@ Ray::Ray( void )
    for (int k = 0; k < 3; k++) intensity[k] = 0.0f;
 
    energy = 1.0f;
+   valid  = true;
+}
 
-   valid = true;
+/*
+** Constructor NAME: Ray
+*/
+Ray::Ray( float position_in[3],
+          float direction_in[3])
+{
+
+   position[0] = position_in[0];
+   position[1] = position_in[1];
+   position[2] = position_in[2];
+
+   direction[0] = direction_in[0];
+   direction[1] = direction_in[1];
+   direction[2] = direction_in[2];
+
+   energy = 1.0f;
+   valid  = true;
+
 }
 
 /*
@@ -35,8 +54,7 @@ Ray::Ray( float position_in[3],
    intensity[2] = intensity_in[2];
 
    energy = 1.0f;
-
-   valid = true;
+   valid  = true;
 
 }
 
