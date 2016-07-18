@@ -22,12 +22,15 @@ Map_grid::Map_grid(void)
    local_grid_size[1] = 11;
    local_grid_size[2] = 11;
 
-   Map = new Map[local_grid_size[0] *
-                 local_grid_size[1] *
-                 local_grid_size[2]];
+   std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
+
+   for (int k = 0; k < total_grid_size; k++)
+      maps.push_back(Map(k));
+
 }
 
 Map_grid::~Map_grid(void)
 {
-   delete[] Map;
+   std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
+   maps.erase (maps.begin(), maps.begin() + total_grid_size);
 }
