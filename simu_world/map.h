@@ -1,6 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <iostream>
+
 class Map
 {
    /*
@@ -45,7 +47,7 @@ class Map
    */
    unsigned char *characteristics;
 
-   const unsigned int map_dim = 64;
+   const unsigned int map_dim;
    unsigned int id;
 
    Map( unsigned int id_in );
@@ -55,11 +57,12 @@ class Map
 
 class Map_grid
 {
-   size_t local_grid_size[3] = {11, 11, 11};
+   size_t local_grid_size[3];
 
    Map *map;
 
    Map_grid(void);
+   ~Map_grid(void);
 };
 
 #endif
