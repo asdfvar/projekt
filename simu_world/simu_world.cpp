@@ -4,7 +4,7 @@
 #include "simu_world.h"
 #include "opengl_interface.h"
 
-//Opengl_interface opengl_interface();
+Opengl_interface opengl_interface;
 
 /*********************
  * Display to screen *
@@ -12,7 +12,7 @@
 
 void display(void) {
 
-//opengl_interface.display();
+opengl_interface.display();
 
 }
 
