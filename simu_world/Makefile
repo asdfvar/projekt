@@ -1,16 +1,21 @@
 CPPC  = g++
-CL    = ar rcs
-FLAGS = -O3 -Wall
+FLAGS = -O3 -Wall -lm -lGL -lGLU -lglut
 
-OBJ = map.o
+OBJ = main.o simu_world.o opengl_interface.o
 
-LIBEXE = libsimu.a
+EXE = simu_world
 
 all: $(OBJ)
-	$(CL) $(LIBEXE) $^
+	$(CPPC) $^ -o $(EXE) $(FLAGS)
 
 clean:
-	rm $(OBJ) $(LIBEXE)
+	rm $(OBJ) $(EXE)
 
 map.o: map.cpp
+	$(CPPC) $^ -c
+
+opengl_interface.o: opengl_interface.cpp
+	$(CPPC) $^ -c
+
+simu_world.o: simu_world.cpp
 	$(CPPC) $^ -c
