@@ -1,7 +1,8 @@
 CPPC  = g++
 FLAGS = -O3 -Wall -lm -lGL -lGLU -lglut
 
-OBJ = main.o simu_world.o opengl_interface.o
+OBJ = main.o simu_world.o opengl_interface.o \
+      display.o
 
 EXE = simu_world
 
@@ -18,4 +19,7 @@ opengl_interface.o: opengl_interface.cpp
 	$(CPPC) $^ -c
 
 simu_world.o: simu_world.cpp
+	$(CPPC) $^ -c
+
+display.o: display.cpp
 	$(CPPC) $^ -c

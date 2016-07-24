@@ -1,6 +1,10 @@
 #ifndef OPENGL_INTERFACE
 #define OPENGL_INTERFACE
 
+#include <GL/glut.h>
+#include <GL/glu.h>
+#include <GL/gl.h>
+
 class Opengl_interface
 {
 

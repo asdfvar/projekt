@@ -70,24 +70,24 @@ void mousePassive(int x, int y) {
 void simu_world( int argc, char** argv )
 {
 
-   int windowsizex = 1200;
-   int windowsizey = 1000;
+   int windowsizex = 800;
+   int windowsizey = 600;
 
-   glutInit(&argc, argv);
-   glutInitDisplayMode(GLUT_RGB|GLUT_SINGLE);
-   glutInitWindowSize(windowsizex, windowsizey);
-   glutInitWindowPosition(50, 50);
-   glutCreateWindow("2D Physics Sim");
+   glutInit( &argc, argv);
+   glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE);
+   glutInitWindowSize( windowsizex, windowsizey);
+   glutInitWindowPosition( 50, 50);
+   glutCreateWindow( "Simu World");
 
-   glutDisplayFunc(display);
-   glutMouseFunc(mouse);
-   glutMotionFunc(mouseMotion);
-//   glutPassiveMotionFunc(mousePassive);
+   glutDisplayFunc( display);
+   glutMouseFunc( mouse);
+   glutMotionFunc( mouseMotion);
+//   glutPassiveMotionFunc( mousePassive);
 #if 0
-   glutKeyboardUpFunc(keyboardUp);
-   glutKeyboardFunc(keyboardDown);
+   glutKeyboardUpFunc( keyboardUp);
+   glutKeyboardFunc( keyboardDown);
 #endif
-   glutIdleFunc(idle);
+   glutIdleFunc( idle);
 
    glutMainLoop();
 
