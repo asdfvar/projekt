@@ -5,6 +5,8 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
+#include "time_manager.h"
+
 class Opengl_interface
 {
 
@@ -42,6 +44,10 @@ class Opengl_interface
       ** Keyboard down-keys input
       */
       void keyboard_down(void);
+
+   private:
+
+      Time_manager *time_manager;
 
 };
 

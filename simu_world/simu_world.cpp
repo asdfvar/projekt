@@ -22,7 +22,7 @@ opengl_interface.display();
 
 void idle(void) {
 
-//opengl_interface.idle();
+opengl_interface.idle();
 
 }
 
