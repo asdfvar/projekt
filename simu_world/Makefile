@@ -1,5 +1,8 @@
 CPPC  = g++
 FLAGS = -O3 -Wall -lm -lGL -lGLU -lglut
+INC   = -Imap -I.
+LIBPATH = -Lmap
+LIBS  = -lsimu
 
 OBJ = main.o simu_world.o opengl_interface.o \
       idle.o display.o time_manager.o
@@ -7,25 +10,25 @@ OBJ = main.o simu_world.o opengl_interface.o \
 EXE = simu_world
 
 all: $(OBJ)
-	$(CPPC) $^ -o $(EXE) $(FLAGS)
+	$(CPPC) $^ $(INC) $(LIBS) $(LIBPATH) -o $(EXE) $(FLAGS)
 
 clean:
 	rm $(OBJ) $(EXE)
 
 map.o: map.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $(INC) $^ -c
 
 opengl_interface.o: opengl_interface.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $(INC) $^ -c
 
 simu_world.o: simu_world.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $(INC) $^ -c
 
 idle.o: idle.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $(INC) $^ -c
 
 display.o: display.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $(INC) $^ -c
 
 time_manager.o: time_manager.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $(INC) $^ -c

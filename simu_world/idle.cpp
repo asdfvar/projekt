@@ -7,4 +7,6 @@ void Opengl_interface::idle( void)
    */
    time_manager->wait_for_time();
 
+   user.update( time_manager->get_time_step() );
+
 }

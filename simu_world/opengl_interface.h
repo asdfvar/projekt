@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 
 #include "time_manager.h"
+#include "user.h"
 
 class Opengl_interface
 {
@@ -48,6 +49,7 @@ class Opengl_interface
    private:
 
       Time_manager *time_manager;
+      User user;
 
 };
 

@@ -67,6 +67,24 @@ glNormal3f(0.0f, 0.0f, -0.5f); // guestimating this (too lazy)
    glVertex3f(-0.8, 0.8, 0.8f);
    glVertex3f(-0.6, 0.9, -0.8f);
 glEnd();
+glBegin(GL_POLYGON);
+glNormal3f(1.0f, 1.0f, -0.5f); // guestimating this (too lazy)
+   glVertex3f(0.5, 0.5, 0.0f);
+   glVertex3f(0.2, 0.5, 0.0f);
+   glVertex3f(0.35, 0.7, 0.0f);
+glEnd();
+glBegin(GL_POLYGON);
+glNormal3f(0.0f, 0.0f, -0.5f); // guestimating this (too lazy)
+   glVertex3f(0.5, 0.0, 0.8f);
+   glVertex3f(0.2, 0.0, 0.8f);
+   glVertex3f(0.35, 0.2, 0.8f);
+glEnd();
+glBegin(GL_POLYGON);
+glNormal3f(1.0f, 1.0f, 0.5f); // guestimating this (too lazy)
+   glVertex3f(0.5, -0.5, -0.8f);
+   glVertex3f(0.2, -0.5, -0.8f);
+   glVertex3f(0.35, -0.3, -0.8f);
+glEnd();
 }
 #endif
 
