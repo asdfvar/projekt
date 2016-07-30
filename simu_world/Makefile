@@ -9,10 +9,14 @@ OBJ = main.o simu_world.o opengl_interface.o \
 
 EXE = simu_world
 
-all: $(OBJ)
+all: SIMU_WORLD
+
+SIMU_WORLD: $(OBJ)
+	cd map/ && $(MAKE)
 	$(CPPC) $^ $(INC) $(LIBS) $(LIBPATH) -o $(EXE) $(FLAGS)
 
 clean:
+	make -C map/ clean
 	rm $(OBJ) $(EXE)
 
 map.o: map.cpp
