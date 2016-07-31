@@ -19,9 +19,10 @@ class Time_manager
    private:
 
       double time_step;
-      bool  init_done;
+      bool   init_done;
       double start_time;
       double end_time;
+      double time_step_actual;
 };
 
 #endif

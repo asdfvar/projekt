@@ -40,8 +40,8 @@ glColor3ub(red, green, blue);
 glBegin(GL_POLYGON);
 for (int k = 0; k < 80; k++)
 {
-   float x = 0.0f + 0.1f/2.0f * cosf(2.0f * 3.14159f * (float)k / 80);
-   float y = 0.0f + 0.1f/2.0f * sinf(2.0f * 3.14159f * (float)k / 80);
+   float x = 0.0f + 0.1f/2.0f * cosf(2.0f * 3.14159f * (float)k / 80.0f);
+   float y = 0.0f + 0.1f/2.0f * sinf(2.0f * 3.14159f * (float)k / 80.0f);
    glVertex3f(x, y, 0.0f);
 }
 glEnd();
@@ -75,9 +75,9 @@ glNormal3f(1.0f, 1.0f, -0.5f); // guestimating this (too lazy)
 glEnd();
 glBegin(GL_POLYGON);
 glNormal3f(0.0f, 0.0f, -0.5f); // guestimating this (too lazy)
-   glVertex3f(0.5, 0.0, 0.8f);
-   glVertex3f(0.2, 0.0, 0.8f);
-   glVertex3f(0.35, 0.2, 0.8f);
+   glVertex3f(0.3, 0.0, 0.8f);
+   glVertex3f(0.0, 0.0, 0.8f);
+   glVertex3f(0.15, 0.2, 0.8f);
 glEnd();
 glBegin(GL_POLYGON);
 glNormal3f(1.0f, 1.0f, 0.5f); // guestimating this (too lazy)

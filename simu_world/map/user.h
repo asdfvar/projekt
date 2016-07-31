@@ -18,6 +18,9 @@ class User
       float position[3];
       float direction[3];
       float speed;
+      float window_distance;
+      float window_width;
+      float window_height;
 };
 
 #endif

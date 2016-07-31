@@ -1,5 +1,6 @@
 #include "time_manager.h"
 #include <iostream>
+#include <cmath>
 
 Time_manager::Time_manager( double time_step_in)
 {
@@ -31,11 +32,13 @@ void Time_manager::wait_for_time( void )
 
    } while (dt < time_step);
 
+   time_step_actual = floor(dt / time_step) * time_step;
+
    gettimeofday(&start, NULL);
    start_time = (start.tv_sec*1000000 + start.tv_usec) / 1000000.0;
 }
 
 float Time_manager::get_time_step( void)
 {
-   return time_step;
+   return time_step_actual;
 }

@@ -2,6 +2,9 @@
 
 User::User( void)
 {
+   /*
+   ** User positional attributes
+   */
    position[0] = 0.0f;
    position[1] = 0.0f;
    position[2] = 0.0f;
@@ -11,6 +14,14 @@ User::User( void)
    direction[2] = 0.0f;
 
    speed = 0.0f;
+
+   /*
+   ** User view-window attributes
+   */
+   window_distance = 1.0f;
+   window_width    = 1.0f;
+   window_height   = 1.0f;
+
 }
 
 void User::update( float dt)
