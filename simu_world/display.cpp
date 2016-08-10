@@ -75,8 +75,9 @@ glNormal3f(1.0f, 1.0f, -0.5f); // guestimating this (too lazy)
 glEnd();
 glBegin(GL_POLYGON);
 glNormal3f(0.0f, 0.0f, -0.5f); // guestimating this (too lazy)
-   glVertex3f(0.3, 0.0, 0.8f);
-   glVertex3f(0.0, 0.0, 0.8f);
+   glVertex3f(0.3, 0.0, -0.1f);
+   glVertex3f(0.0, 0.0, -0.1f);
+   glVertex3f(0.0, 0.2, -0.1f);
    glVertex3f(0.15, 0.2, 0.8f);
 glEnd();
 glBegin(GL_POLYGON);

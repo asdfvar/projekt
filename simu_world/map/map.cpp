@@ -1,31 +1,41 @@
 #include "map.h"
+#include <iostream>
 #include <cstdlib>
 
-Map::Map(unsigned int id_in)
+Map::Map( unsigned int id_in, int *map_dim_in, float *position_in)
 {
-   map_dim[0]      = 65;
-   map_dim[1]      = 65;
-   map_dim[2]      = 65;
-   blocks          = new char[map_dim[0] * map_dim[1] * map_dim[2]];
-   characteristics = new char[map_dim[0] * map_dim[1] * map_dim[2]];
+   for (int ind = 0; ind < 3; ind++) if (map_dim_in[ind] % 2 == 0) std::cout << "map dimension must be odd" << std::endl;
+   for (int ind = 0; ind < 3; ind++) map_dim[ind] = map_dim_in[ind];
+   blocks = new int[map_dim[0] * map_dim[1] * map_dim[2]];
 
    id = id_in;
+   for (int ind = 0; ind < 3; ind++) position[ind] = position_in[ind];
 
+   create_random();
+}
+
+void Map::change_position(float *position_in)
+{
+   position[0] = position_in[0];
+   position[1] = position_in[1];
+   position[2] = position_in[2];
    create_random();
 }
 
 void Map::create_random( void)
 {
    for (int ind = 0; ind < map_dim[0] * map_dim[1] * map_dim[2]; ind++) {
-      blocks[ind] = static_cast<char>( std::rand() % 2);
-      characteristics[ind] = 0;
+      int random_num = std::rand() % 100;
+      if (random_num == 1)
+         blocks[ind] = 1;
+      else
+         blocks[ind] = 0;
    }
 }
 
 Map::~Map(void)
 {
    delete[] blocks;
-   delete[] characteristics;
 }
 
 Map_grid::Map_grid(void)
@@ -43,10 +53,21 @@ Map_grid::Map_grid(void)
    for (int k = 0; k < local_grid_size[1]; k++) virtual_grid_id_y[k] = k;
    for (int k = 0; k < local_grid_size[2]; k++) virtual_grid_id_z[k] = k;
 
-   std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
+   int map_dim[3] = {65, 65, 65};
+   for (int ind_x = -local_grid_size[0]/2, ind = 0; ind_x <= local_grid_size[0]/2; ind_x++)
+   {
+      for (int ind_y = -local_grid_size[1]/2; ind_y <= local_grid_size[1]/2; ind_y++)
+      {
+         for (int ind_z = -local_grid_size[2]/2; ind_z <= local_grid_size[2]/2; ind_z++, ind++)
+         {
+           float position[3] = {(float)(ind_x * map_dim[0]),
+                                (float)(ind_y * map_dim[1]),
+                                (float)(ind_z * map_dim[2])};
 
-   for (int k = 0; k < total_grid_size; k++)
-      maps.push_back(Map(k));
+            maps.push_back(Map(ind, map_dim, position));
+         }
+      }
+   }
 
 }
 

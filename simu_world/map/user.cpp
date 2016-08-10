@@ -40,3 +40,8 @@ void User::stop( void)
 {
    speed = 0.0f;
 }
+
+void User::draw_scene( Map *map)
+{
+   
+}

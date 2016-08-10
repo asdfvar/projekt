@@ -1,6 +1,8 @@
 #ifndef USER_H
 #define USER_H
 
+#include "map.h"
+
 class User
 {
 
@@ -12,6 +14,8 @@ class User
 
       void move_forward( void);
       void stop( void);
+
+      void draw_scene( Map *map);
 
    private:
 
