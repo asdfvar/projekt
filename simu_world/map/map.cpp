@@ -19,7 +19,6 @@ void Map::change_position(float *position_in)
    position[0] = position_in[0];
    position[1] = position_in[1];
    position[2] = position_in[2];
-   create_random();
 }
 
 void Map::create_random( void)
