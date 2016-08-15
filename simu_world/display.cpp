@@ -1,9 +1,9 @@
 #include "opengl_interface.h"
 #include <cmath>
 
-#define TEST_DRAW_CIRCLE
-#define TEST_DRAW_LINE
-#define TEST_DRAW_3D_TRIANGLE
+//#define TEST_DRAW_CIRCLE
+//#define TEST_DRAW_LINE
+//#define TEST_DRAW_3D_TRIANGLE
 
 void Opengl_interface::display(void)
 {

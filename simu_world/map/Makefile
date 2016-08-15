@@ -1,6 +1,7 @@
 CPPC  = g++
 CL    = ar rcs
 FLAGS = -O3 -Wall
+INC   = -I../../kernels/
 
 OBJ = map.o user.o
 
@@ -16,4 +17,4 @@ map.o: map.cpp
 	$(CPPC) $^ -c
 
 user.o: user.cpp
-	$(CPPC) $^ -c
+	$(CPPC) $^ $(INC) -c

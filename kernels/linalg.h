@@ -139,7 +139,7 @@ namespace linalg
    /*
    ** Function NAME: linear_transform
    **
-   ** apply the linear tranform 'Matrix' to
+   ** apply the linear transform 'Matrix' to
    ** the input 'input' of dimension 'dim_in'
    ** to produce an output of dimension 'dim_out'
    */

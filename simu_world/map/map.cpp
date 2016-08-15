@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstdlib>
 
+/*
+** constructor name: Map
+*/
 Map::Map( unsigned int id_in, int *map_dim_in, float *position_in)
 {
    for (int ind = 0; ind < 3; ind++) if (map_dim_in[ind] % 2 == 0) std::cout << "map dimension must be odd" << std::endl;
@@ -14,6 +17,9 @@ Map::Map( unsigned int id_in, int *map_dim_in, float *position_in)
    create_random();
 }
 
+/*
+** function name: change_position from: Map
+*/
 void Map::change_position(float *position_in)
 {
    position[0] = position_in[0];
@@ -21,6 +27,9 @@ void Map::change_position(float *position_in)
    position[2] = position_in[2];
 }
 
+/*
+** function name: create_random from: Map
+*/
 void Map::create_random( void)
 {
    for (int ind = 0; ind < map_dim[0] * map_dim[1] * map_dim[2]; ind++) {
@@ -32,11 +41,59 @@ void Map::create_random( void)
    }
 }
 
+/*
+** destructor name: ~Map
+*/
 Map::~Map(void)
 {
    delete[] blocks;
 }
 
+/*
+** function name: get_dimensions from Map
+*/
+unsigned int Map::get_dimensions(void)
+{
+   return map_dim[0] * map_dim[1] * map_dim[2];
+}
+
+/*
+** function name: get_position from Map
+*/
+void Map::get_position(float *position_out,
+                       int    block_index)
+{
+
+   if (block_index >= map_dim[0]*map_dim[1]*map_dim[2])
+   {
+      std::cout << "block index exceeds map dimensions" << std::endl;
+      return;
+   }
+
+   // get block x,y,z indices
+   unsigned int block_index_x = block_index  %  map_dim[0];
+   unsigned int block_index_y = (block_index % (map_dim[0] * map_dim[1])) / map_dim[0];
+   unsigned int block_index_z = block_index  / (map_dim[0] * map_dim[1]);
+
+   // get relative position to this block
+   float rel_block_pos_x = static_cast<float>(block_index_x);
+   float rel_block_pos_y = static_cast<float>(block_index_y);
+   float rel_block_pos_z = static_cast<float>(block_index_z);
+
+   // convert to absolute position
+   float block_pos_x = rel_block_pos_x + position[0];
+   float block_pos_y = rel_block_pos_y + position[1];
+   float block_pos_z = rel_block_pos_z + position[2];
+
+   position_out[0] = block_pos_x;
+   position_out[1] = block_pos_y;
+   position_out[2] = block_pos_z;
+
+}
+
+/*
+** constructor name: Map_grid
+*/
 Map_grid::Map_grid(void)
 {
 
@@ -70,6 +127,9 @@ Map_grid::Map_grid(void)
 
 }
 
+/*
+** destructor name: ~Map_grid
+*/
 Map_grid::~Map_grid(void)
 {
    std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
@@ -81,6 +141,7 @@ Map_grid::~Map_grid(void)
 }
 
 /*
+** function name: shift from: Map_grid
 ** Circular shift the cube in the specified direction
 */
 void Map_grid::shift( int x, int y, int z)
