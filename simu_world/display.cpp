@@ -103,6 +103,8 @@ glEnd();
 }
 #endif
 
+   user.draw_scene( map);
+
 glFlush();
 
 }

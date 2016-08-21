@@ -16,7 +16,7 @@ class Map
       ~Map( void );
 
       // Functions
-      void get_position(float *position_out, int block_index);
+      int  get_position(float *position_out, int block_index);
       void change_position(float *position_in);
       unsigned int get_dimensions(void);
 

@@ -60,14 +60,14 @@ unsigned int Map::get_dimensions(void)
 /*
 ** function name: get_position from Map
 */
-void Map::get_position(float *position_out,
-                       int    block_index)
+int Map::get_position(float *position_out,
+                      int    block_index)
 {
 
    if (block_index >= map_dim[0]*map_dim[1]*map_dim[2])
    {
       std::cout << "block index exceeds map dimensions" << std::endl;
-      return;
+      return 0;
    }
 
    // get block x,y,z indices
@@ -88,6 +88,8 @@ void Map::get_position(float *position_out,
    position_out[0] = block_pos_x;
    position_out[1] = block_pos_y;
    position_out[2] = block_pos_z;
+
+   return blocks[block_index];
 
 }
 

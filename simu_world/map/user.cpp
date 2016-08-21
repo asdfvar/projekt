@@ -2,6 +2,10 @@
 #include "user.h"
 #include "linalg.h"
 
+#include <GL/glut.h>
+#include <GL/glu.h>
+#include <GL/gl.h>
+
 User::User( void)
 {
    /*
@@ -65,35 +69,78 @@ void User::draw_scene( Map *map)
 
       // get absolute position of block from map
       float block_position[3];
-      map->get_position( block_position, block_ind);
+      if (!map->get_position( block_position, block_ind)) continue;
 
-      // get position of block relative to user but at absolute direction
-      float user_to_block[3];
-      user_to_block[0] = block_position[0] - position[0];
-      user_to_block[1] = block_position[1] - position[1];
-      user_to_block[2] = block_position[2] - position[2];
+      // get 4 positions of the face
+      float corner_pos_x[4];
+      float corner_pos_y[4];
+      float corner_pos_z[4];
 
-      // rotate to user perspective to get relative orientation
-      /*
-      ** [ cos(hor_angle) -sin(hor_angle) 0 ]
-      ** [ sin(hor_angle)  cos(hor_angle) 0 ]
-      ** [ 0               0              1 ]
-      */
-      float xp = user_to_block[0]*cosf(hor_angle) - user_to_block[1]*sinf(hor_angle);
-      float yp = user_to_block[0]*sinf(hor_angle) + user_to_block[1]*cosf(hor_angle);
-      float zp = user_to_block[2];
+      float user_to_corner_x[4];
+      float user_to_corner_y[4];
+      float user_to_corner_z[4];
 
-      /*
-      ** [ cos(hor_angle) 0 -sin(hor_angle) ]
-      ** [ 0              1  0              ]
-      ** [ sin(hor_angle) 0  cos(hor_angle) ]
-      */
-      user_to_block[0] = xp*cosf(vert_angle) - zp*sinf(vert_angle);
-      user_to_block[1] = yp;
-      user_to_block[2] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
+      for (int corner = 0; corner < 4; corner++)
+      {
+         if (corner == 0)
+         {
+            corner_pos_x[corner] = block_position[0] + 0.5f;
+            corner_pos_y[corner] = block_position[1] + 0.5f;
+            corner_pos_z[corner] = block_position[2] + 0.5f;
+         }
+         else if (corner == 1)
+         {
+            corner_pos_x[corner] = block_position[0] + 0.5f;
+            corner_pos_y[corner] = block_position[1] + 0.5f;
+            corner_pos_z[corner] = block_position[2] - 0.5f;
+         }
+         else if (corner == 2)
+         {
+            corner_pos_x[corner] = block_position[0] + 0.5f;
+            corner_pos_y[corner] = block_position[1] - 0.5f;
+            corner_pos_z[corner] = block_position[2] - 0.5f;
+         }
+         else if (corner == 3)
+         {
+            corner_pos_x[corner] = block_position[0] + 0.5f;
+            corner_pos_y[corner] = block_position[1] - 0.5f;
+            corner_pos_z[corner] = block_position[2] + 0.5f;
+         }
 
-      // check that each point falls withing the viewing window
+         // get position of block corner relative to user but at absolute direction
+         user_to_corner_x[corner] = corner_pos_x[corner] - position[0];
+         user_to_corner_y[corner] = corner_pos_y[corner] - position[1];
+         user_to_corner_z[corner] = corner_pos_z[corner] - position[2];
+   
+         // rotate to user perspective to get relative orientation
+         /*
+         ** [ cos(hor_angle) -sin(hor_angle) 0 ]
+         ** [ sin(hor_angle)  cos(hor_angle) 0 ]
+         ** [ 0               0              1 ]
+         */
+         float xp = user_to_corner_x[corner]*cosf(hor_angle) - user_to_corner_y[corner]*sinf(hor_angle);
+         float yp = user_to_corner_x[corner]*sinf(hor_angle) + user_to_corner_y[corner]*cosf(hor_angle);
+         float zp = user_to_corner_z[corner];
+   
+         /*
+         ** [ cos(vert_angle) 0 -sin(vert_angle) ]
+         ** [ 0               1  0               ]
+         ** [ sin(vert_angle) 0  cos(vert_angle) ]
+         */
+         user_to_corner_x[corner] = xp*cosf(vert_angle) - zp*sinf(vert_angle);
+         user_to_corner_y[corner] = yp;
+         user_to_corner_z[corner] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
+      }
+
+      // check if any point falls within the viewing window. If so, then render it
 //      linalg::cross_product<float>(c, a, b); // c = a x b
+
+      glBegin(GL_POLYGON);
+         glNormal3f(1.0f, 1.0f, -0.5f);
+         glVertex3f(0.5f, 0.5f,  0.0f);
+         glVertex3f(0.2f, 0.5f,  0.0f);
+         glVertex3f(0.35f, 0.7f, 0.0f);
+      glEnd();
    }
    
 }

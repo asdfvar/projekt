@@ -1,5 +1,5 @@
-#ifndef OPENGL_INTERFACE
-#define OPENGL_INTERFACE
+#ifndef OPENGL_INTERFACE_H
+#define OPENGL_INTERFACE_H
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -49,7 +49,8 @@ class Opengl_interface
    private:
 
       Time_manager *time_manager;
-      User user;
+      Map          *map;
+      User          user;
 
 };
 
