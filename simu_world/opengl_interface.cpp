@@ -8,6 +8,11 @@ Opengl_interface::Opengl_interface(void)
    map = new Map( 0, map_dim, map_pos);
 }
 
+void Opengl_interface::keyboardDown( const char key)
+{
+
+}
+
 Opengl_interface::~Opengl_interface(void)
 {
    delete time_manager;

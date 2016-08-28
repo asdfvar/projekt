@@ -13,6 +13,7 @@ class User
       void update( float dt);
 
       void move_forward( void);
+      void move_upward( void);
       void stop( void);
 
       void draw_scene( Map *map);

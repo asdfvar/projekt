@@ -53,29 +53,49 @@ void mouse(
 
 void mouseMotion(int x, int y) {
 
+ #ifdef VERBOSE
+   std::cout << "mouseMotion x = " << x << std::endl;
+   std::cout << "mouseMotion y = " << y << std::endl;
+ #endif
    //opengl_interface.mouseMotion(x, y);
 }
 
 
+/*
+** GLUT_WINDOW_X        X location in pixels (relative to the screen origin) of the current window
+** GLUT_WINDOW_Y        Y location in pixels (relative to the screen origin) of the current window
+** GLUT_WINDOW_WIDTH    Width in pixels of the current window
+** GLUT_WINDOW_HEIGHT   Height in pixels of the current window
+*/
 void mousePassive(int x, int y) {
 
-   std::cout << "x = " << x << std::endl;
-   std::cout << "y = " << y << std::endl;
+ #ifdef VERBOSE
+   std::cout << "mousePassive x = " << x << std::endl;
+   std::cout << "mousePassive y = " << y << std::endl;
+ #endif
 }
 
 void keyboardUp(unsigned char key, int x, int y) {
 
-   std::cout << key << std::endl;
+ #ifdef VERBOSE
+   std::cout << "keyboardUp = " << key << std::endl;
+ #endif
 }
 
 void keyboardDown(unsigned char key, int x, int y)
 {
-switch (key) {
-   case 'q':
-      std::cout << "program exit" << std::endl;
-      exit(1);
-      break;
-}
+
+ #ifdef VERBOSE
+   std::cout << "keyboardDown = " << key << std::endl;
+ #endif
+   switch (key) {
+      case 'q':
+         std::cout << "program exit" << std::endl;
+         exit(1);
+         break;
+   }
+
+   opengl_interface.keyboardDown( key);
 }
 
 

@@ -44,7 +44,7 @@ class Opengl_interface
       /*
       ** Keyboard down-keys input
       */
-      void keyboard_down(void);
+      void keyboardDown( const char key);
 
    private:
 

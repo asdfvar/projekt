@@ -37,6 +37,11 @@ void User::update( float dt)
    position[2] += direction[2] * speed * dt;
 }
 
+void User::move_upward( void)
+{
+   position[2] += 0.5f;
+}
+
 void User::move_forward( void)
 {
    speed = 0.3f;
