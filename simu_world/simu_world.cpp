@@ -55,13 +55,29 @@ void mouseMotion(int x, int y) {
 
    //opengl_interface.mouseMotion(x, y);
 }
-#if 0
+
+
 void mousePassive(int x, int y) {
 
    std::cout << "x = " << x << std::endl;
    std::cout << "y = " << y << std::endl;
 }
-#endif
+
+void keyboardUp(unsigned char key, int x, int y) {
+
+   std::cout << key << std::endl;
+}
+
+void keyboardDown(unsigned char key, int x, int y)
+{
+switch (key) {
+   case 'q':
+      std::cout << "program exit" << std::endl;
+      exit(1);
+      break;
+}
+}
+
 
 /********
  * Main *
@@ -82,11 +98,9 @@ void simu_world( int argc, char** argv )
    glutDisplayFunc( display);
    glutMouseFunc( mouse);
    glutMotionFunc( mouseMotion);
-//   glutPassiveMotionFunc( mousePassive);
-#if 0
+   glutPassiveMotionFunc( mousePassive);
    glutKeyboardUpFunc( keyboardUp);
    glutKeyboardFunc( keyboardDown);
-#endif
    glutIdleFunc( idle);
 
    glutMainLoop();

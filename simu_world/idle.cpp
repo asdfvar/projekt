@@ -1,4 +1,5 @@
 #include "opengl_interface.h"
+#include <iostream>
 
 void Opengl_interface::idle( void)
 {
