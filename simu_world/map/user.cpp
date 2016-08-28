@@ -80,6 +80,9 @@ void User::draw_scene( Map *map)
       float user_to_corner_y[4];
       float user_to_corner_z[4];
 
+      float view_x[4];
+      float view_y[4];
+
       for (int corner = 0; corner < 4; corner++)
       {
          if (corner == 0)
@@ -130,16 +133,30 @@ void User::draw_scene( Map *map)
          user_to_corner_x[corner] = xp*cosf(vert_angle) - zp*sinf(vert_angle);
          user_to_corner_y[corner] = yp;
          user_to_corner_z[corner] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
+
+         float view_window_ratio_up = 0.5f * window_height / window_distance;
+         float corner_ratio_up = user_to_corner_z[corner] / user_to_corner_x[corner];
+         view_y[corner] = corner_ratio_up / view_window_ratio_up * window_height;
+         float view_window_ratio_right = 0.5f * window_width / window_distance;
+         float corner_ratio_right = user_to_corner_y[corner] / user_to_corner_x[corner];
+         view_x[corner] = corner_ratio_right / view_window_ratio_right * window_width;
       }
 
       // check if any point falls within the viewing window. If so, then render it
 //      linalg::cross_product<float>(c, a, b); // c = a x b
 
       glBegin(GL_POLYGON);
+#if 1
+         glVertex3f(view_x[0], view_y[0], 0.0f);
+         glVertex3f(view_x[1], view_y[1], 0.0f);
+         glVertex3f(view_x[2], view_y[2], 0.0f);
+         glVertex3f(view_x[3], view_y[3], 0.0f);
+#else
          glNormal3f(1.0f, 1.0f, -0.5f);
          glVertex3f(0.5f, 0.5f,  0.0f);
          glVertex3f(0.2f, 0.5f,  0.0f);
          glVertex3f(0.35f, 0.7f, 0.0f);
+#endif
       glEnd();
    }
    
