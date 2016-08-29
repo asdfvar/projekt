@@ -11,6 +11,11 @@ Opengl_interface::Opengl_interface(void)
 void Opengl_interface::keyboardDown( const char key)
 {
 
+   switch (key) {
+      case 'u':
+         user.move_upward();
+   }
+
 }
 
 Opengl_interface::~Opengl_interface(void)

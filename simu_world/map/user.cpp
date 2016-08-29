@@ -40,6 +40,7 @@ void User::update( float dt)
 void User::move_upward( void)
 {
    position[2] += 0.5f;
+std::cout << __FILE__ << ": position[2] = " << position[2] << std::endl;
 }
 
 void User::move_forward( void)
@@ -164,5 +165,5 @@ void User::draw_scene( Map *map)
 #endif
       glEnd();
    }
-   
+
 }

@@ -105,6 +105,4 @@ glEnd();
 
    user.draw_scene( map);
 
-glFlush();
-
 }

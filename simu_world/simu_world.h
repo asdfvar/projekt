@@ -1,7 +1,7 @@
 #ifndef SIMU_WORLD
 #define SIMU_WORLD
 
-#define VERBOSE
+//#define VERBOSE
 
 void simu_world( int argc, char** argv  );
 

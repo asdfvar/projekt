@@ -12,7 +12,11 @@ Opengl_interface opengl_interface;
 
 void display(void) {
 
-opengl_interface.display();
+  glClear(GL_COLOR_BUFFER_BIT);
+
+   opengl_interface.display();
+
+  glFlush();
 
 }
 
@@ -22,7 +26,9 @@ opengl_interface.display();
 
 void idle(void) {
 
-opengl_interface.idle();
+   opengl_interface.idle();
+
+   glutPostRedisplay();
 
 }
 
