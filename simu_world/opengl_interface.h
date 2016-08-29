@@ -39,7 +39,7 @@ class Opengl_interface
       /*
       ** Keyboard up-keys input
       */
-      void keyboard_up(void);
+      void keyboardUp( const char key);
 
       /*
       ** Keyboard down-keys input

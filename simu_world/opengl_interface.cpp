@@ -14,6 +14,27 @@ void Opengl_interface::keyboardDown( const char key)
    switch (key) {
       case 'u':
          user.move_upward();
+         break;
+      case 'n':
+         user.move_downward();
+         break;
+      case 'w':
+         user.move_forward();
+         break;
+      case 's':
+         user.move_backward();
+         break;
+   }
+
+}
+
+void Opengl_interface::keyboardUp( const char key)
+{
+
+   switch (key) {
+      case 'w':
+         user.stop();
+         break;
    }
 
 }

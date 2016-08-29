@@ -86,6 +86,8 @@ void keyboardUp(unsigned char key, int x, int y) {
  #ifdef VERBOSE
    std::cout << "keyboardUp = " << key << std::endl;
  #endif
+
+   opengl_interface.keyboardUp( key);
 }
 
 void keyboardDown(unsigned char key, int x, int y)

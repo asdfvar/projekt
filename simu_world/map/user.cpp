@@ -43,9 +43,20 @@ void User::move_upward( void)
 std::cout << __FILE__ << ": position[2] = " << position[2] << std::endl;
 }
 
+void User::move_downward( void)
+{
+   position[2] -= 0.5f;
+std::cout << __FILE__ << ": position[2] = " << position[2] << std::endl;
+}
+
 void User::move_forward( void)
 {
    speed = 0.3f;
+}
+
+void User::move_backward( void)
+{
+   speed = -0.3f;
 }
 
 void User::stop( void)

@@ -13,7 +13,9 @@ class User
       void update( float dt);
 
       void move_forward( void);
+      void move_backward( void);
       void move_upward( void);
+      void move_downward( void);
       void stop( void);
 
       void draw_scene( Map *map);
