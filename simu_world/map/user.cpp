@@ -51,7 +51,7 @@ std::cout << __FILE__ << ": position[2] = " << position[2] << std::endl;
 
 void User::move_forward( void)
 {
-   speed = 0.3f;
+   speed = 1.0f;
 }
 
 void User::move_backward( void)
@@ -97,84 +97,209 @@ void User::draw_scene( Map *map)
       float user_to_corner_y[4];
       float user_to_corner_z[4];
 
-      float view_x[4];
-      float view_y[4];
+      float view_x[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+      float view_y[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 
-      for (int corner = 0; corner < 4; corner++)
+      for (int face = 0; face < 6; face++)
       {
-         if (corner == 0)
+         for (int corner = 0; corner < 4; corner++)
          {
-            corner_pos_x[corner] = block_position[0] + 0.5f;
-            corner_pos_y[corner] = block_position[1] + 0.5f;
-            corner_pos_z[corner] = block_position[2] + 0.5f;
-         }
-         else if (corner == 1)
-         {
-            corner_pos_x[corner] = block_position[0] + 0.5f;
-            corner_pos_y[corner] = block_position[1] + 0.5f;
-            corner_pos_z[corner] = block_position[2] - 0.5f;
-         }
-         else if (corner == 2)
-         {
-            corner_pos_x[corner] = block_position[0] + 0.5f;
-            corner_pos_y[corner] = block_position[1] - 0.5f;
-            corner_pos_z[corner] = block_position[2] - 0.5f;
-         }
-         else if (corner == 3)
-         {
-            corner_pos_x[corner] = block_position[0] + 0.5f;
-            corner_pos_y[corner] = block_position[1] - 0.5f;
-            corner_pos_z[corner] = block_position[2] + 0.5f;
-         }
-
-         // get position of block corner relative to user but at absolute direction
-         user_to_corner_x[corner] = corner_pos_x[corner] - position[0];
-         user_to_corner_y[corner] = corner_pos_y[corner] - position[1];
-         user_to_corner_z[corner] = corner_pos_z[corner] - position[2];
+            if (face == 0) {
+               if (corner == 0)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 1)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 2)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 3)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+            } else if (face == 1) {
+               if (corner == 0)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 1)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 2)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 3)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+            } else if (face == 2) {
+               if (corner == 0)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 1)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 2)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 3)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+            } else if (face == 3) {
+               if (corner == 0)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 1)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 2)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 3)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+            } else if (face == 4) {
+               if (corner == 0)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 1)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 2)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+               else if (corner == 3)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
+               }
+            } else if (face == 5) {
+               if (corner == 0)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 1)
+               {
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 2)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+               else if (corner == 3)
+               {
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
+               }
+            }
    
-         // rotate to user perspective to get relative orientation
-         /*
-         ** [ cos(hor_angle) -sin(hor_angle) 0 ]
-         ** [ sin(hor_angle)  cos(hor_angle) 0 ]
-         ** [ 0               0              1 ]
-         */
-         float xp = user_to_corner_x[corner]*cosf(hor_angle) - user_to_corner_y[corner]*sinf(hor_angle);
-         float yp = user_to_corner_x[corner]*sinf(hor_angle) + user_to_corner_y[corner]*cosf(hor_angle);
-         float zp = user_to_corner_z[corner];
+            // get position of block corner relative to user but at absolute direction
+            user_to_corner_x[corner] = corner_pos_x[corner] - position[0];
+            user_to_corner_y[corner] = corner_pos_y[corner] - position[1];
+            user_to_corner_z[corner] = corner_pos_z[corner] - position[2];
+      
+            // rotate to user perspective to get relative orientation
+            /*
+            ** [ cos(hor_angle) -sin(hor_angle) 0 ]
+            ** [ sin(hor_angle)  cos(hor_angle) 0 ]
+            ** [ 0               0              1 ]
+            */
+            float xp = user_to_corner_x[corner]*cosf(hor_angle) - user_to_corner_y[corner]*sinf(hor_angle);
+            float yp = user_to_corner_x[corner]*sinf(hor_angle) + user_to_corner_y[corner]*cosf(hor_angle);
+            float zp = user_to_corner_z[corner];
+      
+            /*
+            ** [ cos(vert_angle) 0 -sin(vert_angle) ]
+            ** [ 0               1  0               ]
+            ** [ sin(vert_angle) 0  cos(vert_angle) ]
+            */
+            user_to_corner_x[corner] = xp*cosf(vert_angle) - zp*sinf(vert_angle);
+            user_to_corner_y[corner] = yp;
+            user_to_corner_z[corner] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
    
-         /*
-         ** [ cos(vert_angle) 0 -sin(vert_angle) ]
-         ** [ 0               1  0               ]
-         ** [ sin(vert_angle) 0  cos(vert_angle) ]
-         */
-         user_to_corner_x[corner] = xp*cosf(vert_angle) - zp*sinf(vert_angle);
-         user_to_corner_y[corner] = yp;
-         user_to_corner_z[corner] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
+            float view_window_ratio_up = 0.5f * window_height / window_distance;
+            float corner_ratio_up = user_to_corner_z[corner] / user_to_corner_x[corner];
+            view_y[corner] = corner_ratio_up / view_window_ratio_up * window_height;
+            float view_window_ratio_right = 0.5f * window_width / window_distance;
+            float corner_ratio_right = user_to_corner_y[corner] / user_to_corner_x[corner];
+            view_x[corner] = corner_ratio_right / view_window_ratio_right * window_width;
 
-         float view_window_ratio_up = 0.5f * window_height / window_distance;
-         float corner_ratio_up = user_to_corner_z[corner] / user_to_corner_x[corner];
-         view_y[corner] = corner_ratio_up / view_window_ratio_up * window_height;
-         float view_window_ratio_right = 0.5f * window_width / window_distance;
-         float corner_ratio_right = user_to_corner_y[corner] / user_to_corner_x[corner];
-         view_x[corner] = corner_ratio_right / view_window_ratio_right * window_width;
+         }
+         glBegin(GL_POLYGON);
+//       glNormal3f(1.0f, 1.0f, -0.5f);
+         glVertex3f(view_x[0], view_y[0], 0.0f);
+         glVertex3f(view_x[1], view_y[1], 0.0f);
+         glVertex3f(view_x[2], view_y[2], 0.0f);
+         glVertex3f(view_x[3], view_y[3], 0.0f);
+         glEnd();
       }
 
       // check if any point falls within the viewing window. If so, then render it
 //      linalg::cross_product<float>(c, a, b); // c = a x b
 
-      glBegin(GL_POLYGON);
-#if 1
-         glVertex3f(view_x[0], view_y[0], 0.0f);
-         glVertex3f(view_x[1], view_y[1], 0.0f);
-         glVertex3f(view_x[2], view_y[2], 0.0f);
-         glVertex3f(view_x[3], view_y[3], 0.0f);
-#else
-         glNormal3f(1.0f, 1.0f, -0.5f);
-         glVertex3f(0.5f, 0.5f,  0.0f);
-         glVertex3f(0.2f, 0.5f,  0.0f);
-         glVertex3f(0.35f, 0.7f, 0.0f);
-#endif
-      glEnd();
    }
 
 }
