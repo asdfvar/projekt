@@ -16,6 +16,8 @@ class User
       void move_backward( void);
       void move_upward( void);
       void move_downward( void);
+      void move_right( void);
+      void move_left( void);
       void stop( void);
 
       void draw_scene( Map *map);

@@ -24,6 +24,12 @@ void Opengl_interface::keyboardDown( const char key)
       case 's':
          user.move_backward();
          break;
+      case 'a':
+         user.move_left();
+         break;
+      case 'd':
+         user.move_right();
+         break;
    }
 
 }
@@ -33,6 +39,9 @@ void Opengl_interface::keyboardUp( const char key)
 
    switch (key) {
       case 'w':
+         user.stop();
+         break;
+      case 's':
          user.stop();
          break;
    }

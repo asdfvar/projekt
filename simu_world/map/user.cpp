@@ -40,13 +40,21 @@ void User::update( float dt)
 void User::move_upward( void)
 {
    position[2] += 0.5f;
-std::cout << __FILE__ << ": position[2] = " << position[2] << std::endl;
 }
 
 void User::move_downward( void)
 {
    position[2] -= 0.5f;
-std::cout << __FILE__ << ": position[2] = " << position[2] << std::endl;
+}
+
+void User::move_right( void)
+{
+   position[1] += 0.5f;
+}
+
+void User::move_left( void)
+{
+   position[1] -= 0.5f;
 }
 
 void User::move_forward( void)
