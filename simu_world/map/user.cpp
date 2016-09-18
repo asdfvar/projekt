@@ -105,14 +105,17 @@ void User::draw_scene( Map *map)
       float user_to_corner_y[4];
       float user_to_corner_z[4];
 
+      float normal[3];
+
       float view_x[4] = {0.0f, 0.0f, 0.0f, 0.0f};
       float view_y[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+      float view_depth[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 
       for (int face = 0; face < 6; face++)
       {
          for (int corner = 0; corner < 4; corner++)
          {
-            if (face == 0) {
+            if (face == 0) { // x+
                if (corner == 0)
                {
                   corner_pos_x[corner] = block_position[0] + 0.5f;
@@ -137,7 +140,7 @@ void User::draw_scene( Map *map)
                   corner_pos_y[corner] = block_position[1] - 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
-            } else if (face == 1) {
+            } else if (face == 1) { // x-
                if (corner == 0)
                {
                   corner_pos_x[corner] = block_position[0] - 0.5f;
@@ -162,7 +165,7 @@ void User::draw_scene( Map *map)
                   corner_pos_y[corner] = block_position[1] - 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
-            } else if (face == 2) {
+            } else if (face == 2) { // y+
                if (corner == 0)
                {
                   corner_pos_x[corner] = block_position[0] - 0.5f;
@@ -187,7 +190,7 @@ void User::draw_scene( Map *map)
                   corner_pos_y[corner] = block_position[1] + 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
-            } else if (face == 3) {
+            } else if (face == 3) { // y-
                if (corner == 0)
                {
                   corner_pos_x[corner] = block_position[0] - 0.5f;
@@ -212,7 +215,7 @@ void User::draw_scene( Map *map)
                   corner_pos_y[corner] = block_position[1] - 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
-            } else if (face == 4) {
+            } else if (face == 4) { // z+
                if (corner == 0)
                {
                   corner_pos_x[corner] = block_position[0] - 0.5f;
@@ -237,7 +240,7 @@ void User::draw_scene( Map *map)
                   corner_pos_y[corner] = block_position[1] - 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
-            } else if (face == 5) {
+            } else if (face == 5) { // z-
                if (corner == 0)
                {
                   corner_pos_x[corner] = block_position[0] - 0.5f;
@@ -263,7 +266,7 @@ void User::draw_scene( Map *map)
                   corner_pos_z[corner] = block_position[2] - 0.5f;
                }
             }
-   
+
             // get position of block corner relative to user but at absolute direction
             user_to_corner_x[corner] = corner_pos_x[corner] - position[0];
             user_to_corner_y[corner] = corner_pos_y[corner] - position[1];
@@ -288,25 +291,44 @@ void User::draw_scene( Map *map)
             user_to_corner_y[corner] = yp;
             user_to_corner_z[corner] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
    
-            float view_window_ratio_up = 0.5f * window_height / window_distance;
-            float corner_ratio_up = user_to_corner_z[corner] / user_to_corner_x[corner];
-            view_y[corner] = corner_ratio_up / view_window_ratio_up * window_height;
+            float view_window_ratio_up    = 0.5f * window_height / window_distance;
+            float corner_ratio_up         = user_to_corner_z[corner] / user_to_corner_x[corner];
+            view_y[corner]                = corner_ratio_up / view_window_ratio_up * window_height;
             float view_window_ratio_right = 0.5f * window_width / window_distance;
-            float corner_ratio_right = user_to_corner_y[corner] / user_to_corner_x[corner];
-            view_x[corner] = corner_ratio_right / view_window_ratio_right * window_width;
+            float corner_ratio_right      = user_to_corner_y[corner] / user_to_corner_x[corner];
+            view_x[corner]                = corner_ratio_right / view_window_ratio_right * window_width;
+            view_depth[corner]            = sqrtf( user_to_corner_x[corner] * user_to_corner_x[corner] +
+                                                   user_to_corner_y[corner] * user_to_corner_y[corner] +
+                                                   user_to_corner_z[corner] * user_to_corner_z[corner]);
 
-         }
+         } // for (int corner = 0; corner < 4; corner++)
+
+         // get relative normal direction
+         float vec1[3] = {user_to_corner_x[1] - user_to_corner_x[0],
+                          user_to_corner_y[1] - user_to_corner_y[0],
+                          user_to_corner_z[1] - user_to_corner_z[0]};
+         float vec2[3] = {user_to_corner_x[3] - user_to_corner_x[0],
+                          user_to_corner_y[3] - user_to_corner_y[0],
+                          user_to_corner_z[3] - user_to_corner_z[0]};
+
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         float to_user[3] = {-direction[0], -direction[1], -direction[2]};
+         linalg::unit_vector<float>  ( normal, 3);
+         float brightness = linalg::dot_product<float>  ( normal, to_user, 3);
+
+         // set max distance to 100.0
+         float dist_ratio[4];
+         for (int ind = 0; ind < 4; ind++) dist_ratio[ind] = view_depth[ind] / 100.0f;
+   
          glBegin(GL_POLYGON);
-//       glNormal3f(1.0f, 1.0f, -0.5f);
-         glVertex3f(view_x[0], view_y[0], 0.0f);
-         glVertex3f(view_x[1], view_y[1], 0.0f);
-         glVertex3f(view_x[2], view_y[2], 0.0f);
-         glVertex3f(view_x[3], view_y[3], 0.0f);
+           glNormal3f(0.0f, 0.0f, -brightness);
+           glVertex3f(view_x[0], view_y[0], dist_ratio[0]);
+           glVertex3f(view_x[1], view_y[1], dist_ratio[1]);
+           glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
+           glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
          glEnd();
-      }
-
-      // check if any point falls within the viewing window. If so, then render it
-//      linalg::cross_product<float>(c, a, b); // c = a x b
+      } // for (int face = 0; face < 6; face++)
 
    }
 

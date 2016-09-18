@@ -51,6 +51,7 @@ class Opengl_interface
       Time_manager *time_manager;
       Map          *map;
       User          user;
+float rcube;
 
 };
 

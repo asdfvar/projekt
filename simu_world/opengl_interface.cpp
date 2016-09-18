@@ -6,6 +6,7 @@ Opengl_interface::Opengl_interface(void)
    int map_dim[3]   = {11, 11, 11};
    float map_pos[3] = {0.0f, 0.0f, 0.0f};
    map = new Map( 0, map_dim, map_pos);
+rcube = 0.0f;
 }
 
 void Opengl_interface::keyboardDown( const char key)

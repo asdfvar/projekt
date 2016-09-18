@@ -4,6 +4,7 @@
 //#define TEST_DRAW_CIRCLE
 //#define TEST_DRAW_LINE
 //#define TEST_DRAW_3D_TRIANGLE
+//#define ROT_CUBE
 
 void Opengl_interface::display(void)
 {
@@ -15,7 +16,7 @@ float mat_shininess[1]  = { 50.0f };
 float light_ambient[] = {0.2, 0.2, 0.2, 1.0};
 float light_diffuse[] = {0.8, 0.8, 0.8, 1.0};
 float light_specular[] = {0.8, 0.8, 0.8, 1.0};
-float light_position[] = {1.0, 1.0, 1.0, 0.0};
+float light_position[] = {0.0, 0.0, 1.0, 0.0};
 
 glLightfv( GL_LIGHT0, GL_AMBIENT, light_ambient);
 glLightfv( GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -101,6 +102,69 @@ glVertex3f(-1.0f, -0.9f ,0.0);
 glVertex3f(0.5, 0.5f, 0.0);
 glEnd();
 }
+#endif
+
+#ifdef ROT_CUBE
+  glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);     // Clear The Screen And The Depth Buffer
+ 
+  glLoadIdentity();                    // Reset the transformation matrix.
+  glTranslatef(0.0f, 0.0f, 1.8f);          // Move Right 3 Units, and back into the screen 7
+ 
+  glRotatef(rcube,1.0f,1.0f,1.0f);          // Rotate The Cube On X, Y, and Z
+ 
+  // draw a cube (6 quadrilaterals)
+  glBegin(GL_QUADS);                    // start drawing the cube.
+ 
+  // top of cube
+  glColor3f(0.0f,1.0f,0.0f);               // Set The Color To Blue
+glNormal3f(0.0f, 0.0f, 1.0f);
+  glVertex3f( 1.0f, 1.0f,-1.0f);          // Top Right Of The Quad (Top)
+  glVertex3f(-1.0f, 1.0f,-1.0f);          // Top Left Of The Quad (Top)
+  glVertex3f(-1.0f, 1.0f, 1.0f);          // Bottom Left Of The Quad (Top)
+  glVertex3f( 1.0f, 1.0f, 1.0f);          // Bottom Right Of The Quad (Top)
+ 
+  // bottom of cube
+  glColor3f(1.0f,0.5f,0.0f);               // Set The Color To Orange
+glNormal3f(0.0f, 0.0f, -1.0f);
+  glVertex3f( 1.0f,-1.0f, 1.0f);          // Top Right Of The Quad (Bottom)
+  glVertex3f(-1.0f,-1.0f, 1.0f);          // Top Left Of The Quad (Bottom)
+  glVertex3f(-1.0f,-1.0f,-1.0f);          // Bottom Left Of The Quad (Bottom)
+  glVertex3f( 1.0f,-1.0f,-1.0f);          // Bottom Right Of The Quad (Bottom)
+ 
+  // front of cube
+  glColor3f(1.0f,0.0f,0.0f);               // Set The Color To Red
+glNormal3f(1.0f, 0.0f, 0.0f);
+  glVertex3f( 1.0f, 1.0f, 1.0f);          // Top Right Of The Quad (Front)
+  glVertex3f(-1.0f, 1.0f, 1.0f);          // Top Left Of The Quad (Front)
+  glVertex3f(-1.0f,-1.0f, 1.0f);          // Bottom Left Of The Quad (Front)
+  glVertex3f( 1.0f,-1.0f, 1.0f);          // Bottom Right Of The Quad (Front)
+ 
+  // back of cube.
+  glColor3f(1.0f,1.0f,0.0f);               // Set The Color To Yellow
+glNormal3f(-1.0f, 0.0f, 0.0f);
+  glVertex3f( 1.0f,-1.0f,-1.0f);          // Top Right Of The Quad (Back)
+  glVertex3f(-1.0f,-1.0f,-1.0f);          // Top Left Of The Quad (Back)
+  glVertex3f(-1.0f, 1.0f,-1.0f);          // Bottom Left Of The Quad (Back)
+  glVertex3f( 1.0f, 1.0f,-1.0f);          // Bottom Right Of The Quad (Back)
+ 
+  // left of cube
+  glColor3f(0.0f,0.0f,1.0f);               // Blue
+glNormal3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(-1.0f, 1.0f, 1.0f);          // Top Right Of The Quad (Left)
+  glVertex3f(-1.0f, 1.0f,-1.0f);          // Top Left Of The Quad (Left)
+  glVertex3f(-1.0f,-1.0f,-1.0f);          // Bottom Left Of The Quad (Left)
+  glVertex3f(-1.0f,-1.0f, 1.0f);          // Bottom Right Of The Quad (Left)
+ 
+  // Right of cube
+  glColor3f(1.0f,0.0f,1.0f);               // Set The Color To Violet
+glNormal3f(0.0f, -1.0f, 0.0f);
+  glVertex3f( 1.0f, 1.0f,-1.0f);             // Top Right Of The Quad (Right)
+  glVertex3f( 1.0f, 1.0f, 1.0f);          // Top Left Of The Quad (Right)
+  glVertex3f( 1.0f,-1.0f, 1.0f);          // Bottom Left Of The Quad (Right)
+  glVertex3f( 1.0f,-1.0f,-1.0f);          // Bottom Right Of The Quad (Right)
+  glEnd();                         // Done Drawing The Cube
+ 
+  rcube-=1.0f;                         // Decrease The Rotation Variable For The Cube
 #endif
 
    user.draw_scene( map);
