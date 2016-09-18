@@ -64,6 +64,13 @@ void mouseMotion(int x, int y) {
    std::cout << "mouseMotion y = " << y << std::endl;
  #endif
    //opengl_interface.mouseMotion(x, y);
+
+// TODO: For next time:
+#if 0
+// Reset mouse position for next frame
+glfwSetMousePos(1024/2, 768/2);
+#endif
+
 }
 
 
