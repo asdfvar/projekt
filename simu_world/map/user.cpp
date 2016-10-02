@@ -62,6 +62,53 @@ static void point_conversion(float perspective[3],
    xp_prime[1] = k * xp_hat[1];
    xp_prime[2] = k * xp_hat[2];
 
+   float dx  = d_hat[0];
+   float dy  = d_hat[1];
+   float dxy = sqrtf( d_hat[0] * d_hat[0] + d_hat[1] * d_hat[1]);
+
+   /*
+   ** rot_z = [ dy / |dxy|, -dx / |dxy|, 0 ]
+   **         [ dx / |dxy|,  dy / |dxy|, 0 ]
+   **         [ 0,           0,          1 ]
+   */
+   float rot_z[3][3];
+   rot_z[0][0] = dy / dxy; rot_z[0][1] = -dx / dxy; rot_z[0][2] = 0.0f;
+   rot_z[1][0] = dx / dxy; rot_z[1][1] = -dy / dxy; rot_z[1][2] = 0.0f;
+   rot_z[2][0] = 0.0f;     rot_z[2][1] = 0.0f;      rot_z[2][2] = 1.0f;
+
+   /*
+   ** rot_x = [ 1,           0,           0        ]
+   **         [ 0,           dz / |d|,    |dxy|    ]
+   **         [ 0,          -|dxy| / |d|, dz / |d| ]
+   */
+   float rot_x[3][3];
+   rot_x[0][0] = 1.0f;     rot_x[0][1] = -dx / dxy; rot_x[0][2] = 0.0f;
+   rot_x[1][0] = dx / dxy; rot_x[1][1] = -dy / dxy; rot_x[1][2] = 0.0f;
+   rot_x[2][0] = 0.0f;     rot_x[2][1] = 0.0f;      rot_x[2][2] = 1.0f;
+
+   /*
+   ** rot_w = [ dy / |dxy|, -dx / |dxy|]
+   **         [ dx / |dxy|,  dy / |dxy|]
+   */
+   float rot_w[2][2];
+   rot_w[0][0] =  cosf(rotation); rot_w[0][1] = sinf(rotation);
+   rot_w[1][0] = -sinf(rotation); rot_w[1][1] = cosf(rotation);
+
+   float temp[3];
+   temp[0] = rot_z[0][0] * xp_prime[0] + rot_z[0][1] * xp_prime[1] + rot_z[0][2] * xp_prime[2];
+   temp[1] = rot_z[1][0] * xp_prime[0] + rot_z[1][1] * xp_prime[1] + rot_z[1][2] * xp_prime[2];
+   temp[2] = rot_z[2][0] * xp_prime[0] + rot_z[2][1] * xp_prime[1] + rot_z[2][2] * xp_prime[2];
+
+   xp_prime[0] = rot_x[0][0] * temp[0] + rot_x[0][1] * temp[1] + rot_x[0][2] * temp[2];
+   xp_prime[1] = rot_x[1][0] * temp[0] + rot_x[1][1] * temp[1] + rot_x[1][2] * temp[2];
+   xp_prime[2] = temp[2];
+
+   temp[0] = rot_w[0][0] * xp_prime[0] + rot_w[0][1] * xp_prime[1];
+   temp[1] = rot_w[1][0] * xp_prime[0] + rot_w[1][1] * xp_prime[1];
+
+   xp_prime[0] = temp[0];
+   xp_prime[1] = temp[1];
+
    return;
 }
 
