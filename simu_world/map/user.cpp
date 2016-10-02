@@ -6,6 +6,65 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
+static void point_conversion(float perspective[3],
+                             float direction[3],
+                             float rotation,
+                             float window_distance,
+                             float point[3],
+                             float *output_point)
+{
+
+   float norm = sqrtf( direction[0] * direction[0] +
+                       direction[1] * direction[1] +
+                       direction[2] * direction[2]);
+
+   float d_hat[3];
+   d_hat[0] = direction[0] / norm;
+   d_hat[1] = direction[1] / norm;
+   d_hat[2] = direction[2] / norm;
+
+   float xl[3];
+   xl[0] = d_hat[0] * window_distance;
+   xl[1] = d_hat[1] * window_distance;
+   xl[2] = d_hat[2] * window_distance;
+
+   float xp[3];
+   xp[0] = point[0] - perspective[0];
+   xp[1] = point[1] - perspective[1];
+   xp[2] = point[2] - perspective[2];
+
+   norm = sqrtf( xp[0] * xp[0] +
+                 xp[1] * xp[1] +
+                 xp[2] * xp[2]);
+
+   float xp_hat[3];
+   xp_hat[0] = xp[0] / norm;
+   xp_hat[1] = xp[1] / norm;
+   xp_hat[2] = xp[2] / norm;
+
+   float dot = xp_hat[0] * d_hat[0] +
+               xp_hat[1] * d_hat[1] +
+               xp_hat[2] * d_hat[2];
+
+   float denom_vec[3];
+   denom_vec[0] = dot * d_hat[0];
+   denom_vec[1] = dot * d_hat[1];
+   denom_vec[2] = dot * d_hat[2];
+
+   float k;
+   float max = denom_vec[0];
+   if (max < denom_vec[1]) { max = denom_vec[1]; k = xl[1] / denom_vec[1]; }
+   if (max < denom_vec[2]) { max = denom_vec[2]; k = xl[1] / denom_vec[2]; }
+   else { k = xl[0] / denom_vec[0]; }
+
+   float xp_prime[3];
+   xp_prime[0] = k * xp_hat[0];
+   xp_prime[1] = k * xp_hat[1];
+   xp_prime[2] = k * xp_hat[2];
+
+   return;
+}
+
 User::User( void)
 {
    /*
