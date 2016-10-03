@@ -109,6 +109,9 @@ static void point_conversion(float perspective[3],
    xp_prime[0] = temp[0];
    xp_prime[1] = temp[1];
 
+   output_point[0] = xp_prime[0];
+   output_point[1] = xp_prime[1];
+
    return;
 }
 
@@ -406,6 +409,22 @@ void User::draw_scene( Map *map)
             view_depth[corner]            = sqrtf( user_to_corner_x[corner] * user_to_corner_x[corner] +
                                                    user_to_corner_y[corner] * user_to_corner_y[corner] +
                                                    user_to_corner_z[corner] * user_to_corner_z[corner]);
+
+            float corner_point[3] = { corner_pos_x[corner],
+                                      corner_pos_y[corner],
+                                      corner_pos_z[corner] };
+            float output_point[2];
+            point_conversion(position,
+                             direction,
+                             0.0f, /* rotation (w) */
+                             window_distance,
+                             corner_point,
+                             output_point);
+#if 0
+            // scale to [-1, 1]
+            view_x[corner] = output_point[0] / window_width;
+            view_y[corner] = output_point[1] / window_width;
+#endif
 
          } // for (int corner = 0; corner < 4; corner++)
 
