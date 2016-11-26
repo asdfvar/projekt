@@ -11,40 +11,69 @@ static void point_conversion(float perspective[3],
                              float rotation,
                              float window_distance,
                              float point[3],
+                             bool  debug,
                              float *output_point)
 {
 
-   float norm = sqrtf( direction[0] * direction[0] +
-                       direction[1] * direction[1] +
-                       direction[2] * direction[2]);
+   float temp;
+   float temp_array[3];
+
+   float d_norm = sqrtf( direction[0] * direction[0] +
+                         direction[1] * direction[1] +
+                         direction[2] * direction[2]);
+
+if (debug) std::cout << "window distance = " << window_distance << std::endl;
+if (debug) std::cout << "point = " << point[0] << ", " << point[1] << ", " << point[2] << std::endl;
 
    float d_hat[3];
-   d_hat[0] = direction[0] / norm;
-   d_hat[1] = direction[1] / norm;
-   d_hat[2] = direction[2] / norm;
+   d_hat[0] = direction[0] / d_norm;
+   d_hat[1] = direction[1] / d_norm;
+   d_hat[2] = direction[2] / d_norm;
 
-   float xl[3];
-   xl[0] = d_hat[0] * window_distance;
-   xl[1] = d_hat[1] * window_distance;
-   xl[2] = d_hat[2] * window_distance;
+   float d[3];
+   d[0] = d_hat[0] * window_distance;
+   d[1] = d_hat[1] * window_distance;
+   d[2] = d_hat[2] * window_distance;
 
-   float xp[3];
-   xp[0] = point[0] - perspective[0];
-   xp[1] = point[1] - perspective[1];
-   xp[2] = point[2] - perspective[2];
+   float p[3];
+   p[0] = point[0] - perspective[0];
+   p[1] = point[1] - perspective[1];
+   p[2] = point[2] - perspective[2];
 
-   norm = sqrtf( xp[0] * xp[0] +
-                 xp[1] * xp[1] +
-                 xp[2] * xp[2]);
+   float p_norm = sqrtf( p[0] * p[0] +
+                         p[1] * p[1] +
+                         p[2] * p[2]);
 
-   float xp_hat[3];
-   xp_hat[0] = xp[0] / norm;
-   xp_hat[1] = xp[1] / norm;
-   xp_hat[2] = xp[2] / norm;
+   float p_hat[3];
+   p_hat[0] = p[0] / p_norm;
+   p_hat[1] = p[1] / p_norm;
+   p_hat[2] = p[2] / p_norm;
 
-   float dot = xp_hat[0] * d_hat[0] +
-               xp_hat[1] * d_hat[1] +
-               xp_hat[2] * d_hat[2];
+   temp = p[0] * d_hat[0] +
+          p[1] * d_hat[1] +
+          p[2] * d_hat[2];
+
+   temp_array[0] = temp * d_hat[0];
+   temp_array[1] = temp * d_hat[1];
+   temp_array[2] = temp * d_hat[2];
+
+   temp = sqrtf( temp_array[0] * temp_array[0] +
+                 temp_array[1] * temp_array[1] +
+                 temp_array[2] * temp_array[2]);
+
+   float pp_norm = d_norm * p_norm / temp;
+
+   float pp[3];
+   pp[0] = pp_norm / p_norm * p[0];
+   pp[1] = pp_norm / p_norm * p[1];
+   pp[2] = pp_norm / p_norm * p[2];
+
+if (debug) std::cout << "pp = " << pp[0] << ", " << pp[1] << ", " << pp[2] << std::endl;
+
+#if 1
+   float dot = p_hat[0] * d_hat[0] +
+               p_hat[1] * d_hat[1] +
+               p_hat[2] * d_hat[2];
 
    float denom_vec[3];
    denom_vec[0] = dot * d_hat[0];
@@ -53,27 +82,30 @@ static void point_conversion(float perspective[3],
 
    float k;
    float max = denom_vec[0];
-   if (max < denom_vec[1]) { max = denom_vec[1]; k = xl[1] / denom_vec[1]; }
-   if (max < denom_vec[2]) { max = denom_vec[2]; k = xl[1] / denom_vec[2]; }
-   else { k = xl[0] / denom_vec[0]; }
+   if (max < denom_vec[1]) { max = denom_vec[1]; k = d[1] / denom_vec[1]; }
+   if (max < denom_vec[2]) { max = denom_vec[2]; k = d[1] / denom_vec[2]; }
+   else { k = d[0] / denom_vec[0]; }
 
    float xp_prime[3];
-   xp_prime[0] = k * xp_hat[0];
-   xp_prime[1] = k * xp_hat[1];
-   xp_prime[2] = k * xp_hat[2];
+   xp_prime[0] = k * p_hat[0];
+   xp_prime[1] = k * p_hat[1];
+   xp_prime[2] = k * p_hat[2];
 
    float dx  = d_hat[0];
    float dy  = d_hat[1];
+   float dz  = d_hat[2];
    float dxy = sqrtf( d_hat[0] * d_hat[0] + d_hat[1] * d_hat[1]);
 
+if (debug) std::cout << "dxy = " << dxy << std::endl;
+
    /*
-   ** rot_z = [ dy / |dxy|, -dx / |dxy|, 0 ]
-   **         [ dx / |dxy|,  dy / |dxy|, 0 ]
+   ** rot_z = [ dy / |dxy|,  dx / |dxy|, 0 ]
+   **         [-dx / |dxy|,  dy / |dxy|, 0 ]
    **         [ 0,           0,          1 ]
    */
    float rot_z[3][3];
    rot_z[0][0] = dy / dxy; rot_z[0][1] = -dx / dxy; rot_z[0][2] = 0.0f;
-   rot_z[1][0] = dx / dxy; rot_z[1][1] = -dy / dxy; rot_z[1][2] = 0.0f;
+   rot_z[1][0] = dx / dxy; rot_z[1][1] =  dy / dxy; rot_z[1][2] = 0.0f;
    rot_z[2][0] = 0.0f;     rot_z[2][1] = 0.0f;      rot_z[2][2] = 1.0f;
 
    /*
@@ -82,9 +114,9 @@ static void point_conversion(float perspective[3],
    **         [ 0,          -|dxy| / |d|, dz / |d| ]
    */
    float rot_x[3][3];
-   rot_x[0][0] = 1.0f;     rot_x[0][1] = -dx / dxy; rot_x[0][2] = 0.0f;
-   rot_x[1][0] = dx / dxy; rot_x[1][1] = -dy / dxy; rot_x[1][2] = 0.0f;
-   rot_x[2][0] = 0.0f;     rot_x[2][1] = 0.0f;      rot_x[2][2] = 1.0f;
+   rot_x[0][0] = 1.0f; rot_x[0][1] = 0.0f; rot_x[0][2] = 0.0f;
+   rot_x[1][0] = 0.0f; rot_x[1][1] = dz;   rot_x[1][2] = dxy;
+   rot_x[2][0] = 0.0f; rot_x[2][1] = dxy;  rot_x[2][2] = dz;
 
    /*
    ** rot_w = [ dy / |dxy|, -dx / |dxy|]
@@ -94,23 +126,27 @@ static void point_conversion(float perspective[3],
    rot_w[0][0] =  cosf(rotation); rot_w[0][1] = sinf(rotation);
    rot_w[1][0] = -sinf(rotation); rot_w[1][1] = cosf(rotation);
 
-   float temp[3];
-   temp[0] = rot_z[0][0] * xp_prime[0] + rot_z[0][1] * xp_prime[1] + rot_z[0][2] * xp_prime[2];
-   temp[1] = rot_z[1][0] * xp_prime[0] + rot_z[1][1] * xp_prime[1] + rot_z[1][2] * xp_prime[2];
-   temp[2] = rot_z[2][0] * xp_prime[0] + rot_z[2][1] * xp_prime[1] + rot_z[2][2] * xp_prime[2];
+   temp_array[0] = rot_z[0][0] * pp[0] + rot_z[0][1] * pp[1] + rot_z[0][2] * pp[2];
+   temp_array[1] = rot_z[1][0] * pp[0] + rot_z[1][1] * pp[1] + rot_z[1][2] * pp[2];
+   temp_array[2] = rot_z[2][0] * pp[0] + rot_z[2][1] * pp[1] + rot_z[2][2] * pp[2];
 
-   xp_prime[0] = rot_x[0][0] * temp[0] + rot_x[0][1] * temp[1] + rot_x[0][2] * temp[2];
-   xp_prime[1] = rot_x[1][0] * temp[0] + rot_x[1][1] * temp[1] + rot_x[1][2] * temp[2];
-   xp_prime[2] = temp[2];
+if (debug) std::cout << "rot(z) = " << temp_array[0] << ", " << temp_array[1] << ", " << temp_array[2] << std::endl;
 
-   temp[0] = rot_w[0][0] * xp_prime[0] + rot_w[0][1] * xp_prime[1];
-   temp[1] = rot_w[1][0] * xp_prime[0] + rot_w[1][1] * xp_prime[1];
+   pp[0] = rot_x[0][0] * temp_array[0] + rot_x[0][1] * temp_array[1] + rot_x[0][2] * temp_array[2];
+   pp[1] = rot_x[1][0] * temp_array[0] + rot_x[1][1] * temp_array[1] + rot_x[1][2] * temp_array[2];
+   pp[2] = rot_x[2][0] * temp_array[0] + rot_x[2][1] * temp_array[1] + rot_x[2][2] * temp_array[2];
 
-   xp_prime[0] = temp[0];
-   xp_prime[1] = temp[1];
+if (debug) std::cout << "rot(x) = " << pp[0] << ", " << pp[1] << ", " << pp[2] << std::endl;
 
-   output_point[0] = xp_prime[0];
-   output_point[1] = xp_prime[1];
+   temp_array[0] = rot_w[0][0] * pp[0] + rot_w[0][1] * pp[1];
+   temp_array[1] = rot_w[1][0] * pp[0] + rot_w[1][1] * pp[1];
+
+   pp[0] = temp_array[0];
+   pp[1] = temp_array[1];
+
+   output_point[0] = pp[0];
+   output_point[1] = pp[1];
+#endif
 
    return;
 }
@@ -197,13 +233,29 @@ void User::draw_scene( Map *map)
 
    int number_of_blocks = map->get_dimensions();
 
+//<<<
+number_of_blocks = 1;
+//>>>
+
    // iterate through all the blocks
    for (int block_ind = 0; block_ind < number_of_blocks; block_ind++)
    {
 
       // get absolute position of block from map
       float block_position[3];
+#if 0
       if (!map->get_position( block_position, block_ind)) continue;
+#else
+//<<<
+map->get_position( block_position, block_ind);
+//>>>
+#endif
+
+//<<<
+block_position[0] = 4.0f;
+block_position[1] = 0.0f;
+block_position[2] = 0.0f;
+//>>>
 
       // get 4 positions of the face
       float corner_pos_x[4];
@@ -219,6 +271,9 @@ void User::draw_scene( Map *map)
       float view_x[4] = {0.0f, 0.0f, 0.0f, 0.0f};
       float view_y[4] = {0.0f, 0.0f, 0.0f, 0.0f};
       float view_depth[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+      float new_view_x[4];
+      float new_view_y[4];
 
       for (int face = 0; face < 6; face++)
       {
@@ -413,17 +468,21 @@ void User::draw_scene( Map *map)
             float corner_point[3] = { corner_pos_x[corner],
                                       corner_pos_y[corner],
                                       corner_pos_z[corner] };
+//<<<
+// std::cout << "corner = " << corner << std::endl;
+//>>>
             float output_point[2];
             point_conversion(position,
                              direction,
                              0.0f, /* rotation (w) */
                              window_distance,
                              corner_point,
+                             (face == 0 && corner == 0),
                              output_point);
-#if 0
+#if 1
             // scale to [-1, 1]
-            view_x[corner] = output_point[0] / window_width;
-            view_y[corner] = output_point[1] / window_width;
+            new_view_x[corner] = output_point[0] / window_width;
+            new_view_y[corner] = output_point[1] / window_width;
 #endif
 
          } // for (int corner = 0; corner < 4; corner++)
@@ -445,13 +504,22 @@ void User::draw_scene( Map *map)
          // set max distance to 100.0
          float dist_ratio[4];
          for (int ind = 0; ind < 4; ind++) dist_ratio[ind] = view_depth[ind] / 100.0f;
+
+//<<<
+std::cout << "face = " << face << std::endl;
+for (int k = 0; k < 4; k++) {
+std::cout << "k = " << k << ": view = (" <<  view_x[k] << ", " << view_y[k] << ")";
+std::cout << ":\tnew view = (" << new_view_x[k] << ", " << new_view_y[k] << ")" << std::endl;
+}
+std::cout << std::endl;
+//>>>
    
          glBegin(GL_POLYGON);
            glNormal3f(0.0f, 0.0f, -brightness);
-           glVertex3f(view_x[0], view_y[0], dist_ratio[0]);
-           glVertex3f(view_x[1], view_y[1], dist_ratio[1]);
-           glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
-           glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
+           glVertex3f(new_view_x[0], new_view_y[0], dist_ratio[0]);
+           glVertex3f(new_view_x[1], new_view_y[1], dist_ratio[1]);
+           glVertex3f(new_view_x[2], new_view_y[2], dist_ratio[2]);
+           glVertex3f(new_view_x[3], new_view_y[3], dist_ratio[3]);
          glEnd();
       } // for (int face = 0; face < 6; face++)
 
