@@ -11,7 +11,6 @@ static void point_conversion(float perspective[3],
                              float rotation,
                              float window_distance,
                              float point[3],
-                             bool  debug,
                              float *output_point)
 {
 
@@ -22,18 +21,10 @@ static void point_conversion(float perspective[3],
                          direction[1] * direction[1] +
                          direction[2] * direction[2]);
 
-if (debug) std::cout << "window distance = " << window_distance << std::endl;
-if (debug) std::cout << "point = " << point[0] << ", " << point[1] << ", " << point[2] << std::endl;
-
    float d_hat[3];
    d_hat[0] = direction[0] / d_norm;
    d_hat[1] = direction[1] / d_norm;
    d_hat[2] = direction[2] / d_norm;
-
-   float d[3];
-   d[0] = d_hat[0] * window_distance;
-   d[1] = d_hat[1] * window_distance;
-   d[2] = d_hat[2] * window_distance;
 
    float p[3];
    p[0] = point[0] - perspective[0];
@@ -43,11 +34,6 @@ if (debug) std::cout << "point = " << point[0] << ", " << point[1] << ", " << po
    float p_norm = sqrtf( p[0] * p[0] +
                          p[1] * p[1] +
                          p[2] * p[2]);
-
-   float p_hat[3];
-   p_hat[0] = p[0] / p_norm;
-   p_hat[1] = p[1] / p_norm;
-   p_hat[2] = p[2] / p_norm;
 
    temp = p[0] * d_hat[0] +
           p[1] * d_hat[1] +
@@ -68,35 +54,10 @@ if (debug) std::cout << "point = " << point[0] << ", " << point[1] << ", " << po
    pp[1] = pp_norm / p_norm * p[1];
    pp[2] = pp_norm / p_norm * p[2];
 
-if (debug) std::cout << "pp = " << pp[0] << ", " << pp[1] << ", " << pp[2] << std::endl;
-
-#if 1
-   float dot = p_hat[0] * d_hat[0] +
-               p_hat[1] * d_hat[1] +
-               p_hat[2] * d_hat[2];
-
-   float denom_vec[3];
-   denom_vec[0] = dot * d_hat[0];
-   denom_vec[1] = dot * d_hat[1];
-   denom_vec[2] = dot * d_hat[2];
-
-   float k;
-   float max = denom_vec[0];
-   if (max < denom_vec[1]) { max = denom_vec[1]; k = d[1] / denom_vec[1]; }
-   if (max < denom_vec[2]) { max = denom_vec[2]; k = d[1] / denom_vec[2]; }
-   else { k = d[0] / denom_vec[0]; }
-
-   float xp_prime[3];
-   xp_prime[0] = k * p_hat[0];
-   xp_prime[1] = k * p_hat[1];
-   xp_prime[2] = k * p_hat[2];
-
    float dx  = d_hat[0];
    float dy  = d_hat[1];
    float dz  = d_hat[2];
    float dxy = sqrtf( d_hat[0] * d_hat[0] + d_hat[1] * d_hat[1]);
-
-if (debug) std::cout << "dxy = " << dxy << std::endl;
 
    /*
    ** rot_z = [ dy / |dxy|,  dx / |dxy|, 0 ]
@@ -130,13 +91,9 @@ if (debug) std::cout << "dxy = " << dxy << std::endl;
    temp_array[1] = rot_z[1][0] * pp[0] + rot_z[1][1] * pp[1] + rot_z[1][2] * pp[2];
    temp_array[2] = rot_z[2][0] * pp[0] + rot_z[2][1] * pp[1] + rot_z[2][2] * pp[2];
 
-if (debug) std::cout << "rot(z) = " << temp_array[0] << ", " << temp_array[1] << ", " << temp_array[2] << std::endl;
-
    pp[0] = rot_x[0][0] * temp_array[0] + rot_x[0][1] * temp_array[1] + rot_x[0][2] * temp_array[2];
    pp[1] = rot_x[1][0] * temp_array[0] + rot_x[1][1] * temp_array[1] + rot_x[1][2] * temp_array[2];
    pp[2] = rot_x[2][0] * temp_array[0] + rot_x[2][1] * temp_array[1] + rot_x[2][2] * temp_array[2];
-
-if (debug) std::cout << "rot(x) = " << pp[0] << ", " << pp[1] << ", " << pp[2] << std::endl;
 
    temp_array[0] = rot_w[0][0] * pp[0] + rot_w[0][1] * pp[1];
    temp_array[1] = rot_w[1][0] * pp[0] + rot_w[1][1] * pp[1];
@@ -146,7 +103,6 @@ if (debug) std::cout << "rot(x) = " << pp[0] << ", " << pp[1] << ", " << pp[2] <
 
    output_point[0] = pp[0];
    output_point[1] = pp[1];
-#endif
 
    return;
 }
@@ -204,12 +160,12 @@ void User::move_left( void)
 
 void User::move_forward( void)
 {
-   speed = 1.0f;
+   speed = 4.0f;
 }
 
 void User::move_backward( void)
 {
-   speed = -0.3f;
+   speed = -4.0f;
 }
 
 void User::stop( void)
@@ -268,12 +224,9 @@ block_position[2] = 0.0f;
 
       float normal[3];
 
-      float view_x[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-      float view_y[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-      float view_depth[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-
-      float new_view_x[4];
-      float new_view_y[4];
+      float view_x[4];
+      float view_y[4];
+      float view_depth[4];
 
       for (int face = 0; face < 6; face++)
       {
@@ -455,35 +408,25 @@ block_position[2] = 0.0f;
             user_to_corner_y[corner] = yp;
             user_to_corner_z[corner] = xp*sinf(vert_angle) + zp*cosf(vert_angle);
    
-            float view_window_ratio_up    = 0.5f * window_height / window_distance;
-            float corner_ratio_up         = user_to_corner_z[corner] / user_to_corner_x[corner];
-            view_y[corner]                = corner_ratio_up / view_window_ratio_up * window_height;
-            float view_window_ratio_right = 0.5f * window_width / window_distance;
-            float corner_ratio_right      = user_to_corner_y[corner] / user_to_corner_x[corner];
-            view_x[corner]                = corner_ratio_right / view_window_ratio_right * window_width;
-            view_depth[corner]            = sqrtf( user_to_corner_x[corner] * user_to_corner_x[corner] +
-                                                   user_to_corner_y[corner] * user_to_corner_y[corner] +
-                                                   user_to_corner_z[corner] * user_to_corner_z[corner]);
+            view_depth[corner] = sqrtf( user_to_corner_x[corner] * user_to_corner_x[corner] +
+                                        user_to_corner_y[corner] * user_to_corner_y[corner] +
+                                        user_to_corner_z[corner] * user_to_corner_z[corner]);
 
             float corner_point[3] = { corner_pos_x[corner],
                                       corner_pos_y[corner],
                                       corner_pos_z[corner] };
-//<<<
-// std::cout << "corner = " << corner << std::endl;
-//>>>
+
             float output_point[2];
             point_conversion(position,
                              direction,
                              0.0f, /* rotation (w) */
                              window_distance,
                              corner_point,
-                             (face == 0 && corner == 0),
                              output_point);
-#if 1
+
             // scale to [-1, 1]
-            new_view_x[corner] = output_point[0] / window_width;
-            new_view_y[corner] = output_point[1] / window_width;
-#endif
+            view_x[corner] = output_point[0] / window_width;
+            view_y[corner] = output_point[1] / window_width;
 
          } // for (int corner = 0; corner < 4; corner++)
 
@@ -505,21 +448,12 @@ block_position[2] = 0.0f;
          float dist_ratio[4];
          for (int ind = 0; ind < 4; ind++) dist_ratio[ind] = view_depth[ind] / 100.0f;
 
-//<<<
-std::cout << "face = " << face << std::endl;
-for (int k = 0; k < 4; k++) {
-std::cout << "k = " << k << ": view = (" <<  view_x[k] << ", " << view_y[k] << ")";
-std::cout << ":\tnew view = (" << new_view_x[k] << ", " << new_view_y[k] << ")" << std::endl;
-}
-std::cout << std::endl;
-//>>>
-   
          glBegin(GL_POLYGON);
            glNormal3f(0.0f, 0.0f, -brightness);
-           glVertex3f(new_view_x[0], new_view_y[0], dist_ratio[0]);
-           glVertex3f(new_view_x[1], new_view_y[1], dist_ratio[1]);
-           glVertex3f(new_view_x[2], new_view_y[2], dist_ratio[2]);
-           glVertex3f(new_view_x[3], new_view_y[3], dist_ratio[3]);
+           glVertex3f(view_x[0], view_y[0], dist_ratio[0]);
+           glVertex3f(view_x[1], view_y[1], dist_ratio[1]);
+           glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
+           glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
          glEnd();
       } // for (int face = 0; face < 6; face++)
 
