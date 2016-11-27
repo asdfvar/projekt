@@ -46,11 +46,21 @@ class Opengl_interface
       */
       void keyboardDown( const char key);
 
+      /*
+      ** Passive mouse location
+      */
+      void mousePassive( int x, int y);
+
    private:
+
+      bool first_frame;
+
+      int mousePassivePosition[2];
 
       Time_manager *time_manager;
       Map          *map;
       User          user;
+
 float rcube;
 
 };

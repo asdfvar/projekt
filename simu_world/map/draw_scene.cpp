@@ -306,6 +306,7 @@ block_position[2] = 0.0f;
            glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
            glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
          glEnd();
+
       } // for (int face = 0; face < 6; face++)
 
    }

@@ -16,6 +16,16 @@ void User::get_direction( float *direction_out)
    return;
 }
 
+void User::set_direction( float *direction_in)
+{
+
+   direction[0] = direction_in[0];
+   direction[1] = direction_in[1];
+   direction[2] = direction_in[2];
+
+   return;
+}
+
 void User::get_position( float *position_out)
 {
 

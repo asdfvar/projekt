@@ -25,6 +25,8 @@ class User
       float get_window_distance( void);
       float get_window_width( void);
 
+      void set_direction( float *direction);
+
    private:
 
       float position[3];

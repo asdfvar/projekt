@@ -65,12 +65,6 @@ void mouseMotion(int x, int y) {
  #endif
    //opengl_interface.mouseMotion(x, y);
 
-// TODO: For next time:
-#if 0
-// Reset mouse position for next frame
-glfwSetMousePos(1024/2, 768/2);
-#endif
-
 }
 
 
@@ -80,12 +74,17 @@ glfwSetMousePos(1024/2, 768/2);
 ** GLUT_WINDOW_WIDTH    Width in pixels of the current window
 ** GLUT_WINDOW_HEIGHT   Height in pixels of the current window
 */
-void mousePassive(int x, int y) {
+void mousePassive(int x, int y)
+{
 
  #ifdef VERBOSE
+if (x != 400) {
    std::cout << "mousePassive x = " << x << std::endl;
    std::cout << "mousePassive y = " << y << std::endl;
+}
  #endif
+
+   opengl_interface.mousePassive( x, y);
 }
 
 void keyboardUp(unsigned char key, int x, int y) {

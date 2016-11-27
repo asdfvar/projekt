@@ -2,6 +2,7 @@
 
 Opengl_interface::Opengl_interface(void)
 {
+   first_frame = true;
    time_manager = new Time_manager( 1.0 / 60.0);
    int map_dim[3]   = {11, 11, 11};
    float map_pos[3] = {0.0f, 0.0f, 0.0f};
@@ -46,6 +47,14 @@ void Opengl_interface::keyboardUp( const char key)
          user.stop();
          break;
    }
+
+}
+
+void Opengl_interface::mousePassive( int x, int y)
+{
+
+   mousePassivePosition[0] = x;
+   mousePassivePosition[1] = y;
 
 }
 
