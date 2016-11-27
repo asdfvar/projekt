@@ -134,13 +134,13 @@ void simu_world( int argc, char** argv )
    glutInitWindowPosition( 50, 50);
    glutCreateWindow( "Simu World");
 
-   glutDisplayFunc( display);
-   glutMouseFunc( mouse);
-   glutMotionFunc( mouseMotion);
+   glutDisplayFunc(       display);
+   glutMouseFunc(         mouse);
+   glutMotionFunc(        mouseMotion);
    glutPassiveMotionFunc( mousePassive);
-   glutKeyboardUpFunc( keyboardUp);
-   glutKeyboardFunc( keyboardDown);
-   glutIdleFunc( idle);
+   glutKeyboardUpFunc(    keyboardUp);
+   glutKeyboardFunc(      keyboardDown);
+   glutIdleFunc(          idle);
 
    glutMainLoop();
 

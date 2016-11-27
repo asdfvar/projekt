@@ -20,7 +20,10 @@ class User
       void move_left( void);
       void stop( void);
 
-      void draw_scene( Map *map);
+      void  get_direction( float *direction);
+      void  get_position( float *position);
+      float get_window_distance( void);
+      float get_window_width( void);
 
    private:
 

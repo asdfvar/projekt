@@ -1,4 +1,5 @@
 #include "opengl_interface.h"
+#include "draw_scene.h"
 #include <cmath>
 
 //#define TEST_DRAW_CIRCLE
@@ -158,7 +159,7 @@ glNormal3f(0.0f, 1.0f, 0.0f);
   // Right of cube
   glColor3f(1.0f,0.0f,1.0f);               // Set The Color To Violet
 glNormal3f(0.0f, -1.0f, 0.0f);
-  glVertex3f( 1.0f, 1.0f,-1.0f);             // Top Right Of The Quad (Right)
+  glVertex3f( 1.0f, 1.0f,-1.0f);          // Top Right Of The Quad (Right)
   glVertex3f( 1.0f, 1.0f, 1.0f);          // Top Left Of The Quad (Right)
   glVertex3f( 1.0f,-1.0f, 1.0f);          // Bottom Left Of The Quad (Right)
   glVertex3f( 1.0f,-1.0f,-1.0f);          // Bottom Right Of The Quad (Right)
@@ -167,6 +168,6 @@ glNormal3f(0.0f, -1.0f, 0.0f);
   rcube-=1.0f;                         // Decrease The Rotation Variable For The Cube
 #endif
 
-   user.draw_scene( map);
+   draw_scene( &user, map);
 
 }
