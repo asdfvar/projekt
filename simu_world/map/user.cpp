@@ -79,12 +79,25 @@ void User::move_downward( void)
 
 void User::move_right( void)
 {
-   position[1] += 0.5f;
+   float right_direction[3];
+   right_direction[0] =  direction[1];
+   right_direction[1] = -direction[0];
+   right_direction[2] =  direction[2];
+   position[0] += 0.5f * right_direction[0];
+   position[1] += 0.5f * right_direction[1];
+   position[2] += 0.5f * right_direction[2];
 }
 
 void User::move_left( void)
 {
-   position[1] -= 0.5f;
+   float left_direction[3];
+   left_direction[0] = -direction[1];
+   left_direction[1] =  direction[0];
+   left_direction[2] =  direction[2];
+   position[0] += 0.5f * left_direction[0];
+   position[1] += 0.5f * left_direction[1];
+   position[2] += 0.5f * left_direction[2];
+
 }
 
 void User::move_forward( void)
