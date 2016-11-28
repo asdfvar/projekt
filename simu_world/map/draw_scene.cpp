@@ -25,6 +25,10 @@ void draw_scene( User *user, Map  *map)
 
    user->get_direction( user_direction);
 
+//<<<
+std::cout << __FILE__ << ":user direction = " << user_direction[0] << ", " << user_direction[1] << ", " << user_direction[2] << std::endl;
+//>>>
+
    // get vertical angle of look direction
    float horizontal_length = sqrtf( user_direction[0] * user_direction[0] +
                                     user_direction[1] * user_direction[1]);
@@ -272,6 +276,12 @@ block_position[2] = 0.0f;
                              window_distance,
                              corner_point,
                              output_point);
+
+//<<<
+if (face == 0) {
+std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output_point[1] << std::endl;
+}
+//>>>
 
             float window_width = user->get_window_width();
 
