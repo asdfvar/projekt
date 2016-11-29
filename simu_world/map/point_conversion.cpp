@@ -1,4 +1,5 @@
 #include "point_conversion.h"
+#include <iostream>
 #include <cmath>
 
 void point_conversion(float perspective[3],
@@ -64,37 +65,44 @@ void point_conversion(float perspective[3],
    rot_z[1][0] = dx / dxy; rot_z[1][1] =  dy / dxy; rot_z[1][2] = 0.0f;
    rot_z[2][0] = 0.0f;     rot_z[2][1] = 0.0f;      rot_z[2][2] = 1.0f;
 
+   temp_array[0] = rot_z[0][0] * d_hat[0] + rot_z[0][1] * d_hat[1] + rot_z[0][2] * d_hat[2];
+   temp_array[1] = rot_z[1][0] * d_hat[0] + rot_z[1][1] * d_hat[1] + rot_z[1][2] * d_hat[2];
+   temp_array[2] = rot_z[2][0] * d_hat[0] + rot_z[2][1] * d_hat[1] + rot_z[2][2] * d_hat[2];
+
+   d_hat[0] = temp_array[0];
+   d_hat[1] = temp_array[1];
+   d_hat[2] = temp_array[2];
+
+   temp_array[0] = rot_z[0][0] * pp[0] + rot_z[0][1] * pp[1] + rot_z[0][2] * pp[2];
+   temp_array[1] = rot_z[1][0] * pp[0] + rot_z[1][1] * pp[1] + rot_z[1][2] * pp[2];
+   temp_array[2] = rot_z[2][0] * pp[0] + rot_z[2][1] * pp[1] + rot_z[2][2] * pp[2];
+
+   pp[0] = temp_array[0];
+   pp[1] = temp_array[1];
+   pp[2] = temp_array[2];
+
+   dx  = d_hat[0];
+   dy  = d_hat[1];
+   dz  = d_hat[2];
+   dxy = sqrtf( d_hat[0] * d_hat[0] + d_hat[1] * d_hat[1]);
+
    /*
    ** rot_x = [ 1,           0,           0        ]
    **         [ 0,           dz / |d|,    |dxy|    ]
    **         [ 0,          -|dxy| / |d|, dz / |d| ]
    */
    float rot_x[3][3];
-   rot_x[0][0] = 1.0f; rot_x[0][1] = 0.0f; rot_x[0][2] = 0.0f;
-   rot_x[1][0] = 0.0f; rot_x[1][1] = dz;   rot_x[1][2] = dxy;
-   rot_x[2][0] = 0.0f; rot_x[2][1] = dxy;  rot_x[2][2] = dz;
+   rot_x[0][0] = 1.0f; rot_x[0][1] =  0.0f; rot_x[0][2] = 0.0f;
+   rot_x[1][0] = 0.0f; rot_x[1][1] = -dz;  rot_x[1][2] = dy;
+   rot_x[2][0] = 0.0f; rot_x[2][1] = -dy;  rot_x[2][2] = -dz;
 
-   /*
-   ** rot_w = [ dy / |dxy|, -dx / |dxy|]
-   **         [ dx / |dxy|,  dy / |dxy|]
-   */
-   float rot_w[2][2];
-   rot_w[0][0] =  cosf(rotation); rot_w[0][1] = sinf(rotation);
-   rot_w[1][0] = -sinf(rotation); rot_w[1][1] = cosf(rotation);
-
-   temp_array[0] = rot_z[0][0] * pp[0] + rot_z[0][1] * pp[1] + rot_z[0][2] * pp[2];
-   temp_array[1] = rot_z[1][0] * pp[0] + rot_z[1][1] * pp[1] + rot_z[1][2] * pp[2];
-   temp_array[2] = rot_z[2][0] * pp[0] + rot_z[2][1] * pp[1] + rot_z[2][2] * pp[2];
-
-   pp[0] = rot_x[0][0] * temp_array[0] + rot_x[0][1] * temp_array[1] + rot_x[0][2] * temp_array[2];
-   pp[1] = rot_x[1][0] * temp_array[0] + rot_x[1][1] * temp_array[1] + rot_x[1][2] * temp_array[2];
-   pp[2] = rot_x[2][0] * temp_array[0] + rot_x[2][1] * temp_array[1] + rot_x[2][2] * temp_array[2];
-
-   temp_array[0] = rot_w[0][0] * pp[0] + rot_w[0][1] * pp[1];
-   temp_array[1] = rot_w[1][0] * pp[0] + rot_w[1][1] * pp[1];
+   temp_array[0] = rot_x[0][0] * pp[0] + rot_x[0][1] * pp[1] + rot_x[0][2] * pp[2];
+   temp_array[1] = rot_x[1][0] * pp[0] + rot_x[1][1] * pp[1] + rot_x[1][2] * pp[2];
+   temp_array[2] = rot_x[2][0] * pp[0] + rot_x[2][1] * pp[1] + rot_x[2][2] * pp[2];
 
    pp[0] = temp_array[0];
    pp[1] = temp_array[1];
+   pp[2] = temp_array[2];
 
    output_point[0] = pp[0];
    output_point[1] = pp[1];

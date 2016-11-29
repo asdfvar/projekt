@@ -27,10 +27,10 @@ void Opengl_interface::idle( void)
       int y_offset = window_center_y - mousePassivePosition[1];
    
       const float toggle = 0.001f;
-      float cos_x = cosf( (float)x_offset * toggle);
-      float sin_x = sinf( (float)x_offset * toggle);
-      float cos_y = cosf( (float)y_offset * toggle);
-      float sin_y = sinf( (float)y_offset * toggle);
+      float cos_x = cosf( -(float)x_offset * toggle);
+      float sin_x = sinf( -(float)x_offset * toggle);
+      float cos_y = cosf(  (float)y_offset * toggle);
+      float sin_y = sinf(  (float)y_offset * toggle);
    
       float direction[3];
       user.get_direction( direction);

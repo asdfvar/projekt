@@ -13,7 +13,7 @@
 #include <GL/gl.h>
 
 /*
-** function: draw_scene from: User
+** function: draw_scene
 **
 ** The coordinates are converted so that they are relative
 ** to the user.
@@ -29,7 +29,6 @@ void draw_scene( User *user, Map  *map)
 std::cout << __FILE__ << ":user direction = " << user_direction[0] << ", " << user_direction[1] << ", " << user_direction[2] << std::endl;
 //>>>
 
-   // get vertical angle of look direction
    float horizontal_length = sqrtf( user_direction[0] * user_direction[0] +
                                     user_direction[1] * user_direction[1]);
    float vert_angle        = asinf( user_direction[2] / horizontal_length);
