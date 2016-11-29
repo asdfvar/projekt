@@ -2,11 +2,14 @@
 #include <iostream>
 #include <cmath>
 
-void point_conversion(float perspective[3],
-                      float direction[3],
-                      float rotation,
-                      float window_distance,
-                      float point[3],
+/*
+** Projects a point onto the plane that is perpendicular to the look direction
+** at window distance away. TODO: more description here.
+*/
+void point_conversion(float  perspective[3],
+                      float  direction[3],
+                      float  window_distance,
+                      float  point[3],
                       float *output_point)
 {
 
@@ -106,6 +109,7 @@ void point_conversion(float perspective[3],
 
    output_point[0] = pp[0];
    output_point[1] = pp[1];
+   output_point[2] = pp[2];
 
    return;
 }

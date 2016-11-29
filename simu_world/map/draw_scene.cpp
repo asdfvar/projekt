@@ -73,6 +73,7 @@ block_position[2] = 0.0f;
 
       float view_x[4];
       float view_y[4];
+      bool  valid_view[4];
       float view_depth[4];
 
       for (int face = 0; face < 6; face++)
@@ -266,19 +267,18 @@ block_position[2] = 0.0f;
                                       corner_pos_y[corner],
                                       corner_pos_z[corner] };
 
-            float output_point[2];
+            float output_point[3];
             float window_distance = user->get_window_distance();
 
             point_conversion(user_position,
                              user_direction,
-                             0.0f, /* rotation (w) */
                              window_distance,
                              corner_point,
                              output_point);
 
 //<<<
 if (face == 0) {
-std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output_point[1] << std::endl;
+std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output_point[1] << ", " << output_point[2] << std::endl;
 }
 //>>>
 
@@ -287,6 +287,7 @@ std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output
             // scale to [-1, 1]
             view_x[corner] = output_point[0] / window_width;
             view_y[corner] = output_point[1] / window_width;
+            valid_view[corner] = (output_point[2] < 0.0f);
 
          } // for (int corner = 0; corner < 4; corner++)
 
@@ -308,13 +309,16 @@ std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output
          float dist_ratio[4];
          for (int ind = 0; ind < 4; ind++) dist_ratio[ind] = view_depth[ind] / 100.0f;
 
-         glBegin(GL_POLYGON);
-           glNormal3f(0.0f, 0.0f, -brightness);
-           glVertex3f(view_x[0], view_y[0], dist_ratio[0]);
-           glVertex3f(view_x[1], view_y[1], dist_ratio[1]);
-           glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
-           glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
-         glEnd();
+         if (valid_view[0] && valid_view[1] && valid_view[2] && valid_view[3])
+         {
+            glBegin(GL_POLYGON);
+              glNormal3f(0.0f, 0.0f, -brightness);
+              glVertex3f(view_x[0], view_y[0], dist_ratio[0]);
+              glVertex3f(view_x[1], view_y[1], dist_ratio[1]);
+              glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
+              glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
+            glEnd();
+         }
 
       } // for (int face = 0; face < 6; face++)
 
