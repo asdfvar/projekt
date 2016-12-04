@@ -71,10 +71,11 @@ block_position[2] = 0.0f;
 
       float normal[3];
 
+      float output_point_distance[4];
+      float output_point[3];
       float view_x[4];
       float view_y[4];
       bool  valid_view[4];
-      float view_depth[4];
 
       for (int face = 0; face < 6; face++)
       {
@@ -259,28 +260,17 @@ block_position[2] = 0.0f;
             user_to_corner_y[corner] = yp;
             user_to_corner_z[corner] = xp * sinf(vert_angle) + zp * cosf(vert_angle);
    
-            view_depth[corner] = sqrtf( user_to_corner_x[corner] * user_to_corner_x[corner] +
-                                        user_to_corner_y[corner] * user_to_corner_y[corner] +
-                                        user_to_corner_z[corner] * user_to_corner_z[corner]);
-
             float corner_point[3] = { corner_pos_x[corner],
                                       corner_pos_y[corner],
                                       corner_pos_z[corner] };
 
-            float output_point[3];
             float window_distance = user->get_window_distance();
 
-            point_conversion(user_position,
-                             user_direction,
-                             window_distance,
-                             corner_point,
-                             output_point);
-
-//<<<
-if (face == 0) {
-std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output_point[1] << ", " << output_point[2] << std::endl;
-}
-//>>>
+            output_point_distance[corner] = point_conversion(user_position,
+                                                             user_direction,
+                                                             window_distance,
+                                                             corner_point,
+                                                             output_point);
 
             float window_width = user->get_window_width();
 
@@ -305,18 +295,15 @@ std::cout << __FILE__ << ":output_point = " << output_point[0] << ", " << output
          linalg::unit_vector<float>  ( normal, 3);
          float brightness = linalg::dot_product<float>  ( normal, to_user, 3);
 
-         // set max distance to 100.0
-         float dist_ratio[4];
-         for (int ind = 0; ind < 4; ind++) dist_ratio[ind] = view_depth[ind] / 100.0f;
-
          if (valid_view[0] && valid_view[1] && valid_view[2] && valid_view[3])
          {
+            float max_view_distance = 100.0f;
             glBegin(GL_POLYGON);
               glNormal3f(0.0f, 0.0f, -brightness);
-              glVertex3f(view_x[0], view_y[0], dist_ratio[0]);
-              glVertex3f(view_x[1], view_y[1], dist_ratio[1]);
-              glVertex3f(view_x[2], view_y[2], dist_ratio[2]);
-              glVertex3f(view_x[3], view_y[3], dist_ratio[3]);
+              glVertex3f(view_x[0], view_y[0], output_point_distance[0] / max_view_distance);
+              glVertex3f(view_x[1], view_y[1], output_point_distance[1] / max_view_distance);
+              glVertex3f(view_x[2], view_y[2], output_point_distance[2] / max_view_distance);
+              glVertex3f(view_x[3], view_y[3], output_point_distance[3] / max_view_distance);
             glEnd();
          }
 

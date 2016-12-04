@@ -6,11 +6,11 @@
 ** Projects a point onto the plane that is perpendicular to the look direction
 ** at window distance away. TODO: more description here.
 */
-void point_conversion(float  perspective[3],
-                      float  direction[3],
-                      float  window_distance,
-                      float  point[3],
-                      float *output_point)
+float point_conversion(float  perspective[3],
+                       float  direction[3],
+                       float  window_distance,
+                       float  point[3],
+                       float *output_point)
 {
 
    float temp;
@@ -49,9 +49,15 @@ void point_conversion(float  perspective[3],
    float pp_norm = d_norm * p_norm / temp;
 
    float pp[3];
+#if 1
    pp[0] = pp_norm / p_norm * p[0];
    pp[1] = pp_norm / p_norm * p[1];
    pp[2] = pp_norm / p_norm * p[2];
+#else
+   pp[0] = p[0];
+   pp[1] = p[1];
+   pp[2] = p[2];
+#endif
 
    float dx  = d_hat[0];
    float dy  = d_hat[1];
@@ -111,5 +117,5 @@ void point_conversion(float  perspective[3],
    output_point[1] = pp[1];
    output_point[2] = pp[2];
 
-   return;
+   return p_norm;
 }
