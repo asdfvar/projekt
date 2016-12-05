@@ -55,7 +55,10 @@ void Opengl_interface::keyboardUp( const char key)
 void Opengl_interface::mousePassive( int x, int y)
 {
 
-   if (!mouse_passive_done)
+   int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
+   int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+
+   if (!mouse_passive_done && (x != window_center_x || y != window_center_y))
    {
       mousePassivePosition[0] = x;
       mousePassivePosition[1] = y;

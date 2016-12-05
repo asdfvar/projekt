@@ -26,7 +26,7 @@ void Opengl_interface::idle( void)
       int x_offset = mousePassivePosition[0] - window_center_x;
       int y_offset = window_center_y - mousePassivePosition[1];
    
-      const float toggle = 0.001f;
+      const float toggle = 0.003f;
       float cos_x = cosf( -(float)x_offset * toggle);
       float sin_x = sinf( -(float)x_offset * toggle);
       float cos_y = cosf(  (float)y_offset * toggle);
@@ -64,9 +64,15 @@ void Opengl_interface::idle( void)
       rot_x[2][0] = 0.0f; rot_x[2][1] = sin_y; rot_x[2][2] =  cos_y;
 
       float rot_z_back[3][3];
-      rot_z_back[0][0] =  direction[1] / norm_xy; rot_z_back[0][1] = direction[0] / norm_xy; rot_z_back[0][2] = 0.0f;
-      rot_z_back[1][0] = -direction[0] / norm_xy; rot_z_back[1][1] = direction[1] / norm_xy; rot_z_back[1][2] = 0.0f;
-      rot_z_back[2][0] =  0.0f;                   rot_z_back[2][1] = 0.0f;                   rot_z_back[2][2] = 1.0f;
+      rot_z_back[0][0] = direction[1] / norm_xy; rot_z_back[0][1]
+                       = direction[0] / norm_xy; rot_z_back[0][2]
+                       = 0.0f;
+      rot_z_back[1][0] = -direction[0] / norm_xy; rot_z_back[1][1]
+                       = direction[1] / norm_xy; rot_z_back[1][2]
+                       = 0.0f;
+      rot_z_back[2][0] = 0.0f;
+      rot_z_back[2][1] = 0.0f;
+      rot_z_back[2][2] = 1.0f;
 
       temp[0] = direction[0] * rot_z[0][0] + direction[1] * rot_z[0][1] + direction[2] * rot_z[0][2];
       temp[1] = direction[0] * rot_z[1][0] + direction[1] * rot_z[1][1] + direction[2] * rot_z[1][2];
