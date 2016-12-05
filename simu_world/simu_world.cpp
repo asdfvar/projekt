@@ -85,6 +85,7 @@ if (x != 400) {
  #endif
 
    opengl_interface.mousePassive( x, y);
+   glutPostRedisplay();
 }
 
 void keyboardUp(unsigned char key, int x, int y) {

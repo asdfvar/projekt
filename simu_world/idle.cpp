@@ -21,7 +21,7 @@ void Opengl_interface::idle( void)
       mousePassivePosition[1] = window_center_y;
       first_frame = false;
    }
-   else
+   else if( mouse_passive_done)
    {
       int x_offset = mousePassivePosition[0] - window_center_x;
       int y_offset = window_center_y - mousePassivePosition[1];
@@ -103,6 +103,7 @@ void Opengl_interface::idle( void)
       user.set_direction( direction);
    
       glutWarpPointer( window_center_x, window_center_y); // Moves the curser to this position in pixels
+      mouse_passive_done = false;
    }
 
 }

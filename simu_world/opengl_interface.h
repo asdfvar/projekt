@@ -55,7 +55,9 @@ class Opengl_interface
 
       bool first_frame;
 
-      int mousePassivePosition[2];
+      int  mousePassivePosition[2];
+      bool idle_done_mouse_passive;
+      bool mouse_passive_done;
 
       Time_manager *time_manager;
       Map          *map;

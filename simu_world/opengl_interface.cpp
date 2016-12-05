@@ -2,12 +2,14 @@
 
 Opengl_interface::Opengl_interface(void)
 {
-   first_frame = true;
-   time_manager = new Time_manager( 1.0 / 60.0);
-   int map_dim[3]   = {11, 11, 11};
-   float map_pos[3] = {0.0f, 0.0f, 0.0f};
-   map = new Map( 0, map_dim, map_pos);
-rcube = 0.0f;
+   first_frame             = true;
+   time_manager            = new Time_manager( 1.0 / 60.0);
+   int map_dim[3]          = {11, 11, 11};
+   float map_pos[3]        = {0.0f, 0.0f, 0.0f};
+   map                     = new Map( 0, map_dim, map_pos);
+   rcube                   = 0.0f;
+   idle_done_mouse_passive = true;
+   mouse_passive_done      = true;
 }
 
 void Opengl_interface::keyboardDown( const char key)
@@ -53,8 +55,12 @@ void Opengl_interface::keyboardUp( const char key)
 void Opengl_interface::mousePassive( int x, int y)
 {
 
-   mousePassivePosition[0] = x;
-   mousePassivePosition[1] = y;
+   if (!mouse_passive_done)
+   {
+      mousePassivePosition[0] = x;
+      mousePassivePosition[1] = y;
+      mouse_passive_done      = true;
+   }
 
 }
 
