@@ -14,7 +14,7 @@ void display(void) {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-   opengl_interface.display();
+  opengl_interface.display();
 
   glFlush();
 
@@ -129,7 +129,7 @@ void simu_world( int argc, char** argv )
    int windowsizey = 600;
 
    glutInit( &argc, argv);
-   glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE);
+   glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH);
    glutInitWindowSize( windowsizex, windowsizey);
    glutInitWindowPosition( 50, 50);
    glutCreateWindow( "Simu World");

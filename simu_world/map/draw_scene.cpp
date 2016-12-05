@@ -25,10 +25,6 @@ void draw_scene( User *user, Map  *map)
 
    user->get_direction( user_direction);
 
-//<<<
-std::cout << __FILE__ << ":user direction = " << user_direction[0] << ", " << user_direction[1] << ", " << user_direction[2] << std::endl;
-//>>>
-
    float horizontal_length = sqrtf( user_direction[0] * user_direction[0] +
                                     user_direction[1] * user_direction[1]);
    float vert_angle        = asinf( user_direction[2] / horizontal_length);
@@ -247,8 +243,10 @@ block_position[2] = 0.0f;
             ** [ sin(hor_angle)  cos(hor_angle) 0 ]
             ** [ 0               0              1 ]
             */
-            float xp = user_to_corner_x[corner]*cosf(hor_angle) - user_to_corner_y[corner]*sinf(hor_angle);
-            float yp = user_to_corner_x[corner]*sinf(hor_angle) + user_to_corner_y[corner]*cosf(hor_angle);
+            float xp = user_to_corner_x[corner] * cosf(hor_angle) -
+                       user_to_corner_y[corner] * sinf(hor_angle);
+            float yp = user_to_corner_x[corner] * sinf(hor_angle) +
+                       user_to_corner_y[corner] * cosf(hor_angle);
             float zp = user_to_corner_z[corner];
       
             /*
@@ -275,8 +273,8 @@ block_position[2] = 0.0f;
             float window_width = user->get_window_width();
 
             // scale to [-1, 1]
-            view_x[corner] = output_point[0] / window_width;
-            view_y[corner] = output_point[1] / window_width;
+            view_x[corner]     = output_point[0] / window_width;
+            view_y[corner]     = output_point[1] / window_width;
             valid_view[corner] = (output_point[2] < 0.0f);
 
          } // for (int corner = 0; corner < 4; corner++)
@@ -300,6 +298,7 @@ block_position[2] = 0.0f;
             float max_view_distance = 100.0f;
             glBegin(GL_POLYGON);
               glNormal3f(0.0f, 0.0f, -brightness);
+              glColor3f( 1.0f, 1.0f, 1.0f);
               glVertex3f(view_x[0], view_y[0], output_point_distance[0] / max_view_distance);
               glVertex3f(view_x[1], view_y[1], output_point_distance[1] / max_view_distance);
               glVertex3f(view_x[2], view_y[2], output_point_distance[2] / max_view_distance);

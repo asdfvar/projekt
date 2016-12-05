@@ -111,13 +111,14 @@ glEnd();
   glLoadIdentity();                    // Reset the transformation matrix.
   glTranslatef(0.0f, 0.0f, 1.8f);          // Move Right 3 Units, and back into the screen 7
  
-  glRotatef(rcube,1.0f,1.0f,1.0f);          // Rotate The Cube On X, Y, and Z
+  glRotatef(rcube, 1.0f, 1.0f, 1.0f);          // Rotate The Cube On X, Y, and Z
+std::cout << "rcube = " << rcube << std::endl;
  
   // draw a cube (6 quadrilaterals)
   glBegin(GL_QUADS);                    // start drawing the cube.
  
   // top of cube
-  glColor3f(0.0f,1.0f,0.0f);               // Set The Color To Blue
+  glColor3f(0.0f,1.0f,0.0f);               // Set The Color To Green
 glNormal3f(0.0f, 0.0f, 1.0f);
   glVertex3f( 1.0f, 1.0f,-1.0f);          // Top Right Of The Quad (Top)
   glVertex3f(-1.0f, 1.0f,-1.0f);          // Top Left Of The Quad (Top)
@@ -165,7 +166,7 @@ glNormal3f(0.0f, -1.0f, 0.0f);
   glVertex3f( 1.0f,-1.0f,-1.0f);          // Bottom Right Of The Quad (Right)
   glEnd();                         // Done Drawing The Cube
  
-  rcube-=1.0f;                         // Decrease The Rotation Variable For The Cube
+  rcube -= 0.4f;                         // Decrease The Rotation Variable For The Cube
 #endif
 
    draw_scene( &user, map);

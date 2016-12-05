@@ -102,7 +102,8 @@ void Opengl_interface::idle( void)
 
       user.set_direction( direction);
    
-      glutWarpPointer( window_center_x, window_center_y); // Moves the curser to this position in pixels
+      glutWarpPointer( window_center_x, window_center_y);
+
       mouse_passive_done = false;
    }
 
