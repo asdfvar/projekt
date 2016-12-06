@@ -4,8 +4,13 @@ INC   = -Imap -I.
 LIBPATH = -Lmap
 LIBS  = -lsimu
 
-OBJ = main.o simu_world.o opengl_interface.o \
-      idle.o display.o time_manager.o
+OBJ = main.o             \
+      simu_world.o       \
+      opengl_interface.o \
+      idle.o             \
+      display.o          \
+      time_manager.o     \
+#
 
 EXE = simu_world
 

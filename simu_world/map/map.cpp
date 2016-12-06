@@ -32,7 +32,8 @@ void Map::change_position(float *position_in)
 */
 void Map::create_random( void)
 {
-   for (int ind = 0; ind < map_dim[0] * map_dim[1] * map_dim[2]; ind++) {
+   for (int ind = 0; ind < map_dim[0] * map_dim[1] * map_dim[2]; ind++)
+   {
       int random_num = std::rand() % 100;
       if (random_num == 1)
          blocks[ind] = 1;

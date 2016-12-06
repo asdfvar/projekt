@@ -23,10 +23,10 @@ class Map
    private:
 
       // Parameters:
-      int *blocks;
+      int         *blocks;
       unsigned int map_dim[3];
       unsigned int id;
-      float position[3];
+      float        position[3];
 
       // Functions:
       void create_random( void);
