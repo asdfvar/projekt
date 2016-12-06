@@ -87,8 +87,8 @@ block_position[2] = 0.0f;
                else if (corner == 1)
                {
                   corner_pos_x[corner] = block_position[0] + 0.5f;
-                  corner_pos_y[corner] = block_position[1] + 0.5f;
-                  corner_pos_z[corner] = block_position[2] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
                }
                else if (corner == 2)
                {
@@ -99,8 +99,8 @@ block_position[2] = 0.0f;
                else if (corner == 3)
                {
                   corner_pos_x[corner] = block_position[0] + 0.5f;
-                  corner_pos_y[corner] = block_position[1] - 0.5f;
-                  corner_pos_z[corner] = block_position[2] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
                }
             } else if (face == 1) { // x-
                if (corner == 0)
@@ -136,9 +136,9 @@ block_position[2] = 0.0f;
                }
                else if (corner == 1)
                {
-                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
                   corner_pos_y[corner] = block_position[1] + 0.5f;
-                  corner_pos_z[corner] = block_position[2] - 0.5f;
+                  corner_pos_z[corner] = block_position[2] + 0.5f;
                }
                else if (corner == 2)
                {
@@ -148,9 +148,9 @@ block_position[2] = 0.0f;
                }
                else if (corner == 3)
                {
-                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
                   corner_pos_y[corner] = block_position[1] + 0.5f;
-                  corner_pos_z[corner] = block_position[2] + 0.5f;
+                  corner_pos_z[corner] = block_position[2] - 0.5f;
                }
             } else if (face == 3) { // y-
                if (corner == 0)
@@ -186,8 +186,8 @@ block_position[2] = 0.0f;
                }
                else if (corner == 1)
                {
-                  corner_pos_x[corner] = block_position[0] - 0.5f;
-                  corner_pos_y[corner] = block_position[1] + 0.5f;
+                  corner_pos_x[corner] = block_position[0] + 0.5f;
+                  corner_pos_y[corner] = block_position[1] - 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
                else if (corner == 2)
@@ -198,8 +198,8 @@ block_position[2] = 0.0f;
                }
                else if (corner == 3)
                {
-                  corner_pos_x[corner] = block_position[0] + 0.5f;
-                  corner_pos_y[corner] = block_position[1] - 0.5f;
+                  corner_pos_x[corner] = block_position[0] - 0.5f;
+                  corner_pos_y[corner] = block_position[1] + 0.5f;
                   corner_pos_z[corner] = block_position[2] + 0.5f;
                }
             } else if (face == 5) { // z-
