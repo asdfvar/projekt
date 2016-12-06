@@ -264,11 +264,11 @@ block_position[2] = 0.0f;
 
             float window_distance = user->get_window_distance();
 
-            output_point_distance[corner] = point_conversion(user_position,
-                                                             user_direction,
-                                                             window_distance,
-                                                             corner_point,
-                                                             output_point);
+            output_point_distance[corner] = point_conversion( user_position,
+                                                              user_direction,
+                                                              window_distance,
+                                                              corner_point,
+                                                              output_point);
 
             float window_width = user->get_window_width();
 
@@ -279,19 +279,18 @@ block_position[2] = 0.0f;
 
          } // for (int corner = 0; corner < 4; corner++)
 
-         // get relative normal direction
-         float vec1[3] = {user_to_corner_x[1] - user_to_corner_x[0],
-                          user_to_corner_y[1] - user_to_corner_y[0],
-                          user_to_corner_z[1] - user_to_corner_z[0]};
-         float vec2[3] = {user_to_corner_x[3] - user_to_corner_x[0],
-                          user_to_corner_y[3] - user_to_corner_y[0],
-                          user_to_corner_z[3] - user_to_corner_z[0]};
+         float vec1[3] = {corner_pos_x[1] - corner_pos_x[0],
+                          corner_pos_y[1] - corner_pos_y[0],
+                          corner_pos_z[1] - corner_pos_z[0]};
+         float vec2[3] = {corner_pos_x[3] - corner_pos_x[0],
+                          corner_pos_y[3] - corner_pos_y[0],
+                          corner_pos_z[3] - corner_pos_z[0]};
 
          linalg::cross_product<float>( normal, vec2, vec1);
          linalg::unit_vector<float>  ( normal, 3);
-         float to_user[3] = {-user_direction[0], -user_direction[1], -user_direction[2]};
-         linalg::unit_vector<float>  ( normal, 3);
-         float brightness = linalg::dot_product<float>  ( normal, to_user, 3);
+         float user_opposite[3] = {-user_direction[0], -user_direction[1], -user_direction[2]};
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         float brightness = linalg::dot_product<float>( normal, user_opposite, 3);
 
          if (valid_view[0] && valid_view[1] && valid_view[2] && valid_view[3])
          {
