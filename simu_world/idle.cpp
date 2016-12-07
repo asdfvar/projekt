@@ -16,7 +16,7 @@ void Opengl_interface::idle( void)
 
    if (first_frame)
    {
-      glutWarpPointer( window_center_x, window_center_y); // Moves the curser to this position in pixels
+      glutWarpPointer( window_center_x, window_center_y);
       mousePassivePosition[0] = window_center_x;
       mousePassivePosition[1] = window_center_y;
       first_frame = false;
@@ -90,9 +90,17 @@ void Opengl_interface::idle( void)
       direction[1] = temp[1];
       direction[2] = temp[2];
 
-      temp[0] = direction[0] * rot_z_back[0][0] + direction[1] * rot_z_back[0][1] + direction[2] * rot_z_back[0][2];
-      temp[1] = direction[0] * rot_z_back[1][0] + direction[1] * rot_z_back[1][1] + direction[2] * rot_z_back[1][2];
-      temp[2] = direction[0] * rot_z_back[2][0] + direction[1] * rot_z_back[2][1] + direction[2] * rot_z_back[2][2];
+      temp[0] = direction[0] * rot_z_back[0][0] +
+                direction[1] * rot_z_back[0][1] +
+                direction[2] * rot_z_back[0][2];
+
+      temp[1] = direction[0] * rot_z_back[1][0] +
+                direction[1] * rot_z_back[1][1] +
+                direction[2] * rot_z_back[1][2];
+
+      temp[2] = direction[0] * rot_z_back[2][0] +
+                direction[1] * rot_z_back[2][1] +
+                direction[2] * rot_z_back[2][2];
 
       direction[0] = temp[0];
       direction[1] = temp[1];

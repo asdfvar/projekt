@@ -4,6 +4,9 @@
 #include "simu_world.h"
 #include "opengl_interface.h"
 
+/*
+** Define the interface with openGL
+*/
 Opengl_interface opengl_interface;
 
 /*********************
@@ -59,10 +62,6 @@ void mouse(
 
 void mouseMotion(int x, int y) {
 
- #ifdef VERBOSE
-   std::cout << "mouseMotion x = " << x << std::endl;
-   std::cout << "mouseMotion y = " << y << std::endl;
- #endif
    //opengl_interface.mouseMotion(x, y);
 
 }
@@ -77,22 +76,11 @@ void mouseMotion(int x, int y) {
 void mousePassive(int x, int y)
 {
 
- #ifdef VERBOSE
-if (x != 400) {
-   std::cout << "mousePassive x = " << x << std::endl;
-   std::cout << "mousePassive y = " << y << std::endl;
-}
- #endif
-
    opengl_interface.mousePassive( x, y);
    glutPostRedisplay();
 }
 
 void keyboardUp(unsigned char key, int x, int y) {
-
- #ifdef VERBOSE
-   std::cout << "keyboardUp = " << key << std::endl;
- #endif
 
    opengl_interface.keyboardUp( key);
 }
@@ -100,10 +88,8 @@ void keyboardUp(unsigned char key, int x, int y) {
 void keyboardDown(unsigned char key, int x, int y)
 {
 
- #ifdef VERBOSE
-   std::cout << "keyboardDown = " << key << std::endl;
- #endif
-   switch (key) {
+   switch (key)
+   {
       case 'q':
          std::cout << "program exit" << std::endl;
          exit(1);
