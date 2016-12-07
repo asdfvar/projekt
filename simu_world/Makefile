@@ -7,8 +7,6 @@ LIBS  = -lsimu
 OBJ = main.o             \
       simu_world.o       \
       opengl_interface.o \
-      idle.o             \
-      display.o          \
       time_manager.o     \
 #
 
@@ -28,12 +26,6 @@ opengl_interface.o: opengl_interface.cpp
 	$(CPPC) $(INC) $^ -c
 
 simu_world.o: simu_world.cpp
-	$(CPPC) $(INC) $^ -c
-
-idle.o: idle.cpp
-	$(CPPC) $(INC) $^ -c
-
-display.o: display.cpp
 	$(CPPC) $(INC) $^ -c
 
 time_manager.o: time_manager.cpp
