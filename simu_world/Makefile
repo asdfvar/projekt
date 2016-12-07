@@ -1,7 +1,7 @@
 CPPC  = g++
 FLAGS = -O3 -Wall -lm -lGL -lGLU -lglut
-INC   = -Imap -I.
-LIBPATH = -Lmap
+INC   = -Ikernels -I.
+LIBPATH = -Lkernels
 LIBS  = -lsimu
 
 OBJ = main.o             \
@@ -17,15 +17,12 @@ EXE = simu_world
 all: SIMU_WORLD
 
 SIMU_WORLD: $(OBJ)
-	cd map/ && $(MAKE)
+	cd kernels/ && $(MAKE)
 	$(CPPC) $^ $(INC) $(LIBS) $(LIBPATH) -o $(EXE) $(FLAGS)
 
 clean:
-	make -C map/ clean
+	make -C kernels/ clean
 	rm $(OBJ) $(EXE)
-
-map.o: map.cpp
-	$(CPPC) $(INC) $^ -c
 
 opengl_interface.o: opengl_interface.cpp
 	$(CPPC) $(INC) $^ -c
