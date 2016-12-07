@@ -8,8 +8,8 @@ Opengl_interface::Opengl_interface(void)
    float map_pos[3]        = {0.0f, 0.0f, 0.0f};
    map                     = new Map( 0, map_dim, map_pos);
    rcube                   = 0.0f;
-   idle_done_mouse_passive = true;
-   mouse_passive_done      = true;
+   mousePassiveTask        = true;
+   idleTask                = false;
 }
 
 void Opengl_interface::keyboardDown( const char key)
@@ -58,11 +58,12 @@ void Opengl_interface::mousePassive( int x, int y)
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
    int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
-   if (!mouse_passive_done && (x != window_center_x || y != window_center_y))
+   if ( mousePassiveTask )
    {
       mousePassivePosition[0] = x;
       mousePassivePosition[1] = y;
-      mouse_passive_done      = true;
+      mousePassiveTask        = false;
+      idleTask                = true;
    }
 
 }

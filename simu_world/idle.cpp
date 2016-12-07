@@ -19,9 +19,9 @@ void Opengl_interface::idle( void)
       glutWarpPointer( window_center_x, window_center_y);
       mousePassivePosition[0] = window_center_x;
       mousePassivePosition[1] = window_center_y;
-      first_frame = false;
+      first_frame             = false;
    }
-   else if( mouse_passive_done)
+   else if( idleTask )
    {
       int x_offset = mousePassivePosition[0] - window_center_x;
       int y_offset = window_center_y - mousePassivePosition[1];
@@ -118,7 +118,8 @@ void Opengl_interface::idle( void)
    
       glutWarpPointer( window_center_x, window_center_y);
 
-      mouse_passive_done = false;
+      mousePassiveTask = true;
+      idleTask         = false;
    }
 
 }
