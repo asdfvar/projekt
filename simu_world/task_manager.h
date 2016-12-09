@@ -9,7 +9,7 @@ class Task_manager
           ~Task_manager( void);
       bool task_enabled( int task);
       int  enable_task( int task);
-      void disable_task( int task);
+      int  disable_task( int task);
       void execute_commands( void);
 
    private:

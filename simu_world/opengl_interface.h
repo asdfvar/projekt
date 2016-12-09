@@ -58,8 +58,6 @@ class Opengl_interface
 
       int  mousePassivePosition[2];
       bool idle_done_mouse_passive;
-      bool mousePassiveTask;
-      bool idleTask;
       Task_manager *task_manager;
 
       Time_manager *time_manager;

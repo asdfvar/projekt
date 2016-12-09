@@ -1,5 +1,6 @@
 #include "opengl_interface.h"
 #include "draw_scene.h"
+#include "task_manager.h"
 
 Opengl_interface::Opengl_interface(void)
 {
@@ -9,9 +10,9 @@ Opengl_interface::Opengl_interface(void)
    float map_pos[3]        = {0.0f, 0.0f, 0.0f};
    map                     = new Map( 0, map_dim, map_pos);
    rcube                   = 0.0f;
-   mousePassiveTask        = true;
-   idleTask                = false;
    task_manager            = new Task_manager(4);
+
+   task_manager->enable_task(0);
 }
 
 void Opengl_interface::keyboardDown( const char key)
@@ -60,13 +61,15 @@ void Opengl_interface::mousePassive( int x, int y)
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
    int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
-   if ( mousePassiveTask )
+   if ( task_manager->task_enabled(1) )
    {
       mousePassivePosition[0] = x;
       mousePassivePosition[1] = y;
-      mousePassiveTask        = false;
-      idleTask                = true;
+      task_manager->disable_task(1);
+      task_manager->enable_task(0);
    }
+
+   task_manager->execute_commands();
 
 }
 
@@ -97,7 +100,7 @@ void Opengl_interface::idle( void)
       mousePassivePosition[1] = window_center_y;
       first_frame             = false;
    }
-   else if( idleTask )
+   else if( task_manager->task_enabled(0) )
    {
       int x_offset = mousePassivePosition[0] - window_center_x;
       int y_offset = window_center_y - mousePassivePosition[1];
@@ -228,18 +231,20 @@ void Opengl_interface::idle( void)
    /*
    ** Handle task options
    */
-   if (idleTask)
+   if( task_manager->task_enabled(0) )
    {
       /*
       ** Disable this task
       */
-      idleTask = false;
+      task_manager->disable_task(0);
 
       /*
       ** Tell the passive-mouse task to enable
       */
-      mousePassiveTask = true;
+      task_manager->enable_task(1);
    }
+
+   task_manager->execute_commands();
 
 }
 
