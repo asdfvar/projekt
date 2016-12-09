@@ -102,6 +102,9 @@ void Opengl_interface::idle( void)
    }
    else if( task_manager->task_enabled(0) )
    {
+      /*
+      ** Move the window based on the mouse motion
+      */
       int x_offset = mousePassivePosition[0] - window_center_x;
       int y_offset = window_center_y - mousePassivePosition[1];
    
