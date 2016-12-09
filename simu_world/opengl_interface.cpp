@@ -11,6 +11,7 @@ Opengl_interface::Opengl_interface(void)
    rcube                   = 0.0f;
    mousePassiveTask        = true;
    idleTask                = false;
+   task_manager            = new Task_manager(4);
 }
 
 void Opengl_interface::keyboardDown( const char key)
@@ -73,6 +74,7 @@ Opengl_interface::~Opengl_interface(void)
 {
    delete time_manager;
    delete map;
+   delete task_manager;
 }
 
 void Opengl_interface::idle( void)

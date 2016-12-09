@@ -7,6 +7,7 @@
 
 #include "time_manager.h"
 #include "user.h"
+#include "task_manager.h"
 
 class Opengl_interface
 {
@@ -59,6 +60,7 @@ class Opengl_interface
       bool idle_done_mouse_passive;
       bool mousePassiveTask;
       bool idleTask;
+      Task_manager *task_manager;
 
       Time_manager *time_manager;
       Map          *map;
