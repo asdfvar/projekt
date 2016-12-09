@@ -221,8 +221,22 @@ void Opengl_interface::idle( void)
    
       glutWarpPointer( window_center_x, window_center_y);
 
+   }
+
+   /*
+   ** Handle task options
+   */
+   if (idleTask)
+   {
+      /*
+      ** Disable this task
+      */
+      idleTask = false;
+
+      /*
+      ** Tell the passive-mouse task to enable
+      */
       mousePassiveTask = true;
-      idleTask         = false;
    }
 
 }

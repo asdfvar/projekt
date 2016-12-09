@@ -8,6 +8,7 @@ OBJ = main.o             \
       simu_world.o       \
       opengl_interface.o \
       time_manager.o     \
+      task_manager.o     \
 #
 
 EXE = simu_world
@@ -29,4 +30,7 @@ simu_world.o: simu_world.cpp
 	$(CPPC) $(INC) $^ -c
 
 time_manager.o: time_manager.cpp
+	$(CPPC) $(INC) $^ -c
+
+task_manager.o: task_manager.cpp
 	$(CPPC) $(INC) $^ -c
