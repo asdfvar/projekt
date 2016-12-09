@@ -5,8 +5,9 @@ class Task_manager
 {
    public:
 
-           Task_manager( unsigned int num_tasks);
-          ~Task_manager( void);
+      Task_manager( unsigned int num_tasks);
+     ~Task_manager( void);
+
       bool task_enabled( int task);
       int  enable_task( int task);
       int  disable_task( int task);

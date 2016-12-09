@@ -18,7 +18,12 @@ class User
       void move_downward( void);
       void move_right( void);
       void move_left( void);
-      void stop( void);
+
+      void stop_forward( void);
+      void stop_right( void);
+      void stop_left( void);
+      void stop_up( void);
+      void stop_down( void);
 
       void  get_direction( float *direction);
       void  get_position( float *position);
@@ -31,7 +36,13 @@ class User
 
       float position[3];
       float direction[3];
-      float speed;
+
+      float forward_speed;
+      float right_speed;
+      float left_speed;
+      float up_speed;
+      float down_speed;
+
       float window_distance;
       float window_width;
       float window_height;

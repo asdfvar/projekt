@@ -34,11 +34,15 @@ void Opengl_interface::keyboardDown( const char key)
          mode = 0;
          glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
          break;
-      case 'u':
-         user.move_upward();
-         break;
-      case 'n':
-         user.move_downward();
+      case 32: // space bar
+         if (glutGetModifiers() == 0)
+         {
+            user.move_upward();
+         }
+         else if (glutGetModifiers() == 1)
+         {
+            user.move_downward();
+         }
          break;
       case 'w':
          user.move_forward();
@@ -59,13 +63,23 @@ void Opengl_interface::keyboardDown( const char key)
 void Opengl_interface::keyboardUp( const char key)
 {
 
-   switch (key) {
+   switch (key)
+   {
       case 'w':
-         user.stop();
+         user.stop_forward();
+         break;
+      case 'a':
+         user.stop_left();
          break;
       case 's':
-         user.stop();
+         user.stop_forward();
          break;
+      case 'd':
+         user.stop_right();
+         break;
+      case 32:
+         user.stop_up();
+         user.stop_down();
    }
 
 }

@@ -59,7 +59,11 @@ User::User( void)
    direction[1] = 0.0f;
    direction[2] = 0.0f;
 
-   speed = 0.0f;
+   forward_speed = 0.0f;
+   right_speed   = 0.0f;
+   left_speed    = 0.0f;
+   up_speed      = 0.0f;
+   down_speed    = 0.0f;
 
    /*
    ** User view-window attributes
@@ -72,55 +76,80 @@ User::User( void)
 
 void User::update( float dt)
 {
-   position[0] += direction[0] * speed * dt;
-   position[1] += direction[1] * speed * dt;
-   position[2] += direction[2] * speed * dt;
-}
+   position[0] += direction[0] * forward_speed * dt;
+   position[1] += direction[1] * forward_speed * dt;
+   position[2] += direction[2] * forward_speed * dt;
 
-void User::move_upward( void)
-{
-   position[2] += 0.5f;
-}
-
-void User::move_downward( void)
-{
-   position[2] -= 0.5f;
-}
-
-void User::move_right( void)
-{
    float right_direction[3];
    right_direction[0] =  direction[1];
    right_direction[1] = -direction[0];
    right_direction[2] =  direction[2];
-   position[0] += 0.5f * right_direction[0];
-   position[1] += 0.5f * right_direction[1];
-   position[2] += 0.5f * right_direction[2];
-}
+   position[0] += right_direction[0] * right_speed * dt;
+   position[1] += right_direction[1] * right_speed * dt;
 
-void User::move_left( void)
-{
    float left_direction[3];
    left_direction[0] = -direction[1];
    left_direction[1] =  direction[0];
    left_direction[2] =  direction[2];
-   position[0] += 0.5f * left_direction[0];
-   position[1] += 0.5f * left_direction[1];
-   position[2] += 0.5f * left_direction[2];
+   position[0] += left_direction[0] * left_speed * dt;
+   position[1] += left_direction[1] * left_speed * dt;
 
+   position[2] += up_speed * dt;
+
+   position[2] += -down_speed * dt;
+}
+
+void User::move_upward( void)
+{
+   up_speed = 4.0f;
+}
+
+void User::move_downward( void)
+{
+   down_speed = 4.0f;
+}
+
+void User::move_right( void)
+{
+   right_speed = 4.0f;
+}
+
+void User::move_left( void)
+{
+   left_speed = 4.0f;
 }
 
 void User::move_forward( void)
 {
-   speed = 4.0f;
+   forward_speed = 4.0f;
 }
 
 void User::move_backward( void)
 {
-   speed = -4.0f;
+   forward_speed = -4.0f;
 }
 
-void User::stop( void)
+void User::stop_forward( void)
 {
-   speed = 0.0f;
+   forward_speed = 0.0f;
+}
+
+void User::stop_right( void)
+{
+   right_speed = 0.0f;
+}
+
+void User::stop_left( void)
+{
+   left_speed = 0.0f;
+}
+
+void User::stop_up( void)
+{
+   up_speed = 0.0f;
+}
+
+void User::stop_down( void)
+{
+   down_speed = 0.0f;
 }
