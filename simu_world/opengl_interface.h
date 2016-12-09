@@ -23,7 +23,7 @@ class Opengl_interface
       void display(void);
 
       /*
-      ** Main function kernel
+      ** Idle processing
       */
       void idle(void);
 
@@ -57,9 +57,9 @@ class Opengl_interface
       bool first_frame;
 
       int  mousePassivePosition[2];
-      bool idle_done_mouse_passive;
-      Task_manager *task_manager;
+      int  mode;
 
+      Task_manager *task_manager;
       Time_manager *time_manager;
       Map          *map;
       User          user;

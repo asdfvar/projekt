@@ -94,10 +94,6 @@ void keyboardDown(unsigned char key, int x, int y)
          std::cout << "program exit" << std::endl;
          exit(1);
          break;
-      case 27: // escape key
-         std::cout << "program exit" << std::endl;
-         exit(1);
-         break;
    }
 
    opengl_interface.keyboardDown( key);

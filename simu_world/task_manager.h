@@ -12,6 +12,8 @@ class Task_manager
       int  disable_task( int task);
       void execute_commands( void);
 
+      void print_status( void);
+
    private:
 
       unsigned int  num_tasks;

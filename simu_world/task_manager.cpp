@@ -75,3 +75,13 @@ void Task_manager::execute_commands( void)
       tasks_to_enable[task]  = false;
    }
 }
+
+void Task_manager::print_status( void)
+{
+   std::cout << "enabled tasks: ";
+   for (unsigned int task = 0; task < num_tasks; task++)
+   {
+      std::cout << tasks[task] << ", ";
+   }
+   std::cout << std::endl;
+}
