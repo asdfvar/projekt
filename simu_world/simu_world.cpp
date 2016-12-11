@@ -108,7 +108,7 @@ void simu_world( int argc, char** argv )
 {
 
    int windowsizex = 800;
-   int windowsizey = 600;
+   int windowsizey = 800;
 
    glutInit( &argc, argv);
    glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH);

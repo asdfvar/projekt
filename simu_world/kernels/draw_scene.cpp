@@ -2,6 +2,7 @@
 #include "draw_block.h"
 #include "user.h"
 #include "map.h"
+#include "hud.h"
 #include "point_conversion.h"
 #include "linalg.h"
 #include <cmath>
@@ -35,11 +36,7 @@ number_of_blocks = map->get_dimensions();
 
       if (!map->get_position( block_position, block_ind)) continue;
 
-      draw_block( block_position,
-                  user);
-
-
-
+      draw_block( block_position, user);
    }
 
 //<<<
@@ -48,7 +45,8 @@ block_position[1] = 0.0f;
 block_position[2] = 0.0f;
 //>>>
 
-   draw_block( block_position,
-               user);
+   draw_block( block_position, user);
+
+   hud::display();
 
 }

@@ -302,11 +302,11 @@ void Opengl_interface::display(void)
    glLightfv( GL_LIGHT0, GL_SPECULAR, light_specular);
    glLightfv( GL_LIGHT0, GL_POSITION, light_position);
    
-   glEnable( GL_LIGHT0);
-   glEnable( GL_LESS);
-   glEnable( GL_DEPTH_TEST);
-   glEnable( GL_LIGHTING);
-   glEnable( GL_COLOR_MATERIAL);
+   glEnable( GL_LIGHT0         );
+   glEnable( GL_LESS           );
+   glEnable( GL_DEPTH_TEST     );
+   glEnable( GL_LIGHTING       );
+   glEnable( GL_COLOR_MATERIAL );
 
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
