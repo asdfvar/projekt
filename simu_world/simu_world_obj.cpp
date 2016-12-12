@@ -2,14 +2,15 @@
 #include "draw_scene.h"
 #include "task_manager.h"
 #include "change_direction.h"
+#include "opengl_interface.h"
 
 Simu_world_obj::Simu_world_obj(void)
 {
    first_frame      = true;
-   time_manager     = new Time_manager( 1.0 / 120.0);
-   int map_dim[3]   = {11, 11, 11};
-   float map_pos[3] = {0.0f, 0.0f, 0.0f};
-   map              = new Map( 0, map_dim, map_pos);
+   time_manager     = new Time_manager( 1.0 / 120.0 );
+   int map_dim[3]   = { 11, 11, 11 };
+   float map_pos[3] = { 0.0f, 0.0f, 0.0f };
+   map              = new Map( 0, map_dim, map_pos );
    task_manager     = new Task_manager(4);
    mode             = 1;
 
@@ -20,8 +21,8 @@ Simu_world_obj::Simu_world_obj(void)
 void Simu_world_obj::keyboardDown( const char key)
 {
 
-   int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
-   int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+   int window_center_x = ogl::Get(GLUT_WINDOW_WIDTH)  / 2;
+   int window_center_y = ogl::Get(GLUT_WINDOW_HEIGHT) / 2;
 
    switch (key)
    {
