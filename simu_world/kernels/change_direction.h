@@ -2,6 +2,7 @@
 #define CHANGE_DIRECTION_H
 
 void change_direction( float *direction,
-                       float  mousePassivePosition[2]);
+                       int    window_center[2],
+                       int    mousePassivePosition[2]);
 
 #endif

@@ -64,8 +64,6 @@ class Opengl_interface
       Map          *map;
       User          user;
 
-float rcube;
-
 };
 
 #endif

@@ -1,17 +1,17 @@
 #include "opengl_interface.h"
 #include "draw_scene.h"
 #include "task_manager.h"
+#include "change_direction.h"
 
 Opengl_interface::Opengl_interface(void)
 {
-   first_frame             = true;
-   time_manager            = new Time_manager( 1.0 / 120.0);
-   int map_dim[3]          = {11, 11, 11};
-   float map_pos[3]        = {0.0f, 0.0f, 0.0f};
-   map                     = new Map( 0, map_dim, map_pos);
-   rcube                   = 0.0f;
-   task_manager            = new Task_manager(4);
-   mode                    = 1;
+   first_frame      = true;
+   time_manager     = new Time_manager( 1.0 / 120.0);
+   int map_dim[3]   = {11, 11, 11};
+   float map_pos[3] = {0.0f, 0.0f, 0.0f};
+   map              = new Map( 0, map_dim, map_pos);
+   task_manager     = new Task_manager(4);
+   mode             = 1;
 
    task_manager->enable_task(0);
    task_manager->execute_commands();
@@ -121,12 +121,14 @@ void Opengl_interface::idle( void)
 
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
    int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+   int window_center[2] = { glutGet(GLUT_WINDOW_WIDTH)  / 2,
+                            glutGet(GLUT_WINDOW_HEIGHT) / 2 };
 
    if (first_frame)
    {
-      glutWarpPointer( window_center_x, window_center_y);
-      mousePassivePosition[0] = window_center_x;
-      mousePassivePosition[1] = window_center_y;
+      glutWarpPointer( window_center[0], window_center[1]);
+      mousePassivePosition[0] = window_center[0];
+      mousePassivePosition[1] = window_center[1];
       first_frame             = false;
    }
    if( task_manager->task_enabled(0) )
@@ -143,125 +145,12 @@ void Opengl_interface::idle( void)
          /*
          ** Move the direction of the user based from mouse motion
          */
-         int x_offset = mousePassivePosition[0] - window_center_x;
-         int y_offset = window_center_y - mousePassivePosition[1];
-      
-         const float toggle = 0.003f;
-         float cos_x = cosf( -(float)x_offset * toggle);
-         float sin_x = sinf( -(float)x_offset * toggle);
-         float cos_y = cosf(  (float)y_offset * toggle);
-         float sin_y = sinf(  (float)y_offset * toggle);
-      
          float direction[3];
-         user.get_direction( direction);
-      
-         float temp[3];
-         temp[0] = cos_x * direction[0] - sin_x * direction[1];
-         temp[1] = sin_x * direction[0] + cos_x * direction[1];
-      
-         direction[0] = temp[0];
-         direction[1] = temp[1];
-      
-         float norm = sqrtf( direction[0] * direction[0] +
-                             direction[1] * direction[1] +
-                             direction[2] * direction[2]);
-   
-         direction[0] /= norm;
-         direction[1] /= norm;
-         direction[2] /= norm;
-   
-         float norm_xy = sqrtf( direction[0] * direction[0] +
-                                direction[1] * direction[1]);
-   
-         float rot_z[3][3];
-   
-         rot_z[0][0] =  direction[1] / norm_xy; rot_z[0][1]
-                     = -direction[0] / norm_xy; rot_z[0][2]
-                     = 0.0f;
-   
-         rot_z[1][0] = direction[0] / norm_xy; rot_z[1][1]
-                     = direction[1] / norm_xy; rot_z[1][2]
-                     = 0.0f;
-   
-         rot_z[2][0] = 0.0f;
-         rot_z[2][1] = 0.0f;
-         rot_z[2][2] = 1.0f;
-   
-         float rot_x[3][3];
-   
-         rot_x[0][0] = 1.0f; rot_x[0][1] =  0.0f; rot_x[0][2] =  0.0f;
-         rot_x[1][0] = 0.0f; rot_x[1][1] = cos_y; rot_x[1][2] = -sin_y;
-         rot_x[2][0] = 0.0f; rot_x[2][1] = sin_y; rot_x[2][2] =  cos_y;
-   
-         float rot_z_back[3][3];
-   
-         rot_z_back[0][0] = direction[1] / norm_xy; rot_z_back[0][1]
-                          = direction[0] / norm_xy; rot_z_back[0][2]
-                          = 0.0f;
-   
-         rot_z_back[1][0] = -direction[0] / norm_xy; rot_z_back[1][1]
-                          = direction[1] / norm_xy; rot_z_back[1][2]
-                          = 0.0f;
-   
-         rot_z_back[2][0] = 0.0f;
-         rot_z_back[2][1] = 0.0f;
-         rot_z_back[2][2] = 1.0f;
-   
-         temp[0] = direction[0] * rot_z[0][0] +
-                   direction[1] * rot_z[0][1] +
-                   direction[2] * rot_z[0][2];
-   
-         temp[1] = direction[0] * rot_z[1][0] +
-                   direction[1] * rot_z[1][1] +
-                   direction[2] * rot_z[1][2];
-   
-         temp[2] = direction[0] * rot_z[2][0] +
-                   direction[1] * rot_z[2][1] +
-                   direction[2] * rot_z[2][2];
-   
-         direction[0] = temp[0];
-         direction[1] = temp[1];
-         direction[2] = temp[2];
-   
-         temp[0] = direction[0] * rot_x[0][0] +
-                   direction[1] * rot_x[0][1] +
-                   direction[2] * rot_x[0][2];
-   
-         temp[1] = direction[0] * rot_x[1][0] +
-                   direction[1] * rot_x[1][1] +
-                   direction[2] * rot_x[1][2];
-   
-         temp[2] = direction[0] * rot_x[2][0] +
-                   direction[1] * rot_x[2][1] +
-                   direction[2] * rot_x[2][2];
-   
-         direction[0] = temp[0];
-         direction[1] = temp[1];
-         direction[2] = temp[2];
-   
-         temp[0] = direction[0] * rot_z_back[0][0] +
-                   direction[1] * rot_z_back[0][1] +
-                   direction[2] * rot_z_back[0][2];
-   
-         temp[1] = direction[0] * rot_z_back[1][0] +
-                   direction[1] * rot_z_back[1][1] +
-                   direction[2] * rot_z_back[1][2];
-   
-         temp[2] = direction[0] * rot_z_back[2][0] +
-                   direction[1] * rot_z_back[2][1] +
-                   direction[2] * rot_z_back[2][2];
-   
-         direction[0] = temp[0];
-         direction[1] = temp[1];
-         direction[2] = temp[2];
-   
-         norm = sqrtf( direction[0] * direction[0] +
-                       direction[1] * direction[1] +
-                       direction[2] * direction[2]);
-   
-         direction[0] /= norm;
-         direction[1] /= norm;
-         direction[2] /= norm;
+         user.get_direction( direction );
+
+         change_direction( direction,
+                           window_center,
+                           mousePassivePosition);
    
          user.set_direction( direction);
       
