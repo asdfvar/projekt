@@ -12,8 +12,9 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
-void draw_block( float  block_position[3],
-                 User  *user)
+void draw_block( float                  block_position[3],
+                 ogl::Opengl_interface *opengl_interface,
+                 User                  *user)
 {
 
    float user_direction[3];
@@ -36,7 +37,8 @@ void draw_block( float  block_position[3],
    {
       for (int corner = 0; corner < 4; corner++)
       {
-         if (face == 0) { // x+
+         if (face == 0)
+         { // x+
             if (corner == 0)
             {
                corner_pos_x[corner] = block_position[0] + 0.5f;
@@ -61,7 +63,8 @@ void draw_block( float  block_position[3],
                corner_pos_y[corner] = block_position[1] + 0.5f;
                corner_pos_z[corner] = block_position[2] - 0.5f;
             }
-         } else if (face == 1) { // x-
+         } else if (face == 1)
+         { // x-
             if (corner == 0)
             {
                corner_pos_x[corner] = block_position[0] - 0.5f;
@@ -227,15 +230,15 @@ void draw_block( float  block_position[3],
 
       if (valid_view[0] && valid_view[1] && valid_view[2] && valid_view[3])
       {
-         float max_view_distance = 100.0f;
-         glBegin(GL_POLYGON);
-           glNormal3f(0.0f, 0.0f, -brightness);
-           glColor3f( 1.0f, 1.0f, 1.0f);
-           glVertex3f(view_x[0], view_y[0], output_point_distance[0] / max_view_distance);
-           glVertex3f(view_x[1], view_y[1], output_point_distance[1] / max_view_distance);
-           glVertex3f(view_x[2], view_y[2], output_point_distance[2] / max_view_distance);
-           glVertex3f(view_x[3], view_y[3], output_point_distance[3] / max_view_distance);
-         glEnd();
+
+        float color[3] = { 1.0f, 1.0f, 1.0f };
+
+        opengl_interface->draw_polygon( view_x,
+                                        view_y,
+                                        output_point_distance,
+                                        color,
+                                        brightness,
+                                        4);
       }
 
    } // for (int face = 0; face < 6; face++)

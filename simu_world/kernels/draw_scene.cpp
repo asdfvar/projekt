@@ -8,19 +8,14 @@
 #include <cmath>
 
 /*
-** OpenGL includes
-*/
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-
-/*
 ** function: draw_scene
 **
 ** The coordinates are converted so that they are relative
 ** to the user.
 */
-void draw_scene( User *user, Map  *map)
+void draw_scene( User                  *user,
+                 ogl::Opengl_interface *opengl_interface,
+                 Map                   *map)
 {
 
 int number_of_blocks;
@@ -36,7 +31,9 @@ number_of_blocks = map->get_dimensions();
 
       if (!map->get_position( block_position, block_ind)) continue;
 
-      draw_block( block_position, user);
+      draw_block( block_position,
+                  opengl_interface,
+                  user);
    }
 
 //<<<
@@ -45,7 +42,9 @@ block_position[1] = 0.0f;
 block_position[2] = 0.0f;
 //>>>
 
-   draw_block( block_position, user);
+   draw_block( block_position,
+               opengl_interface,
+               user);
 
    hud::display();
 

@@ -21,8 +21,8 @@ Simu_world_obj::Simu_world_obj(void)
 void Simu_world_obj::keyboardDown( const char key)
 {
 
-   int window_center_x = ogl::Get(GLUT_WINDOW_WIDTH)  / 2;
-   int window_center_y = ogl::Get(GLUT_WINDOW_HEIGHT) / 2;
+   int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
+   int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
    switch (key)
    {
@@ -200,6 +200,8 @@ void Simu_world_obj::display(void)
 
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   draw_scene( &user, map);
+   draw_scene( &user,
+               &opengl_interface,
+                map);
 
 }

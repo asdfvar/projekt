@@ -11,6 +11,7 @@ OBJ = map.o user.o       \
       draw_block.o       \
       hud.o              \
       change_direction.o \
+      opengl_interface.o \
 #
 
 LIBEXE = libsimu.a
@@ -40,4 +41,7 @@ hud.o: hud.cpp
 	$(CPPC) $(INC) $^ -c
 
 change_direction.o: change_direction.cpp
+	$(CPPC) $(INC) $^ -c
+
+opengl_interface.o: opengl_interface.cpp
 	$(CPPC) $(INC) $^ -c

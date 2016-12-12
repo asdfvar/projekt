@@ -3,7 +3,10 @@
 
 #include "user.h"
 #include "map.h"
+#include "opengl_interface.h"
 
-void draw_scene( User *user, Map  *map);
+void draw_scene( User                  *user,
+                 ogl::Opengl_interface *opengl_interface,
+                 Map                   *map);
 
 #endif
