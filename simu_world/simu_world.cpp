@@ -2,12 +2,12 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include "simu_world.h"
-#include "opengl_interface.h"
+#include "simu_world_obj.h"
 
 /*
 ** Define the interface with openGL
 */
-Opengl_interface opengl_interface;
+Simu_world_obj simu_world_obj;
 
 /*********************
  * Display to screen *
@@ -17,7 +17,7 @@ void display(void) {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  opengl_interface.display();
+  simu_world_obj.display();
 
   glFlush();
 
@@ -29,7 +29,7 @@ void display(void) {
 
 void idle(void) {
 
-   opengl_interface.idle();
+   simu_world_obj.idle();
 
    glutPostRedisplay();
 
@@ -56,13 +56,13 @@ void mouse(
       GLUT_DOWN
 */
 
-//opengl_interface.mouse(button, state, x, y);
+//simu_world_obj.mouse(button, state, x, y);
 
 }
 
 void mouseMotion(int x, int y) {
 
-   //opengl_interface.mouseMotion(x, y);
+   //simu_world_obj.mouseMotion(x, y);
 
 }
 
@@ -76,13 +76,13 @@ void mouseMotion(int x, int y) {
 void mousePassive(int x, int y)
 {
 
-   opengl_interface.mousePassive( x, y);
+   simu_world_obj.mousePassive( x, y);
    glutPostRedisplay();
 }
 
 void keyboardUp(unsigned char key, int x, int y) {
 
-   opengl_interface.keyboardUp( key);
+   simu_world_obj.keyboardUp( key);
 }
 
 void keyboardDown(unsigned char key, int x, int y)
@@ -96,7 +96,7 @@ void keyboardDown(unsigned char key, int x, int y)
          break;
    }
 
-   opengl_interface.keyboardDown( key);
+   simu_world_obj.keyboardDown( key);
 }
 
 

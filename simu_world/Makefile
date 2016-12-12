@@ -4,11 +4,11 @@ INC   = -Ikernels -I.
 LIBPATH = -Lkernels
 LIBS  = -lsimu
 
-OBJ = main.o             \
-      simu_world.o       \
-      opengl_interface.o \
-      time_manager.o     \
-      task_manager.o     \
+OBJ = main.o           \
+      simu_world.o     \
+      simu_world_obj.o \
+      time_manager.o   \
+      task_manager.o   \
 #
 
 EXE = simu_world
@@ -23,7 +23,7 @@ clean:
 	make -C kernels/ clean
 	rm $(OBJ) $(EXE)
 
-opengl_interface.o: opengl_interface.cpp
+simu_world_obj.o: simu_world_obj.cpp
 	$(CPPC) $(INC) $^ -c
 
 simu_world.o: simu_world.cpp

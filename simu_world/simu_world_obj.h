@@ -1,5 +1,5 @@
-#ifndef OPENGL_INTERFACE_H
-#define OPENGL_INTERFACE_H
+#ifndef SIMU_WORLD_H
+#define SIMU_WORLD_H
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -9,13 +9,13 @@
 #include "user.h"
 #include "task_manager.h"
 
-class Opengl_interface
+class Simu_world_obj
 {
 
    public:
 
-      Opengl_interface(void);
-      ~Opengl_interface(void);
+      Simu_world_obj(void);
+     ~Simu_world_obj(void);
 
       /*
       ** Display to screen

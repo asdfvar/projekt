@@ -1,9 +1,9 @@
-#include "opengl_interface.h"
+#include "simu_world_obj.h"
 #include "draw_scene.h"
 #include "task_manager.h"
 #include "change_direction.h"
 
-Opengl_interface::Opengl_interface(void)
+Simu_world_obj::Simu_world_obj(void)
 {
    first_frame      = true;
    time_manager     = new Time_manager( 1.0 / 120.0);
@@ -17,7 +17,7 @@ Opengl_interface::Opengl_interface(void)
    task_manager->execute_commands();
 }
 
-void Opengl_interface::keyboardDown( const char key)
+void Simu_world_obj::keyboardDown( const char key)
 {
 
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
@@ -60,7 +60,7 @@ void Opengl_interface::keyboardDown( const char key)
 
 }
 
-void Opengl_interface::keyboardUp( const char key)
+void Simu_world_obj::keyboardUp( const char key)
 {
 
    switch (key)
@@ -84,7 +84,7 @@ void Opengl_interface::keyboardUp( const char key)
 
 }
 
-void Opengl_interface::mousePassive( int x, int y)
+void Simu_world_obj::mousePassive( int x, int y)
 {
 
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
@@ -102,14 +102,14 @@ void Opengl_interface::mousePassive( int x, int y)
 
 }
 
-Opengl_interface::~Opengl_interface(void)
+Simu_world_obj::~Simu_world_obj(void)
 {
    delete time_manager;
    delete map;
    delete task_manager;
 }
 
-void Opengl_interface::idle( void)
+void Simu_world_obj::idle( void)
 {
 
    /*
@@ -176,7 +176,7 @@ void Opengl_interface::idle( void)
 
 }
 
-void Opengl_interface::display(void)
+void Simu_world_obj::display(void)
 {
 
    float mat_specular[4]  = { 1.0f, 1.0f, 1.0f, 1.0f };
