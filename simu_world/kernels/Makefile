@@ -10,6 +10,7 @@ OBJ = map.o user.o       \
       point_conversion.o \
       draw_block.o       \
       hud.o              \
+      change_direction.o \
 #
 
 LIBEXE = libsimu.a
@@ -36,4 +37,7 @@ draw_block.o: draw_block.cpp
 	$(CPPC) $(INC) $^ -c
 
 hud.o: hud.cpp
+	$(CPPC) $(INC) $^ -c
+
+change_direction.o: change_direction.cpp
 	$(CPPC) $(INC) $^ -c

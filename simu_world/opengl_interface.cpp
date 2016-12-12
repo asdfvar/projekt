@@ -141,7 +141,7 @@ void Opengl_interface::idle( void)
          glutSetCursor(GLUT_CURSOR_NONE);
 
          /*
-         ** Move the window based on the mouse motion
+         ** Move the direction of the user based from mouse motion
          */
          int x_offset = mousePassivePosition[0] - window_center_x;
          int y_offset = window_center_y - mousePassivePosition[1];
