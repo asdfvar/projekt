@@ -7,7 +7,7 @@
 
 #include "time_manager.h"
 #include "user.h"
-#include "task_manager.h"
+#include "semaphore.h"
 #include "opengl_interface.h"
 
 class Simu_world_obj
@@ -60,7 +60,7 @@ class Simu_world_obj
       int  mousePassivePosition[2];
       int  mode;
 
-      Task_manager          *task_manager;
+      Semaphore             *semaphore;
       Time_manager          *time_manager;
       ogl::Opengl_interface  opengl_interface;
       Map                   *map;

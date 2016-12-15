@@ -1,6 +1,6 @@
 #include "simu_world_obj.h"
 #include "draw_scene.h"
-#include "task_manager.h"
+#include "semaphore.h"
 #include "change_direction.h"
 #include "opengl_interface.h"
 
@@ -11,11 +11,9 @@ Simu_world_obj::Simu_world_obj(void)
    int map_dim[3]   = { 11, 11, 11 };
    float map_pos[3] = { 0.0f, 0.0f, 0.0f };
    map              = new Map( 0, map_dim, map_pos );
-   task_manager     = new Task_manager(4);
+   semaphore        = new Semaphore(4);
    mode             = 1;
 
-   task_manager->enable_task(0);
-   task_manager->execute_commands();
 }
 
 void Simu_world_obj::keyboardDown( const char key)
@@ -91,15 +89,15 @@ void Simu_world_obj::mousePassive( int x, int y)
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
    int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
-   if ( task_manager->task_enabled(1) )
+   if ( semaphore->task_pool(1) == 0 )
    {
+      semaphore->increment_task(1);
+
       mousePassivePosition[0] = x;
       mousePassivePosition[1] = y;
-      task_manager->disable_task(1);
-      task_manager->enable_task(0);
-   }
 
-   task_manager->execute_commands();
+      semaphore->decrement_task(0);
+   }
 
 }
 
@@ -107,7 +105,7 @@ Simu_world_obj::~Simu_world_obj(void)
 {
    delete time_manager;
    delete map;
-   delete task_manager;
+   delete semaphore;
 }
 
 void Simu_world_obj::idle( void)
@@ -132,8 +130,9 @@ void Simu_world_obj::idle( void)
       mousePassivePosition[1] = window_center[1];
       first_frame             = false;
    }
-   if( task_manager->task_enabled(0) )
+   if( semaphore->task_pool(0) == 0 )
    {
+      semaphore->increment_task(0);
       if (mode == 0)
       {
          glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
@@ -159,21 +158,10 @@ void Simu_world_obj::idle( void)
       }
 
       /*
-      ** Handle task options
-      */
-
-      /*
-      ** Disable this task
-      */
-      task_manager->disable_task(0);
-
-      /*
       ** Tell the passive-mouse task to enable
       */
-      task_manager->enable_task(1);
+      semaphore->decrement_task(1);
    }
-
-   task_manager->execute_commands();
 
 }
 
