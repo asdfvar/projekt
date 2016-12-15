@@ -1,6 +1,5 @@
 #include "simu_world_obj.h"
 #include "draw_scene.h"
-#include "semaphore.h"
 #include "change_direction.h"
 #include "opengl_interface.h"
 

@@ -8,6 +8,7 @@
 #include "time_manager.h"
 #include "user.h"
 #include "semaphore.h"
+#include "menu.h"
 #include "opengl_interface.h"
 
 class Simu_world_obj
@@ -61,6 +62,7 @@ class Simu_world_obj
       int  mode;
 
       Semaphore             *semaphore;
+      Menu                  *current_menu;
       Time_manager          *time_manager;
       ogl::Opengl_interface  opengl_interface;
       Map                   *map;
