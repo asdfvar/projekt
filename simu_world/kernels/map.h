@@ -44,6 +44,10 @@ class Map_grid
 
       void shift( int x, int y, int z);
 
+      Map *access_map(int v_id_x,
+                      int v_id_y,
+                      int v_id_z);
+
    private:
       std::size_t local_grid_size[3];
 

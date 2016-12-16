@@ -113,11 +113,11 @@ Map_grid::Map_grid(void)
    for (int k = 0; k < local_grid_size[2]; k++) virtual_grid_id_z[k] = k;
 
    int map_dim[3] = {65, 65, 65};
-   for (int ind_x = -local_grid_size[0]/2, ind = 0; ind_x <= local_grid_size[0]/2; ind_x++)
+   for (int ind_z = -local_grid_size[2]/2, ind = 0; ind_z <= local_grid_size[2]/2; ind_z++)
    {
       for (int ind_y = -local_grid_size[1]/2; ind_y <= local_grid_size[1]/2; ind_y++)
       {
-         for (int ind_z = -local_grid_size[2]/2; ind_z <= local_grid_size[2]/2; ind_z++, ind++)
+         for (int ind_x = -local_grid_size[0]/2; ind_x <= local_grid_size[0]/2; ind_x++, ind++)
          {
            float position[3] = {(float)(ind_x * map_dim[0]),
                                 (float)(ind_y * map_dim[1]),
@@ -144,22 +144,40 @@ Map_grid::~Map_grid(void)
 }
 
 /*
+** function name: access_map from: Map_grid
+** Return pointer to the specified Map block
+*/
+Map *Map_grid::access_map(int v_id_x,
+                          int v_id_y,
+                          int v_id_z)
+{
+   unsigned int index =  virtual_grid_id_x[v_id_x] + 
+                         virtual_grid_id_y[v_id_y] * local_grid_size[0] +
+                         virtual_grid_id_z[v_id_z] * local_grid_size[0] * local_grid_size[1];
+
+   return &maps.at( index );
+}
+
+/*
 ** function name: shift from: Map_grid
 ** Circular shift the cube in the specified direction
 */
 void Map_grid::shift( int x, int y, int z)
 {
-   for (int k = 0; k < local_grid_size[0]; k++) {
+   for (int k = 0; k < local_grid_size[0]; k++)
+   {
       for (virtual_grid_id_x[k] -= x;
            virtual_grid_id_x[k] < 0;
            virtual_grid_id_x[k] += local_grid_size[0]) { /* N/A */};
    }
-   for (int k = 0; k < local_grid_size[1]; k++) {
+   for (int k = 0; k < local_grid_size[1]; k++)
+   {
       for (virtual_grid_id_y[k] -= y;
            virtual_grid_id_y[k] < 0;
            virtual_grid_id_y[k] += local_grid_size[1]) { /* N/A */};
    }
-   for (int k = 0; k < local_grid_size[2]; k++) {
+   for (int k = 0; k < local_grid_size[2]; k++)
+   {
       for (virtual_grid_id_z[k] -= z;
            virtual_grid_id_z[k] < 0;
            virtual_grid_id_z[k] += local_grid_size[2]) { /* N/A */};

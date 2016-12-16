@@ -66,6 +66,7 @@ class Simu_world_obj
       Time_manager          *time_manager;
       ogl::Opengl_interface  opengl_interface;
       Map                   *map;
+      Map_grid               map_grid;
       User                   user;
 
 };

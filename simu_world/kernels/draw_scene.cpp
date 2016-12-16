@@ -36,16 +36,6 @@ number_of_blocks = map->get_dimensions();
                   user);
    }
 
-//<<<
-block_position[0] = 4.0f;
-block_position[1] = 0.0f;
-block_position[2] = 0.0f;
-//>>>
-
-   draw_block( block_position,
-               opengl_interface,
-               user);
-
    hud::display();
 
 }
