@@ -15,6 +15,7 @@
 */
 void draw_scene( User                  *user,
                  ogl::Opengl_interface *opengl_interface,
+                 Map_grid              *map_grid,
                  Map                   *map)
 {
 
@@ -24,6 +25,8 @@ number_of_blocks = map->get_dimensions();
 //>>>
 
    float block_position[3];
+
+//   map = map_grid->access_map( 2, 2, 2);
 
    // iterate through all the blocks
    for (int block_ind = 0; block_ind < number_of_blocks; block_ind++)

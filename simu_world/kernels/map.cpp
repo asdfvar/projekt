@@ -113,6 +113,7 @@ Map_grid::Map_grid(void)
    for (int k = 0; k < local_grid_size[2]; k++) virtual_grid_id_z[k] = k;
 
    int map_dim[3] = {65, 65, 65};
+   int ind;
    for (int ind_z = -local_grid_size[2]/2, ind = 0; ind_z <= local_grid_size[2]/2; ind_z++)
    {
       for (int ind_y = -local_grid_size[1]/2; ind_y <= local_grid_size[1]/2; ind_y++)
@@ -122,8 +123,8 @@ Map_grid::Map_grid(void)
            float position[3] = {(float)(ind_x * map_dim[0]),
                                 (float)(ind_y * map_dim[1]),
                                 (float)(ind_z * map_dim[2])};
-
-            maps.push_back(Map(ind, map_dim, position));
+// TODO:
+//            maps.push_back( Map(ind, map_dim, position));
          }
       }
    }
@@ -136,7 +137,7 @@ Map_grid::Map_grid(void)
 Map_grid::~Map_grid(void)
 {
    std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
-   maps.erase (maps.begin(), maps.begin() + total_grid_size);
+//   maps.erase (maps.begin(), maps.begin() + total_grid_size);
 
    delete[] virtual_grid_id_x;
    delete[] virtual_grid_id_y;
@@ -154,6 +155,8 @@ Map *Map_grid::access_map(int v_id_x,
    unsigned int index =  virtual_grid_id_x[v_id_x] + 
                          virtual_grid_id_y[v_id_y] * local_grid_size[0] +
                          virtual_grid_id_z[v_id_z] * local_grid_size[0] * local_grid_size[1];
+std::cout << "index = " << index << std::endl;
+index = 1;
 
    return &maps.at( index );
 }

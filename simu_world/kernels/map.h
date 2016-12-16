@@ -49,7 +49,7 @@ class Map_grid
                       int v_id_z);
 
    private:
-      std::size_t local_grid_size[3];
+      int local_grid_size[3];
 
       int *virtual_grid_id_x,
           *virtual_grid_id_y,

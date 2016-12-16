@@ -189,6 +189,7 @@ void Simu_world_obj::display(void)
 
    draw_scene( &user,
                &opengl_interface,
+               &map_grid,
                 map);
 
 }
