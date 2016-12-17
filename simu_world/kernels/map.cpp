@@ -103,6 +103,7 @@ Map_grid::Map_grid(void)
    local_grid_size[0] = 11; // must be odd
    local_grid_size[1] = 11; // must be odd
    local_grid_size[2] = 11; // must be odd
+   int total_local_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
 
    virtual_grid_id_x = new int[local_grid_size[0]];
    virtual_grid_id_y = new int[local_grid_size[1]];
@@ -111,6 +112,8 @@ Map_grid::Map_grid(void)
    for (int k = 0; k < local_grid_size[0]; k++) virtual_grid_id_x[k] = k;
    for (int k = 0; k < local_grid_size[1]; k++) virtual_grid_id_y[k] = k;
    for (int k = 0; k < local_grid_size[2]; k++) virtual_grid_id_z[k] = k;
+
+   maps.reserve( total_local_grid_size);
 
    int map_dim[3] = {65, 65, 65};
    int ind;
@@ -123,8 +126,18 @@ Map_grid::Map_grid(void)
            float position[3] = {(float)(ind_x * map_dim[0]),
                                 (float)(ind_y * map_dim[1]),
                                 (float)(ind_z * map_dim[2])};
-// TODO:
-//            maps.push_back( Map(ind, map_dim, position));
+           std::vector<Map*>::size_type sz = maps.capacity();
+           maps.push_back( new Map(ind, map_dim, position));
+
+           if (sz < maps.capacity())
+           {
+              std::cout << "Map grid capacity increased" << std::endl;
+           }
+
+           if (ind % 100 == 0)
+           {
+              std::cout << (float)ind / (float)total_local_grid_size << std::endl;
+           }
          }
       }
    }
@@ -137,7 +150,7 @@ Map_grid::Map_grid(void)
 Map_grid::~Map_grid(void)
 {
    std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
-//   maps.erase (maps.begin(), maps.begin() + total_grid_size);
+   maps.erase (maps.begin(), maps.begin() + total_grid_size);
 
    delete[] virtual_grid_id_x;
    delete[] virtual_grid_id_y;
@@ -158,7 +171,7 @@ Map *Map_grid::access_map(int v_id_x,
 std::cout << "index = " << index << std::endl;
 index = 1;
 
-   return &maps.at( index );
+   return maps.at( index );
 }
 
 /*

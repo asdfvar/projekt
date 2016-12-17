@@ -55,7 +55,7 @@ class Map_grid
           *virtual_grid_id_y,
           *virtual_grid_id_z;
 
-      std::vector<Map> maps;
+      std::vector<Map*> maps;
 
 };
 
