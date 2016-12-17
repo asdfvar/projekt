@@ -4,7 +4,6 @@
 #include "map.h"
 #include "hud.h"
 #include "point_conversion.h"
-#include "linalg.h"
 #include <cmath>
 
 /*
@@ -19,17 +18,12 @@ void draw_scene( User                  *user,
                  Map                   *map)
 {
 
-int number_of_blocks;
-//<<<
-number_of_blocks = map->get_dimensions();
-//>>>
-
    float block_position[3];
 
-//   map = map_grid->access_map( 2, 2, 2);
+   map = map_grid->access_map( 5, 5, 4);
 
    // iterate through all the blocks
-   for (int block_ind = 0; block_ind < number_of_blocks; block_ind++)
+   for (int block_ind = 0; block_ind < map->get_dimensions(); block_ind++)
    {
 
       if (!map->get_position( block_position, block_ind)) continue;

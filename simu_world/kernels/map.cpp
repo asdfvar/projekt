@@ -42,6 +42,33 @@ void Map::create_random( void)
    }
 }
 
+void Map::display_info( void)
+{
+   bool block_exists = false;
+   float l_position[3];
+   for (int ind = 0; ind < map_dim[0] * map_dim[1] * map_dim[2]; ind++)
+   {
+      if (blocks[ind] > 0)
+      {
+         block_exists = true;
+         int stat = get_position( l_position, ind);
+         if (stat != 0)
+         {
+            std::cout << "block position = " << l_position[0] << ", "
+                                             << l_position[1] << ", "
+                                             << l_position[2] << std::endl;
+         }
+      }
+      
+   }
+
+   if (block_exists)
+   {
+      std::cout << "block exists" << std::endl;
+      std::cout << "map position = " << position[0] << ", " << position[1] << ", " << position[2] << std::endl;
+   }
+}
+
 /*
 ** destructor name: ~Map
 */
@@ -114,6 +141,7 @@ Map_grid::Map_grid(void)
    for (int k = 0; k < local_grid_size[2]; k++) virtual_grid_id_z[k] = k;
 
    maps.reserve( total_local_grid_size);
+   std::vector<Map*>::size_type sz = maps.capacity();
 
    int map_dim[3] = {65, 65, 65};
    int ind;
@@ -126,12 +154,13 @@ Map_grid::Map_grid(void)
            float position[3] = {(float)(ind_x * map_dim[0]),
                                 (float)(ind_y * map_dim[1]),
                                 (float)(ind_z * map_dim[2])};
-           std::vector<Map*>::size_type sz = maps.capacity();
+
            maps.push_back( new Map(ind, map_dim, position));
 
            if (sz < maps.capacity())
            {
               std::cout << "Map grid capacity increased" << std::endl;
+              sz = maps.capacity();
            }
 
            if (ind % 100 == 0)
@@ -168,8 +197,6 @@ Map *Map_grid::access_map(int v_id_x,
    unsigned int index =  virtual_grid_id_x[v_id_x] + 
                          virtual_grid_id_y[v_id_y] * local_grid_size[0] +
                          virtual_grid_id_z[v_id_z] * local_grid_size[0] * local_grid_size[1];
-std::cout << "index = " << index << std::endl;
-index = 1;
 
    return maps.at( index );
 }

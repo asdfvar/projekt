@@ -19,6 +19,7 @@ class Map
       int  get_position(float *position_out, int block_index);
       void change_position(float *position_in);
       unsigned int get_dimensions(void);
+      void display_info( void);
 
    private:
 
