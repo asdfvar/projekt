@@ -20,10 +20,10 @@ void draw_scene( User                  *user,
 
    float block_position[3];
 
-   map = map_grid->access_map( 5, 5, 4);
+   map = map_grid->access_map( 5, 5, 5);
 
    // iterate through all the blocks
-   for (int block_ind = 0; block_ind < map->get_dimensions(); block_ind++)
+   for (unsigned int block_ind = 0; block_ind < map->get_dimensions(); block_ind++)
    {
 
       if (!map->get_position( block_position, block_ind)) continue;

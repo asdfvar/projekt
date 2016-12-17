@@ -13,13 +13,14 @@ Simu_world_obj simu_world_obj;
  * Display to screen *
  *********************/
 
-void display(void) {
+void display(void)
+{
 
   glClear(GL_COLOR_BUFFER_BIT);
 
   simu_world_obj.display();
 
-  glFlush();
+  glutSwapBuffers();
 
 }
 
@@ -111,7 +112,7 @@ void simu_world( int argc, char** argv )
    int windowsizey = 800;
 
    glutInit( &argc, argv);
-   glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH);
+   glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
    glutInitWindowSize( windowsizex, windowsizey);
    glutInitWindowPosition( 50, 50);
    glutCreateWindow( "Simu World");
