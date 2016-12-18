@@ -46,18 +46,18 @@ float point_conversion(float  perspective[3],
                  temp_array[1] * temp_array[1] +
                  temp_array[2] * temp_array[2]);
 
-   float pp_norm = d_norm * p_norm / temp;
+   /*
+   ** pp_norm = d_norm * p_norm / temp;
+   */
+   float pp_norm = d_norm / temp;
 
+   /*
+   ** pp = pp_norm / p_norm * p
+   */
    float pp[3];
-#if 1
-   pp[0] = pp_norm / p_norm * p[0];
-   pp[1] = pp_norm / p_norm * p[1];
-   pp[2] = pp_norm / p_norm * p[2];
-#else
-   pp[0] = p[0];
-   pp[1] = p[1];
-   pp[2] = p[2];
-#endif
+   pp[0] = pp_norm * p[0];
+   pp[1] = pp_norm * p[1];
+   pp[2] = pp_norm * p[2];
 
    float dx  = d_hat[0];
    float dy  = d_hat[1];
@@ -96,9 +96,9 @@ float point_conversion(float  perspective[3],
    dxy = sqrtf( d_hat[0] * d_hat[0] + d_hat[1] * d_hat[1]);
 
    /*
-   ** rot_x = [ 1,           0,           0        ]
-   **         [ 0,           dz / |d|,    |dxy|    ]
-   **         [ 0,          -|dxy| / |d|, dz / |d| ]
+   ** rot_x = [ 1,  0,           0        ]
+   **         [ 0,  dz / |d|,    |dxy|    ]
+   **         [ 0, -|dxy| / |d|, dz / |d| ]
    */
    float rot_x[3][3];
    rot_x[0][0] = 1.0f; rot_x[0][1] =  0.0f; rot_x[0][2] = 0.0f;
