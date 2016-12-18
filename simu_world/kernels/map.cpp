@@ -127,9 +127,9 @@ int Map::get_position(float *position_out,
 Map_grid::Map_grid(void)
 {
 
-   local_grid_size[0] = 2; // must be odd
-   local_grid_size[1] = 2; // must be odd
-   local_grid_size[2] = 2; // must be odd
+   local_grid_size[0] = 5;
+   local_grid_size[1] = 5;
+   local_grid_size[2] = 5;
    int total_local_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
 
    virtual_grid_id_x = new int[local_grid_size[0]];
@@ -143,7 +143,7 @@ Map_grid::Map_grid(void)
    maps.reserve( total_local_grid_size);
    std::vector<Map*>::size_type sz = maps.capacity();
 
-   int map_dim[3] = {33, 33, 33};
+   int map_dim[3] = {11, 11, 11};
    int ind;
    for (int ind_z = -local_grid_size[2]/2, ind = 0; ind_z <= local_grid_size[2]/2; ind_z++)
    {
