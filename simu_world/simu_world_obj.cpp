@@ -115,10 +115,12 @@ void Simu_world_obj::idle( void)
    */
    time_manager->wait_for_time();
 
+std::cout << "time step = " << time_manager->get_time_step() << std::endl;
+
    user.update( time_manager->get_time_step() );
 
-   int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
-   int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+   int window_center_x  = glutGet(GLUT_WINDOW_WIDTH)  / 2;
+   int window_center_y  = glutGet(GLUT_WINDOW_HEIGHT) / 2;
    int window_center[2] = { glutGet(GLUT_WINDOW_WIDTH)  / 2,
                             glutGet(GLUT_WINDOW_HEIGHT) / 2 };
 

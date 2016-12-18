@@ -49,6 +49,9 @@ class Map_grid
                       int v_id_y,
                       int v_id_z);
 
+      int get_virtual_grid_id(int ind);
+      int get_grid_size(int ind);
+
    private:
       int local_grid_size[3];
 
