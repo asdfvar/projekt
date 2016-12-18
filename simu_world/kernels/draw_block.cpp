@@ -20,6 +20,21 @@ void draw_block( float                  block_position[3],
    float user_direction[3];
    user->get_direction( user_direction);
 
+   float user_position[3];
+   user->get_position( user_position);
+
+   float user_to_block[3] = {block_position[0] - user_position[0],
+                             block_position[1] - user_position[1],
+                             block_position[2] - user_position[2]};
+
+   /*
+   ** Return if the user direction and block position are > 90 degrees off
+   */
+   if ( linalg::dot_product<float>( user_direction, user_to_block, 3) < 0.0f)
+   {
+      return;
+   }
+
    // get 4 positions of the face
    float corner_pos_x[4];
    float corner_pos_y[4];
@@ -190,9 +205,6 @@ void draw_block( float                  block_position[3],
                corner_pos_z[corner] = block_position[2] - 0.5f;
             }
          }
-
-         float user_position[3];
-         user->get_position( user_position);
 
          float window_distance = user->get_window_distance();
 
