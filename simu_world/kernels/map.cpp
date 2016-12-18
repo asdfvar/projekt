@@ -34,8 +34,8 @@ void Map::create_random( void)
 {
    for (int ind = 0; ind < map_dim[0] * map_dim[1] * map_dim[2]; ind++)
    {
-      int random_num = std::rand() % 400;
-      if (random_num == 1)
+      int random_num = std::rand() % 100;
+      if (random_num == 0)
          blocks[ind] = 1;
       else
          blocks[ind] = 0;
@@ -127,9 +127,9 @@ int Map::get_position(float *position_out,
 Map_grid::Map_grid(void)
 {
 
-   local_grid_size[0] = 11;
-   local_grid_size[1] = 11;
-   local_grid_size[2] = 11;
+   local_grid_size[0] = 13;
+   local_grid_size[1] = 13;
+   local_grid_size[2] = 13;
    int total_local_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
 
    virtual_grid_id_x = new int[local_grid_size[0]];
