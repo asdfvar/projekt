@@ -167,9 +167,30 @@ void Simu_world_obj::idle( void)
          map_grid.get_virtual_grid( user_position,
                                     virtual_grid);
 
+         // TODO: get_virtual_center
          if (virtual_grid[0] > 6)
          {
             map_grid.shift(1, 0, 0);
+         }
+         if (virtual_grid[0] < 6)
+         {
+            map_grid.shift(-1, 0, 0);
+         }
+         if (virtual_grid[1] > 6)
+         {
+            map_grid.shift(0, 1, 0);
+         }
+         if (virtual_grid[1] < 6)
+         {
+            map_grid.shift(0, -1, 0);
+         }
+         if (virtual_grid[2] > 6)
+         {
+            map_grid.shift(0, 0, 1);
+         }
+         if (virtual_grid[2] < 6)
+         {
+            map_grid.shift(0, 0, -1);
          }
 
 std::cout << "virtual grid position = " << virtual_grid[0] << ", " << virtual_grid[1] << ", " << virtual_grid[2] << std::endl;

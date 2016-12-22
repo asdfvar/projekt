@@ -265,18 +265,35 @@ void Map_grid::shift( int x, int y, int z)
    for (int k = 0; k < local_grid_size[0]; k++)
    {
       
-      for (virtual_grid_id_x[k] -= x;
-           virtual_grid_id_x[k] >= local_grid_size[0];
-           virtual_grid_id_x[k] -= local_grid_size[0])
-      { }
+      virtual_grid_id_x[k] -= x;
+      if (virtual_grid_id_x[k] >= local_grid_size[0])
+      {
+         for (;virtual_grid_id_x[k] >= local_grid_size[0];
+               virtual_grid_id_x[k] -= local_grid_size[0]) { /* NA */}
+
+         for (int y_dir = 0; y_dir < local_grid_size[1]; y_dir++)
+         {
+            for (int z_dir = 0; z_dir < local_grid_size[2]; z_dir++)
+            {
+
+               // shift the local map position
+               Map *this_map = access_map( k,
+                                           y_dir,
+                                           z_dir);
+
+               this_map->move( -local_grid_size[0], 0, 0);
+            }
+         }
+
+      }
 
       if (virtual_grid_id_x[k] < 0)
       {
          for (;virtual_grid_id_x[k] < 0; virtual_grid_id_x[k] += local_grid_size[0]) { /* NA */}
 
-         for (int y_dir = 0; y_dir < local_grid_size[0]; y_dir++)
+         for (int y_dir = 0; y_dir < local_grid_size[1]; y_dir++)
          {
-            for (int z_dir = 0; z_dir < local_grid_size[0]; z_dir++)
+            for (int z_dir = 0; z_dir < local_grid_size[2]; z_dir++)
             {
 
                // shift the local map position
@@ -290,27 +307,98 @@ void Map_grid::shift( int x, int y, int z)
       }
 
    }
+
    for (int k = 0; k < local_grid_size[1]; k++)
    {
-      for (virtual_grid_id_y[k] += y;
-           virtual_grid_id_y[k] >= local_grid_size[1];
-           virtual_grid_id_y[k] -= local_grid_size[1])
-      { }
-      for (;virtual_grid_id_y[k] < 0;
-            virtual_grid_id_y[k] += local_grid_size[1])
-      { }
-   }
-   for (int k = 0; k < local_grid_size[2]; k++)
-   {
-      for (virtual_grid_id_z[k] += z;
-           virtual_grid_id_z[k] >= local_grid_size[2];
-           virtual_grid_id_z[k] -= local_grid_size[2])
-      { }
-      for (;virtual_grid_id_z[k] < 0;
-            virtual_grid_id_z[k] += local_grid_size[2])
-      { }
+      virtual_grid_id_y[k] -= y;
+      if (virtual_grid_id_y[k] >= local_grid_size[1])
+      {
+         for (;virtual_grid_id_y[k] >= local_grid_size[1];
+               virtual_grid_id_y[k] -= local_grid_size[1]) { /* NA */}
+
+         for (int x_dir = 0; x_dir < local_grid_size[0]; x_dir++)
+         {
+            for (int z_dir = 0; z_dir < local_grid_size[2]; z_dir++)
+            {
+
+               // shift the local map position
+               Map *this_map = access_map( x_dir,
+                                           k,
+                                           z_dir);
+
+               this_map->move( 0, -local_grid_size[1], 0);
+            }
+         }
+
+      }
+
+      if (virtual_grid_id_y[k] < 0)
+      {
+         for (;virtual_grid_id_y[k] < 0; virtual_grid_id_y[k] += local_grid_size[1]) { /* NA */}
+
+         for (int x_dir = 0; x_dir < local_grid_size[0]; x_dir++)
+         {
+            for (int z_dir = 0; z_dir < local_grid_size[2]; z_dir++)
+            {
+
+               // shift the local map position
+               Map *this_map = access_map( x_dir,
+                                           k,
+                                           z_dir);
+
+               this_map->move( 0, local_grid_size[1], 0);
+            }
+         }
+      }
+
+
    }
 
+   for (int k = 0; k < local_grid_size[2]; k++)
+   {
+      virtual_grid_id_z[k] -= z;
+      if (virtual_grid_id_z[k] >= local_grid_size[2])
+      {
+         for (;virtual_grid_id_z[k] >= local_grid_size[2];
+               virtual_grid_id_z[k] -= local_grid_size[2]) { /* NA */}
+
+         for (int x_dir = 0; x_dir < local_grid_size[0]; x_dir++)
+         {
+            for (int y_dir = 0; y_dir < local_grid_size[1]; y_dir++)
+            {
+
+               // shift the local map position
+               Map *this_map = access_map( x_dir,
+                                           y_dir,
+                                           k);
+
+               this_map->move( 0, 0, -local_grid_size[2]);
+            }
+         }
+
+      }
+
+      if (virtual_grid_id_z[k] < 0)
+      {
+         for (;virtual_grid_id_z[k] < 0; virtual_grid_id_z[k] += local_grid_size[2]) { /* NA */}
+
+         for (int x_dir = 0; x_dir < local_grid_size[0]; x_dir++)
+         {
+            for (int y_dir = 0; y_dir < local_grid_size[1]; y_dir++)
+            {
+
+               // shift the local map position
+               Map *this_map = access_map( x_dir,
+                                           y_dir,
+                                           k);
+
+               this_map->move( 0, 0, local_grid_size[2]);
+            }
+         }
+      }
+
+
+   }
 }
 
 int Map_grid::get_virtual_grid_id(int ind)
