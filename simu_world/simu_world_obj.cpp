@@ -13,6 +13,8 @@ Simu_world_obj::Simu_world_obj(void)
    semaphore        = new Semaphore(4);
    mode             = 1;
 
+//   map_grid.shift(6, 0, 0);
+
 }
 
 void Simu_world_obj::keyboardDown( const char key)
@@ -115,8 +117,6 @@ void Simu_world_obj::idle( void)
    */
    time_manager->wait_for_time();
 
-std::cout << "time step = " << time_manager->get_time_step() << std::endl;
-
    user.update( time_manager->get_time_step() );
 
    int window_center_x  = glutGet(GLUT_WINDOW_WIDTH)  / 2;
@@ -156,6 +156,23 @@ std::cout << "time step = " << time_manager->get_time_step() << std::endl;
          user.set_direction( direction);
       
          glutWarpPointer( window_center_x, window_center_y);
+
+         /*
+         ** Update the map grid if the user position has exceeded the threshold
+         */
+         float user_position[3];
+         int   virtual_grid[3];
+
+         user.get_position( user_position);
+         map_grid.get_virtual_grid( user_position,
+                                    virtual_grid);
+
+         if (virtual_grid[0] > 6)
+         {
+            map_grid.shift(1, 0, 0);
+         }
+
+std::cout << "virtual grid position = " << virtual_grid[0] << ", " << virtual_grid[1] << ", " << virtual_grid[2] << std::endl;
       }
 
       /*

@@ -20,6 +20,8 @@ class Map
       void change_position(float *position_in);
       unsigned int get_dimensions(void);
       void display_info( void);
+      bool position_in_map( float *poisition_in);
+      void move( int x, int y, int z);
 
    private:
 
@@ -51,6 +53,8 @@ class Map_grid
 
       int get_virtual_grid_id(int ind);
       int get_grid_size(int ind);
+      void get_virtual_grid( float *position,
+                             int   *virtual_grid_out);
 
    private:
       int local_grid_size[3];
