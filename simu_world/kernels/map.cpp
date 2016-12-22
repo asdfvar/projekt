@@ -238,9 +238,19 @@ Map *Map_grid::access_map(int v_id_x,
                           int v_id_y,
                           int v_id_z)
 {
-   unsigned int index =  virtual_grid_id_x[v_id_x] + 
-                         virtual_grid_id_y[v_id_y] * local_grid_size[0] +
-                         virtual_grid_id_z[v_id_z] * local_grid_size[0] * local_grid_size[1];
+   if (v_id_x < 0 || v_id_x >= local_grid_size[0] ||
+       v_id_y < 0 || v_id_y >= local_grid_size[1] ||
+       v_id_z < 0 || v_id_z >= local_grid_size[2])
+   {
+      std::cout << "select index of " << v_id_x << ", "  << v_id_x << ", "  << v_id_x <<
+                   " out of bounds: " << local_grid_size[0] << ", " <<
+                                         local_grid_size[1] << ", " <<
+                                         local_grid_size[2] << std::endl;
+   }
+
+   unsigned int index =  v_id_x + 
+                         v_id_y * local_grid_size[0] +
+                         v_id_z * local_grid_size[0] * local_grid_size[1];
 
    return maps.at( index );
 }
@@ -255,36 +265,24 @@ void Map_grid::shift( int x, int y, int z)
    for (int k = 0; k < local_grid_size[0]; k++)
    {
       
-      for (virtual_grid_id_x[k] += x;
+      for (virtual_grid_id_x[k] -= x;
            virtual_grid_id_x[k] >= local_grid_size[0];
            virtual_grid_id_x[k] -= local_grid_size[0])
+      { }
+
+      if (virtual_grid_id_x[k] < 0)
       {
+         for (;virtual_grid_id_x[k] < 0; virtual_grid_id_x[k] += local_grid_size[0]) { /* NA */}
+
          for (int y_dir = 0; y_dir < local_grid_size[0]; y_dir++)
          {
             for (int z_dir = 0; z_dir < local_grid_size[0]; z_dir++)
             {
 
                // shift the local map position
-               Map *this_map = access_map( virtual_grid_id_x[k],
-                                           virtual_grid_id_y[y_dir],
-                                           virtual_grid_id_z[z_dir]);
-
-               this_map->move( -local_grid_size[0], 0, 0);
-            }
-         }
-      }
-      for (;virtual_grid_id_x[k] < 0;
-            virtual_grid_id_x[k] += local_grid_size[0])
-      {
-         for (int y_dir = 0; y_dir < local_grid_size[0]; y_dir++)
-         {
-            for (int z_dir = 0; z_dir < local_grid_size[0]; z_dir++)
-            {
-
-               // shift the local map position
-               Map *this_map = access_map( virtual_grid_id_x[k],
-                                           virtual_grid_id_y[y_dir],
-                                           virtual_grid_id_z[z_dir]);
+               Map *this_map = access_map( k,
+                                           y_dir,
+                                           z_dir);
 
                this_map->move( local_grid_size[0], 0, 0);
             }
@@ -339,9 +337,9 @@ void Map_grid::get_virtual_grid( float *position,
          for (int z_dir = 0; z_dir < local_grid_size[0]; z_dir++)
          {
 
-            Map *this_map = access_map( virtual_grid_id_x[x_dir],
-                                        virtual_grid_id_y[y_dir],
-                                        virtual_grid_id_z[z_dir]);
+            Map *this_map = access_map( x_dir,
+                                        y_dir,
+                                        z_dir);
 
             if (this_map->position_in_map( position))
             {
