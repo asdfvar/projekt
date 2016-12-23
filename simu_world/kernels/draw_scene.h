@@ -7,7 +7,6 @@
 
 void draw_scene( User                  *user,
                  ogl::Opengl_interface *opengl_interface,
-                 Map_grid              *map_grid,
-                 Map                   *map);
+                 Map_grid              *map_grid);
 
 #endif

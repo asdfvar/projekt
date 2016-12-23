@@ -14,11 +14,11 @@
 */
 void draw_scene( User                  *user,
                  ogl::Opengl_interface *opengl_interface,
-                 Map_grid              *map_grid,
-                 Map                   *map)
+                 Map_grid              *map_grid)
 {
 
    float block_position[3];
+   Map *map;
 
    for (int grid_x = 0; grid_x < map_grid->get_grid_size(0); grid_x++)
    {

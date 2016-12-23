@@ -9,11 +9,8 @@ Simu_world_obj::Simu_world_obj(void)
    time_manager     = new Time_manager( 1.0 / 120.0 );
    int map_dim[3]   = { 11, 11, 11 };
    float map_pos[3] = { 0.0f, 0.0f, 0.0f };
-   map              = new Map( 0, map_dim, map_pos );
    semaphore        = new Semaphore(4);
    mode             = 1;
-
-//   map_grid.shift(6, 0, 0);
 
 }
 
@@ -105,7 +102,6 @@ void Simu_world_obj::mousePassive( int x, int y)
 Simu_world_obj::~Simu_world_obj(void)
 {
    delete time_manager;
-   delete map;
    delete semaphore;
 }
 
@@ -161,39 +157,10 @@ void Simu_world_obj::idle( void)
          ** Update the map grid if the user position has exceeded the threshold
          */
          float user_position[3];
-         int   virtual_grid[3];
 
          user.get_position( user_position);
-         map_grid.get_virtual_grid( user_position,
-                                    virtual_grid);
+         map_grid.update( user_position);
 
-         // TODO: get_virtual_center
-         if (virtual_grid[0] > 6)
-         {
-            map_grid.shift(1, 0, 0);
-         }
-         if (virtual_grid[0] < 6)
-         {
-            map_grid.shift(-1, 0, 0);
-         }
-         if (virtual_grid[1] > 6)
-         {
-            map_grid.shift(0, 1, 0);
-         }
-         if (virtual_grid[1] < 6)
-         {
-            map_grid.shift(0, -1, 0);
-         }
-         if (virtual_grid[2] > 6)
-         {
-            map_grid.shift(0, 0, 1);
-         }
-         if (virtual_grid[2] < 6)
-         {
-            map_grid.shift(0, 0, -1);
-         }
-
-std::cout << "virtual grid position = " << virtual_grid[0] << ", " << virtual_grid[1] << ", " << virtual_grid[2] << std::endl;
       }
 
       /*
@@ -229,7 +196,6 @@ void Simu_world_obj::display(void)
 
    draw_scene( &user,
                &opengl_interface,
-               &map_grid,
-                map);
+               &map_grid);
 
 }

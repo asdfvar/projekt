@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <iostream>
 
 /*
 ** class name: Map
@@ -45,18 +44,17 @@ class Map_grid
       Map_grid(void);
       ~Map_grid(void);
 
-      void shift( int x, int y, int z);
+      void update( float *position);
 
       Map *access_map(int v_id_x,
                       int v_id_y,
                       int v_id_z);
 
-      int get_virtual_grid_id(int ind);
       int get_grid_size(int ind);
-      void get_virtual_grid( float *position,
-                             int   *virtual_grid_out);
 
    private:
+      void shift( int x, int y, int z);
+
       int local_grid_size[3];
 
       int *virtual_grid_id_x,
