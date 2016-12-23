@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include "opengl_interface.h"
+#include "user.h"
 
 /*
 ** class name: Map
@@ -45,6 +47,8 @@ class Map_grid
       ~Map_grid(void);
 
       void update( float *position);
+      void render_map( ogl::Opengl_interface *oglint,
+                       User *user);
 
       Map *access_map(int v_id_x,
                       int v_id_y,

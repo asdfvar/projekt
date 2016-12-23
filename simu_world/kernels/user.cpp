@@ -1,6 +1,6 @@
-#include <cmath>
 #include "user.h"
 #include "linalg.h"
+#include <cmath>
 
 #include <GL/glut.h>
 #include <GL/glu.h>

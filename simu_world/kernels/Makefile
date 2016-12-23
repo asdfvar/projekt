@@ -5,7 +5,8 @@ CL    = ar rcs
 FLAGS = -O3 -Wall -lGL -lGLU -lglut
 INC   = -I$(BASE)/kernels/
 
-OBJ = map.o user.o       \
+OBJ = map.o              \
+      user.o             \
       draw_scene.o       \
       point_conversion.o \
       draw_block.o       \

@@ -1,6 +1,7 @@
 #include "map.h"
 #include <iostream>
 #include <cstdlib>
+#include "draw_block.h"
 
 /*
 ** constructor name: Map
@@ -285,6 +286,35 @@ void Map_grid::update( float *position)
       shift(0, 0, -1);
    }
 
+}
+
+void Map_grid::render_map( ogl::Opengl_interface *opengl_interface,
+                           User *user)
+{
+   float block_position[3];
+   Map *map;
+
+   for (int grid_x = 0; grid_x < local_grid_size[0]; grid_x++)
+   {
+      for (int grid_y = 0; grid_y < local_grid_size[1]; grid_y++)
+      {
+         for (int grid_z = 0; grid_z < local_grid_size[2]; grid_z++)
+         {
+            map = access_map( grid_x, grid_y, grid_z);
+
+            // iterate through all the blocks
+            for (unsigned int block_ind = 0; block_ind < map->get_dimensions(); block_ind++)
+            {
+
+               if (!map->get_position( block_position, block_ind)) continue;
+
+               draw_block( block_position,
+                           opengl_interface,
+                           user);
+            }
+         }
+      }
+   }
 }
 
 /*

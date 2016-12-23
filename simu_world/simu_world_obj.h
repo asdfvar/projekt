@@ -7,6 +7,7 @@
 
 #include "time_manager.h"
 #include "user.h"
+#include "map.h"
 #include "semaphore.h"
 #include "menu.h"
 #include "opengl_interface.h"

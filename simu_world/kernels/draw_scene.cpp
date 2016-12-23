@@ -17,30 +17,7 @@ void draw_scene( User                  *user,
                  Map_grid              *map_grid)
 {
 
-   float block_position[3];
-   Map *map;
-
-   for (int grid_x = 0; grid_x < map_grid->get_grid_size(0); grid_x++)
-   {
-      for (int grid_y = 0; grid_y < map_grid->get_grid_size(1); grid_y++)
-      {
-         for (int grid_z = 0; grid_z < map_grid->get_grid_size(2); grid_z++)
-         {
-            map = map_grid->access_map( grid_x, grid_y, grid_z);
-
-            // iterate through all the blocks
-            for (unsigned int block_ind = 0; block_ind < map->get_dimensions(); block_ind++)
-            {
-
-               if (!map->get_position( block_position, block_ind)) continue;
-
-               draw_block( block_position,
-                           opengl_interface,
-                           user);
-         }
-      }
-   }
-   }
+   map_grid->render_map( opengl_interface, user);
 
    hud::display();
 
