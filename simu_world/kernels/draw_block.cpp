@@ -12,9 +12,8 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
-void draw_block( float                  block_position[3],
-                 ogl::Opengl_interface *opengl_interface,
-                 User                  *user)
+void draw_block( float  block_position[3],
+                 User  *user)
 {
 
    float user_direction[3];
@@ -245,12 +244,12 @@ void draw_block( float                  block_position[3],
 
         float color[3] = { 1.0f, 1.0f, 1.0f };
 
-        opengl_interface->draw_polygon( view_x,
-                                        view_y,
-                                        output_point_distance,
-                                        color,
-                                        brightness,
-                                        4);
+        ogl::draw_polygon( view_x,
+                           view_y,
+                           output_point_distance,
+                           color,
+                           brightness,
+                           4);
       }
 
    } // for (int face = 0; face < 6; face++)

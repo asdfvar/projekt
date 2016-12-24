@@ -288,8 +288,7 @@ void Map_grid::update( float *position)
 
 }
 
-void Map_grid::render_map( ogl::Opengl_interface *opengl_interface,
-                           User *user)
+void Map_grid::render_map( User *user)
 {
    float block_position[3];
    Map *map;
@@ -309,7 +308,6 @@ void Map_grid::render_map( ogl::Opengl_interface *opengl_interface,
                if (!map->get_position( block_position, block_ind)) continue;
 
                draw_block( block_position,
-                           opengl_interface,
                            user);
             }
          }

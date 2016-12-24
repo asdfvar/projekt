@@ -7,23 +7,12 @@
 
 namespace ogl
 {
-  class Opengl_interface
-  {
-     public:
-
-        Opengl_interface( void );
-
-        void draw_polygon( float *vertices_x,
-                           float *vertices_y,
-                           float *distances,
-                           float *color,
-                           float  brightness,
-                           int    num_vertices);
-
-     private:
-
-        float max_view_distance;
-  };
+   void draw_polygon( float *vertices_x,
+                      float *vertices_y,
+                      float *distances,
+                      float *color,
+                      float  brightness,
+                      int    num_vertices);
 
 }
 

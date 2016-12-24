@@ -13,11 +13,10 @@
 ** to the user.
 */
 void draw_scene( User                  *user,
-                 ogl::Opengl_interface *opengl_interface,
                  Map_grid              *map_grid)
 {
 
-   map_grid->render_map( opengl_interface, user);
+   map_grid->render_map( user);
 
    hud::display();
 

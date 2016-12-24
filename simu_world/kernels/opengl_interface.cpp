@@ -1,17 +1,14 @@
 #include "opengl_interface.h"
 #include <iostream>
 
-ogl::Opengl_interface::Opengl_interface( void )
-{
-   max_view_distance = 100.0f;
-}
+static float max_view_distance = 100.0f;
 
-void ogl::Opengl_interface::draw_polygon( float *vertices_x,
-                                          float *vertices_y,
-                                          float *distances,
-                                          float *color,
-                                          float  brightness,
-                                          int    num_vertices)
+void ogl::draw_polygon( float *vertices_x,
+                        float *vertices_y,
+                        float *distances,
+                        float *color,
+                        float  brightness,
+                        int    num_vertices)
 {
 
    glBegin(GL_POLYGON);

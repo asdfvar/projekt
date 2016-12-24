@@ -195,7 +195,6 @@ void Simu_world_obj::display(void)
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    draw_scene( &user,
-               &opengl_interface,
                &map_grid);
 
 }
