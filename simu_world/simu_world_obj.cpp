@@ -122,6 +122,9 @@ void Simu_world_obj::idle( void)
 
    if (first_frame)
    {
+
+      ogl::opengl_initial_settings();
+
       glutWarpPointer( window_center[0], window_center[1]);
       mousePassivePosition[0] = window_center[0];
       mousePassivePosition[1] = window_center[1];
@@ -174,25 +177,7 @@ void Simu_world_obj::idle( void)
 void Simu_world_obj::display(void)
 {
 
-   float mat_specular[4]  = { 1.0f, 1.0f, 1.0f, 1.0f };
-   float mat_shininess[1] = { 50.0f };
-   float light_ambient[]  = { 0.2, 0.2, 0.2, 1.0 };
-   float light_diffuse[]  = { 0.8, 0.8, 0.8, 1.0 };
-   float light_specular[] = { 0.8, 0.8, 0.8, 1.0 };
-   float light_position[] = { 0.0, 0.0, 1.0, 0.0 };
-   
-   glLightfv( GL_LIGHT0, GL_AMBIENT, light_ambient);
-   glLightfv( GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-   glLightfv( GL_LIGHT0, GL_SPECULAR, light_specular);
-   glLightfv( GL_LIGHT0, GL_POSITION, light_position);
-   
-   glEnable( GL_LIGHT0         );
-   glEnable( GL_LESS           );
-   glEnable( GL_DEPTH_TEST     );
-   glEnable( GL_LIGHTING       );
-   glEnable( GL_COLOR_MATERIAL );
-
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   ogl::opengl_clear();
 
    draw_scene( &user,
                &map_grid);

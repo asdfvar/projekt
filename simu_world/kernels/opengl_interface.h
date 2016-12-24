@@ -7,6 +7,11 @@
 
 namespace ogl
 {
+
+   void opengl_initial_settings ( void );
+
+   void opengl_clear ( void );
+
    void draw_polygon( float *vertices_x,
                       float *vertices_y,
                       float *distances,
