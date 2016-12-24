@@ -4,71 +4,56 @@
 #include "simu_world.h"
 #include "simu_world_obj.h"
 
-/*
-** Define the interface with openGL
-*/
+/* Define the interface with openGL */
 Simu_world_obj simu_world_obj;
 
-/*********************
- * Display to screen *
- *********************/
-
+/***********************
+ ** Display to screen **
+ ***********************/
 void display(void)
 {
-
-  glClear(GL_COLOR_BUFFER_BIT);
-
   simu_world_obj.display();
-
-  glutSwapBuffers();
-
 }
 
-/*******************
- * Idle processing *
- *******************/
-
-void idle(void) {
-
-   simu_world_obj.idle();
-
-   glutPostRedisplay();
-
-}
-
-/***************
- * Mouse click *
- ***************/
-
-void mouse(
-        int button,
-        int state,
-        int x,
-        int y)
+/*********************
+ ** Idle processing **
+ *********************/
+void idle(void)
 {
+   simu_world_obj.idle();
+}
 
-/*
-   button
-      GLUT_LEFT_BUTTON
-      GLUT_MIDDLE_BUTTON
-      GLUT_RIGHT_BUTTON
-   state
-      GLUT_UP
-      GLUT_DOWN
+/*****************
+*** Mouse click **
+******************
+**   button
+**      GLUT_LEFT_BUTTON
+**      GLUT_MIDDLE_BUTTON
+**      GLUT_RIGHT_BUTTON
+**   state
+**      GLUT_UP
+**      GLUT_DOWN
 */
-
-//simu_world_obj.mouse(button, state, x, y);
-
+void mouse( int button,
+            int state,
+            int x,
+            int y)
+{
+// simu_world_obj.mouse(button, state, x, y);
 }
 
-void mouseMotion(int x, int y) {
-
-   //simu_world_obj.mouseMotion(x, y);
-
+/**************************
+ ** Active mouse control **
+ **************************/
+void mouseMotion(int x, int y)
+{
+   // simu_world_obj.mouseMotion(x, y);
 }
 
 
-/*
+/***************************
+*** Passive mouse control **
+****************************
 ** GLUT_WINDOW_X        X location in pixels (relative to the screen origin) of the current window
 ** GLUT_WINDOW_Y        Y location in pixels (relative to the screen origin) of the current window
 ** GLUT_WINDOW_WIDTH    Width in pixels of the current window
@@ -76,19 +61,22 @@ void mouseMotion(int x, int y) {
 */
 void mousePassive(int x, int y)
 {
-
    simu_world_obj.mousePassive( x, y);
-   glutPostRedisplay();
 }
 
+/*****************
+ ** Keyboard up **
+ *****************/
 void keyboardUp(unsigned char key, int x, int y) {
 
    simu_world_obj.keyboardUp( key);
 }
 
+/*******************
+ ** Keyboard down **
+ *******************/
 void keyboardDown(unsigned char key, int x, int y)
 {
-
    switch (key)
    {
       case 'q':
@@ -101,10 +89,9 @@ void keyboardDown(unsigned char key, int x, int y)
 }
 
 
-/********
- * Main *
- ********/
-
+/**********
+ ** Main **
+ **********/
 void simu_world( int argc, char** argv )
 {
 

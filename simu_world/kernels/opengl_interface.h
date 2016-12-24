@@ -12,6 +12,10 @@ namespace ogl
 
    void opengl_clear ( void );
 
+   void swap_buffers ( void );
+
+   void redisplay ( void );
+
    void draw_polygon( float *vertices_x,
                       float *vertices_y,
                       float *distances,

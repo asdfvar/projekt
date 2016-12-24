@@ -9,7 +9,7 @@ void change_direction( float *direction,
          int x_offset = mousePassivePosition[0] - window_center[0];
          int y_offset = window_center[1] - mousePassivePosition[1];
       
-         const float toggle = 0.003f;
+         const float toggle = 0.005f;
          float cos_x = cosf( -(float)x_offset * toggle);
          float sin_x = sinf( -(float)x_offset * toggle);
          float cos_y = cosf(  (float)y_offset * toggle);

@@ -31,6 +31,18 @@ void ogl::opengl_clear( void )
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+/* function name: swap_buffers */
+void ogl::swap_buffers( void )
+{
+   glutSwapBuffers();
+}
+
+/* function name: redisplay */
+void ogl::redisplay ( void )
+{
+   glutPostRedisplay();
+}
+
 /* function name: draw_polygon */
 void ogl::draw_polygon( float *vertices_x,
                         float *vertices_y,

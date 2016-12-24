@@ -101,32 +101,32 @@ void User::update( float dt)
 
 void User::move_upward( void)
 {
-   up_speed = 8.0f;
+   up_speed = 10.0f;
 }
 
 void User::move_downward( void)
 {
-   down_speed = 8.0f;
+   down_speed = 10.0f;
 }
 
 void User::move_right( void)
 {
-   right_speed = 8.0f;
+   right_speed = 10.0f;
 }
 
 void User::move_left( void)
 {
-   left_speed = 8.0f;
+   left_speed = 10.0f;
 }
 
 void User::move_forward( void)
 {
-   forward_speed = 8.0f;
+   forward_speed = 10.0f;
 }
 
 void User::move_backward( void)
 {
-   forward_speed = -8.0f;
+   forward_speed = -10.0f;
 }
 
 void User::stop_forward( void)

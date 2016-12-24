@@ -172,6 +172,10 @@ void Simu_world_obj::idle( void)
       semaphore->decrement_task(1);
    }
 
+   /*
+   ** Tell openGL to re-display
+   */
+   ogl::redisplay();
 }
 
 void Simu_world_obj::display(void)
@@ -181,5 +185,7 @@ void Simu_world_obj::display(void)
 
    draw_scene( &user,
                &map_grid);
+
+   ogl::swap_buffers();
 
 }
