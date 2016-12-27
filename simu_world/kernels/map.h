@@ -7,28 +7,28 @@
 #include "user.h"
 
 /*
-** class name: Map
+** class name: Chunk
 */
-class Map
+class Chunk
 {
    public:
-      Map( void);
-      Map( unsigned int id_in, int *map_dim_in, float *position_in);
-      ~Map( void );
+      Chunk( void);
+      Chunk( unsigned int id_in, int *chunk_dim_in, float *position_in);
+      ~Chunk( void );
 
       // Functions
       int  get_position(float *position_out, int block_index);
       void change_position(float *position_in);
       unsigned int get_dimensions(void);
       void display_info( void);
-      bool position_in_map( float *poisition_in);
+      bool position_in_chunk( float *poisition_in);
       void move( int x, int y, int z);
 
    private:
 
       // Parameters:
       int         *blocks;
-      unsigned int map_dim[3];
+      unsigned int chunk_dim[3];
       unsigned int id;
       float        position[3];
 
@@ -47,9 +47,9 @@ class Map_grid
       ~Map_grid(void);
 
       void update( float *position);
-      void render_map( User *user);
+      void render_chunk( User *user);
 
-      Map *access_map(int v_id_x,
+      Chunk *access_chunk(int v_id_x,
                       int v_id_y,
                       int v_id_z);
 
@@ -64,7 +64,7 @@ class Map_grid
           *virtual_grid_id_y,
           *virtual_grid_id_z;
 
-      std::vector<Map*> maps;
+      std::vector<Chunk*> chunks;
 
 };
 

@@ -7,8 +7,8 @@ Simu_world_obj::Simu_world_obj(void)
 {
    first_frame      = true;
    time_manager     = new Time_manager( 1.0 / 120.0 );
-   int map_dim[3]   = { 11, 11, 11 };
-   float map_pos[3] = { 0.0f, 0.0f, 0.0f };
+   int chunk_dim[3]   = { 11, 11, 11 };
+   float chunk_pos[3] = { 0.0f, 0.0f, 0.0f };
    semaphore        = new Semaphore(4);
    mode             = 1;
 
@@ -157,7 +157,7 @@ void Simu_world_obj::idle( void)
          glutWarpPointer( window_center_x, window_center_y);
 
          /*
-         ** Update the map grid if the user position has exceeded the threshold
+         ** Update the chunk grid if the user position has exceeded the threshold
          */
          float user_position[3];
 

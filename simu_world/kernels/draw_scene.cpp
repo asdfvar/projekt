@@ -16,7 +16,7 @@ void draw_scene( User                  *user,
                  Map_grid              *map_grid)
 {
 
-   map_grid->render_map( user);
+   map_grid->render_chunk( user);
 
    hud::display();
 

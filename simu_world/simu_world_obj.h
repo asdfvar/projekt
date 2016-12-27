@@ -65,7 +65,6 @@ class Simu_world_obj
       Semaphore             *semaphore;
       Menu                  *current_menu;
       Time_manager          *time_manager;
-      Map                   *map;
       Map_grid               map_grid;
       User                   user;
 
