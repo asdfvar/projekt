@@ -6,6 +6,7 @@ FLAGS = -O3 -Wall -lGL -lGLU -lglut
 INC   = -I$(BASE)/kernels/
 
 OBJ = map.o              \
+      chunk.o            \
       user.o             \
       draw_scene.o       \
       point_conversion.o \
@@ -24,6 +25,9 @@ clean:
 	rm $(OBJ) $(LIBEXE)
 
 map.o: map.cpp
+	$(CPPC) $^ -c
+
+chunk.o: chunk.cpp
 	$(CPPC) $^ -c
 
 user.o: user.cpp
