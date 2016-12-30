@@ -28,17 +28,6 @@ Chunk::Chunk( unsigned int id_in, int *chunk_dim_in, float *position_in)
 }
 
 /*
-** function name: change_position from: Chunk 
-** TODO: obsolete
-*/
-void Chunk::change_position(float *position_in)
-{
-   position[0] = position_in[0];
-   position[1] = position_in[1];
-   position[2] = position_in[2];
-}
-
-/*
 ** function name: create_random from: Chunk 
 */
 void Chunk::create_random( void)
@@ -169,9 +158,9 @@ int Chunk::get_position(float *position_out,
 }
 
 /*
-** constructor name: Map_grid
+** constructor name: Map
 */
-Map_grid::Map_grid(void)
+Map::Map(void)
 {
 
    local_grid_size[0] = 13;
@@ -221,9 +210,9 @@ Map_grid::Map_grid(void)
 }
 
 /*
-** destructor name: ~Map_grid
+** destructor name: ~Map
 */
-Map_grid::~Map_grid(void)
+Map::~Map(void)
 {
    std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
    chunks.erase (chunks.begin(), chunks.begin() + total_grid_size);
@@ -233,7 +222,7 @@ Map_grid::~Map_grid(void)
    delete[] virtual_grid_id_z;
 }
 
-void Map_grid::update( float *position)
+void Map::update( float *position)
 {
    int virtual_grid[3] = { -1, -1, -1 };
 
@@ -290,7 +279,7 @@ void Map_grid::update( float *position)
 
 }
 
-void Map_grid::render_chunk( User *user)
+void Map::render_chunk( User *user)
 {
    float block_position[3];
    Chunk *chunk;
@@ -318,10 +307,10 @@ void Map_grid::render_chunk( User *user)
 }
 
 /*
-** function name: access_chunk from: Map_grid
+** function name: access_chunk from: Map
 ** Return pointer to the specified chunk block
 */
-Chunk *Map_grid::access_chunk(int p_id_x,
+Chunk *Map::access_chunk(int p_id_x,
                               int p_id_y,
                               int p_id_z)
 {
@@ -343,10 +332,10 @@ Chunk *Map_grid::access_chunk(int p_id_x,
 }
 
 /*
-** function name: shift from: Map_grid
+** function name: shift from: Map
 ** Circular shift the cube in the specified direction
 */
-void Map_grid::shift( int x, int y, int z)
+void Map::shift( int x, int y, int z)
 {
 
    for (int k = 0; k < local_grid_size[0]; k++)
@@ -488,7 +477,7 @@ void Map_grid::shift( int x, int y, int z)
    }
 }
 
-int Map_grid::get_grid_size(int ind)
+int Map::get_grid_size(int ind)
 {
    return local_grid_size[ind];
 }

@@ -162,7 +162,7 @@ void Simu_world_obj::idle( void)
          float user_position[3];
 
          user.get_position( user_position);
-         map_grid.update( user_position);
+         map.update( user_position);
 
       }
 
@@ -184,7 +184,7 @@ void Simu_world_obj::display(void)
    ogl::opengl_clear();
 
    draw_scene( &user,
-               &map_grid);
+               &map);
 
    ogl::swap_buffers();
 

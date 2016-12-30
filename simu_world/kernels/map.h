@@ -18,7 +18,7 @@ class Chunk
 
       // Functions
       int  get_position(float *position_out, int block_index);
-      void change_position(float *position_in);
+      void change(float *position_in);
       unsigned int get_dimensions(void);
       void display_info( void);
       bool position_in_chunk( float *poisition_in);
@@ -38,13 +38,13 @@ class Chunk
 };
 
 /*
-** class name: Map_grid
+** class name: Map
 */
-class Map_grid
+class Map
 {
    public:
-      Map_grid(void);
-      ~Map_grid(void);
+      Map(void);
+     ~Map(void);
 
       void update( float *position);
       void render_chunk( User *user);

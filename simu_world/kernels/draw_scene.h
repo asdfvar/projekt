@@ -5,7 +5,7 @@
 #include "map.h"
 #include "opengl_interface.h"
 
-void draw_scene( User                  *user,
-                 Map_grid              *map_grid);
+void draw_scene( User *user,
+                 Map  *map);
 
 #endif
