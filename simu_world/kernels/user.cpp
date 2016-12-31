@@ -1,10 +1,43 @@
 #include "user.h"
 #include "linalg.h"
+#include "fileio.h"
 #include <cmath>
 
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+
+User::User( void)
+{
+   /*
+   ** User positional attributes
+   */
+   position[0] = 0.0f;
+   position[1] = 0.0f;
+   position[2] = 0.0f;
+
+   direction[0] = 1.0f;
+   direction[1] = 0.0f;
+   direction[2] = 0.0f;
+
+   forward_speed = 0.0f;
+   right_speed   = 0.0f;
+   left_speed    = 0.0f;
+   up_speed      = 0.0f;
+   down_speed    = 0.0f;
+
+   /*
+   ** User view-window attributes
+   */
+   window_distance = 1.0f;
+   window_width    = 1.0f;
+   window_height   = 1.0f;
+
+   int data[8] = {3, 1, 4, 1, 5, 9, 2, 6};
+   fio::write( "test.bin", 0, (char*)data, 4*8);
+   fio::read(  "test.bin" );
+
+}
 
 void User::get_direction( float *direction_out)
 {
@@ -44,34 +77,6 @@ float User::get_window_distance( void)
 float User::get_window_width( void)
 {
    return window_width;
-}
-
-User::User( void)
-{
-   /*
-   ** User positional attributes
-   */
-   position[0] = 0.0f;
-   position[1] = 0.0f;
-   position[2] = 0.0f;
-
-   direction[0] = 1.0f;
-   direction[1] = 0.0f;
-   direction[2] = 0.0f;
-
-   forward_speed = 0.0f;
-   right_speed   = 0.0f;
-   left_speed    = 0.0f;
-   up_speed      = 0.0f;
-   down_speed    = 0.0f;
-
-   /*
-   ** User view-window attributes
-   */
-   window_distance = 1.0f;
-   window_width    = 1.0f;
-   window_height   = 1.0f;
-
 }
 
 void User::update( float dt)

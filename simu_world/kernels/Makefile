@@ -14,6 +14,7 @@ OBJ = map.o              \
       hud.o              \
       change_direction.o \
       opengl_interface.o \
+      fileio.o           \
 #
 
 LIBEXE = libsimu.a
@@ -49,4 +50,7 @@ change_direction.o: change_direction.cpp
 	$(CPPC) $(INC) $^ -c
 
 opengl_interface.o: opengl_interface.cpp
+	$(CPPC) $(INC) $^ -c
+
+fileio.o: fileio.cpp
 	$(CPPC) $(INC) $^ -c
