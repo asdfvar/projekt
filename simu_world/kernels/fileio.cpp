@@ -24,22 +24,18 @@ namespace fio
     OF.write( (char*)data, N * sizeof(*data) );
     OF.close();
 
-   std::cout << "size of char = " << sizeof(char) << " size of int = " << sizeof(int) << std::endl;;
+   std::cout << "size of char = " << sizeof(char) << " size of int = " << sizeof(int) << std::endl;
  }
 
- void read (const std::string         path,
-            int                       position,
-            void                     *buffer,
-            int                       N)
+ void read (const std::string  path,
+            int                position,
+            void              *buffer,
+            int                N)
  {
     std::ios_base::seekdir position_x;
     std::ifstream IS ( path.c_str(), std::ifstream::binary );
     IS.seekg( position );
     IS.read ((char*)buffer, N);
-
-    int *temp = (int*)buffer;
-
-    delete[] temp;
  }
 
  void read (const std::string path)
@@ -55,7 +51,7 @@ namespace fio
     IS.read ((char*)buffer, length);
 
     std::cout << "reading " << length << " bytes" << std::endl;
-    for (int k = 0; k < length; k++)
+    for (int k = 0; k < length/4; k++)
        std::cout << buffer[k];
     std::cout << std::endl;
 
