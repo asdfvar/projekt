@@ -9,6 +9,7 @@ OBJ = main.o             \
       simu_world_obj.o   \
       time_manager.o     \
       semaphore.o        \
+      io_manager.o       \
 #
 
 EXE = simu_world
@@ -33,4 +34,7 @@ time_manager.o: time_manager.cpp
 	$(CPPC) $(INC) $^ -c
 
 semaphore.o: semaphore.cpp
+	$(CPPC) $(INC) $^ -c
+
+io_manager.o: io_manager.cpp
 	$(CPPC) $(INC) $^ -c

@@ -1,11 +1,18 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include <pthread.h>
 #include "simu_world.h"
 #include "simu_world_obj.h"
+#include "io_manager.h"
 
 /* Define the interface with openGL */
 Simu_world_obj simu_world_obj;
+
+typedef struct ARGS
+{
+   Simu_world_obj *simu_world_obj;
+} ARGS;
 
 /***********************
  ** Display to screen **
@@ -95,6 +102,15 @@ void keyboardDown(unsigned char key, int x, int y)
 void simu_world( int argc, char** argv )
 {
 
+   ARGS args;
+   args.simu_world_obj = &simu_world_obj;
+   pthread_t IO_thread;
+
+   /*
+   ** Create the IO manager thread
+   */
+   pthread_create( &IO_thread, NULL, io_manager, (void*)&args );
+
    int windowsizex = 800;
    int windowsizey = 800;
 
@@ -113,5 +129,10 @@ void simu_world( int argc, char** argv )
    glutIdleFunc(          idle);
 
    glutMainLoop();
+
+   /*
+   ** wait for the IO manager thread to finish
+   */
+   pthread_join( IO_thread, NULL);
 
 }
