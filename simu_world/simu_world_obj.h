@@ -55,6 +55,8 @@ class Simu_world_obj
       */
       void mousePassive( int x, int y);
 
+      void update_map( void );
+
    private:
 
       bool first_frame;

@@ -23,6 +23,7 @@ class Chunk
       void display_info( void);
       bool position_in_chunk( float *poisition_in);
       void move( int x, int y, int z);
+      void update( void );
 
    private:
 
@@ -31,6 +32,7 @@ class Chunk
       unsigned int chunk_dim[3];
       unsigned int id;
       float        position[3];
+      bool         valid;
 
       // Functions:
       void create_random( void);

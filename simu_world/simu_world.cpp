@@ -5,14 +5,10 @@
 #include "simu_world.h"
 #include "simu_world_obj.h"
 #include "io_manager.h"
+#include "thread_args.h"
 
 /* Define the interface with openGL */
 Simu_world_obj simu_world_obj;
-
-typedef struct ARGS
-{
-   Simu_world_obj *simu_world_obj;
-} ARGS;
 
 /***********************
  ** Display to screen **

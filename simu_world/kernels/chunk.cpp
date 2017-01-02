@@ -24,7 +24,17 @@ Chunk::Chunk( unsigned int id_in, int *chunk_dim_in, float *position_in)
 
    for (int ind = 0; ind < 3; ind++) position[ind] = position_in[ind];
 
-   create_random();
+   valid = false;
+
+}
+
+void Chunk::update( void )
+{
+   if (!valid)
+   {
+      create_random();
+      valid = true;
+   }
 }
 
 /*
@@ -103,6 +113,8 @@ void Chunk::move( int x, int y, int z)
    position[0] += static_cast<float>(x) * chunk_dim[0];
    position[1] += static_cast<float>(y) * chunk_dim[1];
    position[2] += static_cast<float>(z) * chunk_dim[2];
+
+   valid = false;
 }
 
 /*

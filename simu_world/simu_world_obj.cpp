@@ -189,3 +189,8 @@ void Simu_world_obj::display(void)
    ogl::swap_buffers();
 
 }
+
+void Simu_world_obj::update_map()
+{
+   map.update();
+}

@@ -16,6 +16,7 @@ class Map
       Map(void);
      ~Map(void);
 
+      void update( void );
       void update( float *position);
       void render_chunk( User *user);
 
