@@ -69,6 +69,7 @@ Map::~Map(void)
 }
 
 /*
+** function name: update from: Map
 ** Update chunks from the IO thread
 */
 void Map::update( void )
@@ -91,6 +92,9 @@ void Map::update( void )
 
 }
 
+/*
+** function name: update from: Map
+*/
 void Map::update( float *position)
 {
    int virtual_grid[3] = { -1, -1, -1 };
@@ -145,9 +149,11 @@ void Map::update( float *position)
    {
       shift(0, 0, -1);
    }
-
 }
 
+/*
+** function name: render_chunk from: Map
+*/
 void Map::render_chunk( User *user)
 {
    float block_position[3];
@@ -206,7 +212,6 @@ Chunk *Map::access_chunk(int p_id_x,
 */
 void Map::shift( int x, int y, int z)
 {
-
    for (int k = 0; k < local_grid_size[0]; k++)
    {
       
@@ -342,10 +347,12 @@ void Map::shift( int x, int y, int z)
          }
       }
 
-
    }
 }
 
+/*
+** function name: get_grid_size from: Map
+*/
 int Map::get_grid_size(int ind)
 {
    return local_grid_size[ind];

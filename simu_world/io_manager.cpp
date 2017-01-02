@@ -2,6 +2,9 @@
 #include "thread_args.h"
 #include <iostream>
 
+/*
+** function name: io_manager
+*/
 void *io_manager( void *args_in )
 {
 

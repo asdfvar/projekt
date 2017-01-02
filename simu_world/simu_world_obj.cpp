@@ -3,6 +3,9 @@
 #include "change_direction.h"
 #include "opengl_interface.h"
 
+/*
+** function name: Simu_world_obj from: Simu_world_obj
+*/
 Simu_world_obj::Simu_world_obj(void)
 {
    first_frame      = true;
@@ -11,12 +14,13 @@ Simu_world_obj::Simu_world_obj(void)
    float chunk_pos[3] = { 0.0f, 0.0f, 0.0f };
    semaphore        = new Semaphore(4);
    mode             = 1;
-
 }
 
+/*
+** function name: keyboardDown from: Simu_world_obj
+*/
 void Simu_world_obj::keyboardDown( const char key)
 {
-
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
    int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
@@ -54,12 +58,13 @@ void Simu_world_obj::keyboardDown( const char key)
          user.move_right();
          break;
    }
-
 }
 
+/*
+** function name: keyboardUp from: Simu_world_obj
+*/
 void Simu_world_obj::keyboardUp( const char key)
 {
-
    switch (key)
    {
       case 'w':
@@ -78,9 +83,11 @@ void Simu_world_obj::keyboardUp( const char key)
          user.stop_up();
          user.stop_down();
    }
-
 }
 
+/*
+** function name: mousePassive from Simu_world_obj
+*/
 void Simu_world_obj::mousePassive( int x, int y)
 {
 
@@ -99,12 +106,18 @@ void Simu_world_obj::mousePassive( int x, int y)
 
 }
 
+/*
+** destructor name: ~Simu_world_obj
+*/
 Simu_world_obj::~Simu_world_obj(void)
 {
    delete time_manager;
    delete semaphore;
 }
 
+/*
+** function name: idle from: Simu_world_obj
+*/
 void Simu_world_obj::idle( void)
 {
 
@@ -122,7 +135,6 @@ void Simu_world_obj::idle( void)
 
    if (first_frame)
    {
-
       ogl::opengl_initial_settings();
 
       glutWarpPointer( window_center[0], window_center[1]);
@@ -178,18 +190,23 @@ void Simu_world_obj::idle( void)
    ogl::redisplay();
 }
 
+/*
+** function name: Simu_world_obj
+*/
 void Simu_world_obj::display(void)
 {
-
+   // clear this openGL buffer
    ogl::opengl_clear();
 
-   draw_scene( &user,
-               &map);
+   draw_scene( &user, &map);
 
+   // swap this buffer for the old one
    ogl::swap_buffers();
-
 }
 
+/*
+** function name: simu_world_obj
+*/
 void Simu_world_obj::update_map()
 {
    map.update();

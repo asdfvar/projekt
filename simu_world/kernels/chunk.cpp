@@ -25,9 +25,11 @@ Chunk::Chunk( unsigned int id_in, int *chunk_dim_in, float *position_in)
    for (int ind = 0; ind < 3; ind++) position[ind] = position_in[ind];
 
    valid = false;
-
 }
 
+/*
+** function name: update from: Chunk
+*/
 void Chunk::update( void )
 {
    if (!valid)
@@ -52,6 +54,9 @@ void Chunk::create_random( void)
    }
 }
 
+/*
+** function name: display_info from: Chunk
+*/
 void Chunk::display_info( void)
 {
    bool block_exists = false;
@@ -90,11 +95,11 @@ void Chunk::display_info( void)
 */
 bool Chunk::position_in_chunk( float *position_in)
 {
-   if (position_in[0] >= position[0]                                  &&
+   if (position_in[0] >= position[0]                                    &&
        position_in[0] <  position[0] + static_cast<float>(chunk_dim[0]) &&
-       position_in[1] >= position[1]                                  &&
+       position_in[1] >= position[1]                                    &&
        position_in[1] <  position[1] + static_cast<float>(chunk_dim[1]) &&
-       position_in[2] >= position[2]                                  &&
+       position_in[2] >= position[2]                                    &&
        position_in[2] <  position[2] + static_cast<float>(chunk_dim[2]))
    {
       return true;
@@ -110,6 +115,10 @@ bool Chunk::position_in_chunk( float *position_in)
 */
 void Chunk::move( int x, int y, int z)
 {
+   abs_pos_id[0] += x;
+   abs_pos_id[1] += y;
+   abs_pos_id[2] += z;
+
    position[0] += static_cast<float>(x) * chunk_dim[0];
    position[1] += static_cast<float>(y) * chunk_dim[1];
    position[2] += static_cast<float>(z) * chunk_dim[2];

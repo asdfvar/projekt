@@ -33,6 +33,7 @@ class Chunk
       unsigned int id;
       float        position[3];
       bool         valid;
+      int          abs_pos_id[3];
 
       // Functions:
       void create_random( void);
