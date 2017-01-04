@@ -2,7 +2,7 @@ CPPC  = g++
 FLAGS = -O3 -Wall -lm -lGL -lGLU -lglut
 INC   = -Ikernels -I.
 LIBPATH = -Lkernels
-LIBS  = -lsimu
+LIBS  = -lsimu -lpthread
 
 OBJ = main.o             \
       simu_world.o       \
