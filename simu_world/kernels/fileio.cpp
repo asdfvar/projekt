@@ -19,7 +19,12 @@ namespace fio
 
     std::ofstream OF;
 
-    OF.open( path.c_str(), std::ios::out | std::ios::in | std::ios::binary );
+#if 0
+if ( ifstream("fileName"))
+   std::cout << "file exists" << std::endl;
+#endif
+//    OF.open( path.c_str(), std::ios::out | std::ios::in | std::ios::binary );
+    OF.open( path.c_str(), std::ios::out | std::ios::binary );
     OF.seekp( position, std::ios::beg);
     OF.write( (char*)data, N * sizeof(*data) );
     OF.close();
@@ -36,6 +41,7 @@ namespace fio
     std::ifstream IS ( path.c_str(), std::ifstream::binary );
     IS.seekg( position );
     IS.read ((char*)buffer, N);
+    IS.close();
  }
 
  void read (const std::string path)
@@ -49,6 +55,7 @@ namespace fio
 
     int *buffer = new int[length];
     IS.read ((char*)buffer, length);
+    IS.close();
 
     std::cout << "reading " << length << " bytes" << std::endl;
     for (int k = 0; k < length/4; k++)
