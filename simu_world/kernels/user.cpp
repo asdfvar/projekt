@@ -35,6 +35,7 @@ User::User( void)
 
    int data[8] = {3, 1, 4, 1, 5, 9, 2, 6};
    fio::write( "test.bin", 0, (char*)data, 4*8);
+   fio::write( "test.bin", 8, (char*)data, 4*8);
    fio::read(  "test.bin" );
 
 }

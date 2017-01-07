@@ -19,8 +19,8 @@ namespace fio
 
     std::ofstream OF;
 
-    OF.open( path.c_str(), std::ios::out | std::ios::binary );
-    OF.seekp( position );
+    OF.open( path.c_str(), std::ios::out | std::ios::in | std::ios::binary );
+    OF.seekp( position, std::ios::beg);
     OF.write( (char*)data, N * sizeof(*data) );
     OF.close();
 
