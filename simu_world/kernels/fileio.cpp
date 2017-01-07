@@ -7,7 +7,7 @@ namespace fio
 {
 
  /*
- ** Function NAME: write_bin_float
+ ** function NAME: write_bin_float
  **
  ** Write float data to file
  */
@@ -19,12 +19,15 @@ namespace fio
 
     std::ofstream OF;
 
-#if 0
-if ( ifstream("fileName"))
-   std::cout << "file exists" << std::endl;
-#endif
-//    OF.open( path.c_str(), std::ios::out | std::ios::in | std::ios::binary );
-    OF.open( path.c_str(), std::ios::out | std::ios::binary );
+    // open the file for reading and writting
+    OF.open( path.c_str(), std::ios::out | std::ios::in | std::ios::binary );
+
+    // if the file doesn't exist, open for writting only
+    if( !OF.is_open() )
+    {
+       OF.open( path.c_str(), std::ios::out | std::ios::binary );
+    }
+
     OF.seekp( position, std::ios::beg);
     OF.write( (char*)data, N * sizeof(*data) );
     OF.close();
@@ -32,10 +35,10 @@ if ( ifstream("fileName"))
    std::cout << "size of char = " << sizeof(char) << " size of int = " << sizeof(int) << std::endl;
  }
 
- void read (const std::string  path,
-            int                position,
-            void              *buffer,
-            int                N)
+ void read (const std::string  path,     // path and file name included
+            int                position, // offset in bytes from the beginning of file
+            void              *buffer,   // buffer to hold the data
+            int                N)        // number of bytes to read
  {
     std::ios_base::seekdir position_x;
     std::ifstream IS ( path.c_str(), std::ifstream::binary );

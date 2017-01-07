@@ -37,13 +37,11 @@ User::User( void)
    fio::write( "test.bin", 0, (char*)data, 4*8);
    fio::write( "test.bin", 8, (char*)data, 4*8);
    fio::read(  "test.bin" );
-#if 0
    int numbers[20];
    fio::read ( "test.bin", 8, (void*)numbers, 4*8);
    for (int k = 0; k < 8; k++)
       std::cout << numbers[k];
    std::cout << std::endl;
-#endif
 
 }
 

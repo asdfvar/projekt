@@ -15,7 +15,7 @@ namespace fio
 
  void read (const std::string path);
 
-#if 0
+#if 1
  void read (const std::string  path,
             int                position,
             void              *buffer,
