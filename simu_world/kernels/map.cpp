@@ -22,6 +22,9 @@ Map::Map(void)
    for (int k = 0; k < local_grid_size[1]; k++) virtual_grid_id_y[k] = k;
    for (int k = 0; k < local_grid_size[2]; k++) virtual_grid_id_z[k] = k;
 
+   /*
+   ** Reserve space for the map chunks
+   */
    chunks.reserve( total_local_grid_size);
    std::vector<Chunk*>::size_type sz = chunks.capacity();
 
@@ -37,6 +40,9 @@ Map::Map(void)
                                 (float)(ind_y * chunk_dim[1]),
                                 (float)(ind_z * chunk_dim[2])};
 
+           /*
+           ** Create the chunks for this map
+           */
            chunks.push_back( new Chunk(ind, chunk_dim, position));
 
            if (sz < chunks.capacity())
@@ -94,6 +100,11 @@ void Map::update( void )
 
 /*
 ** function name: update from: Map
+**
+** update map information from user position.
+** when the user is no longer at the center of
+** the map, shift the chunks until the user is
+** at the center of the map
 */
 void Map::update( float *position)
 {
