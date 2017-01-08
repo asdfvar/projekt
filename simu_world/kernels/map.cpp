@@ -110,11 +110,14 @@ void Map::update( float *position)
 {
    int virtual_grid[3] = { -1, -1, -1 };
 
+   /*
+   ** find which chunk (virtual location) the user position is at
+   */
    for (int x_dir = 0; x_dir < local_grid_size[0]; x_dir++)
    {
-      for (int y_dir = 0; y_dir < local_grid_size[0]; y_dir++)
+      for (int y_dir = 0; y_dir < local_grid_size[1]; y_dir++)
       {
-         for (int z_dir = 0; z_dir < local_grid_size[0]; z_dir++)
+         for (int z_dir = 0; z_dir < local_grid_size[2]; z_dir++)
          {
 
             Chunk *this_chunk = access_chunk( x_dir,
@@ -132,6 +135,10 @@ void Map::update( float *position)
       }
    }
 
+   /*
+   ** shift the chunks to align the user position
+   ** with the middle chunk
+   */
    int mid_block[3] = { local_grid_size[0] / 2,
                         local_grid_size[1] / 2,
                         local_grid_size[2] / 2 };
@@ -367,4 +374,18 @@ void Map::shift( int x, int y, int z)
 int Map::get_grid_size(int ind)
 {
    return local_grid_size[ind];
+}
+
+/*
+** function name: debug_info from: Map
+*/
+void Map::debug_info( void )
+{
+
+   std::cout << "physical id 0 -> virtual grid id (" <<
+                 virtual_grid_id_x[0] << ", "        <<
+                 virtual_grid_id_y[0] << ", "        <<
+                 virtual_grid_id_z[0] << ")"         <<
+                 std::endl;
+
 }

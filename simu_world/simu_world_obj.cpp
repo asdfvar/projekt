@@ -121,6 +121,10 @@ Simu_world_obj::~Simu_world_obj(void)
 void Simu_world_obj::idle( void)
 {
 
+#ifdef DEBUG
+   map.debug_info();
+#endif
+
    /*
    ** wait for the prescribed time to pass
    */

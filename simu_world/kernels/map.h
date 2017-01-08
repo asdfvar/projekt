@@ -26,6 +26,8 @@ class Map
 
       int get_grid_size(int ind);
 
+      void debug_info( void );
+
    private:
       void shift( int x, int y, int z);
 
