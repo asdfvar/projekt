@@ -15,12 +15,12 @@ namespace fio
 
  void read (const std::string path);
 
-#if 1
  void read (const std::string  path,
             int                position,
             void              *buffer,
             int                N);
-#endif
+
+ void directory ( void );
 
 }
 

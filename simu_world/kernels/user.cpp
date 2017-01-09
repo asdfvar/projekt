@@ -43,6 +43,8 @@ User::User( void)
       std::cout << numbers[k];
    std::cout << std::endl;
 
+   fio::directory();
+
 }
 
 void User::get_direction( float *direction_out)

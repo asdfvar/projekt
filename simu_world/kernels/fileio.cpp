@@ -2,9 +2,34 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <errno.h>
+#include <stdlib.h>
 
 namespace fio
 {
+
+  void directory( void )
+  {
+
+#if 0
+     DIR *dir = opendir("saves");
+
+     if (dir)
+     {
+        std::cout << "Directory exists" << std::endl;
+        return;
+     }
+     else if (ENOENT == errno)
+     {
+        std::cout << "Directory DOESN'T exists" << std::endl;
+        // create directory
+//        mkdir("saves");
+     }
+#endif
+
+     std::cout << "system output = " << system("mkdir saves") << std::endl;
+
+  }
 
  /*
  ** function NAME: write_bin_float
