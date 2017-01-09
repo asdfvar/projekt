@@ -13,7 +13,12 @@ class Chunk
 {
    public:
       Chunk( void);
-      Chunk( unsigned int id_in, int *chunk_dim_in, float *position_in);
+
+      Chunk( unsigned int  id_in,
+             int           abs_pos_id_in[3],
+             int          *chunk_dim_in,
+             float        *position_in);
+
       ~Chunk( void );
 
       // Functions
@@ -24,6 +29,7 @@ class Chunk
       bool position_in_chunk( float *poisition_in);
       void move( int x, int y, int z);
       void update( void );
+      void get_abs_pos_id( int *abs_pos_id );
 
    private:
 

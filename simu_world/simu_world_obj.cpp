@@ -124,6 +124,7 @@ void Simu_world_obj::idle( void)
 #ifdef DEBUG
    map.debug_info();
    user.debug_info();
+   std::cout << std::endl;
 #endif
 
    /*

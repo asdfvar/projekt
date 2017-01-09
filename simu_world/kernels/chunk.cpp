@@ -6,8 +6,16 @@
 /*
 ** constructor name: Chunk 
 */
-Chunk::Chunk( unsigned int id_in, int *chunk_dim_in, float *position_in)
+Chunk::Chunk( unsigned int  id_in,
+              int           abs_pos_id_in[3],
+              int          *chunk_dim_in,
+              float        *position_in)
 {
+
+   abs_pos_id[0] = abs_pos_id_in[0];
+   abs_pos_id[1] = abs_pos_id_in[1];
+   abs_pos_id[2] = abs_pos_id_in[2];
+
    for (int ind = 0; ind < 3; ind++)
    {
       if (chunk_dim_in[ind] % 2 == 0)
@@ -34,6 +42,10 @@ void Chunk::update( void )
 {
    if (!valid)
    {
+      // TODO:
+      // write this chunk to file using the absolute index id.
+      // try to read from absolute index id. if it doesn't exist, create it
+      // abs_pos_id[3] is the absolute position id of this chunk
       create_random();
       valid = true;
    }
@@ -146,7 +158,7 @@ unsigned int Chunk::get_dimensions(void)
 ** function name: get_position from Chunk
 */
 int Chunk::get_position(float *position_out,
-                      int    block_index)
+                        int    block_index)
 {
 
    if (block_index >= chunk_dim[0] * chunk_dim[1] * chunk_dim[2])
@@ -176,4 +188,14 @@ int Chunk::get_position(float *position_out,
 
    return blocks[block_index];
 
+}
+
+/*
+** function name: get_abs_pos_id from Chunk
+*/
+void Chunk::get_abs_pos_id( int *abs_pos_id_out )
+{
+   abs_pos_id_out[0] = abs_pos_id[0];
+   abs_pos_id_out[1] = abs_pos_id[1];
+   abs_pos_id_out[2] = abs_pos_id[2];
 }

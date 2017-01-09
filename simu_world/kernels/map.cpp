@@ -46,6 +46,7 @@ Map::Map(void)
 
    int chunk_dim[3] = {5, 5, 5};
    int ind;
+   int abs_pos_id[3];
    for (int ind_z = -local_grid_size[2]/2, ind = 0; ind_z <= local_grid_size[2]/2; ind_z++)
    {
       for (int ind_y = -local_grid_size[1]/2; ind_y <= local_grid_size[1]/2; ind_y++)
@@ -56,10 +57,13 @@ Map::Map(void)
                                 (float)(ind_y * chunk_dim[1]),
                                 (float)(ind_z * chunk_dim[2])};
 
+           abs_pos_id[0] = ind_x;
+           abs_pos_id[1] = ind_y;
+           abs_pos_id[2] = ind_z;
            /*
            ** Create the chunks for this map
            */
-           chunks.push_back( new Chunk(ind, chunk_dim, position));
+           chunks.push_back( new Chunk(ind, abs_pos_id, chunk_dim, position));
 
            if (sz < chunks.capacity())
            {
@@ -67,10 +71,6 @@ Map::Map(void)
               sz = chunks.capacity();
            }
 
-           if (ind % 100 == 0)
-           {
-              std::cout << (float)ind / (float)total_local_grid_size << std::endl;
-           }
          }
       }
    }
@@ -421,12 +421,41 @@ void Map::debug_info( void )
    std::cout << "virtual id 0 -> physical grid id (" <<
                  physical_grid_id_x[0] << ", "       <<
                  physical_grid_id_y[0] << ", "       <<
-                 physical_grid_id_z[0] << ")";
+                 physical_grid_id_z[0] << ")"        <<
+                 std::endl;
 
-   std::cout << ", physical id 0 -> virtual grid id (" <<
-                   virtual_grid_id_x[0] << ", "        <<
-                   virtual_grid_id_y[0] << ", "        <<
-                   virtual_grid_id_z[0] << ")"         <<
-                   std::endl;
+   std::cout << "physical -> virtual grid id:" << std::endl;
+   std::cout << "x: ";
+   for (int k = 0; k < local_grid_size[0]; k++)
+   {
+      std::cout << "(" << k << "," << virtual_grid_id_x[k] << "), ";
+   }
+   std::cout << std::endl;
+
+   std::cout << "y: ";
+   for (int k = 0; k < local_grid_size[1]; k++)
+   {
+      std::cout << "(" << k << "," << virtual_grid_id_y[k] << "), ";
+   }
+   std::cout << std::endl;
+
+   std::cout << "z: ";
+   for (int k = 0; k < local_grid_size[2]; k++)
+   {
+      std::cout << "(" << k << "," << virtual_grid_id_z[k] << "), ";
+   }
+   std::cout << std::endl;
+
+   Chunk *this_chunk = access_chunk( physical_grid_id_x[local_grid_size[0]/2],
+                                     physical_grid_id_y[local_grid_size[1]/2],
+                                     physical_grid_id_z[local_grid_size[2]/2]);
+
+   int abs_pos_id[3];
+   this_chunk->get_abs_pos_id( abs_pos_id );
+   std::cout << "absolute chunk position id at center = (" <<
+                 abs_pos_id[0] << ", "            <<
+                 abs_pos_id[1] << ", "            <<
+                 abs_pos_id[2] << ")"             <<
+                 std::endl;
 
 }

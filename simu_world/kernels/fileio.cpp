@@ -57,7 +57,6 @@ namespace fio
     OF.write( (char*)data, N * sizeof(*data) );
     OF.close();
 
-   std::cout << "size of char = " << sizeof(char) << " size of int = " << sizeof(int) << std::endl;
  }
 
  void read (const std::string  path,     // path and file name included
