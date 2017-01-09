@@ -33,6 +33,10 @@ class Map
 
       int local_grid_size[3];
 
+      int *physical_grid_id_x,
+          *physical_grid_id_y,
+          *physical_grid_id_z;
+
       int *virtual_grid_id_x,
           *virtual_grid_id_y,
           *virtual_grid_id_z;

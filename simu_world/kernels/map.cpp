@@ -14,6 +14,22 @@ Map::Map(void)
    local_grid_size[2] = 13;
    int total_local_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
 
+   /*
+   ** Initialize the mapping from the virtual grid index
+   ** to the physical grid index
+   */
+   physical_grid_id_x = new int[local_grid_size[0]];
+   physical_grid_id_y = new int[local_grid_size[1]];
+   physical_grid_id_z = new int[local_grid_size[2]];
+
+   for (int k = 0; k < local_grid_size[0]; k++) physical_grid_id_x[k] = k;
+   for (int k = 0; k < local_grid_size[1]; k++) physical_grid_id_y[k] = k;
+   for (int k = 0; k < local_grid_size[2]; k++) physical_grid_id_z[k] = k;
+
+   /*
+   ** Initialize the mapping from the physical grid
+   ** to the virtual grid index
+   */
    virtual_grid_id_x = new int[local_grid_size[0]];
    virtual_grid_id_y = new int[local_grid_size[1]];
    virtual_grid_id_z = new int[local_grid_size[2]];
@@ -68,6 +84,10 @@ Map::~Map(void)
 {
    std::size_t total_grid_size = local_grid_size[0] * local_grid_size[1] * local_grid_size[2];
    chunks.erase (chunks.begin(), chunks.begin() + total_grid_size);
+
+   delete[] physical_grid_id_x;
+   delete[] physical_grid_id_y;
+   delete[] physical_grid_id_z;
 
    delete[] virtual_grid_id_x;
    delete[] virtual_grid_id_y;
@@ -230,6 +250,10 @@ Chunk *Map::access_chunk(int p_id_x,
 */
 void Map::shift( int x, int y, int z)
 {
+
+   /*
+   ** Update grid mapping in first dimension
+   */
    for (int k = 0; k < local_grid_size[0]; k++)
    {
       
@@ -274,6 +298,10 @@ void Map::shift( int x, int y, int z)
          }
       }
 
+      /*
+      ** Update the virtual-to-physical grid mapping
+      */
+      physical_grid_id_x[virtual_grid_id_x[k]] = k;
    }
 
    for (int k = 0; k < local_grid_size[1]; k++)
@@ -319,6 +347,10 @@ void Map::shift( int x, int y, int z)
          }
       }
 
+      /*
+      ** Update the virtual-to-physical grid mapping
+      */
+      physical_grid_id_y[virtual_grid_id_y[k]] = k;
 
    }
 
@@ -365,6 +397,10 @@ void Map::shift( int x, int y, int z)
          }
       }
 
+      /*
+      ** Update the virtual-to-physical grid mapping
+      */
+      physical_grid_id_z[virtual_grid_id_z[k]] = k;
    }
 }
 
@@ -382,10 +418,15 @@ int Map::get_grid_size(int ind)
 void Map::debug_info( void )
 {
 
-   std::cout << "physical id 0 -> virtual grid id (" <<
-                 virtual_grid_id_x[0] << ", "        <<
-                 virtual_grid_id_y[0] << ", "        <<
-                 virtual_grid_id_z[0] << ")"         <<
-                 std::endl;
+   std::cout << "virtual id 0 -> physical grid id (" <<
+                 physical_grid_id_x[0] << ", "       <<
+                 physical_grid_id_y[0] << ", "       <<
+                 physical_grid_id_z[0] << ")";
+
+   std::cout << ", physical id 0 -> virtual grid id (" <<
+                   virtual_grid_id_x[0] << ", "        <<
+                   virtual_grid_id_y[0] << ", "        <<
+                   virtual_grid_id_z[0] << ")"         <<
+                   std::endl;
 
 }

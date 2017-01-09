@@ -30,6 +30,8 @@ class User
 
       void set_direction( float *direction);
 
+      void debug_info( void );
+
    private:
 
       float position[3];
