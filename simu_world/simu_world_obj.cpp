@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "simu_world_obj.h"
 #include "draw_scene.h"
 #include "change_direction.h"
@@ -14,6 +16,12 @@ Simu_world_obj::Simu_world_obj(void)
    float chunk_pos[3] = { 0.0f, 0.0f, 0.0f };
    semaphore        = new Semaphore(4);
    mode             = 1;
+
+   std::ostringstream ss;
+   ss << 42;
+   std::string the_word = "the answer to the universe is ";
+   the_word += ss.str();
+   std::cout << the_word << std::endl;
 }
 
 /*

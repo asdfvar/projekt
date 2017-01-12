@@ -10,25 +10,7 @@ namespace fio
 
   void directory( void )
   {
-
-#if 0
-     DIR *dir = opendir("saves");
-
-     if (dir)
-     {
-        std::cout << "Directory exists" << std::endl;
-        return;
-     }
-     else if (ENOENT == errno)
-     {
-        std::cout << "Directory DOESN'T exists" << std::endl;
-        // create directory
-//        mkdir("saves");
-     }
-#endif
-
      std::cout << "system output = " << system("mkdir saves") << std::endl;
-
   }
 
  /*
