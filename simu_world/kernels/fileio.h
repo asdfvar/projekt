@@ -13,9 +13,9 @@ namespace fio
              char              *data,
              int                N);
 
- void read (const std::string path);
+ bool read (const std::string path);
 
- void read (const std::string  path,
+ bool read (const std::string  path,
             int                position,
             void              *buffer,
             int                N);

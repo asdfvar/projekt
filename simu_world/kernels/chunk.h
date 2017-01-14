@@ -30,6 +30,7 @@ class Chunk
       void move( int x, int y, int z);
       void update( void );
       void get_abs_pos_id( int *abs_pos_id );
+      bool is_valid( void );
 
    private:
 
@@ -40,6 +41,7 @@ class Chunk
       float        position[3];
       bool         valid;
       int          abs_pos_id[3];
+      int          prev_abs_pos_id[3];
 
       // Functions:
       void create_random( void);

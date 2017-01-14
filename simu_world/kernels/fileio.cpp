@@ -41,20 +41,27 @@ namespace fio
 
  }
 
- void read (const std::string  path,     // path and file name included
+ bool read (const std::string  path,     // path and file name included
             int                position, // offset in bytes from the beginning of file
             void              *buffer,   // buffer to hold the data
             int                N)        // number of bytes to read
  {
+    bool status = false;
+
     std::ios_base::seekdir position_x;
     std::ifstream IS ( path.c_str(), std::ifstream::binary );
     IS.seekg( position );
     IS.read ((char*)buffer, N);
+    status = IS.is_open();
     IS.close();
+
+    return status;
  }
 
- void read (const std::string path)
+ bool read (const std::string path)
  {
+    bool status = false;
+
     std::ifstream IS ( path.c_str(), std::ifstream::binary );
 
     // get length of file:
@@ -64,6 +71,7 @@ namespace fio
 
     int *buffer = new int[length];
     IS.read ((char*)buffer, length);
+    status = IS.is_open();
     IS.close();
 
     std::cout << "reading " << length << " bytes" << std::endl;
@@ -72,6 +80,8 @@ namespace fio
     std::cout << std::endl;
 
     delete[] buffer;
+
+    return status;
 
  }
 

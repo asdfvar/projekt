@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "draw_block.h"
+#include "fileio.h"
 
 /*
 ** constructor name: Map
@@ -43,6 +44,8 @@ Map::Map(void)
    */
    chunks.reserve( total_local_grid_size);
    std::vector<Chunk*>::size_type sz = chunks.capacity();
+
+   fio::directory();
 
    int chunk_dim[3] = {5, 5, 5};
    int ind;
@@ -205,14 +208,17 @@ void Map::render_chunk( User *user)
          {
             chunk = access_chunk( grid_x, grid_y, grid_z);
 
-            // iterate through all the blocks
-            for (unsigned int block_ind = 0; block_ind < chunk->get_dimensions(); block_ind++)
+            if ( chunk->is_valid() )
             {
+               // iterate through all the blocks
+               for (unsigned int block_ind = 0; block_ind < chunk->get_dimensions(); block_ind++)
+               {
 
-               if (!chunk->get_position( block_position, block_ind)) continue;
+                  if (!chunk->get_position( block_position, block_ind)) continue;
 
-               draw_block( block_position,
-                           user);
+                  draw_block( block_position,
+                              user);
+               }
             }
          }
       }

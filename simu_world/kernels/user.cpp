@@ -1,6 +1,6 @@
 #include "user.h"
 #include "linalg.h"
-#include "fileio.h"
+#include <iostream>
 #include <cmath>
 
 #include <GL/glut.h>
@@ -32,18 +32,6 @@ User::User( void)
    window_distance = 1.0f;
    window_width    = 1.0f;
    window_height   = 1.0f;
-
-   int data[8] = {3, 1, 4, 1, 5, 9, 2, 6};
-   fio::write( "test.bin", 0, (char*)data, 4*8);
-   fio::write( "test.bin", 8, (char*)data, 4*8);
-   fio::read(  "test.bin" );
-   int numbers[20];
-   fio::read ( "test.bin", 8, (void*)numbers, 4*8);
-   for (int k = 0; k < 8; k++)
-      std::cout << numbers[k];
-   std::cout << std::endl;
-
-   fio::directory();
 
 }
 
