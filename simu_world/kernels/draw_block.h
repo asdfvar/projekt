@@ -5,6 +5,7 @@
 #include "opengl_interface.h"
 
 void draw_block( float  block_position[3],
+                 float *vertices,
                  User  *user);
 
 #endif

@@ -45,11 +45,15 @@ Map::Map(void)
    chunks.reserve( total_local_grid_size);
    std::vector<Chunk*>::size_type sz = chunks.capacity();
 
+   /*
+   ** Create the save directory
+   */
    fio::directory();
 
    int chunk_dim[3] = {5, 5, 5};
    int ind;
    int abs_pos_id[3];
+
    for (int ind_z = -local_grid_size[2]/2, ind = 0; ind_z <= local_grid_size[2]/2; ind_z++)
    {
       for (int ind_y = -local_grid_size[1]/2; ind_y <= local_grid_size[1]/2; ind_y++)
@@ -78,6 +82,16 @@ Map::Map(void)
       }
    }
 
+   /*
+   ** Create the vertices array big enough for all triangles within all chunks
+   */
+   vertices = new float[ chunk_dim[0]       *
+                         chunk_dim[1]       *
+                         chunk_dim[2]       * // total blocks
+                         6                  * // vertices per face
+                         6                  * // faces per block
+                         3];                  // dimensions
+
 }
 
 /*
@@ -95,6 +109,8 @@ Map::~Map(void)
    delete[] virtual_grid_id_x;
    delete[] virtual_grid_id_y;
    delete[] virtual_grid_id_z;
+
+   delete[] vertices;
 }
 
 /*
@@ -211,12 +227,15 @@ void Map::render_chunk( User *user)
             if ( chunk->is_valid() )
             {
                // iterate through all the blocks
-               for (unsigned int block_ind = 0; block_ind < chunk->get_dimensions(); block_ind++)
+               for (unsigned int ind = 0, block_ind = 0;
+                    block_ind < chunk->get_dimensions();
+                    block_ind++, ind++)
                {
 
                   if (!chunk->get_position( block_position, block_ind)) continue;
 
                   draw_block( block_position,
+                             &vertices[ 3*6*6*ind ],
                               user);
                }
             }

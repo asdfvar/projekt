@@ -13,8 +13,11 @@
 #include <GL/gl.h>
 
 void draw_block( float  block_position[3],
+                 float *vertices,
                  User  *user)
 {
+
+   int vertex_ind = 0;
 
    float user_direction[3];
    user->get_direction( user_direction);
@@ -251,6 +254,30 @@ void draw_block( float  block_position[3],
                            brightness,
                            4);
       }
+
+      vertices[vertex_ind++] = corner_pos_x[0];
+      vertices[vertex_ind++] = corner_pos_y[0];
+      vertices[vertex_ind++] = corner_pos_z[0];
+
+      vertices[vertex_ind++] = corner_pos_x[1];
+      vertices[vertex_ind++] = corner_pos_y[1];
+      vertices[vertex_ind++] = corner_pos_z[1];
+
+      vertices[vertex_ind++] = corner_pos_x[2];
+      vertices[vertex_ind++] = corner_pos_y[2];
+      vertices[vertex_ind++] = corner_pos_z[2];
+
+      vertices[vertex_ind++] = corner_pos_x[0];
+      vertices[vertex_ind++] = corner_pos_y[0];
+      vertices[vertex_ind++] = corner_pos_z[0];
+
+      vertices[vertex_ind++] = corner_pos_x[2];
+      vertices[vertex_ind++] = corner_pos_y[2];
+      vertices[vertex_ind++] = corner_pos_z[2];
+
+      vertices[vertex_ind++] = corner_pos_x[3];
+      vertices[vertex_ind++] = corner_pos_y[3];
+      vertices[vertex_ind++] = corner_pos_z[3];
 
    } // for (int face = 0; face < 6; face++)
 

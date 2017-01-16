@@ -43,6 +43,8 @@ class Map
 
       std::vector<Chunk*> chunks;
 
+      float *vertices;
+
 };
 
 #endif
