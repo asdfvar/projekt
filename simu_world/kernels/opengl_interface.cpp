@@ -23,6 +23,8 @@ void ogl::opengl_initial_settings( void )
    glEnable( GL_LIGHTING       );
    glEnable( GL_COLOR_MATERIAL );
 
+   glDepthFunc( GL_LESS );
+
 }
 
 /* function name: opengl_clear */

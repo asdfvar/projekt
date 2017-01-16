@@ -233,6 +233,29 @@ void Chunk::create_random( void)
 }
 
 /*
+** function name: create_flat from: Chunk 
+*/
+void Chunk::create_flat( void)
+{
+std::cout << "abs_pos_id = " << abs_pos_id[0] << ", " << abs_pos_id[1] << ", " << abs_pos_id[2] << std::endl;
+   int chunk_dim_tot = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+   if (abs_pos_id[2] < 0)
+   {
+      for (int ind = 0; ind < chunk_dim_tot; ind++)
+      {
+         blocks[ind] = 1;
+      }
+   }
+   else
+   {
+      for (int ind = 0; ind < chunk_dim_tot; ind++)
+      {
+         blocks[ind] = 0;
+      }
+   }
+}
+
+/*
 ** function name: display_info from: Chunk
 */
 void Chunk::display_info( void)

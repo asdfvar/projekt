@@ -45,6 +45,7 @@ class Chunk
 
       // Functions:
       void create_random( void);
+      void create_flat( void);
 
 };
 
