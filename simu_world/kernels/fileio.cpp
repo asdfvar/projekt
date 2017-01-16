@@ -10,7 +10,14 @@ namespace fio
 
   void directory( void )
   {
+#ifdef __linux__
      std::cout << "system output = " << system("mkdir saves") << std::endl;
+#elif _WIN32
+// TODO: find out what makes a new directory in windows
+//     std::cout << "system output = " << system("mkdir saves") << std::endl;
+#else
+   std::cout << __FILE__ << ":" << __LINE__ << ": unknown OS" << std::endl;
+#endif
   }
 
  /*

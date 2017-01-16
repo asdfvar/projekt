@@ -102,6 +102,12 @@ void simu_world( int argc, char** argv )
    args.simu_world_obj = &simu_world_obj;
    pthread_t IO_thread;
 
+#ifdef __linux__
+std::cout << "Linux" << std::endl;
+#elif _WIN32
+std::cout << "Windows" << std::endl;
+#endif
+
    /*
    ** Create the IO manager thread
    */

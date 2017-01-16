@@ -261,7 +261,14 @@ bool Chunk::is_valid( void )
 */
 void Chunk::generate_chunk( void )
 {
+#ifdef __linux__
    std::string chunk_name = "saves/chunk_";
+#elif _WIN32
+   std::string chunk_name = "saves\chunk_";
+#else
+   std::cout << __FILE__ << ":" << __LINE__ << ": unknown OS" << std::endl;
+#endif
+
    std::ostringstream id_str;
    if (abs_pos_id[0] < 0)
    {
