@@ -44,8 +44,10 @@ class Chunk
       int          prev_abs_pos_id[3];
 
       // Functions:
-      void create_random( void);
-      void create_flat( void);
+      void create_random( void );
+      void create_flat( void );
+      void generate_chunk( void );
+      void write_chunk( void );
 
 };
 

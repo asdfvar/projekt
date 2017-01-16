@@ -41,56 +41,7 @@ Chunk::Chunk( unsigned int  id_in,
    /*
    ** Attempt to read from file upon creation
    */
-   std::string chunk_name = "saves/chunk_";
-   std::ostringstream id_str;
-   if (abs_pos_id[0] < 0)
-   {
-      id_str << -abs_pos_id[0];
-      chunk_name += "n";
-   }
-   else
-   {
-      id_str << abs_pos_id[0];
-   }
-   chunk_name += id_str.str();
-   chunk_name += "_";
-
-   id_str.clear();
-   id_str.str("");
-   if (abs_pos_id[1] < 0)
-   {
-      id_str << -abs_pos_id[1];
-      chunk_name += "n";
-   }
-   else
-   {
-      id_str << abs_pos_id[1];
-   }
-   chunk_name += id_str.str();
-   chunk_name += "_";
-
-   id_str.clear();
-   id_str.str("");
-   if (abs_pos_id[2] < 0)
-   {
-      id_str << -abs_pos_id[2];
-      chunk_name += "n";
-   }
-   else
-   {
-      id_str << abs_pos_id[2];
-   }
-   chunk_name += id_str.str();
-
-   if( !fio::read (chunk_name,  // path and file name included
-              0,                // offset in bytes from the beginning of file
-              (void*)blocks,    // buffer to hold the data
-              chunk_dim[0] *
-              chunk_dim[1] *
-              chunk_dim[2] * sizeof(chunk_dim[0]))) // number of bytes to read
-   {
-      create_random();
-   }
+   generate_chunk();
 
    valid = true;
 }
@@ -109,109 +60,12 @@ void Chunk::update( void )
       /*
       ** write old data to file
       */
-      std::string chunk_name = "saves/chunk_";
-      std::ostringstream id_str;
-
-      if (prev_abs_pos_id[0] < 0)
-      {
-         id_str << -prev_abs_pos_id[0];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << prev_abs_pos_id[0];
-      }
-      chunk_name += id_str.str();
-      chunk_name += "_";
-
-      id_str.clear();
-      id_str.str("");
-      if (prev_abs_pos_id[1] < 0)
-      {
-         id_str << -prev_abs_pos_id[1];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << prev_abs_pos_id[1];
-      }
-      chunk_name += id_str.str();
-      chunk_name += "_";
-
-      id_str.clear();
-      id_str.str("");
-      if (prev_abs_pos_id[2] < 0)
-      {
-         id_str << -prev_abs_pos_id[2];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << prev_abs_pos_id[2];
-      }
-      chunk_name += id_str.str();
-
-      fio::write( chunk_name,
-                  0,
-                 (char*)blocks,
-                  chunk_dim[0] *
-                  chunk_dim[1] *
-                  chunk_dim[2] * sizeof(chunk_dim[0]));
+      write_chunk();
 
       /*
       ** Attempt to read from file
       */
-      chunk_name = "saves/chunk_";
-      id_str.clear();
-      id_str.str("");
-      if (abs_pos_id[0] < 0)
-      {
-         id_str << -abs_pos_id[0];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << abs_pos_id[0];
-      }
-      chunk_name += id_str.str();
-      chunk_name += "_";
-
-      id_str.clear();
-      id_str.str("");
-      if (abs_pos_id[1] < 0)
-      {
-         id_str << -abs_pos_id[1];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << abs_pos_id[1];
-      }
-      chunk_name += id_str.str();
-      chunk_name += "_";
-
-      id_str.clear();
-      id_str.str("");
-      if (abs_pos_id[2] < 0)
-      {
-         id_str << -abs_pos_id[2];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << abs_pos_id[2];
-      }
-      chunk_name += id_str.str();
-
-      if( !fio::read (chunk_name,  // path and file name included
-                 0,                // offset in bytes from the beginning of file
-                 (void*)blocks,    // buffer to hold the data
-                 chunk_dim[0] *
-                 chunk_dim[1] *
-                 chunk_dim[2] * sizeof(chunk_dim[0]))) // number of bytes to read
-      {
-         create_random();
-      }
+      generate_chunk();
 
       valid = true;
    }
@@ -400,4 +254,116 @@ void Chunk::get_abs_pos_id( int *abs_pos_id_out )
 bool Chunk::is_valid( void )
 {
    return valid;
+}
+
+/*
+** function name: generate_chunk from Chunk
+*/
+void Chunk::generate_chunk( void )
+{
+   std::string chunk_name = "saves/chunk_";
+   std::ostringstream id_str;
+   if (abs_pos_id[0] < 0)
+   {
+      id_str << -abs_pos_id[0];
+      chunk_name += "n";
+   }
+   else
+   {
+      id_str << abs_pos_id[0];
+   }
+   chunk_name += id_str.str();
+   chunk_name += "_";
+
+   id_str.clear();
+   id_str.str("");
+   if (abs_pos_id[1] < 0)
+   {
+      id_str << -abs_pos_id[1];
+      chunk_name += "n";
+   }
+   else
+   {
+      id_str << abs_pos_id[1];
+   }
+   chunk_name += id_str.str();
+   chunk_name += "_";
+
+   id_str.clear();
+   id_str.str("");
+   if (abs_pos_id[2] < 0)
+   {
+      id_str << -abs_pos_id[2];
+      chunk_name += "n";
+   }
+   else
+   {
+      id_str << abs_pos_id[2];
+   }
+   chunk_name += id_str.str();
+
+   if( !fio::read (chunk_name,  // path and file name included
+              0,                // offset in bytes from the beginning of file
+              (void*)blocks,    // buffer to hold the data
+              chunk_dim[0] *
+              chunk_dim[1] *
+              chunk_dim[2] * sizeof(chunk_dim[0]))) // number of bytes to read
+   {
+      create_random();
+   }
+}
+
+/*
+** function name: write_chunk from Chunk
+*/
+void Chunk::write_chunk( void )
+{
+      std::string chunk_name = "saves/chunk_";
+      std::ostringstream id_str;
+
+      if (prev_abs_pos_id[0] < 0)
+      {
+         id_str << -prev_abs_pos_id[0];
+         chunk_name += "n";
+      }
+      else
+      {
+         id_str << prev_abs_pos_id[0];
+      }
+      chunk_name += id_str.str();
+      chunk_name += "_";
+
+      id_str.clear();
+      id_str.str("");
+      if (prev_abs_pos_id[1] < 0)
+      {
+         id_str << -prev_abs_pos_id[1];
+         chunk_name += "n";
+      }
+      else
+      {
+         id_str << prev_abs_pos_id[1];
+      }
+      chunk_name += id_str.str();
+      chunk_name += "_";
+
+      id_str.clear();
+      id_str.str("");
+      if (prev_abs_pos_id[2] < 0)
+      {
+         id_str << -prev_abs_pos_id[2];
+         chunk_name += "n";
+      }
+      else
+      {
+         id_str << prev_abs_pos_id[2];
+      }
+      chunk_name += id_str.str();
+
+      fio::write( chunk_name,
+                  0,
+                 (char*)blocks,
+                  chunk_dim[0] *
+                  chunk_dim[1] *
+                  chunk_dim[2] * sizeof(chunk_dim[0]));
 }
