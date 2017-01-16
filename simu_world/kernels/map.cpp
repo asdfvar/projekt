@@ -84,6 +84,7 @@ Map::Map(void)
 
    /*
    ** Create the vertices array big enough for all triangles within all chunks
+   ** TODO: future use with openGl's VBO
    */
    vertices = new float[ chunk_dim[0]       *
                          chunk_dim[1]       *
