@@ -5,6 +5,7 @@
 #include "hud.h"
 #include "point_conversion.h"
 #include <cmath>
+#include "text.h"
 
 /*
 ** function: draw_scene
@@ -19,4 +20,5 @@ void draw_scene( User *user, Map *map)
 
    hud::display();
 
+//   txt::write_to_screen( "A letter", -0.5f, +0.5f);
 }

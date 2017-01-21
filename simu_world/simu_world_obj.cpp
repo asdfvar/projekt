@@ -4,6 +4,7 @@
 #include "draw_scene.h"
 #include "change_direction.h"
 #include "opengl_interface.h"
+#include "text.h"
 
 /*
 ** function name: Simu_world_obj from: Simu_world_obj
@@ -22,6 +23,7 @@ Simu_world_obj::Simu_world_obj(void)
    std::string the_word = "the answer to the universe is ";
    the_word += ss.str();
    std::cout << the_word << std::endl;
+
 }
 
 /*
