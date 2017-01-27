@@ -216,6 +216,8 @@ void Simu_world_obj::display(void)
 
    draw_scene( &user, &map);
 
+   text.write_to_screen( "ABCD", -0.5f, 0.5f, 1.0f);
+
    // swap this buffer for the old one
    ogl::swap_buffers();
 }

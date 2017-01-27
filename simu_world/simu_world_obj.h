@@ -11,6 +11,7 @@
 #include "semaphore.h"
 #include "menu.h"
 #include "opengl_interface.h"
+#include "text.h"
 
 class Simu_world_obj
 {
@@ -69,6 +70,7 @@ class Simu_world_obj
       Time_manager          *time_manager;
       Map                    map;
       User                   user;
+      Text                   text;
 
 };
 
