@@ -23,6 +23,11 @@ namespace ogl
                       float  brightness,
                       int    num_vertices);
 
+   void draw_2d_polygon( float *vertices_x,
+                         float *vertices_y,
+                         float *color,
+                         int    num_vertices);
+
 }
 
 #endif

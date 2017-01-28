@@ -64,3 +64,19 @@ void ogl::draw_polygon( float *vertices_x,
    glEnd();
 
 }
+
+void ogl::draw_2d_polygon( float *vertices_x,
+                           float *vertices_y,
+                           float *color,
+                           int    num_vertices)
+{
+
+   glBegin(GL_POLYGON);
+     glColor3f( color[0], color[1], color[2]);
+     for (int vertex = 0; vertex < num_vertices; vertex++)
+     {
+        glVertex2f( vertices_x[vertex], vertices_y[vertex] );
+     }
+   glEnd();
+
+}
