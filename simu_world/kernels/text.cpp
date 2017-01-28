@@ -130,6 +130,11 @@ static void LCD_font(unsigned int plick,
    }
 }
 
+Text::Text( void )
+{
+   row = 0;
+}
+
 /*
 ** function name: write_to_screen from: Text
 */
@@ -152,7 +157,7 @@ void Text::write_to_screen( std::string input,
       glLineWidth( 3.0f );
       glBegin( GL_LINES );
 
-      switch( input.at(k) )
+      switch( std::toupper(input.at(k)) )
       {
          case 'A':
             LCD_font( 10, offset + x, y, scale);
@@ -494,6 +499,9 @@ void Text::write_to_screen( std::string input,
             LCD_font( 16, offset + x, y, scale);
             break;
 
+         case ' ':
+            break;
+
          default:
             LCD_font(  1, offset + x, y, scale);
             LCD_font(  2, offset + x, y, scale);
@@ -524,15 +532,15 @@ void Text::write_to_screen( std::string input,
 
    for (int k = 0; k < input.length(); k++)
    {
-      float vertices_x[4] = { offset + x - hor * 1.5f,
-                              offset + x + hor * 1.5f,
-                              offset + x + hor * 1.5f,
-                              offset + x - hor * 1.5f };
+      float vertices_x[4] = { offset + x - hor * 1.5f * scale,
+                              offset + x + hor * 1.5f * scale,
+                              offset + x + hor * 1.5f * scale,
+                              offset + x - hor * 1.5f * scale };
 
-      float vertices_y[4] = { y - ver * 1.5f,
-                              y - ver * 1.5f,
-                              y + ver * 1.5f,
-                              y + ver * 1.5f };
+      float vertices_y[4] = { y - ver * 1.5f * scale,
+                              y - ver * 1.5f * scale,
+                              y + ver * 1.5f * scale,
+                              y + ver * 1.5f * scale };
 
       float color[3]     = { 0.0f, 0.0f, 0.0f };
 
@@ -542,5 +550,35 @@ void Text::write_to_screen( std::string input,
                             4);
 
       offset += hor * 3.0f * scale;
+   }
+}
+
+void Text::clear( void )
+{
+   for (int k = 0; k <= row; k++)
+      buffer[k].clear();
+
+   row = 0;
+}
+
+void Text::populate( std::string input )
+{
+   buffer[row] = input;
+   row++;
+}
+
+void Text::display_contents( const float x,
+                             const float y,
+                             const float scale )
+{
+
+   float ver = 0.02;
+
+   for (int k = 0; k <= row; k++)
+   {
+      write_to_screen( buffer[k],
+                       x,
+                       y - (float)k * ver * 3.0f * scale,
+                       scale );
    }
 }

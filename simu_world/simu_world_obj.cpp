@@ -199,6 +199,9 @@ void Simu_world_obj::idle( void)
       */
       semaphore->decrement_task(1);
    }
+   text.clear();
+   text.populate( "abcDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+   text.populate( "hello world");
 
    /*
    ** Tell openGL to re-display
@@ -216,7 +219,7 @@ void Simu_world_obj::display(void)
 
    draw_scene( &user, &map);
 
-   text.write_to_screen( "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", -0.5f, 0.5f, 1.0f);
+   text.display_contents( -0.9f, 0.9f, 1.0f);
 
    // swap this buffer for the old one
    ogl::swap_buffers();
