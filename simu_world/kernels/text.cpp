@@ -39,93 +39,93 @@ static void LCD_font(unsigned int plick,
    switch( plick )
    {
       case 1:
-         glVertex3f(x - hor * scale, y + ver * scale, 0.0f);
-         glVertex3f(x,               y + ver * scale, 0.0f);
+         glVertex3f(x,                      y,               0.0f);
+         glVertex3f(x + hor * scale,        y,               0.0f);
         break;
 
       case 2:
-         glVertex3f(x,               y + ver * scale, 0.0f);
-         glVertex3f(x + hor * scale, y + ver * scale, 0.0f);
+         glVertex3f(x +        hor * scale, y,               0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y,               0.0f);
         break;
 
       case 3:
-         glVertex3f(x - hor * scale, y,               0.0f);
-         glVertex3f(x - hor * scale, y + ver * scale, 0.0f);
+         glVertex3f(x,                      y,               0.0f);
+         glVertex3f(x,                      y - ver * scale, 0.0f);
         break;
 
       case 4:
-         glVertex3f(x - hor * scale, y + ver * scale, 0.0f);
-         glVertex3f(x,               y,               0.0f);
+         glVertex3f(x,                      y,               0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale, 0.0f);
         break;
 
       case 5:
-         glVertex3f(x,               y + ver * scale, 0.0f);
-         glVertex3f(x,               y,               0.0f);
+         glVertex3f(x + hor * scale, y - ver * scale + ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
         break;
 
       case 6:
-         glVertex3f(x,               y,               0.0f);
-         glVertex3f(x + hor * scale, y + ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale + ver * scale, 0.0f);
         break;
 
       case 7:
-         glVertex3f(x + hor * scale, y,               0.0f);
-         glVertex3f(x + hor * scale, y + ver * scale, 0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale + ver * scale, 0.0f);
         break;
 
       case 8:
-         glVertex3f(x - hor * scale, y,               0.0f);
-         glVertex3f(x,               y,               0.0f);
+         glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
         break;
 
       case 9:
-         glVertex3f(x,               y,               0.0f);
-         glVertex3f(x + hor * scale, y,               0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
         break;
 
       case 10:
-         glVertex3f(x - hor * scale, y,               0.0f);
-         glVertex3f(x - hor * scale, y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale - hor * scale, y - ver * scale - ver * scale, 0.0f);
         break;
 
       case 11:
-         glVertex3f(x - hor * scale, y - ver * scale, 0.0f);
-         glVertex3f(x,               y,               0.0f);
+         glVertex3f(x + hor * scale - hor * scale, y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
         break;
 
       case 12:
-         glVertex3f(x,               y,               0.0f);
-         glVertex3f(x,               y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
         break;
 
       case 13:
-         glVertex3f(x,               y,               0.0f);
-         glVertex3f(x + hor * scale, y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale - ver * scale, 0.0f);
         break;
 
       case 14:
-         glVertex3f(x + hor * scale, y,               0.0f);
-         glVertex3f(x + hor * scale, y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale - ver * scale, 0.0f);
         break;
 
       case 15:
-         glVertex3f(x - hor * scale, y - ver * scale, 0.0f);
-         glVertex3f(x,               y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale - hor * scale, y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
         break;
 
       case 16:
-         glVertex3f(x,               y - ver * scale, 0.0f);
-         glVertex3f(x + hor * scale, y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale - ver * scale, 0.0f);
         break;
 
       case 17:
-         glVertex3f(x,               y - ver * scale, 0.0f);
-         glVertex3f(x + hor * scale, y,               0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
         break;
 
       case 18:
-         glVertex3f(x - hor * scale, y,               0.0f);
-         glVertex3f(x,               y - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
         break;
    }
 }
@@ -532,15 +532,15 @@ void Text::write_to_screen( std::string input,
 
    for (int k = 0; k < input.length(); k++)
    {
-      float vertices_x[4] = { offset + x - hor * 1.5f * scale,
-                              offset + x + hor * 1.5f * scale,
-                              offset + x + hor * 1.5f * scale,
-                              offset + x - hor * 1.5f * scale };
+      float vertices_x[4] = { offset + x - hor * 0.5f * scale,
+                              offset + x + hor * 2.8f * scale,
+                              offset + x + hor * 2.8f * scale,
+                              offset + x - hor * 0.5f * scale       };
 
-      float vertices_y[4] = { y - ver * 1.5f * scale,
-                              y - ver * 1.5f * scale,
-                              y + ver * 1.5f * scale,
-                              y + ver * 1.5f * scale };
+      float vertices_y[4] = { y - ver * 2.8f * scale,
+                              y - ver * 2.8f * scale,
+                              y + ver * 0.5f * scale,
+                              y + ver * 0.5f * scale       };
 
       float color[3]     = { 0.0f, 0.0f, 0.0f };
 
