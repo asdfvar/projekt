@@ -14,9 +14,13 @@ class Text
                             const float y,
                             const float scale );
 
+      void new_line( void );
+
       void clear( void );
 
-      void populate( std::string input );
+      void populate( std::string );
+      void populate( int );
+      void populate( float );
 
       void display_contents( const float x,
                              const float y,

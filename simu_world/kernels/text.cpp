@@ -2,6 +2,8 @@
 #include <iostream>
 #include <stdio.h>
 #include "opengl_interface.h"
+#include <sstream>
+#include <cstdlib>
 
 /*             1         2
 **        **********************
@@ -127,6 +129,14 @@ static void LCD_font(unsigned int plick,
          glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
          glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
         break;
+
+      case 19:
+         glVertex3f(x + (hor - 0.002f) * scale, y - (2.0f * ver - 0.002f) * scale,           0.0f);
+         glVertex3f(x + (hor + 0.002f) * scale, y - (2.0f * ver - 0.002f) * scale,           0.0f);
+         glVertex3f(x + (hor + 0.002f) * scale, y - 2.0f * ver  * scale,           0.0f);
+         glVertex3f(x + (hor - 0.002f) * scale, y - 2.0f * ver  * scale,           0.0f);
+         glVertex3f(x + (hor - 0.002f) * scale, y - (2.0f * ver - 0.002f) * scale,           0.0f);
+        break;
    }
 }
 
@@ -153,7 +163,7 @@ void Text::write_to_screen( std::string input,
    {
 
       // setup the GL conditions
-      glColor3f( 0.0f, 0.6f, 0.0f );
+      glColor3f( 0.0f, 0.8f, 0.0f );
       glLineWidth( 3.0f );
       glBegin( GL_LINES );
 
@@ -502,6 +512,15 @@ void Text::write_to_screen( std::string input,
          case ' ':
             break;
 
+         case '.':
+            LCD_font( 19, offset + x + 0.01f, y - 0.01f, scale);
+            break;
+
+         case '-':
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            break;
+
          default:
             LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
@@ -553,6 +572,11 @@ void Text::write_to_screen( std::string input,
    }
 }
 
+void Text::new_line( void )
+{
+   row++;
+}
+
 void Text::clear( void )
 {
    for (int k = 0; k <= row; k++)
@@ -563,8 +587,21 @@ void Text::clear( void )
 
 void Text::populate( std::string input )
 {
-   buffer[row] = input;
-   row++;
+   buffer[row] += input;
+}
+
+void Text::populate( int number )
+{
+   std::ostringstream id_str;
+   id_str << number;
+   buffer[row] += id_str.str();
+}
+
+void Text::populate( float number )
+{
+   std::ostringstream id_str;
+   id_str << number;
+   buffer[row] += id_str.str();
 }
 
 void Text::display_contents( const float x,

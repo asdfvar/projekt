@@ -1,9 +1,9 @@
 #include <iostream>
 #include <sstream>
 #include "simu_world_obj.h"
-#include "draw_scene.h"
 #include "change_direction.h"
 #include "opengl_interface.h"
+#include "hud.h"
 #include "text.h"
 
 /*
@@ -131,6 +131,8 @@ Simu_world_obj::~Simu_world_obj(void)
 void Simu_world_obj::idle( void)
 {
 
+   text.clear();
+
 #ifdef DEBUG
    map.debug_info();
    user.debug_info();
@@ -192,6 +194,13 @@ void Simu_world_obj::idle( void)
          user.get_position( user_position);
          map.update( user_position);
 
+         text.populate("user position ");
+         text.populate( user_position[0] );
+         text.populate( " . " );
+         text.populate( user_position[1] );
+         text.populate( " . " );
+         text.populate( user_position[2] );
+
       }
 
       /*
@@ -199,9 +208,6 @@ void Simu_world_obj::idle( void)
       */
       semaphore->decrement_task(1);
    }
-   text.clear();
-   text.populate( "abcDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
-   text.populate( "hello world");
 
    /*
    ** Tell openGL to re-display
@@ -217,7 +223,9 @@ void Simu_world_obj::display(void)
    // clear this openGL buffer
    ogl::opengl_clear();
 
-   draw_scene( &user, &map);
+   map.render_chunk( &user);
+
+   hud::display();
 
    text.display_contents( -1.0f, 1.0f, 1.0f);
 

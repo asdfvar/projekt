@@ -8,7 +8,6 @@ INC   = -I$(BASE)/kernels/
 OBJ = map.o              \
       chunk.o            \
       user.o             \
-      draw_scene.o       \
       point_conversion.o \
       draw_block.o       \
       hud.o              \
@@ -33,9 +32,6 @@ chunk.o: chunk.cpp
 	$(CPPC) $^ -c
 
 user.o: user.cpp
-	$(CPPC) $^ $(INC) -c $(FLAGS)
-
-draw_scene.o: draw_scene.cpp
 	$(CPPC) $^ $(INC) -c $(FLAGS)
 
 point_conversion.o: point_conversion.cpp
