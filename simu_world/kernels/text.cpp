@@ -160,365 +160,365 @@ void Text::write_to_screen( std::string input,
       switch( std::toupper(input.at(k)) )
       {
          case 'A':
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'B':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
-            LCD_font(  5, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  5, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'C':
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'D':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
-            LCD_font(  5, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  5, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'E':
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'F':
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'G':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'H':
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'I':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font(  5, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  5, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'J':
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'K':
-            LCD_font(  5, offset + x, y, scale);
-            LCD_font(  6, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
-            LCD_font( 13, offset + x, y, scale);
+            LCD_font(  5, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  6, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 13, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'L':
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'M':
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  4, offset + x, y, scale);
-            LCD_font(  6, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  4, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  6, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'N':
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  4, offset + x, y, scale);
-            LCD_font( 13, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  4, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 13, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'O':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'P':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'Q':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 13, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 13, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'R':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 13, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 13, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'S':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'T':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  5, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  5, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'U':
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'V':
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 17, offset + x, y, scale);
-            LCD_font( 18, offset + x, y, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 17, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 18, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'W':
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'X':
-            LCD_font(  4, offset + x, y, scale);
-            LCD_font( 13, offset + x, y, scale);
-            LCD_font(  6, offset + x, y, scale);
-            LCD_font( 11, offset + x, y, scale);
+            LCD_font(  4, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 13, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  6, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 11, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'Y':
-            LCD_font( 12, offset + x, y, scale);
-            LCD_font(  6, offset + x, y, scale);
-            LCD_font(  4, offset + x, y, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  6, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  4, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case 'Z':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  6, offset + x, y, scale);
-            LCD_font( 11, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  6, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 11, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '1':
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '2':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '3':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '4':
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '5':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '6':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '7':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '8':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '9':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '0':
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case ' ':
             break;
 
          default:
-            LCD_font(  1, offset + x, y, scale);
-            LCD_font(  2, offset + x, y, scale);
-            LCD_font(  3, offset + x, y, scale);
-            LCD_font(  4, offset + x, y, scale);
-            LCD_font(  5, offset + x, y, scale);
-            LCD_font(  6, offset + x, y, scale);
-            LCD_font(  7, offset + x, y, scale);
-            LCD_font(  8, offset + x, y, scale);
-            LCD_font(  9, offset + x, y, scale);
-            LCD_font( 10, offset + x, y, scale);
-            LCD_font( 11, offset + x, y, scale);
-            LCD_font( 12, offset + x, y, scale);
-            LCD_font( 13, offset + x, y, scale);
-            LCD_font( 14, offset + x, y, scale);
-            LCD_font( 15, offset + x, y, scale);
-            LCD_font( 16, offset + x, y, scale);
+            LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  3, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  4, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  5, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  6, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 10, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 11, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 12, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 13, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);
             break;
       }
 
@@ -532,10 +532,10 @@ void Text::write_to_screen( std::string input,
 
    for (int k = 0; k < input.length(); k++)
    {
-      float vertices_x[4] = { offset + x - hor * 0.5f * scale,
-                              offset + x + hor * 2.8f * scale,
-                              offset + x + hor * 2.8f * scale,
-                              offset + x - hor * 0.5f * scale       };
+      float vertices_x[4] = { offset + x + 0.01f - hor * 0.5f * scale,
+                              offset + x + 0.01f + hor * 2.8f * scale,
+                              offset + x + 0.01f + hor * 2.8f * scale,
+                              offset + x + 0.01f - hor * 0.5f * scale       };
 
       float vertices_y[4] = { y - ver * 2.8f * scale,
                               y - ver * 2.8f * scale,

@@ -219,7 +219,7 @@ void Simu_world_obj::display(void)
 
    draw_scene( &user, &map);
 
-   text.display_contents( -0.9f, 0.9f, 1.0f);
+   text.display_contents( -1.0f, 1.0f, 1.0f);
 
    // swap this buffer for the old one
    ogl::swap_buffers();
