@@ -535,12 +535,12 @@ void Text::write_to_screen( std::string input,
       float vertices_x[4] = { offset + x + 0.01f - hor * 0.5f * scale,
                               offset + x + 0.01f + hor * 2.8f * scale,
                               offset + x + 0.01f + hor * 2.8f * scale,
-                              offset + x + 0.01f - hor * 0.5f * scale       };
+                              offset + x + 0.01f - hor * 0.5f * scale };
 
       float vertices_y[4] = { y - ver * 2.8f * scale,
                               y - ver * 2.8f * scale,
                               y + ver * 0.5f * scale,
-                              y + ver * 0.5f * scale       };
+                              y + ver * 0.5f * scale };
 
       float color[3]     = { 0.0f, 0.0f, 0.0f };
 
