@@ -203,6 +203,18 @@ unsigned int Chunk::get_dimensions(void)
 }
 
 /*
+** function name: get_dimensions from Chunk 
+*/
+unsigned int Chunk::get_dimensions( unsigned int *dimensions_out)
+{
+   dimensions_out[0] = chunk_dim[0];
+   dimensions_out[1] = chunk_dim[1];
+   dimensions_out[2] = chunk_dim[2];
+
+   return chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+}
+
+/*
 ** function name: get_position from Chunk
 */
 int Chunk::get_position(float *position_out,

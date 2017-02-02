@@ -24,22 +24,22 @@ class Map
                       int v_id_y,
                       int v_id_z);
 
-      int get_grid_size(int ind);
-
       void debug_info( void );
+      int  get_abs_element( int *position);
 
    private:
       void shift( int x, int y, int z);
 
-      int local_grid_size[3];
+      int num_chunks[3];
+      int num_chunk_elements[3];
 
-      int *physical_grid_id_x,
-          *physical_grid_id_y,
-          *physical_grid_id_z;
+      int *physical_chunk_id_x,
+          *physical_chunk_id_y,
+          *physical_chunk_id_z;
 
-      int *virtual_grid_id_x,
-          *virtual_grid_id_y,
-          *virtual_grid_id_z;
+      int *virtual_chunk_id_x,
+          *virtual_chunk_id_y,
+          *virtual_chunk_id_z;
 
       std::vector<Chunk*> chunks;
 

@@ -25,6 +25,7 @@ class Chunk
       int  get_position(float *position_out, int block_index);
       void change(float *position_in);
       unsigned int get_dimensions(void);
+      unsigned int get_dimensions( unsigned int *dimensions_out);
       void display_info( void);
       bool position_in_chunk( float *poisition_in);
       void move( int x, int y, int z);
