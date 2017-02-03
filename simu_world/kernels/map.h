@@ -6,6 +6,7 @@
 #include <vector>
 #include "opengl_interface.h"
 #include "user.h"
+#include "text.h"
 
 /*
 ** class name: Map
@@ -25,7 +26,7 @@ class Map
                       int v_id_z);
 
       void debug_info( void );
-      int  get_abs_element( int *position);
+      int  get_abs_element( int *position, Text *text);
 
    private:
       void shift( int x, int y, int z);

@@ -131,11 +131,11 @@ static void LCD_font(unsigned int plick,
         break;
 
       case 19:
-         glVertex3f(x + (hor - 0.002f) * scale, y - (2.0f * ver - 0.002f) * scale,           0.0f);
-         glVertex3f(x + (hor + 0.002f) * scale, y - (2.0f * ver - 0.002f) * scale,           0.0f);
-         glVertex3f(x + (hor + 0.002f) * scale, y - 2.0f * ver  * scale,           0.0f);
-         glVertex3f(x + (hor - 0.002f) * scale, y - 2.0f * ver  * scale,           0.0f);
-         glVertex3f(x + (hor - 0.002f) * scale, y - (2.0f * ver - 0.002f) * scale,           0.0f);
+         glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
+         glVertex3f(x + 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
+         glVertex3f(x + 0.002f * scale, y - (2.0f * ver  * scale),           0.0f);
+         glVertex3f(x - 0.002f * scale, y - (2.0f * ver  * scale),           0.0f);
+         glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
         break;
    }
 }
@@ -429,6 +429,7 @@ void Text::write_to_screen( std::string input,
             LCD_font(  1, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font(  2, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font(  7, offset + x + 0.01f, y - 0.01f, scale);
+            LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font( 14, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font( 15, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font( 16, offset + x + 0.01f, y - 0.01f, scale);

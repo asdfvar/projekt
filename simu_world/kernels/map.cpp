@@ -435,15 +435,95 @@ void Map::shift( int x, int y, int z)
 /*
 ** function name: get_abs_element from: Map
 */
-int Map::get_abs_element( int *position_in)
+int Map::get_abs_element( int *position_in, Text *text)
 {
-   int physical_chunk_position[3] = { (position_in[0] / num_chunk_elements[0]) + num_chunks[0] / 2,
-                                      (position_in[1] / num_chunk_elements[1]) + num_chunks[1] / 2,
-                                      (position_in[2] / num_chunk_elements[2]) + num_chunks[2] / 2 };
+   int physical_chunk_position[3];
+
+   if (position_in[0] >= 0)
+   {
+      physical_chunk_position[0] = ((position_in[0] / num_chunk_elements[0]) +
+                                     num_chunks[0] / 2) % num_chunks[0];
+   }
+   else
+   {
+      physical_chunk_position[0] = ((position_in[0] / num_chunk_elements[0]) +
+                                     num_chunks[0] / 2 - 1) % num_chunks[0];
+   }
+   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
+
+   if (position_in[1] >= 0)
+   {
+      physical_chunk_position[1] = ((position_in[1] / num_chunk_elements[1]) +
+                                     num_chunks[1] / 2) % num_chunks[1];
+   }
+   else
+   {
+      physical_chunk_position[1] = ((position_in[1] / num_chunk_elements[1]) +
+                                     num_chunks[1] / 2 - 1) % num_chunks[1];
+   }
+   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
+
+   if (position_in[2] >= 0)
+   {
+      physical_chunk_position[2] = ((position_in[2] / num_chunk_elements[2]) +
+                                     num_chunks[2] / 2) % num_chunks[2];
+   }
+   else
+   {
+      physical_chunk_position[2] = ((position_in[2] / num_chunk_elements[2]) +
+                                     num_chunks[2] / 2 - 1) % num_chunks[2];
+   }
+   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
+
 
    int element_position[3] = { position_in[0] % num_chunk_elements[0],
                                position_in[1] % num_chunk_elements[1],
                                position_in[2] % num_chunk_elements[2] };
+
+   if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
+   if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
+   if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
+
+   // TODO: setup debugger to identify which physical chunk and respective element the position is in
+   text->populate("position in ");
+   text->populate( position_in[0] );
+   text->populate( ". ");
+   text->populate( position_in[1] );
+   text->populate( ". ");
+   text->populate( position_in[2] );
+   text->populate( ". ");
+   text->new_line();
+   text->populate("Physical Chunk ids x ");
+   for (int k = 0; k < num_chunks[0]; k++)
+   {
+      text->populate( physical_chunk_id_x[k] );
+      text->populate( ". ");
+   }
+   text->new_line();
+   text->populate("Physical Chunk ");
+   text->populate( physical_chunk_position[0] );
+   text->populate( ". ");
+   text->populate( physical_chunk_position[1] );
+   text->populate( ". ");
+   text->populate( physical_chunk_position[2] );
+   text->new_line();
+   text->populate("Relative element ");
+   text->populate( element_position[0] );
+   text->populate( ". ");
+   text->populate( element_position[1] );
+   text->populate( ". ");
+   text->populate( element_position[2] );
+
+   
+   Chunk *this_chunk = access_chunk( physical_chunk_id_x[physical_chunk_position[0]]+1,
+                                     physical_chunk_id_y[physical_chunk_position[1]]+1,
+                                     physical_chunk_id_z[physical_chunk_position[2]]+1);
+
+   int element = this_chunk->get_block( element_position );
+
+   text->new_line();
+   text->populate("Chunk element value ");
+   text->populate( element );
 
    if ( physical_chunk_id_x[0] > physical_chunk_position[0] ||
         physical_chunk_id_x[0] > physical_chunk_position[1] ||
@@ -461,7 +541,6 @@ int Map::get_abs_element( int *position_in)
       return 0;
    }
 
-   // TODO: setup debugger to identify which physical chunk and respective element the position is in
    return 0;
 }
 

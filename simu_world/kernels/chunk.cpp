@@ -251,6 +251,23 @@ int Chunk::get_position(float *position_out,
 }
 
 /*
+** function name: get_block from Chunk
+*/
+int Chunk::get_block( int *block_index_in)
+{
+   if (block_index_in[0] * block_index_in[1] * block_index_in[2] >=
+       chunk_dim[0] * chunk_dim[1] * chunk_dim[2])
+   {
+      std::cout << "block index exceeds chunk dimensions" << std::endl;
+      return 0;
+   }
+
+   return blocks[ block_index_in[3] * chunk_dim[2] * chunk_dim[1] +
+                  block_index_in[2] * chunk_dim[0]                +
+                  block_index_in[0] ];
+}
+
+/*
 ** function name: get_abs_pos_id from Chunk
 */
 void Chunk::get_abs_pos_id( int *abs_pos_id_out )

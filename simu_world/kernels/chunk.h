@@ -23,6 +23,7 @@ class Chunk
 
       // Functions
       int  get_position(float *position_out, int block_index);
+      int  get_block( int *block_index);
       void change(float *position_in);
       unsigned int get_dimensions(void);
       unsigned int get_dimensions( unsigned int *dimensions_out);

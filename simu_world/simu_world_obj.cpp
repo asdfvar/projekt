@@ -196,10 +196,17 @@ void Simu_world_obj::idle( void)
 
          text.populate("user position ");
          text.populate( user_position[0] );
-         text.populate( " . " );
+         text.populate( ". " );
          text.populate( user_position[1] );
-         text.populate( " . " );
+         text.populate( ". " );
          text.populate( user_position[2] );
+         text.new_line();
+
+         int i_user_position[3] = { (int)user_position[0],
+                                    (int)user_position[1],
+                                    (int)user_position[2] };
+
+         map.get_abs_element( i_user_position, &text);
 
       }
 
