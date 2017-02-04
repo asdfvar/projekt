@@ -42,108 +42,115 @@ static void LCD_font(unsigned int plick,
    switch( plick )
    {
       case 1:
-         glVertex3f(x,                      y,               0.0f);
-         glVertex3f(x + hor * scale,        y,               0.0f);
+         glVertex3f(x,                      y,                      0.0f);
+         glVertex3f(x + hor * scale,        y,                      0.0f);
         break;
 
       case 2:
-         glVertex3f(x +        hor * scale, y,               0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y,               0.0f);
+         glVertex3f(x +        hor * scale, y,                      0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y,                      0.0f);
         break;
 
       case 3:
-         glVertex3f(x,                      y,               0.0f);
-         glVertex3f(x,                      y - ver * scale, 0.0f);
+         glVertex3f(x,                      y,                      0.0f);
+         glVertex3f(x,                      y - ver * scale,        0.0f);
         break;
 
       case 4:
-         glVertex3f(x,                      y,               0.0f);
-         glVertex3f(x + hor * scale,        y - ver * scale, 0.0f);
+         glVertex3f(x,                      y,                      0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 5:
-         glVertex3f(x + hor * scale, y - ver * scale + ver * scale, 0.0f);
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale,        y,                      0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 6:
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale + ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y,                      0.0f);
         break;
 
       case 7:
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale + ver * scale, 0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y,                      0.0f);
         break;
 
       case 8:
-         glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x,                      y - ver * scale,        0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 9:
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
         break;
 
       case 10:
-         glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale - hor * scale, y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x,                      y - ver * scale,        0.0f);
+         glVertex3f(x,                      y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 11:
-         glVertex3f(x + hor * scale - hor * scale, y - ver * scale - ver * scale, 0.0f);
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
+         glVertex3f(x,                      y - 2.0f * ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 12:
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 13:
-         glVertex3f(x + hor * scale,               y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 14:
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 15:
-         glVertex3f(x + hor * scale - hor * scale, y - ver * scale - ver * scale, 0.0f);
-         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x,                      y - 2.0f * ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 16:
-         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
         break;
 
+      // SPECIAL CHARACTERS
+
+      // right side of the "v" character's slope
       case 17:
-         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
-         glVertex3f(x + hor * scale + hor * scale, y - ver * scale,               0.0f);
+         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
         break;
 
+      // left side of the "v" character's slope
       case 18:
-         glVertex3f(x + hor * scale - hor * scale, y - ver * scale,               0.0f);
-         glVertex3f(x + hor * scale,               y - ver * scale - ver * scale, 0.0f);
+         glVertex3f(x,                      y - ver * scale,        0.0f);
+         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
         break;
 
+      // "." period
       case 19:
          glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
          glVertex3f(x + 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
-         glVertex3f(x + 0.002f * scale, y - (2.0f * ver  * scale),           0.0f);
-         glVertex3f(x - 0.002f * scale, y - (2.0f * ver  * scale),           0.0f);
+         glVertex3f(x + 0.002f * scale, y - (2.0f * ver * scale),            0.0f);
+         glVertex3f(x - 0.002f * scale, y - (2.0f * ver * scale),            0.0f);
          glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
         break;
 
+      // "," comma
       case 20:
          glVertex3f(x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   0.0f);
          glVertex3f(x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   0.0f);
         break;
 
+      // ":" colon
       case 21:
          glVertex3f(x + hor * scale, y - 0.333f * ver * scale,   0.0f);
          glVertex3f(x + hor * scale, y - 0.666f * ver * scale,   0.0f);
@@ -151,6 +158,7 @@ static void LCD_font(unsigned int plick,
          glVertex3f(x + hor * scale, y - 1.666f * ver * scale,   0.0f);
         break;
 
+      // "=" equal
       case 22:
          glVertex3f(x + 0.25f * hor * scale, y - 0.75f * ver * scale,   0.0f);
          glVertex3f(x + 1.75f * hor * scale, y - 0.75f * ver * scale,   0.0f);
@@ -643,7 +651,7 @@ void Text::display_contents( const float x,
                              const float scale )
 {
 
-   float ver = 0.02;
+   float ver = 0.02f;
 
    for (int k = 0; k <= row; k++)
    {
