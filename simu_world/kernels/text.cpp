@@ -143,6 +143,20 @@ static void LCD_font(unsigned int plick,
          glVertex3f(x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   0.0f);
          glVertex3f(x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   0.0f);
         break;
+
+      case 21:
+         glVertex3f(x + hor * scale, y - 0.333f * ver * scale,   0.0f);
+         glVertex3f(x + hor * scale, y - 0.666f * ver * scale,   0.0f);
+         glVertex3f(x + hor * scale, y - 1.333f * ver * scale,   0.0f);
+         glVertex3f(x + hor * scale, y - 1.666f * ver * scale,   0.0f);
+        break;
+
+      case 22:
+         glVertex3f(x + 0.25f * hor * scale, y - 0.75f * ver * scale,   0.0f);
+         glVertex3f(x + 1.75f * hor * scale, y - 0.75f * ver * scale,   0.0f);
+         glVertex3f(x + 0.25f * hor * scale, y - 1.25f * ver * scale,   0.0f);
+         glVertex3f(x + 1.75f * hor * scale, y - 1.25f * ver * scale,   0.0f);
+        break;
    }
 }
 
@@ -531,6 +545,14 @@ void Text::write_to_screen( std::string input,
          case '-':
             LCD_font(  8, offset + x + 0.01f, y - 0.01f, scale);
             LCD_font(  9, offset + x + 0.01f, y - 0.01f, scale);
+            break;
+
+         case ':':
+            LCD_font( 21, offset + x + 0.01f, y - 0.01f, scale);
+            break;
+
+         case '=':
+            LCD_font( 22, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          default:

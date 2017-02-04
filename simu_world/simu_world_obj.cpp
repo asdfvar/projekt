@@ -194,7 +194,7 @@ void Simu_world_obj::idle( void)
          user.get_position( user_position);
          map.update( user_position);
 
-         text.populate("user position ");
+         text.populate("user position: ");
          text.populate( user_position[0] );
          text.populate( ", " );
          text.populate( user_position[1] );

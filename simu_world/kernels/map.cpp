@@ -485,7 +485,7 @@ int Map::get_abs_element( int *position_in, Text *text)
    if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
 
    // TODO: setup debugger to identify which physical chunk and respective element the position is in
-   text->populate("position in ");
+   text->populate("position in: ");
    text->populate( position_in[0] );
    text->populate( ", ");
    text->populate( position_in[1] );
@@ -493,21 +493,21 @@ int Map::get_abs_element( int *position_in, Text *text)
    text->populate( position_in[2] );
    text->populate( ", ");
    text->new_line();
-   text->populate("Physical Chunk ids x ");
+   text->populate("Physical Chunk ids x: ");
    for (int k = 0; k < num_chunks[0]; k++)
    {
       text->populate( physical_chunk_id_x[k] );
       text->populate( ", ");
    }
    text->new_line();
-   text->populate("Physical Chunk ");
+   text->populate("Physical Chunk: ");
    text->populate( physical_chunk_position[0] );
    text->populate( ", ");
    text->populate( physical_chunk_position[1] );
    text->populate( ", ");
    text->populate( physical_chunk_position[2] );
    text->new_line();
-   text->populate("Relative element ");
+   text->populate("Relative element: ");
    text->populate( element_position[0] );
    text->populate( ", ");
    text->populate( element_position[1] );
@@ -522,7 +522,7 @@ int Map::get_abs_element( int *position_in, Text *text)
    int element = this_chunk->get_block( element_position );
 
    text->new_line();
-   text->populate("Chunk element value ");
+   text->populate("Chunk element value: ");
    text->populate( element );
 
    if ( physical_chunk_id_x[0] > physical_chunk_position[0] ||
