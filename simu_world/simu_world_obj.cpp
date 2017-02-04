@@ -196,9 +196,9 @@ void Simu_world_obj::idle( void)
 
          text.populate("user position ");
          text.populate( user_position[0] );
-         text.populate( ". " );
+         text.populate( ", " );
          text.populate( user_position[1] );
-         text.populate( ". " );
+         text.populate( ", " );
          text.populate( user_position[2] );
          text.new_line();
 

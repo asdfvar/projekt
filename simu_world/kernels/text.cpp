@@ -5,14 +5,15 @@
 #include <sstream>
 #include <cstdlib>
 
-/*             1         2
+/*         -------> +x
+**    (0,0)    1         2
 **        **********************
-**        **********************
-**        ***       **       ***
-**        ** *      **      * **
-**        **  *   5 **     *  **
-**        **   *    **  6 *   **
-**      3 **  4 *   **   *  7 **
+**  +y    **********************
+**   ^    ***       **       ***
+**   |    ** *      **      * **
+**   |    **  *   5 **     *  **
+**   |    **   *    **  6 *   **
+**   |  3 **  4 *   **   *  7 **
 **        **     *  **  *     **
 **        **      * ** *      **
 **        **  8    ****   9   **
@@ -136,6 +137,11 @@ static void LCD_font(unsigned int plick,
          glVertex3f(x + 0.002f * scale, y - (2.0f * ver  * scale),           0.0f);
          glVertex3f(x - 0.002f * scale, y - (2.0f * ver  * scale),           0.0f);
          glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
+        break;
+
+      case 20:
+         glVertex3f(x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   0.0f);
+         glVertex3f(x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   0.0f);
         break;
    }
 }
@@ -516,6 +522,10 @@ void Text::write_to_screen( std::string input,
 
          case '.':
             LCD_font( 19, offset + x + 0.01f, y - 0.01f, scale);
+            break;
+
+         case ',':
+            LCD_font( 20, offset + x + 0.01f, y - 0.01f, scale);
             break;
 
          case '-':
