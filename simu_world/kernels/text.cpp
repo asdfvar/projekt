@@ -143,6 +143,7 @@ static void LCD_font(unsigned int plick,
 Text::Text( void )
 {
    row = 0;
+   curr_buffer = buffer_1;
 }
 
 /*
@@ -581,28 +582,28 @@ void Text::new_line( void )
 void Text::clear( void )
 {
    for (int k = 0; k <= row; k++)
-      buffer[k].clear();
+      curr_buffer[k].clear();
 
    row = 0;
 }
 
 void Text::populate( std::string input )
 {
-   buffer[row] += input;
+   curr_buffer[row] += input;
 }
 
 void Text::populate( int number )
 {
    std::ostringstream id_str;
    id_str << number;
-   buffer[row] += id_str.str();
+   curr_buffer[row] += id_str.str();
 }
 
 void Text::populate( float number )
 {
    std::ostringstream id_str;
    id_str << number;
-   buffer[row] += id_str.str();
+   curr_buffer[row] += id_str.str();
 }
 
 void Text::display_contents( const float x,
@@ -614,9 +615,13 @@ void Text::display_contents( const float x,
 
    for (int k = 0; k <= row; k++)
    {
-      write_to_screen( buffer[k],
+      write_to_screen( curr_buffer[k],
                        x,
                        y - (float)k * ver * 3.0f * scale,
                        scale );
    }
+
+   // swap buffers
+   if (curr_buffer == buffer_1) curr_buffer = buffer_2;
+   if (curr_buffer == buffer_2) curr_buffer = buffer_1;
 }

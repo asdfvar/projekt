@@ -529,7 +529,7 @@ int Map::get_abs_element( int *position_in, Text *text)
         physical_chunk_id_x[0] > physical_chunk_position[1] ||
         physical_chunk_id_z[0] > physical_chunk_position[2] )
    {
-      std::cout << "position out of scope of map" << std::endl;
+//      std::cout << "position out of scope of map" << std::endl;
       return 0;
    }
 
@@ -537,7 +537,7 @@ int Map::get_abs_element( int *position_in, Text *text)
         physical_chunk_id_y[num_chunks[1]] <= physical_chunk_position[1] ||
         physical_chunk_id_z[num_chunks[2]] <= physical_chunk_position[2] )
    {
-      std::cout << "position out of scope of map" << std::endl;
+//      std::cout << "position out of scope of map" << std::endl;
       return 0;
    }
 

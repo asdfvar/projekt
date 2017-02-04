@@ -28,7 +28,9 @@ class Text
 
    private:
 
-      std::string buffer[20];
+      std::string *curr_buffer;
+      std::string  buffer_1[20];
+      std::string  buffer_2[20];
       int row;
 };
 
