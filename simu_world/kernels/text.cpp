@@ -171,7 +171,10 @@ static void LCD_font(unsigned int plick,
 Text::Text( void )
 {
    row = 0;
-   curr_buffer = buffer_1;
+   edit_buffer = buffer_1;
+   disp_buffer = buffer_2;
+   edit_complete = false;
+   display_complete = false;
 }
 
 /*
@@ -621,29 +624,57 @@ void Text::new_line( void )
 
 void Text::clear( void )
 {
+   if ( display_complete )
+   {
+      // swap buffers
+      if (edit_buffer == buffer_1 && disp_buffer == buffer_2)
+      {
+         edit_buffer = buffer_2;
+         disp_buffer = buffer_1;
+      }
+      else if (edit_buffer == buffer_2 && disp_buffer == buffer_1)
+      {
+         edit_buffer = buffer_1;
+         disp_buffer = buffer_2;
+      }
+      else
+      {
+         std::cout << __FILE__ << ":" << __LINE__ <<
+                   ": error with edit buffer and display buffer"
+                   << std::endl;
+      }
+
+      display_complete = false;
+   }
+
    for (int k = 0; k <= row; k++)
-      curr_buffer[k].clear();
+      edit_buffer[k].clear();
 
    row = 0;
 }
 
 void Text::populate( std::string input )
 {
-   curr_buffer[row] += input;
+   edit_buffer[row] += input;
 }
 
 void Text::populate( int number )
 {
    std::ostringstream id_str;
    id_str << number;
-   curr_buffer[row] += id_str.str();
+   edit_buffer[row] += id_str.str();
 }
 
 void Text::populate( float number )
 {
    std::ostringstream id_str;
    id_str << number;
-   curr_buffer[row] += id_str.str();
+   edit_buffer[row] += id_str.str();
+}
+
+void Text::done( void )
+{
+   edit_complete = true;
 }
 
 void Text::display_contents( const float x,
@@ -653,15 +684,18 @@ void Text::display_contents( const float x,
 
    float ver = 0.02f;
 
-   for (int k = 0; k <= row; k++)
+   if ( edit_complete )
    {
-      write_to_screen( curr_buffer[k],
-                       x,
-                       y - (float)k * ver * 3.0f * scale,
-                       scale );
+      for (int k = 0; k <= row; k++)
+      {
+         write_to_screen( disp_buffer[k],
+                          x,
+                          y - (float)k * ver * 3.0f * scale,
+                          scale );
+      }
+
+      edit_complete    = false;
+      display_complete = true;
    }
 
-   // swap buffers
-   if (curr_buffer == buffer_1) curr_buffer = buffer_2;
-   if (curr_buffer == buffer_2) curr_buffer = buffer_1;
 }

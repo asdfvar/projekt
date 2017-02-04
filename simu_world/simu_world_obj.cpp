@@ -216,6 +216,9 @@ void Simu_world_obj::idle( void)
       semaphore->decrement_task(1);
    }
 
+   // Tell the display that text is done editing the text buffer
+   text.done();
+
    /*
    ** Tell openGL to re-display
    */
