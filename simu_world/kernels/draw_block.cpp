@@ -13,6 +13,7 @@
 #include <GL/gl.h>
 
 void draw_block( float  block_position[3],
+                 float *color,
                  float *vertices,
                  User  *user)
 {
@@ -244,8 +245,6 @@ void draw_block( float  block_position[3],
 
       if (valid_view[0] && valid_view[1] && valid_view[2] && valid_view[3])
       {
-
-        float color[3] = { 1.0f, 1.0f, 1.0f };
 
         ogl::draw_polygon( view_x,
                            view_y,

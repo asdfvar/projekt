@@ -26,7 +26,13 @@ class Map
                       int v_id_z);
 
       void debug_info( void );
+
       int  get_abs_element( int *position, Text *text);
+
+      void set_phys_chunk_color( int    p_ind_x,
+                                 int    p_ind_y,
+                                 int    p_ind_z,
+                                 float *color );
 
    private:
       void shift( int x, int y, int z);

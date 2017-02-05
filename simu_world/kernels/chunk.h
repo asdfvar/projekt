@@ -33,6 +33,8 @@ class Chunk
       void update( void );
       void get_abs_pos_id( int *abs_pos_id );
       bool is_valid( void );
+      void set_color( float *color_in );
+      void get_color( float *color_out );
 
    private:
 
@@ -44,6 +46,7 @@ class Chunk
       bool         valid;
       int          abs_pos_id[3];
       int          prev_abs_pos_id[3];
+      float        color[3];
 
       // Functions:
       void create_random( void );

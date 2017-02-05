@@ -38,6 +38,10 @@ Chunk::Chunk( unsigned int  id_in,
 
    for (int ind = 0; ind < 3; ind++) position[ind] = position_in[ind];
 
+   color[0] = 1.0f;
+   color[1] = 1.0f;
+   color[2] = 1.0f;
+
    /*
    ** Attempt to read from file upon creation
    */
@@ -403,4 +407,18 @@ void Chunk::write_chunk( void )
                   chunk_dim[0] *
                   chunk_dim[1] *
                   chunk_dim[2] * sizeof(chunk_dim[0]));
+}
+
+void Chunk::set_color( float *color_in )
+{
+   color[0] = color_in[0];
+   color[1] = color_in[1];
+   color[2] = color_in[2];
+}
+
+void Chunk::get_color( float *color_out )
+{
+   color_out[0] = color[0];
+   color_out[1] = color[1];
+   color_out[2] = color[2];
 }

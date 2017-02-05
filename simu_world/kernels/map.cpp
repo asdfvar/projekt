@@ -219,13 +219,13 @@ void Map::render_chunk( User *user)
    float block_position[3];
    Chunk *chunk;
 
-   for (int grid_x = 0; grid_x < num_chunks[0]; grid_x++)
+   for (int chunk_ind_x = 0; chunk_ind_x < num_chunks[0]; chunk_ind_x++)
    {
-      for (int grid_y = 0; grid_y < num_chunks[1]; grid_y++)
+      for (int chunk_ind_y = 0; chunk_ind_y < num_chunks[1]; chunk_ind_y++)
       {
-         for (int grid_z = 0; grid_z < num_chunks[2]; grid_z++)
+         for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
          {
-            chunk = access_chunk( grid_x, grid_y, grid_z);
+            chunk = access_chunk( chunk_ind_x, chunk_ind_y, chunk_ind_z);
 
             if ( chunk->is_valid() )
             {
@@ -237,7 +237,11 @@ void Map::render_chunk( User *user)
 
                   if (!chunk->get_position( block_position, block_ind)) continue;
 
+                  float color[3];
+                  chunk->get_color( color );
+
                   draw_block( block_position,
+                              color,
                              &vertices[ 3*6*6*ind ],
                               user);
                }
@@ -251,9 +255,9 @@ void Map::render_chunk( User *user)
 ** function name: access_chunk from: Map
 ** Return pointer to the specified chunk block from physical id input
 */
-Chunk *Map::access_chunk(int p_id_x,
-                         int p_id_y,
-                         int p_id_z)
+Chunk *Map::access_chunk( int p_id_x,
+                          int p_id_y,
+                          int p_id_z)
 {
    if (p_id_x < 0 || p_id_x >= num_chunks[0] ||
        p_id_y < 0 || p_id_y >= num_chunks[1] ||
@@ -270,6 +274,18 @@ Chunk *Map::access_chunk(int p_id_x,
                          p_id_z * num_chunks[0] * num_chunks[1];
 
    return chunks.at( index );
+}
+
+void Map::set_phys_chunk_color( int    p_ind_x,
+                                int    p_ind_y,
+                                int    p_ind_z,
+                                float *color )
+{
+   Chunk *chunk = access_chunk( p_ind_x,
+                                p_ind_y,
+                                p_ind_z );
+
+   chunk->set_color( color );
 }
 
 /*
@@ -515,9 +531,9 @@ int Map::get_abs_element( int *position_in, Text *text)
    text->populate( element_position[2] );
 
    
-   Chunk *this_chunk = access_chunk( physical_chunk_id_x[physical_chunk_position[0]],
-                                     physical_chunk_id_y[physical_chunk_position[1]],
-                                     physical_chunk_id_z[physical_chunk_position[2]]);
+   Chunk *this_chunk = access_chunk( physical_chunk_position[0],
+                                     physical_chunk_position[1],
+                                     physical_chunk_position[2]);
 
    int element = this_chunk->get_block( element_position );
 
