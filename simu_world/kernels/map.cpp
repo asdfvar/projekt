@@ -249,11 +249,11 @@ void Map::render_chunk( User *user)
 
 /*
 ** function name: access_chunk from: Map
-** Return pointer to the specified chunk block
+** Return pointer to the specified chunk block from physical id input
 */
 Chunk *Map::access_chunk(int p_id_x,
-                              int p_id_y,
-                              int p_id_z)
+                         int p_id_y,
+                         int p_id_z)
 {
    if (p_id_x < 0 || p_id_x >= num_chunks[0] ||
        p_id_y < 0 || p_id_y >= num_chunks[1] ||

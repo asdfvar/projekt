@@ -76,7 +76,8 @@ void Chunk::update( void )
 */
 void Chunk::create_random( void)
 {
-   for (int ind = 0; ind < chunk_dim[0] * chunk_dim[1] * chunk_dim[2]; ind++)
+   int chunk_dim_tot = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+   for (int ind = 0; ind < chunk_dim_tot; ind++)
    {
       int random_num = std::rand() % 100;
       if (random_num == 0)
@@ -262,8 +263,8 @@ int Chunk::get_block( int *block_index_in)
       return 0;
    }
 
-   return blocks[ block_index_in[3] * chunk_dim[2] * chunk_dim[1] +
-                  block_index_in[2] * chunk_dim[0]                +
+   return blocks[ block_index_in[2] * chunk_dim[2] * chunk_dim[1] +
+                  block_index_in[1] * chunk_dim[0]                +
                   block_index_in[0] ];
 }
 
