@@ -120,7 +120,7 @@ std::cout << "Windows" << std::endl;
    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
    glutInitWindowSize( windowsizex, windowsizey);
    glutInitWindowPosition( 50, 50);
-   glutCreateWindow( "Simu World");
+   glutCreateWindow( "simu");
 
    glutDisplayFunc(       display);
    glutMouseFunc(         mouse);

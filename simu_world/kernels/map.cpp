@@ -125,9 +125,9 @@ void Map::update( void )
 
    for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
    {
-      for (int y_dir = 0; y_dir < num_chunks[0]; y_dir++)
+      for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
       {
-         for (int z_dir = 0; z_dir < num_chunks[0]; z_dir++)
+         for (int z_dir = 0; z_dir < num_chunks[2]; z_dir++)
          {
 
             Chunk *this_chunk = access_chunk( x_dir,
