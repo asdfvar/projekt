@@ -7,6 +7,11 @@
 #include "io_manager.h"
 #include "thread_args.h"
 
+/*
+   There's a great thread barrier example here:
+   https://github.com/angrave/SystemProgramming/wiki/Sample-program-using-pthread-barriers
+*/
+
 /* Define the interface with openGL */
 Simu_world_obj simu_world_obj;
 
