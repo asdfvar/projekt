@@ -12,8 +12,11 @@
    https://github.com/angrave/SystemProgramming/wiki/Sample-program-using-pthread-barriers
 */
 
+pthread_t         IO_thread;
+pthread_barrier_t IO_barrier;
+
 /* Define the interface with openGL */
-Simu_world_obj simu_world_obj;
+Simu_world_obj simu_world_obj( &IO_barrier );
 
 /***********************
  ** Display to screen **
@@ -103,15 +106,20 @@ void keyboardDown(unsigned char key, int x, int y)
 void simu_world( int argc, char** argv )
 {
 
-   ARGS args;
-   args.simu_world_obj = &simu_world_obj;
-   pthread_t IO_thread;
-
 #ifdef __linux__
 std::cout << "Linux" << std::endl;
 #elif _WIN32
 std::cout << "Windows" << std::endl;
 #endif
+
+//   pthread_barrier_init( &IO_barrier, NULL, 2);
+
+   ARGS args;
+
+   args.simu_world_obj = &simu_world_obj;
+   args.IO_barrier     = &IO_barrier;
+
+std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std::endl;
 
    /*
    ** Create the IO manager thread

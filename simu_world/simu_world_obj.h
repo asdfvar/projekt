@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include <pthread.h>
 
 #include "time_manager.h"
 #include "user.h"
@@ -18,7 +19,7 @@ class Simu_world_obj
 
    public:
 
-      Simu_world_obj(void);
+      Simu_world_obj( pthread_barrier_t* IO_barrier_in );
      ~Simu_world_obj(void);
 
       /*
@@ -58,6 +59,8 @@ class Simu_world_obj
 
       void update_map( void );
 
+      pthread_barrier_t* IO_barrier;
+
    private:
 
       bool first_frame;
@@ -65,10 +68,10 @@ class Simu_world_obj
       int  mousePassivePosition[2];
       int  mode;
 
-      Semaphore             *semaphore;
-      Menu                  *current_menu;
-      Time_manager          *time_manager;
-      Map                    map;
+      Semaphore*             semaphore;
+      Menu*                  current_menu;
+      Time_manager*          time_manager;
+      Map*                   map;
       User                   user;
       Text                   text;
 

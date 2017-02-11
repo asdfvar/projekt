@@ -9,8 +9,15 @@
 /*
 ** function name: Simu_world_obj from: Simu_world_obj
 */
-Simu_world_obj::Simu_world_obj(void)
+Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 {
+
+   IO_barrier = IO_barrier_in;
+
+   map = new Map( IO_barrier_in );
+
+//   pthread_barrier_wait( IO_barrier_in );
+
    first_frame      = true;
    time_manager     = new Time_manager( 1.0 / 120.0 );
    int chunk_dim[3]   = { 11, 11, 11 };
@@ -25,11 +32,11 @@ Simu_world_obj::Simu_world_obj(void)
    std::cout << the_word << std::endl;
 
    float color[3] = { 0.2f, 1.0f, 0.2f };
-   map.set_phys_chunk_color( 6, 6, 6, color );
+   map->set_phys_chunk_color( 6, 6, 6, color );
    color[0] = 1.0f; color[1] = 0.2f; color[2] = 0.2f;
-   map.set_phys_chunk_color( 6, 7, 6, color );
+   map->set_phys_chunk_color( 6, 7, 6, color );
    color[0] = 0.2f; color[1] = 0.2f; color[2] = 1.0f;
-   map.set_phys_chunk_color( 6, 5, 6, color );
+   map->set_phys_chunk_color( 6, 5, 6, color );
 }
 
 /*
@@ -127,6 +134,7 @@ void Simu_world_obj::mousePassive( int x, int y)
 */
 Simu_world_obj::~Simu_world_obj(void)
 {
+   delete map;
    delete time_manager;
    delete semaphore;
 }
@@ -140,7 +148,7 @@ void Simu_world_obj::idle( void)
    text.clear();
 
 #ifdef DEBUG
-   map.debug_info();
+   map->debug_info();
    user.debug_info();
    std::cout << std::endl;
 #endif
@@ -198,7 +206,7 @@ void Simu_world_obj::idle( void)
          float user_position[3];
 
          user.get_position( user_position);
-         map.update( user_position);
+         map->update( user_position);
 
          text.populate("user position: ");
          text.populate( user_position[0] );
@@ -212,7 +220,7 @@ void Simu_world_obj::idle( void)
                                     (int)floorf(user_position[1]),
                                     (int)floorf(user_position[2]) };
 
-         map.get_abs_element( i_user_position, &text);
+         map->get_abs_element( i_user_position, &text);
 
       }
 
@@ -239,7 +247,7 @@ void Simu_world_obj::display(void)
    // clear this openGL buffer
    ogl::opengl_clear();
 
-   map.render_chunk( &user);
+   map->render_chunk( &user);
 
    hud::display();
 
@@ -254,5 +262,5 @@ void Simu_world_obj::display(void)
 */
 void Simu_world_obj::update_map()
 {
-   map.update();
+   map->update();
 }

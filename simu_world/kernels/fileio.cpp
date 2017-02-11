@@ -57,9 +57,17 @@ namespace fio
 
     std::ios_base::seekdir position_x;
     std::ifstream IS ( path.c_str(), std::ifstream::binary );
-    IS.seekg( position );
-    IS.read ((char*)buffer, N);
+
     status = IS.is_open();
+    if ( status )
+    {
+       IS.seekg( position );
+       IS.read ((char*)buffer, N);
+    }
+    else
+    {
+       std::cout << "file doesn't exist" << std::endl;
+    }
     IS.close();
 
     return status;

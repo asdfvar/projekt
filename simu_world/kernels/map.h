@@ -4,6 +4,7 @@
 #include "chunk.h"
 #include <iostream>
 #include <vector>
+#include <pthread.h>
 #include "opengl_interface.h"
 #include "user.h"
 #include "text.h"
@@ -14,7 +15,7 @@
 class Map
 {
    public:
-      Map(void);
+      Map( pthread_barrier_t* );
      ~Map(void);
 
       void update( void );
@@ -33,6 +34,8 @@ class Map
                                  int    p_ind_y,
                                  int    p_ind_z,
                                  float *color );
+
+      pthread_barrier_t* IO_barrier;
 
    private:
       void shift( int x, int y, int z);

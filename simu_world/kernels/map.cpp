@@ -7,8 +7,10 @@
 /*
 ** constructor name: Map
 */
-Map::Map(void)
+Map::Map( pthread_barrier_t* IO_barrier_in )
 {
+
+   IO_barrier = IO_barrier_in;
 
    num_chunks[0] = 13;
    num_chunks[1] = 13;
@@ -95,6 +97,9 @@ Map::Map(void)
                          6                  * // faces per block
                          3];                  // dimensions
 
+   // wait for the IO thread to have finished its initialization before continuing
+   //pthread_barrier_wait( IO_barrier );
+
 }
 
 /*
@@ -123,6 +128,7 @@ Map::~Map(void)
 void Map::update( void )
 {
 
+std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << IO_barrier << std::endl;
    for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
    {
       for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)

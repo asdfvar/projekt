@@ -9,10 +9,15 @@ void *io_manager( void *args_in )
 {
 
    ARGS *args = (ARGS*)args_in;
-   Simu_world_obj *simu_world_obj = args->simu_world_obj;
+
+   Simu_world_obj*    simu_world_obj = args->simu_world_obj;
+   pthread_barrier_t* IO_barrier     = args->IO_barrier;
+
+//   pthread_barrier_wait( IO_barrier );
 
    while( true )
    {
+std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << IO_barrier << std::endl;
       simu_world_obj->update_map();
    }
 }

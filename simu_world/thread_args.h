@@ -5,7 +5,8 @@
 
 typedef struct ARGS
 {
-   Simu_world_obj *simu_world_obj;
+   Simu_world_obj*    simu_world_obj;
+   pthread_barrier_t* IO_barrier;
 } ARGS;
 
 #endif
