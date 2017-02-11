@@ -47,7 +47,8 @@ Chunk::Chunk( unsigned int  id_in,
    */
    generate_chunk();
 
-   valid = true;
+   valid   = true;
+   changed = false;
 }
 
 /*
@@ -96,7 +97,8 @@ void Chunk::create_random( void)
 */
 void Chunk::create_flat( void)
 {
-std::cout << "abs_pos_id = " << abs_pos_id[0] << ", " << abs_pos_id[1] << ", " << abs_pos_id[2] << std::endl;
+std::cout << "abs_pos_id = " << abs_pos_id[0] << ", "
+           << abs_pos_id[1] << ", " << abs_pos_id[2] << std::endl;
    int chunk_dim_tot = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
    if (abs_pos_id[2] < 0)
    {
@@ -343,14 +345,24 @@ void Chunk::generate_chunk( void )
    }
    chunk_name += id_str.str();
 
-   if( !fio::read (chunk_name,  // path and file name included
-              0,                // offset in bytes from the beginning of file
-              (void*)blocks,    // buffer to hold the data
-              chunk_dim[0] *
-              chunk_dim[1] *
-              chunk_dim[2] * sizeof(chunk_dim[0]))) // number of bytes to read
+   if( !fio::read( chunk_name,       // path and file name included
+                   0,                // offset in bytes from the beginning of file
+                   (void*)blocks,    // buffer to hold the data
+                   chunk_dim[0] *
+                      chunk_dim[1] *
+                      chunk_dim[2] *
+                      sizeof(chunk_dim[0])) ) // number of bytes to read
    {
+      std::cout << "new chunk (" << abs_pos_id[0] << ", "
+                                 << abs_pos_id[1] << ", "
+                                 << abs_pos_id[2] << ")"
+                                 << std::endl;
       create_random();
+      changed = true;
+   }
+   else
+   {
+      changed = false;
    }
 }
 
@@ -359,6 +371,9 @@ void Chunk::generate_chunk( void )
 */
 void Chunk::write_chunk( void )
 {
+
+      if ( !changed ) return;
+
       std::string chunk_name = "saves/chunk_";
       std::ostringstream id_str;
 
@@ -401,12 +416,18 @@ void Chunk::write_chunk( void )
       }
       chunk_name += id_str.str();
 
+      std::cout << "writing chunk "
+                << chunk_name
+                << std::endl;
+
       fio::write( chunk_name,
                   0,
                  (char*)blocks,
                   chunk_dim[0] *
                   chunk_dim[1] *
                   chunk_dim[2] * sizeof(chunk_dim[0]));
+
+      changed = false;
 }
 
 void Chunk::set_color( float *color_in )

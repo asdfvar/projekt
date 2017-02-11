@@ -47,6 +47,7 @@ class Chunk
       int          abs_pos_id[3];
       int          prev_abs_pos_id[3];
       float        color[3];
+      bool         changed;
 
       // Functions:
       void create_random( void );

@@ -17,7 +17,6 @@ void *io_manager( void *args_in )
 
    while( true )
    {
-std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << IO_barrier << std::endl;
       simu_world_obj->update_map();
    }
 }

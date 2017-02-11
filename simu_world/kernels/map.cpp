@@ -100,6 +100,8 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
 
+   std::cout << __FILE__ << ":" << __LINE__ << ":finished creating map" << std::endl;
+
 }
 
 /*
@@ -128,7 +130,6 @@ Map::~Map(void)
 void Map::update( void )
 {
 
-std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << IO_barrier << std::endl;
    for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
    {
       for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
@@ -546,22 +547,6 @@ int Map::get_abs_element( int *position_in, Text *text)
    text->new_line();
    text->populate("Chunk element value: ");
    text->populate( element );
-
-   if ( physical_chunk_id_x[0] > physical_chunk_position[0] ||
-        physical_chunk_id_x[0] > physical_chunk_position[1] ||
-        physical_chunk_id_z[0] > physical_chunk_position[2] )
-   {
-      std::cout << "position out of scope of map" << std::endl;
-      return 0;
-   }
-
-   if ( physical_chunk_id_x[num_chunks[0]] <= physical_chunk_position[0] ||
-        physical_chunk_id_y[num_chunks[1]] <= physical_chunk_position[1] ||
-        physical_chunk_id_z[num_chunks[2]] <= physical_chunk_position[2] )
-   {
-      std::cout << "position out of scope of map" << std::endl;
-      return 0;
-   }
 
    return 0;
 }
