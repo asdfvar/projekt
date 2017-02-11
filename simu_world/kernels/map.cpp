@@ -266,11 +266,11 @@ Chunk *Map::access_chunk( int p_id_x,
                           int p_id_y,
                           int p_id_z)
 {
-   if (p_id_x < 0 || p_id_x >= num_chunks[0] ||
-       p_id_y < 0 || p_id_y >= num_chunks[1] ||
-       p_id_z < 0 || p_id_z >= num_chunks[2])
+   if ((p_id_x < 0) || (p_id_x >= num_chunks[0]) ||
+       (p_id_y < 0) || (p_id_y >= num_chunks[1]) ||
+       (p_id_z < 0) || (p_id_z >= num_chunks[2]))
    {
-      std::cout << "select index of " << p_id_x << ", "  << p_id_x << ", "  << p_id_x <<
+      std::cout << "select index of " << p_id_x << ", "  << p_id_y << ", "  << p_id_z <<
                    " out of bounds: " << num_chunks[0] << ", " <<
                                          num_chunks[1] << ", " <<
                                          num_chunks[2] << std::endl;
@@ -547,6 +547,16 @@ int Map::get_abs_element( int *position_in, Text *text)
    text->new_line();
    text->populate("Chunk element value: ");
    text->populate( element );
+
+   int abs_pos_id[3];
+   this_chunk->get_abs_pos_id( abs_pos_id );
+   text->new_line();
+   text->populate("Chunk absolute position: ");
+   text->populate( abs_pos_id[0] );
+   text->populate( ", ");
+   text->populate( abs_pos_id[1] );
+   text->populate( ", ");
+   text->populate( abs_pos_id[2] );
 
    return 0;
 }

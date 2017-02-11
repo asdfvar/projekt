@@ -20,8 +20,6 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 
    first_frame      = true;
    time_manager     = new Time_manager( 1.0 / 120.0 );
-   int chunk_dim[3]   = { 11, 11, 11 };
-   float chunk_pos[3] = { 0.0f, 0.0f, 0.0f };
    semaphore        = new Semaphore(4);
    mode             = 1;
 

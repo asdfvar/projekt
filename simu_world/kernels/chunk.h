@@ -43,11 +43,12 @@ class Chunk
       unsigned int chunk_dim[3];
       unsigned int id;
       float        position[3];
-      bool         valid;
       int          abs_pos_id[3];
       int          prev_abs_pos_id[3];
       float        color[3];
+      bool         valid;
       bool         changed;
+      bool         first_populated;
 
       // Functions:
       void create_random( void );

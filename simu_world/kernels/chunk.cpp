@@ -42,31 +42,40 @@ Chunk::Chunk( unsigned int  id_in,
    color[1] = 1.0f;
    color[2] = 1.0f;
 
+   valid           = false;
+   changed         = false;
+   first_populated = true;
+
    /*
    ** Attempt to read from file upon creation
    */
    generate_chunk();
 
-   valid   = true;
-   changed = false;
 }
 
 /*
 ** function name: update from: Chunk
 **
 ** write old data to file and read new
-** data to memory if it exists. Otherwise, create it
+** data to memory if it exists. Otherwise, create it.
+** chunks are written to file if they leave the field
+** of view (a.k.a. chunks are reassigned).
 */
 void Chunk::update( void )
 {
-   if (!valid)
+   if ( (changed && !valid) || first_populated )
    {
-
       /*
       ** write old data to file
       */
       write_chunk();
 
+      changed         = false;
+      first_populated = false;
+   }
+
+   if ( !valid )
+   {
       /*
       ** Attempt to read from file
       */
@@ -178,8 +187,6 @@ bool Chunk::position_in_chunk( float *position_in)
 void Chunk::move( int x, int y, int z)
 {
 
-   valid = false;
-
    prev_abs_pos_id[0] = abs_pos_id[0];
    prev_abs_pos_id[1] = abs_pos_id[1];
    prev_abs_pos_id[2] = abs_pos_id[2];
@@ -191,6 +198,18 @@ void Chunk::move( int x, int y, int z)
    position[0] += static_cast<float>(x) * chunk_dim[0];
    position[1] += static_cast<float>(y) * chunk_dim[1];
    position[2] += static_cast<float>(z) * chunk_dim[2];
+
+   std::cout << "moving chunk " << prev_abs_pos_id[0] << ", "
+                                << prev_abs_pos_id[1] << ", "
+                                << prev_abs_pos_id[2]
+             << " to "
+                                << abs_pos_id[0] << ", "
+                                << abs_pos_id[1] << ", "
+                                << abs_pos_id[2]
+                                << std::endl;
+
+   valid   = false;
+   //changed = true;
 }
 
 /*
@@ -358,12 +377,19 @@ void Chunk::generate_chunk( void )
                                  << abs_pos_id[2] << ")"
                                  << std::endl;
       create_random();
-      changed = true;
+      changed         = true;
    }
    else
    {
-      changed = false;
+      std::cout << "reading chunk (" << abs_pos_id[0] << ", "
+                                     << abs_pos_id[1] << ", "
+                                     << abs_pos_id[2] << ")"
+                                     << std::endl;
+      changed         = false;
+      first_populated = false;
    }
+
+   valid = true;
 }
 
 /*
@@ -371,8 +397,6 @@ void Chunk::generate_chunk( void )
 */
 void Chunk::write_chunk( void )
 {
-
-      if ( !changed ) return;
 
       std::string chunk_name = "saves/chunk_";
       std::ostringstream id_str;
@@ -416,9 +440,11 @@ void Chunk::write_chunk( void )
       }
       chunk_name += id_str.str();
 
-      std::cout << "writing chunk "
-                << chunk_name
-                << std::endl;
+      std::cout << "writing chunk (" << prev_abs_pos_id[0] << ", "
+                                     << prev_abs_pos_id[1] << ", "
+                                     << prev_abs_pos_id[2] << ") "
+<< chunk_name
+                                     << std::endl;
 
       fio::write( chunk_name,
                   0,
@@ -426,8 +452,6 @@ void Chunk::write_chunk( void )
                   chunk_dim[0] *
                   chunk_dim[1] *
                   chunk_dim[2] * sizeof(chunk_dim[0]));
-
-      changed = false;
 }
 
 void Chunk::set_color( float *color_in )
