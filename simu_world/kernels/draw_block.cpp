@@ -2,32 +2,23 @@
 #include "user.h"
 #include "map.h"
 #include "point_conversion.h"
+#include "opengl_interface.h"
 #include "linalg.h"
 #include <cmath>
 
-/*
-** OpenGL includes
-*/
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-
 void draw_block( float  block_position[3],
-                 float *color,
-                 User  *user)
+                 float *user_position,
+                 float *user_direction,
+                 float  window_distance,
+                 float  window_width,
+                 float *color )
 {
 
    int vertex_ind = 0;
 
-   float user_direction[3];
-   user->get_direction( user_direction);
-
-   float user_position[3];
-   user->get_position( user_position);
-
-   float user_to_block[3] = {block_position[0] - user_position[0],
-                             block_position[1] - user_position[1],
-                             block_position[2] - user_position[2]};
+   float user_to_block[3] = { block_position[0] - user_position[0],
+                              block_position[1] - user_position[1],
+                              block_position[2] - user_position[2] };
 
    /*
    ** Return if the user direction and block position are > 90 degrees off
@@ -208,8 +199,6 @@ void draw_block( float  block_position[3],
             }
          }
 
-         float window_distance = user->get_window_distance();
-
          float corner_point[3] = { corner_pos_x[corner],
                                    corner_pos_y[corner],
                                    corner_pos_z[corner] };
@@ -219,8 +208,6 @@ void draw_block( float  block_position[3],
                                                            window_distance,
                                                            corner_point,
                                                            output_point);
-
-         float window_width = user->get_window_width();
 
          // scale to [-1, 1]
          view_x[corner]     = output_point[0] / window_width;

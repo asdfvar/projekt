@@ -214,6 +214,15 @@ void Map::render_chunk( User *user)
    float block_position[3];
    Chunk *chunk;
 
+   float user_position[3];
+   user->get_position( user_position);
+
+   float user_direction[3];
+   user->get_direction( user_direction);
+
+   float window_distance = user->get_window_distance();
+   float window_width    = user->get_window_width();
+
    for (int chunk_ind_x = 0; chunk_ind_x < num_chunks[0]; chunk_ind_x++)
    {
       for (int chunk_ind_y = 0; chunk_ind_y < num_chunks[1]; chunk_ind_y++)
@@ -236,8 +245,11 @@ void Map::render_chunk( User *user)
                   chunk->get_color( color );
 
                   draw_block( block_position,
-                              color,
-                              user);
+                              user_position,
+                              user_direction,
+                              window_distance,
+                              window_width,
+                              color );
                }
             }
          }

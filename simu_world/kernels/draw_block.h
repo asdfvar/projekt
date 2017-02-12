@@ -1,11 +1,11 @@
 #ifndef DRAW_BLOCK_H
 #define DRAW_BLOCK_H
 
-#include "user.h"
-#include "opengl_interface.h"
-
 void draw_block( float  block_position[3],
-                 float *color,
-                 User  *user);
+                 float *user_position,
+                 float *user_direction,
+                 float  window_distance,
+                 float  window_width,
+                 float *color );
 
 #endif

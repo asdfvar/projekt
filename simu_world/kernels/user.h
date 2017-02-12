@@ -10,23 +10,23 @@ class User
 
       void update( float dt);
 
-      void move_forward( void);
-      void move_backward( void);
-      void move_upward( void);
-      void move_downward( void);
-      void move_right( void);
-      void move_left( void);
+      void move_forward( void );
+      void move_backward( void );
+      void move_upward( void );
+      void move_downward( void );
+      void move_right( void );
+      void move_left( void );
 
-      void stop_forward( void);
-      void stop_right( void);
-      void stop_left( void);
-      void stop_up( void);
-      void stop_down( void);
+      void stop_forward( void );
+      void stop_right( void );
+      void stop_left( void );
+      void stop_up( void );
+      void stop_down( void );
 
-      void  get_direction( float *direction);
-      void  get_position( float *position);
-      float get_window_distance( void);
-      float get_window_width( void);
+      void  get_direction( float *direction );
+      void  get_position( float *position );
+      float get_window_distance( void );
+      float get_window_width( void );
 
       void set_direction( float *direction);
 
