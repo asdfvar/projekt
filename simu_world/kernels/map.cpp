@@ -86,17 +86,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
       }
    }
 
-   /*
-   ** Create the vertices array big enough for all triangles within all chunks
-   ** TODO: future use with openGl's VBO
-   */
-   vertices = new float[ num_chunk_elements[0]       *
-                         num_chunk_elements[1]       *
-                         num_chunk_elements[2]       * // total blocks
-                         6                  * // vertices per face
-                         6                  * // faces per block
-                         3];                  // dimensions
-
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
 
@@ -120,7 +109,6 @@ Map::~Map(void)
    delete[] virtual_chunk_id_y;
    delete[] virtual_chunk_id_z;
 
-   delete[] vertices;
 }
 
 /*
@@ -249,7 +237,6 @@ void Map::render_chunk( User *user)
 
                   draw_block( block_position,
                               color,
-                             &vertices[ 3*6*6*ind ],
                               user);
                }
             }
