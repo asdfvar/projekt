@@ -11,6 +11,7 @@ void draw_block( float  block_position[3],
                  float *user_direction,
                  float  window_distance,
                  float  window_width,
+                 int    side,
                  float *color )
 {
 
@@ -186,250 +187,256 @@ void draw_block( float  block_position[3],
    view_y[7]     = output_point[1] / window_width;
    valid_view[7] = ( output_point[2] < 0.0f );
 
-#if 1
-   if (valid_view[0] && valid_view[1] && valid_view[3] && valid_view[2])
+   if ( side & DRAW_FRONT )
    {
-      // draw face x+
-      vec1[0] = 0;
-      vec1[1] = face_yp - face_yn;
-      vec1[2] = 0;
+      if (valid_view[0] && valid_view[1] && valid_view[3] && valid_view[2])
+      {
+         // draw face x+
+         vec1[0] = 0;
+         vec1[1] = face_yp - face_yn;
+         vec1[2] = 0;
+      
+         vec2[0] = 0;
+         vec2[1] = 0;
+         vec2[2] = face_zp - face_zn;
+      
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      
+         vertices_x[0] = view_x[0];
+         vertices_x[1] = view_x[1];
+         vertices_x[2] = view_x[3];
+         vertices_x[3] = view_x[2];
+      
+         vertices_y[0] = view_y[0];
+         vertices_y[1] = view_y[1];
+         vertices_y[2] = view_y[3];
+         vertices_y[3] = view_y[2];
    
-      vec2[0] = 0;
-      vec2[1] = 0;
-      vec2[2] = face_zp - face_zn;
+         distance[0] = output_point_distance[0];
+         distance[1] = output_point_distance[1];
+         distance[2] = output_point_distance[3];
+         distance[3] = output_point_distance[2];
    
-      linalg::cross_product<float>( normal, vec2, vec1);
-      linalg::unit_vector<float>  ( normal, 3);
-      linalg::unit_vector<float>  ( user_opposite, 3);
-      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
-   
-      vertices_x[0] = view_x[0];
-      vertices_x[1] = view_x[1];
-      vertices_x[2] = view_x[3];
-      vertices_x[3] = view_x[2];
-   
-      vertices_y[0] = view_y[0];
-      vertices_y[1] = view_y[1];
-      vertices_y[2] = view_y[3];
-      vertices_y[3] = view_y[2];
-
-      distance[0] = output_point_distance[0];
-      distance[1] = output_point_distance[1];
-      distance[2] = output_point_distance[3];
-      distance[3] = output_point_distance[2];
-
-      ogl::draw_polygon( vertices_x,
-                         vertices_y,
-                         distance,
-                         color,
-                         brightness,
-                         4 );
+         ogl::draw_polygon( vertices_x,
+                            vertices_y,
+                            distance,
+                            color,
+                            brightness,
+                            4 );
+      }
    }
-#endif
 
-#if 1
-   if (valid_view[4] && valid_view[5] && valid_view[7] && valid_view[6])
+   if ( side & DRAW_BACK )
    {
-      // draw face x-
-      vec1[0] = 0;
-      vec1[1] = 0;
-      vec1[2] = face_zp - face_zn;
+      if (valid_view[4] && valid_view[5] && valid_view[7] && valid_view[6])
+      {
+         // draw face x-
+         vec1[0] = 0;
+         vec1[1] = 0;
+         vec1[2] = face_zp - face_zn;
+      
+         vec2[0] = 0;
+         vec2[1] = face_yp - face_yn;
+         vec2[2] = 0;
+      
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      
+         vertices_x[0] = view_x[4];
+         vertices_x[1] = view_x[5];
+         vertices_x[2] = view_x[7];
+         vertices_x[3] = view_x[6];
+      
+         vertices_y[0] = view_y[4];
+         vertices_y[1] = view_y[5];
+         vertices_y[2] = view_y[7];
+         vertices_y[3] = view_y[6];
    
-      vec2[0] = 0;
-      vec2[1] = face_yp - face_yn;
-      vec2[2] = 0;
+         distance[0] = output_point_distance[4];
+         distance[1] = output_point_distance[5];
+         distance[2] = output_point_distance[7];
+         distance[3] = output_point_distance[6];
    
-      linalg::cross_product<float>( normal, vec2, vec1);
-      linalg::unit_vector<float>  ( normal, 3);
-      linalg::unit_vector<float>  ( user_opposite, 3);
-      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
-   
-      vertices_x[0] = view_x[4];
-      vertices_x[1] = view_x[5];
-      vertices_x[2] = view_x[7];
-      vertices_x[3] = view_x[6];
-   
-      vertices_y[0] = view_y[4];
-      vertices_y[1] = view_y[5];
-      vertices_y[2] = view_y[7];
-      vertices_y[3] = view_y[6];
-
-      distance[0] = output_point_distance[4];
-      distance[1] = output_point_distance[5];
-      distance[2] = output_point_distance[7];
-      distance[3] = output_point_distance[6];
-
-      ogl::draw_polygon( vertices_x,
-                         vertices_y,
-                         distance,
-                         color,
-                         brightness,
-                         4 );
+         ogl::draw_polygon( vertices_x,
+                            vertices_y,
+                            distance,
+                            color,
+                            brightness,
+                            4 );
+      }
    }
-#endif
 
-#if 1
-   if (valid_view[0] && valid_view[1] && valid_view[5] && valid_view[4])
+   if ( side & DRAW_LEFT )
    {
-      // draw face y+
-      vec1[0] = 0;
-      vec1[1] = 0;
-      vec1[2] = face_zp - face_zn;
+      if (valid_view[0] && valid_view[1] && valid_view[5] && valid_view[4])
+      {
+         // draw face y+
+         vec1[0] = 0;
+         vec1[1] = 0;
+         vec1[2] = face_zp - face_zn;
+      
+         vec2[0] = face_xp - face_xn;
+         vec2[1] = 0;
+         vec2[2] = 0;
+      
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      
+         vertices_x[0] = view_x[0];
+         vertices_x[1] = view_x[1];
+         vertices_x[2] = view_x[5];
+         vertices_x[3] = view_x[4];
+      
+         vertices_y[0] = view_y[0];
+         vertices_y[1] = view_y[1];
+         vertices_y[2] = view_y[5];
+         vertices_y[3] = view_y[4];
    
-      vec2[0] = face_xp - face_xn;
-      vec2[1] = 0;
-      vec2[2] = 0;
+         distance[0] = output_point_distance[0];
+         distance[1] = output_point_distance[1];
+         distance[2] = output_point_distance[5];
+         distance[3] = output_point_distance[4];
    
-      linalg::cross_product<float>( normal, vec2, vec1);
-      linalg::unit_vector<float>  ( normal, 3);
-      linalg::unit_vector<float>  ( user_opposite, 3);
-      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
-   
-      vertices_x[0] = view_x[0];
-      vertices_x[1] = view_x[1];
-      vertices_x[2] = view_x[5];
-      vertices_x[3] = view_x[4];
-   
-      vertices_y[0] = view_y[0];
-      vertices_y[1] = view_y[1];
-      vertices_y[2] = view_y[5];
-      vertices_y[3] = view_y[4];
-
-      distance[0] = output_point_distance[0];
-      distance[1] = output_point_distance[1];
-      distance[2] = output_point_distance[5];
-      distance[3] = output_point_distance[4];
-
-      ogl::draw_polygon( vertices_x,
-                         vertices_y,
-                         distance,
-                         color,
-                         brightness,
-                         4 );
+         ogl::draw_polygon( vertices_x,
+                            vertices_y,
+                            distance,
+                            color,
+                            brightness,
+                            4 );
+      }
    }
-#endif
 
-#if 1
-   if (valid_view[2] && valid_view[3] && valid_view[7] && valid_view[6])
+   if ( side & DRAW_RIGHT )
    {
-      // draw face y-
-      vec1[0] = face_xp - face_xn;
-      vec1[1] = 0;
-      vec1[2] = 0;
+      if (valid_view[2] && valid_view[3] && valid_view[7] && valid_view[6])
+      {
+         // draw face y-
+         vec1[0] = face_xp - face_xn;
+         vec1[1] = 0;
+         vec1[2] = 0;
+      
+         vec2[0] = 0;
+         vec2[1] = 0;
+         vec2[2] = face_zp - face_zn;
+      
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      
+         vertices_x[0] = view_x[2];
+         vertices_x[1] = view_x[3];
+         vertices_x[2] = view_x[7];
+         vertices_x[3] = view_x[6];
+      
+         vertices_y[0] = view_y[2];
+         vertices_y[1] = view_y[3];
+         vertices_y[2] = view_y[7];
+         vertices_y[3] = view_y[6];
    
-      vec2[0] = 0;
-      vec2[1] = 0;
-      vec2[2] = face_zp - face_zn;
+         distance[0] = output_point_distance[2];
+         distance[1] = output_point_distance[3];
+         distance[2] = output_point_distance[7];
+         distance[3] = output_point_distance[6];
    
-      linalg::cross_product<float>( normal, vec2, vec1);
-      linalg::unit_vector<float>  ( normal, 3);
-      linalg::unit_vector<float>  ( user_opposite, 3);
-      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
-   
-      vertices_x[0] = view_x[2];
-      vertices_x[1] = view_x[3];
-      vertices_x[2] = view_x[7];
-      vertices_x[3] = view_x[6];
-   
-      vertices_y[0] = view_y[2];
-      vertices_y[1] = view_y[3];
-      vertices_y[2] = view_y[7];
-      vertices_y[3] = view_y[6];
-
-      distance[0] = output_point_distance[2];
-      distance[1] = output_point_distance[3];
-      distance[2] = output_point_distance[7];
-      distance[3] = output_point_distance[6];
-
-      ogl::draw_polygon( vertices_x,
-                         vertices_y,
-                         distance,
-                         color,
-                         brightness,
-                         4 );
+         ogl::draw_polygon( vertices_x,
+                            vertices_y,
+                            distance,
+                            color,
+                            brightness,
+                            4 );
+      }
    }
-#endif
 
-#if 1
-   if (valid_view[0] && valid_view[2] && valid_view[6] && valid_view[4])
+   if ( side & DRAW_TOP )
    {
-      // draw face z+
-      vec1[0] = face_xp - face_xn;
-      vec1[1] = 0;
-      vec1[2] = 0;
+      if (valid_view[0] && valid_view[2] && valid_view[6] && valid_view[4])
+      {
+         // draw face z+
+         vec1[0] = face_xp - face_xn;
+         vec1[1] = 0;
+         vec1[2] = 0;
+      
+         vec2[0] = 0;
+         vec2[1] = face_yp - face_yn;
+         vec2[2] = 0;
+      
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      
+         vertices_x[0] = view_x[0];
+         vertices_x[1] = view_x[2];
+         vertices_x[2] = view_x[6];
+         vertices_x[3] = view_x[4];
+      
+         vertices_y[0] = view_y[0];
+         vertices_y[1] = view_y[2];
+         vertices_y[2] = view_y[6];
+         vertices_y[3] = view_y[4];
    
-      vec2[0] = 0;
-      vec2[1] = face_yp - face_yn;
-      vec2[2] = 0;
+         distance[0] = output_point_distance[0];
+         distance[1] = output_point_distance[2];
+         distance[2] = output_point_distance[6];
+         distance[3] = output_point_distance[4];
    
-      linalg::cross_product<float>( normal, vec2, vec1);
-      linalg::unit_vector<float>  ( normal, 3);
-      linalg::unit_vector<float>  ( user_opposite, 3);
-      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
-   
-      vertices_x[0] = view_x[0];
-      vertices_x[1] = view_x[2];
-      vertices_x[2] = view_x[6];
-      vertices_x[3] = view_x[4];
-   
-      vertices_y[0] = view_y[0];
-      vertices_y[1] = view_y[2];
-      vertices_y[2] = view_y[6];
-      vertices_y[3] = view_y[4];
-
-      distance[0] = output_point_distance[0];
-      distance[1] = output_point_distance[2];
-      distance[2] = output_point_distance[6];
-      distance[3] = output_point_distance[4];
-
-      ogl::draw_polygon( vertices_x,
-                         vertices_y,
-                         distance,
-                         color,
-                         brightness,
-                         4 );
+         ogl::draw_polygon( vertices_x,
+                            vertices_y,
+                            distance,
+                            color,
+                            brightness,
+                            4 );
+      }
    }
-#endif
 
-#if 1
-   if (valid_view[1] && valid_view[3] && valid_view[7] && valid_view[5])
+   if ( side & DRAW_BOTTOM )
    {
-      // draw face z-
-      vec1[0] = 0;
-      vec1[1] = face_yp - face_yn;
-      vec1[2] = 0;
+      if (valid_view[1] && valid_view[3] && valid_view[7] && valid_view[5])
+      {
+         // draw face z-
+         vec1[0] = 0;
+         vec1[1] = face_yp - face_yn;
+         vec1[2] = 0;
+      
+         vec2[0] = face_xp - face_xn;
+         vec2[1] = 0;
+         vec2[2] = 0;
+      
+         linalg::cross_product<float>( normal, vec2, vec1);
+         linalg::unit_vector<float>  ( normal, 3);
+         linalg::unit_vector<float>  ( user_opposite, 3);
+         brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      
+         vertices_x[0] = view_x[1];
+         vertices_x[1] = view_x[3];
+         vertices_x[2] = view_x[7];
+         vertices_x[3] = view_x[5];
+      
+         vertices_y[0] = view_y[1];
+         vertices_y[1] = view_y[3];
+         vertices_y[2] = view_y[7];
+         vertices_y[3] = view_y[5];
    
-      vec2[0] = face_xp - face_xn;
-      vec2[1] = 0;
-      vec2[2] = 0;
+         distance[0] = output_point_distance[1];
+         distance[1] = output_point_distance[3];
+         distance[2] = output_point_distance[7];
+         distance[3] = output_point_distance[5];
    
-      linalg::cross_product<float>( normal, vec2, vec1);
-      linalg::unit_vector<float>  ( normal, 3);
-      linalg::unit_vector<float>  ( user_opposite, 3);
-      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
-   
-      vertices_x[0] = view_x[1];
-      vertices_x[1] = view_x[3];
-      vertices_x[2] = view_x[7];
-      vertices_x[3] = view_x[5];
-   
-      vertices_y[0] = view_y[1];
-      vertices_y[1] = view_y[3];
-      vertices_y[2] = view_y[7];
-      vertices_y[3] = view_y[5];
-
-      distance[0] = output_point_distance[1];
-      distance[1] = output_point_distance[3];
-      distance[2] = output_point_distance[7];
-      distance[3] = output_point_distance[5];
-
-      ogl::draw_polygon( vertices_x,
-                         vertices_y,
-                         distance,
-                         color,
-                         brightness,
-                         4 );
+         ogl::draw_polygon( vertices_x,
+                            vertices_y,
+                            distance,
+                            color,
+                            brightness,
+                            4 );
+      }
    }
-#endif
 
 }

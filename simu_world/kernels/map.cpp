@@ -214,6 +214,10 @@ void Map::render_chunk( User *user)
    float block_position[3];
    Chunk *chunk;
 
+   int mid_chunk[3] = { num_chunks[0] / 2,
+                        num_chunks[1] / 2,
+                        num_chunks[2] / 2 };
+
    float user_position[3];
    user->get_position( user_position );
 
@@ -230,6 +234,33 @@ void Map::render_chunk( User *user)
          for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
          {
             chunk = access_chunk( chunk_ind_x, chunk_ind_y, chunk_ind_z);
+
+            int side = 0;
+
+            if ( virtual_chunk_id_x[ chunk_ind_x ] >= mid_chunk[0] )
+            {
+               side |= DRAW_BACK;
+            }
+            if ( virtual_chunk_id_x[ chunk_ind_x ] <= mid_chunk[0] )
+            {
+               side |= DRAW_FRONT;
+            }
+            if ( virtual_chunk_id_y[ chunk_ind_y ] >= mid_chunk[1] )
+            {
+               side |= DRAW_RIGHT;
+            }
+            if ( virtual_chunk_id_y[ chunk_ind_y ] <= mid_chunk[1] )
+            {
+               side |= DRAW_LEFT;
+            }
+            if ( virtual_chunk_id_z[ chunk_ind_z ] >= mid_chunk[2] )
+            {
+               side |= DRAW_BOTTOM;
+            }
+            if ( virtual_chunk_id_z[ chunk_ind_z ] <= mid_chunk[2] )
+            {
+               side |= DRAW_TOP;
+            }
 
             if ( chunk->is_valid() )
             {
@@ -249,6 +280,7 @@ void Map::render_chunk( User *user)
                               user_direction,
                               window_distance,
                               window_width,
+                              side,
                               color );
                }
             }
