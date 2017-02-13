@@ -215,7 +215,7 @@ void Map::render_chunk( User *user)
    Chunk *chunk;
 
    float user_position[3];
-   user->get_position( user_position);
+   user->get_position( user_position );
 
    float user_direction[3];
    user->get_direction( user_direction);

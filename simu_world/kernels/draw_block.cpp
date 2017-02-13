@@ -28,218 +28,408 @@ void draw_block( float  block_position[3],
       return;
    }
 
-   // get 4 positions of the face
    float corner_pos_x[4];
    float corner_pos_y[4];
    float corner_pos_z[4];
 
    float normal[3];
+   float vertices_x[4];
+   float vertices_y[4];
 
-   float output_point_distance[4];
+   float output_point_distance[8];
+   float distance[4];
    float output_point[3];
-   float view_x[4];
-   float view_y[4];
-   bool  valid_view[4];
+   float view_x[8];
+   float view_y[8];
+   bool  valid_view[8];
 
-   for (int face = 0; face < 6; face++)
+   float corner_point[3];
+   float brightness;
+
+   float user_opposite[3] = {-user_direction[0], -user_direction[1], -user_direction[2]};
+
+   float face_xp = block_position[0] + 0.5f;
+   float face_xn = block_position[0] - 0.5f;
+   float face_yp = block_position[1] + 0.5f;
+   float face_yn = block_position[1] - 0.5f;
+   float face_zp = block_position[2] + 0.5f;
+   float face_zn = block_position[2] - 0.5f;
+
+   float vec1[3];
+   float vec2[3];
+
+   // corner 0
+   corner_point[0] = face_xp;
+   corner_point[1] = face_yp;
+   corner_point[2] = face_zp;
+
+   output_point_distance[0] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[0]     = output_point[0] / window_width;
+   view_y[0]     = output_point[1] / window_width;
+   valid_view[0] = ( output_point[2] < 0.0f );
+
+   // corner 1
+   corner_point[0] = face_xp;
+   corner_point[1] = face_yp;
+   corner_point[2] = face_zn;
+
+   output_point_distance[1] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[1]     = output_point[0] / window_width;
+   view_y[1]     = output_point[1] / window_width;
+   valid_view[1] = ( output_point[2] < 0.0f );
+
+   // corner 2
+   corner_point[0] = face_xp;
+   corner_point[1] = face_yn;
+   corner_point[2] = face_zp;
+
+   output_point_distance[2] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[2]     = output_point[0] / window_width;
+   view_y[2]     = output_point[1] / window_width;
+   valid_view[2] = ( output_point[2] < 0.0f );
+
+   // corner 3
+   corner_point[0] = face_xp;
+   corner_point[1] = face_yn;
+   corner_point[2] = face_zn;
+
+   output_point_distance[3] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[3]     = output_point[0] / window_width;
+   view_y[3]     = output_point[1] / window_width;
+   valid_view[3] = ( output_point[2] < 0.0f );
+
+   // corner 4
+   corner_point[0] = face_xn;
+   corner_point[1] = face_yp;
+   corner_point[2] = face_zp;
+
+   output_point_distance[4] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[4]     = output_point[0] / window_width;
+   view_y[4]     = output_point[1] / window_width;
+   valid_view[4] = ( output_point[2] < 0.0f );
+
+   // corner 5
+   corner_point[0] = face_xn;
+   corner_point[1] = face_yp;
+   corner_point[2] = face_zn;
+
+   output_point_distance[5] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[5]     = output_point[0] / window_width;
+   view_y[5]     = output_point[1] / window_width;
+   valid_view[5] = ( output_point[2] < 0.0f );
+
+   // corner 6
+   corner_point[0] = face_xn;
+   corner_point[1] = face_yn;
+   corner_point[2] = face_zp;
+
+   output_point_distance[6] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[6]     = output_point[0] / window_width;
+   view_y[6]     = output_point[1] / window_width;
+   valid_view[6] = ( output_point[2] < 0.0f );
+
+   // corner 7
+   corner_point[0] = face_xn;
+   corner_point[1] = face_yn;
+   corner_point[2] = face_zn;
+
+   output_point_distance[7] = point_conversion( user_position,
+                                                user_direction,
+                                                window_distance,
+                                                corner_point,
+                                                output_point );
+
+   // scale to [-1, 1]
+   view_x[7]     = output_point[0] / window_width;
+   view_y[7]     = output_point[1] / window_width;
+   valid_view[7] = ( output_point[2] < 0.0f );
+
+#if 1
+   if (valid_view[0] && valid_view[1] && valid_view[3] && valid_view[2])
    {
-      for (int corner = 0; corner < 4; corner++)
-      {
-         if (face == 0)
-         { // x+
-            if (corner == 0)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 1)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 2)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 3)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-         } else if (face == 1)
-         { // x-
-            if (corner == 0)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 1)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 2)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 3)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-         } else if (face == 2) { // y+
-            if (corner == 0)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 1)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 2)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 3)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-         } else if (face == 3) { // y-
-            if (corner == 0)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 1)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 2)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 3)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-         } else if (face == 4) { // z+
-            if (corner == 0)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 1)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 2)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-            else if (corner == 3)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] + 0.5f;
-            }
-         } else if (face == 5) { // z-
-            if (corner == 0)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 1)
-            {
-               corner_pos_x[corner] = block_position[0] - 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 2)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] + 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-            else if (corner == 3)
-            {
-               corner_pos_x[corner] = block_position[0] + 0.5f;
-               corner_pos_y[corner] = block_position[1] - 0.5f;
-               corner_pos_z[corner] = block_position[2] - 0.5f;
-            }
-         }
-
-         float corner_point[3] = { corner_pos_x[corner],
-                                   corner_pos_y[corner],
-                                   corner_pos_z[corner] };
-
-         output_point_distance[corner] = point_conversion( user_position,
-                                                           user_direction,
-                                                           window_distance,
-                                                           corner_point,
-                                                           output_point);
-
-         // scale to [-1, 1]
-         view_x[corner]     = output_point[0] / window_width;
-         view_y[corner]     = output_point[1] / window_width;
-         valid_view[corner] = (output_point[2] < 0.0f);
-
-      } // for (int corner = 0; corner < 4; corner++)
-
-      float vec1[3] = {corner_pos_x[1] - corner_pos_x[0],
-                       corner_pos_y[1] - corner_pos_y[0],
-                       corner_pos_z[1] - corner_pos_z[0]};
-      float vec2[3] = {corner_pos_x[3] - corner_pos_x[0],
-                       corner_pos_y[3] - corner_pos_y[0],
-                       corner_pos_z[3] - corner_pos_z[0]};
-
+      // draw face x+
+      vec1[0] = 0;
+      vec1[1] = face_yp - face_yn;
+      vec1[2] = 0;
+   
+      vec2[0] = 0;
+      vec2[1] = 0;
+      vec2[2] = face_zp - face_zn;
+   
       linalg::cross_product<float>( normal, vec2, vec1);
       linalg::unit_vector<float>  ( normal, 3);
-      float user_opposite[3] = {-user_direction[0], -user_direction[1], -user_direction[2]};
       linalg::unit_vector<float>  ( user_opposite, 3);
-      float brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+   
+      vertices_x[0] = view_x[0];
+      vertices_x[1] = view_x[1];
+      vertices_x[2] = view_x[3];
+      vertices_x[3] = view_x[2];
+   
+      vertices_y[0] = view_y[0];
+      vertices_y[1] = view_y[1];
+      vertices_y[2] = view_y[3];
+      vertices_y[3] = view_y[2];
 
-      if (valid_view[0] && valid_view[1] && valid_view[2] && valid_view[3])
-      {
+      distance[0] = output_point_distance[0];
+      distance[1] = output_point_distance[1];
+      distance[2] = output_point_distance[3];
+      distance[3] = output_point_distance[2];
 
-        ogl::draw_polygon( view_x,
-                           view_y,
-                           output_point_distance,
-                           color,
-                           brightness,
-                           4);
-      }
+      ogl::draw_polygon( vertices_x,
+                         vertices_y,
+                         distance,
+                         color,
+                         brightness,
+                         4 );
+   }
+#endif
 
-   } // for (int face = 0; face < 6; face++)
+#if 1
+   if (valid_view[4] && valid_view[5] && valid_view[7] && valid_view[6])
+   {
+      // draw face x-
+      vec1[0] = 0;
+      vec1[1] = 0;
+      vec1[2] = face_zp - face_zn;
+   
+      vec2[0] = 0;
+      vec2[1] = face_yp - face_yn;
+      vec2[2] = 0;
+   
+      linalg::cross_product<float>( normal, vec2, vec1);
+      linalg::unit_vector<float>  ( normal, 3);
+      linalg::unit_vector<float>  ( user_opposite, 3);
+      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+   
+      vertices_x[0] = view_x[4];
+      vertices_x[1] = view_x[5];
+      vertices_x[2] = view_x[7];
+      vertices_x[3] = view_x[6];
+   
+      vertices_y[0] = view_y[4];
+      vertices_y[1] = view_y[5];
+      vertices_y[2] = view_y[7];
+      vertices_y[3] = view_y[6];
+
+      distance[0] = output_point_distance[4];
+      distance[1] = output_point_distance[5];
+      distance[2] = output_point_distance[7];
+      distance[3] = output_point_distance[6];
+
+      ogl::draw_polygon( vertices_x,
+                         vertices_y,
+                         distance,
+                         color,
+                         brightness,
+                         4 );
+   }
+#endif
+
+#if 1
+   if (valid_view[0] && valid_view[1] && valid_view[5] && valid_view[4])
+   {
+      // draw face y+
+      vec1[0] = 0;
+      vec1[1] = 0;
+      vec1[2] = face_zp - face_zn;
+   
+      vec2[0] = face_xp - face_xn;
+      vec2[1] = 0;
+      vec2[2] = 0;
+   
+      linalg::cross_product<float>( normal, vec2, vec1);
+      linalg::unit_vector<float>  ( normal, 3);
+      linalg::unit_vector<float>  ( user_opposite, 3);
+      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+   
+      vertices_x[0] = view_x[0];
+      vertices_x[1] = view_x[1];
+      vertices_x[2] = view_x[5];
+      vertices_x[3] = view_x[4];
+   
+      vertices_y[0] = view_y[0];
+      vertices_y[1] = view_y[1];
+      vertices_y[2] = view_y[5];
+      vertices_y[3] = view_y[4];
+
+      distance[0] = output_point_distance[0];
+      distance[1] = output_point_distance[1];
+      distance[2] = output_point_distance[5];
+      distance[3] = output_point_distance[4];
+
+      ogl::draw_polygon( vertices_x,
+                         vertices_y,
+                         distance,
+                         color,
+                         brightness,
+                         4 );
+   }
+#endif
+
+#if 1
+   if (valid_view[2] && valid_view[3] && valid_view[7] && valid_view[6])
+   {
+      // draw face y-
+      vec1[0] = face_xp - face_xn;
+      vec1[1] = 0;
+      vec1[2] = 0;
+   
+      vec2[0] = 0;
+      vec2[1] = 0;
+      vec2[2] = face_zp - face_zn;
+   
+      linalg::cross_product<float>( normal, vec2, vec1);
+      linalg::unit_vector<float>  ( normal, 3);
+      linalg::unit_vector<float>  ( user_opposite, 3);
+      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+   
+      vertices_x[0] = view_x[2];
+      vertices_x[1] = view_x[3];
+      vertices_x[2] = view_x[7];
+      vertices_x[3] = view_x[6];
+   
+      vertices_y[0] = view_y[2];
+      vertices_y[1] = view_y[3];
+      vertices_y[2] = view_y[7];
+      vertices_y[3] = view_y[6];
+
+      distance[0] = output_point_distance[2];
+      distance[1] = output_point_distance[3];
+      distance[2] = output_point_distance[7];
+      distance[3] = output_point_distance[6];
+
+      ogl::draw_polygon( vertices_x,
+                         vertices_y,
+                         distance,
+                         color,
+                         brightness,
+                         4 );
+   }
+#endif
+
+#if 1
+   if (valid_view[0] && valid_view[2] && valid_view[6] && valid_view[4])
+   {
+      // draw face z+
+      vec1[0] = face_xp - face_xn;
+      vec1[1] = 0;
+      vec1[2] = 0;
+   
+      vec2[0] = 0;
+      vec2[1] = face_yp - face_yn;
+      vec2[2] = 0;
+   
+      linalg::cross_product<float>( normal, vec2, vec1);
+      linalg::unit_vector<float>  ( normal, 3);
+      linalg::unit_vector<float>  ( user_opposite, 3);
+      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+   
+      vertices_x[0] = view_x[0];
+      vertices_x[1] = view_x[2];
+      vertices_x[2] = view_x[6];
+      vertices_x[3] = view_x[4];
+   
+      vertices_y[0] = view_y[0];
+      vertices_y[1] = view_y[2];
+      vertices_y[2] = view_y[6];
+      vertices_y[3] = view_y[4];
+
+      distance[0] = output_point_distance[0];
+      distance[1] = output_point_distance[2];
+      distance[2] = output_point_distance[6];
+      distance[3] = output_point_distance[4];
+
+      ogl::draw_polygon( vertices_x,
+                         vertices_y,
+                         distance,
+                         color,
+                         brightness,
+                         4 );
+   }
+#endif
+
+#if 1
+   if (valid_view[1] && valid_view[3] && valid_view[7] && valid_view[5])
+   {
+      // draw face z-
+      vec1[0] = 0;
+      vec1[1] = face_yp - face_yn;
+      vec1[2] = 0;
+   
+      vec2[0] = face_xp - face_xn;
+      vec2[1] = 0;
+      vec2[2] = 0;
+   
+      linalg::cross_product<float>( normal, vec2, vec1);
+      linalg::unit_vector<float>  ( normal, 3);
+      linalg::unit_vector<float>  ( user_opposite, 3);
+      brightness = linalg::dot_product<float>( normal, user_opposite, 3);
+   
+      vertices_x[0] = view_x[1];
+      vertices_x[1] = view_x[3];
+      vertices_x[2] = view_x[7];
+      vertices_x[3] = view_x[5];
+   
+      vertices_y[0] = view_y[1];
+      vertices_y[1] = view_y[3];
+      vertices_y[2] = view_y[7];
+      vertices_y[3] = view_y[5];
+
+      distance[0] = output_point_distance[1];
+      distance[1] = output_point_distance[3];
+      distance[2] = output_point_distance[7];
+      distance[3] = output_point_distance[5];
+
+      ogl::draw_polygon( vertices_x,
+                         vertices_y,
+                         distance,
+                         color,
+                         brightness,
+                         4 );
+   }
+#endif
 
 }
