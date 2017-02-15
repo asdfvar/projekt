@@ -222,7 +222,7 @@ void Map::render_chunk( User *user)
    user->get_position( user_position );
 
    float user_direction[3];
-   user->get_direction( user_direction);
+   user->get_direction( user_direction );
 
    float window_distance = user->get_window_distance();
    float window_width    = user->get_window_width();
@@ -265,9 +265,7 @@ void Map::render_chunk( User *user)
             if ( chunk->is_valid() )
             {
                // iterate through all the blocks
-               for (unsigned int ind = 0, block_ind = 0;
-                    block_ind < chunk->get_dimensions();
-                    block_ind++, ind++)
+               for (unsigned int block_ind = 0; block_ind < chunk->get_dimensions(); block_ind++)
                {
 
                   if (!chunk->get_position( block_position, block_ind)) continue;
@@ -500,7 +498,7 @@ int Map::get_abs_element( int *position_in, Text *text)
    }
    else
    {
-      physical_chunk_position[0] = ((position_in[0] / num_chunk_elements[0]) +
+      physical_chunk_position[0] = (((position_in[0] + 1) / num_chunk_elements[0]) +
                                      num_chunks[0] / 2 - 1) % num_chunks[0];
    }
    if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
@@ -512,7 +510,7 @@ int Map::get_abs_element( int *position_in, Text *text)
    }
    else
    {
-      physical_chunk_position[1] = ((position_in[1] / num_chunk_elements[1]) +
+      physical_chunk_position[1] = (((position_in[1] + 1) / num_chunk_elements[1]) +
                                      num_chunks[1] / 2 - 1) % num_chunks[1];
    }
    if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
@@ -524,7 +522,7 @@ int Map::get_abs_element( int *position_in, Text *text)
    }
    else
    {
-      physical_chunk_position[2] = ((position_in[2] / num_chunk_elements[2]) +
+      physical_chunk_position[2] = (((position_in[2] + 1) / num_chunk_elements[2]) +
                                      num_chunks[2] / 2 - 1) % num_chunks[2];
    }
    if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
@@ -538,7 +536,6 @@ int Map::get_abs_element( int *position_in, Text *text)
    if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
    if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
 
-   // TODO: setup debugger to identify which physical chunk and respective element the position is in
    text->populate("position in: ");
    text->populate( position_in[0] );
    text->populate( ", ");
