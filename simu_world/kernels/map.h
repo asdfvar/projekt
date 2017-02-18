@@ -43,6 +43,9 @@ class Map
       int num_chunks[3];
       int num_chunk_elements[3];
 
+      void get_physical_chunk_position( int* abs_position,
+                                        int* physical_chunk_position );
+
       int *physical_chunk_id_x,
           *physical_chunk_id_y,
           *physical_chunk_id_z;

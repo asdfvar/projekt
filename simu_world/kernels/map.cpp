@@ -491,42 +491,7 @@ int Map::get_abs_element( int *position_in, Text *text)
 {
    int physical_chunk_position[3];
 
-   if (position_in[0] >= 0)
-   {
-      physical_chunk_position[0] = ((position_in[0] / num_chunk_elements[0]) +
-                                     num_chunks[0] / 2) % num_chunks[0];
-   }
-   else
-   {
-      physical_chunk_position[0] = (((position_in[0] + 1) / num_chunk_elements[0]) +
-                                     num_chunks[0] / 2 - 1) % num_chunks[0];
-   }
-   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
-
-   if (position_in[1] >= 0)
-   {
-      physical_chunk_position[1] = ((position_in[1] / num_chunk_elements[1]) +
-                                     num_chunks[1] / 2) % num_chunks[1];
-   }
-   else
-   {
-      physical_chunk_position[1] = (((position_in[1] + 1) / num_chunk_elements[1]) +
-                                     num_chunks[1] / 2 - 1) % num_chunks[1];
-   }
-   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
-
-   if (position_in[2] >= 0)
-   {
-      physical_chunk_position[2] = ((position_in[2] / num_chunk_elements[2]) +
-                                     num_chunks[2] / 2) % num_chunks[2];
-   }
-   else
-   {
-      physical_chunk_position[2] = (((position_in[2] + 1) / num_chunk_elements[2]) +
-                                     num_chunks[2] / 2 - 1) % num_chunks[2];
-   }
-   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
-
+   get_physical_chunk_position( position_in, physical_chunk_position );
 
    int element_position[3] = { position_in[0] % num_chunk_elements[0],
                                position_in[1] % num_chunk_elements[1],
@@ -587,6 +552,50 @@ int Map::get_abs_element( int *position_in, Text *text)
    text->populate( abs_pos_id[2] );
 
    return 0;
+}
+
+/*
+** function name: get_physical_chunk_position from: Map
+*/
+void Map::get_physical_chunk_position( int* abs_position,
+                                       int* physical_chunk_position )
+{
+   if (abs_position[0] >= 0)
+   {
+      physical_chunk_position[0] = ((abs_position[0] / num_chunk_elements[0]) +
+                                     num_chunks[0] / 2) % num_chunks[0];
+   }
+   else
+   {
+      physical_chunk_position[0] = (((abs_position[0] + 1) / num_chunk_elements[0]) +
+                                     num_chunks[0] / 2 - 1) % num_chunks[0];
+   }
+   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
+
+   if (abs_position[1] >= 0)
+   {
+      physical_chunk_position[1] = ((abs_position[1] / num_chunk_elements[1]) +
+                                     num_chunks[1] / 2) % num_chunks[1];
+   }
+   else
+   {
+      physical_chunk_position[1] = (((abs_position[1] + 1) / num_chunk_elements[1]) +
+                                     num_chunks[1] / 2 - 1) % num_chunks[1];
+   }
+   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
+
+   if (abs_position[2] >= 0)
+   {
+      physical_chunk_position[2] = ((abs_position[2] / num_chunk_elements[2]) +
+                                     num_chunks[2] / 2) % num_chunks[2];
+   }
+   else
+   {
+      physical_chunk_position[2] = (((abs_position[2] + 1) / num_chunk_elements[2]) +
+                                     num_chunks[2] / 2 - 1) % num_chunks[2];
+   }
+   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
+
 }
 
 /*
