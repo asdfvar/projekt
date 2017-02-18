@@ -60,7 +60,7 @@ void Simu_world_obj::keyboardDown( const char key)
       case 32: // space bar
          user.move_upward();
          break;
-      case 'x':
+      case 'c':
          user.move_downward();
          break;
       case 'w':
@@ -100,7 +100,7 @@ void Simu_world_obj::keyboardUp( const char key)
       case 32: // space bar
          user.stop_up();
          break;
-      case 'x':
+      case 'c':
          user.stop_down();
          break;
    }
