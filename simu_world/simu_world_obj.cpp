@@ -39,6 +39,7 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 
 /*
 ** function name: keyboardDown from: Simu_world_obj
+** glutGetModifiers() is true if the shift key is depressed
 */
 void Simu_world_obj::keyboardDown( const char key)
 {
@@ -57,14 +58,10 @@ void Simu_world_obj::keyboardDown( const char key)
          glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
          break;
       case 32: // space bar
-         if (glutGetModifiers() == 0)
-         {
-            user.move_upward();
-         }
-         else if (glutGetModifiers() == 1)
-         {
-            user.move_downward();
-         }
+         user.move_upward();
+         break;
+      case 'x':
+         user.move_downward();
          break;
       case 'w':
          user.move_forward();
@@ -100,9 +97,12 @@ void Simu_world_obj::keyboardUp( const char key)
       case 'd':
          user.stop_right();
          break;
-      case 32:
+      case 32: // space bar
          user.stop_up();
+         break;
+      case 'x':
          user.stop_down();
+         break;
    }
 }
 
