@@ -87,7 +87,7 @@ void Chunk::update( void )
 /*
 ** function name: create_random from: Chunk 
 */
-void Chunk::create_random( void)
+void Chunk::create_random( void )
 {
    int chunk_dim_tot = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
    for (int ind = 0; ind < chunk_dim_tot; ind++)
@@ -103,7 +103,7 @@ void Chunk::create_random( void)
 /*
 ** function name: create_flat from: Chunk 
 */
-void Chunk::create_flat( void)
+void Chunk::create_flat( void )
 {
 std::cout << "abs_pos_id = " << abs_pos_id[0] << ", "
            << abs_pos_id[1] << ", " << abs_pos_id[2] << std::endl;
@@ -242,9 +242,11 @@ unsigned int Chunk::get_dimensions( unsigned int *dimensions_out)
 /*
 ** function name: get_position from Chunk
 */
-int Chunk::get_position(float *position_out,
+int Chunk::get_position(float* position_out,
                         int    block_index)
 {
+
+   if ( position_out == NULL ) return blocks[block_index];
 
    if (block_index >= chunk_dim[0] * chunk_dim[1] * chunk_dim[2])
    {
@@ -376,6 +378,7 @@ void Chunk::generate_chunk( void )
                                  << abs_pos_id[2] << ")"
                                  << std::endl;
       create_random();
+//      create_flat();
       changed         = true;
    }
    else

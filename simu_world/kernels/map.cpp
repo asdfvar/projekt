@@ -65,9 +65,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
       {
          for (int ind_x = -num_chunks[0]/2; ind_x <= num_chunks[0]/2; ind_x++, ind++)
          {
-           float position[3] = {(float)(ind_x * num_chunk_elements[0]),
-                                (float)(ind_y * num_chunk_elements[1]),
-                                (float)(ind_z * num_chunk_elements[2])};
+           float position[3] = { (float)(ind_x * num_chunk_elements[0]),
+                                 (float)(ind_y * num_chunk_elements[1]),
+                                 (float)(ind_z * num_chunk_elements[2]) };
 
            abs_pos_id[0] = ind_x;
            abs_pos_id[1] = ind_y;
@@ -128,7 +128,7 @@ void Map::update( void )
 
             Chunk *this_chunk = access_chunk( x_dir,
                                               y_dir,
-                                              z_dir);
+                                              z_dir );
             this_chunk->update();
          }
       }
@@ -270,9 +270,57 @@ void Map::render_chunk( User *user)
                {
 
                   int block_sides = 0;
-
-                  if (!chunk->get_position( block_position, block_ind)) continue;
                   int i_block_position[3];
+                  bool front_open, back_open, left_open, right_open, top_open, bottom_open;
+                  front_open = back_open = left_open =
+                  right_open = top_open = bottom_open = true;
+
+                  int block = chunk->get_position( block_position, block_ind );
+                  if ( block == 0 ) continue;
+
+                  int front_block_ind = block_ind + 1;
+                  if( block_ind % num_chunk_elements[0] + 1 < num_chunk_elements[0] )
+                  {
+                     int front_block = chunk->get_position( NULL, front_block_ind );
+                     if (front_block != 0) front_open = false;
+                  }
+
+                  int back_block_ind = block_ind - 1;
+                  if( block_ind % num_chunk_elements[0] > 0 )
+                  {
+                     int back_block = chunk->get_position( NULL, back_block_ind );
+                     if (back_block != 0) back_open = false;
+                  }
+
+                  int left_block_ind = block_ind + num_chunk_elements[0];
+                  if( (block_ind % (num_chunk_elements[0] * num_chunk_elements[1]))/num_chunk_elements[0] + 1 < num_chunk_elements[1])
+                  {
+                     int left_block = chunk->get_position( NULL, left_block_ind );
+                     if (left_block != 0) left_open = false;
+                  }
+
+                  int right_block_ind = block_ind - num_chunk_elements[0];
+                  if( (block_ind % (num_chunk_elements[0] * num_chunk_elements[1]))/num_chunk_elements[0] > 0)
+                  {
+                     int right_block = chunk->get_position( NULL, right_block_ind );
+                     if (right_block != 0) right_open = false;
+                  }
+
+                  int top_block_ind = block_ind + num_chunk_elements[0] * num_chunk_elements[1];
+                  if( block_ind / (num_chunk_elements[0] * num_chunk_elements[1]) + 1 < num_chunk_elements[2] )
+                  {
+                     int top_block = chunk->get_position( NULL, top_block_ind );
+                     if (top_block != 0) top_open = false;
+                  }
+
+                  int bottom_block_ind = block_ind - num_chunk_elements[0] * num_chunk_elements[1];
+                  if( block_ind / (num_chunk_elements[0] * num_chunk_elements[1]) > 0)
+                  {
+                     int bottom_block = chunk->get_position( NULL, bottom_block_ind );
+                     if (bottom_block != 0) bottom_open = false;
+                  }
+
+#if 0
                   i_block_position[0] = floorf( block_position[0] );
                   i_block_position[1] = floorf( block_position[1] );
                   i_block_position[2] = floorf( block_position[2] );
@@ -283,37 +331,38 @@ void Map::render_chunk( User *user)
                   near_block_position[1] = i_block_position[1];
                   near_block_position[2] = i_block_position[2];
 
-                  bool front_open = get_abs_element( near_block_position ) == 0;
+                  front_open = get_abs_element( near_block_position ) == 0;
 
                   near_block_position[0] = i_block_position[0] - 1;
                   near_block_position[1] = i_block_position[1];
                   near_block_position[2] = i_block_position[2];
 
-                  bool back_open = get_abs_element( near_block_position ) == 0;
+                  back_open = get_abs_element( near_block_position ) == 0;
 
                   near_block_position[0] = i_block_position[0];
                   near_block_position[1] = i_block_position[1] + 1;
                   near_block_position[2] = i_block_position[2];
 
-                  bool left_open = get_abs_element( near_block_position ) == 0;
+                  left_open = get_abs_element( near_block_position ) == 0;
 
                   near_block_position[0] = i_block_position[0];
                   near_block_position[1] = i_block_position[1] - 1;
                   near_block_position[2] = i_block_position[2];
 
-                  bool right_open = get_abs_element( near_block_position ) == 0;
+                  right_open = get_abs_element( near_block_position ) == 0;
 
                   near_block_position[0] = i_block_position[0];
                   near_block_position[1] = i_block_position[1];
                   near_block_position[2] = i_block_position[2] + 1;
 
-                  bool top_open = get_abs_element( near_block_position ) == 0;
+                  top_open = get_abs_element( near_block_position ) == 0;
 
                   near_block_position[0] = i_block_position[0];
                   near_block_position[1] = i_block_position[1];
                   near_block_position[2] = i_block_position[2] - 1;
 
-                  bool bottom_open = get_abs_element( near_block_position ) == 0;
+                  bottom_open = get_abs_element( near_block_position ) == 0;
+#endif
 
                   if ( front_open  ) block_sides |= DRAW_FRONT;
                   if ( back_open   ) block_sides |= DRAW_BACK;
