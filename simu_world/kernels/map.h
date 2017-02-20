@@ -16,15 +16,15 @@ class Map
 {
    public:
       Map( pthread_barrier_t* );
-     ~Map(void);
+     ~Map( void );
 
       void update( void );
       void update( float *position);
       void render_chunk( User *user);
 
-      Chunk *access_chunk(int v_id_x,
-                      int v_id_y,
-                      int v_id_z);
+      Chunk *access_chunk( int v_id_x,
+                           int v_id_y,
+                           int v_id_z );
 
       void debug_info( void );
 
@@ -45,6 +45,9 @@ class Map
 
       void get_physical_chunk_position( int* abs_position,
                                         int* physical_chunk_position );
+
+      void get_relative_element_position( int* position_in,
+                                          int* element_position );
 
       int *physical_chunk_id_x,
           *physical_chunk_id_y,

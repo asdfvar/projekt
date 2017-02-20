@@ -490,16 +490,10 @@ void Map::shift( int x, int y, int z)
 int Map::get_abs_element( int *position_in, Text *text)
 {
    int physical_chunk_position[3];
-
    get_physical_chunk_position( position_in, physical_chunk_position );
 
-   int element_position[3] = { position_in[0] % num_chunk_elements[0],
-                               position_in[1] % num_chunk_elements[1],
-                               position_in[2] % num_chunk_elements[2] };
-
-   if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
-   if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
-   if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
+   int element_position[3];
+   get_relative_element_position( position_in, element_position );
 
    text->populate("position in: ");
    text->populate( position_in[0] );
@@ -595,6 +589,18 @@ void Map::get_physical_chunk_position( int* abs_position,
                                      num_chunks[2] / 2 - 1) % num_chunks[2];
    }
    if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
+
+}
+
+void Map::get_relative_element_position( int* position_in, int* element_position )
+{
+   element_position[0] = position_in[0] % num_chunk_elements[0];
+   element_position[1] = position_in[1] % num_chunk_elements[1];
+   element_position[2] = position_in[2] % num_chunk_elements[2];
+
+   if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
+   if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
+   if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
 
 }
 
