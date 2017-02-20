@@ -19,21 +19,23 @@ class Map
      ~Map( void );
 
       void update( void );
-      void update( float *position);
-      void render_chunk( User *user);
+      void update( float *position );
+      void render_chunk( User *user );
 
       Chunk *access_chunk( int v_id_x,
                            int v_id_y,
                            int v_id_z );
 
-      void debug_info( void );
-
-      int  get_abs_element( int *position, Text *text);
+      int  get_abs_element( int* position );
 
       void set_phys_chunk_color( int    p_ind_x,
                                  int    p_ind_y,
                                  int    p_ind_z,
                                  float *color );
+
+      void diagnostics( int* position, Text* text );
+
+      void debug_info( void );
 
       pthread_barrier_t* IO_barrier;
 

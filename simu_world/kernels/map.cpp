@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "draw_block.h"
 #include "fileio.h"
+#include <cmath>
 
 /*
 ** constructor name: Map
@@ -235,31 +236,31 @@ void Map::render_chunk( User *user)
          {
             chunk = access_chunk( chunk_ind_x, chunk_ind_y, chunk_ind_z);
 
-            int side = 0;
+            int chunk_sides = 0;
 
             if ( virtual_chunk_id_x[ chunk_ind_x ] >= mid_chunk[0] )
             {
-               side |= DRAW_BACK;
+               chunk_sides |= DRAW_BACK;
             }
             if ( virtual_chunk_id_x[ chunk_ind_x ] <= mid_chunk[0] )
             {
-               side |= DRAW_FRONT;
+               chunk_sides |= DRAW_FRONT;
             }
             if ( virtual_chunk_id_y[ chunk_ind_y ] >= mid_chunk[1] )
             {
-               side |= DRAW_RIGHT;
+               chunk_sides |= DRAW_RIGHT;
             }
             if ( virtual_chunk_id_y[ chunk_ind_y ] <= mid_chunk[1] )
             {
-               side |= DRAW_LEFT;
+               chunk_sides |= DRAW_LEFT;
             }
             if ( virtual_chunk_id_z[ chunk_ind_z ] >= mid_chunk[2] )
             {
-               side |= DRAW_BOTTOM;
+               chunk_sides |= DRAW_BOTTOM;
             }
             if ( virtual_chunk_id_z[ chunk_ind_z ] <= mid_chunk[2] )
             {
-               side |= DRAW_TOP;
+               chunk_sides |= DRAW_TOP;
             }
 
             if ( chunk->is_valid() )
@@ -268,18 +269,74 @@ void Map::render_chunk( User *user)
                for (unsigned int block_ind = 0; block_ind < chunk->get_dimensions(); block_ind++)
                {
 
+                  int block_sides = 0;
+
                   if (!chunk->get_position( block_position, block_ind)) continue;
+                  int i_block_position[3];
+                  i_block_position[0] = floorf( block_position[0] );
+                  i_block_position[1] = floorf( block_position[1] );
+                  i_block_position[2] = floorf( block_position[2] );
+
+                  int near_block_position[3];
+
+                  near_block_position[0] = i_block_position[0] + 1;
+                  near_block_position[1] = i_block_position[1];
+                  near_block_position[2] = i_block_position[2];
+
+                  bool front_open = get_abs_element( near_block_position ) == 0;
+
+                  near_block_position[0] = i_block_position[0] - 1;
+                  near_block_position[1] = i_block_position[1];
+                  near_block_position[2] = i_block_position[2];
+
+                  bool back_open = get_abs_element( near_block_position ) == 0;
+
+                  near_block_position[0] = i_block_position[0];
+                  near_block_position[1] = i_block_position[1] + 1;
+                  near_block_position[2] = i_block_position[2];
+
+                  bool left_open = get_abs_element( near_block_position ) == 0;
+
+                  near_block_position[0] = i_block_position[0];
+                  near_block_position[1] = i_block_position[1] - 1;
+                  near_block_position[2] = i_block_position[2];
+
+                  bool right_open = get_abs_element( near_block_position ) == 0;
+
+                  near_block_position[0] = i_block_position[0];
+                  near_block_position[1] = i_block_position[1];
+                  near_block_position[2] = i_block_position[2] + 1;
+
+                  bool top_open = get_abs_element( near_block_position ) == 0;
+
+                  near_block_position[0] = i_block_position[0];
+                  near_block_position[1] = i_block_position[1];
+                  near_block_position[2] = i_block_position[2] - 1;
+
+                  bool bottom_open = get_abs_element( near_block_position ) == 0;
+
+                  if ( front_open  ) block_sides |= DRAW_FRONT;
+                  if ( back_open   ) block_sides |= DRAW_BACK;
+                  if ( right_open  ) block_sides |= DRAW_RIGHT;
+                  if ( left_open   ) block_sides |= DRAW_LEFT;
+                  if ( top_open    ) block_sides |= DRAW_TOP;
+                  if ( bottom_open ) block_sides |= DRAW_BOTTOM;
 
                   float color[3];
                   chunk->get_color( color );
 
-                  draw_block( block_position,
-                              user_position,
-                              user_direction,
-                              window_distance,
-                              window_width,
-                              side,
-                              color );
+                  int sides = chunk_sides & block_sides;
+
+                  if ( sides )
+                  {
+                     draw_block( block_position,
+                                 user_position,
+                                 user_direction,
+                                 window_distance,
+                                 window_width,
+                                 sides,
+                                 color );
+                  }
                }
             }
          }
@@ -486,8 +543,85 @@ void Map::shift( int x, int y, int z)
 
 /*
 ** function name: get_abs_element from: Map
+**
+** returns the block element at the absolute position.
+** assumes a toroidal topology with the chunks so it will
+** return a block element modulo the number of chunks
 */
-int Map::get_abs_element( int *position_in, Text *text)
+int Map::get_abs_element( int* position_in)
+{
+   int physical_chunk_position[3];
+   get_physical_chunk_position( position_in, physical_chunk_position );
+
+   Chunk *this_chunk = access_chunk( physical_chunk_position[0],
+                                     physical_chunk_position[1],
+                                     physical_chunk_position[2]);
+
+   int element_position[3];
+   get_relative_element_position( position_in, element_position );
+
+   int element = this_chunk->get_block( element_position );
+
+   return element;
+}
+
+/*
+** function name: get_physical_chunk_position from: Map
+*/
+void Map::get_physical_chunk_position( int* abs_position,
+                                       int* physical_chunk_position )
+{
+   if (abs_position[0] >= 0)
+   {
+      physical_chunk_position[0] = ((abs_position[0] / num_chunk_elements[0]) +
+                                     num_chunks[0] / 2) % num_chunks[0];
+   }
+   else
+   {
+      physical_chunk_position[0] = (((abs_position[0] + 1) / num_chunk_elements[0]) +
+                                     num_chunks[0] / 2 - 1) % num_chunks[0];
+   }
+   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
+
+   if (abs_position[1] >= 0)
+   {
+      physical_chunk_position[1] = ((abs_position[1] / num_chunk_elements[1]) +
+                                     num_chunks[1] / 2) % num_chunks[1];
+   }
+   else
+   {
+      physical_chunk_position[1] = (((abs_position[1] + 1) / num_chunk_elements[1]) +
+                                     num_chunks[1] / 2 - 1) % num_chunks[1];
+   }
+   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
+
+   if (abs_position[2] >= 0)
+   {
+      physical_chunk_position[2] = ((abs_position[2] / num_chunk_elements[2]) +
+                                     num_chunks[2] / 2) % num_chunks[2];
+   }
+   else
+   {
+      physical_chunk_position[2] = (((abs_position[2] + 1) / num_chunk_elements[2]) +
+                                     num_chunks[2] / 2 - 1) % num_chunks[2];
+   }
+   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
+
+}
+
+void Map::get_relative_element_position( int* position_in, int* element_position )
+{
+   element_position[0] = position_in[0] % num_chunk_elements[0];
+   element_position[1] = position_in[1] % num_chunk_elements[1];
+   element_position[2] = position_in[2] % num_chunk_elements[2];
+
+   if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
+   if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
+   if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
+
+}
+
+void Map::diagnostics( int *position_in, Text *text)
 {
    int physical_chunk_position[3];
    get_physical_chunk_position( position_in, physical_chunk_position );
@@ -544,63 +678,6 @@ int Map::get_abs_element( int *position_in, Text *text)
    text->populate( abs_pos_id[1] );
    text->populate( ", ");
    text->populate( abs_pos_id[2] );
-
-   return 0;
-}
-
-/*
-** function name: get_physical_chunk_position from: Map
-*/
-void Map::get_physical_chunk_position( int* abs_position,
-                                       int* physical_chunk_position )
-{
-   if (abs_position[0] >= 0)
-   {
-      physical_chunk_position[0] = ((abs_position[0] / num_chunk_elements[0]) +
-                                     num_chunks[0] / 2) % num_chunks[0];
-   }
-   else
-   {
-      physical_chunk_position[0] = (((abs_position[0] + 1) / num_chunk_elements[0]) +
-                                     num_chunks[0] / 2 - 1) % num_chunks[0];
-   }
-   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
-
-   if (abs_position[1] >= 0)
-   {
-      physical_chunk_position[1] = ((abs_position[1] / num_chunk_elements[1]) +
-                                     num_chunks[1] / 2) % num_chunks[1];
-   }
-   else
-   {
-      physical_chunk_position[1] = (((abs_position[1] + 1) / num_chunk_elements[1]) +
-                                     num_chunks[1] / 2 - 1) % num_chunks[1];
-   }
-   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
-
-   if (abs_position[2] >= 0)
-   {
-      physical_chunk_position[2] = ((abs_position[2] / num_chunk_elements[2]) +
-                                     num_chunks[2] / 2) % num_chunks[2];
-   }
-   else
-   {
-      physical_chunk_position[2] = (((abs_position[2] + 1) / num_chunk_elements[2]) +
-                                     num_chunks[2] / 2 - 1) % num_chunks[2];
-   }
-   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
-
-}
-
-void Map::get_relative_element_position( int* position_in, int* element_position )
-{
-   element_position[0] = position_in[0] % num_chunk_elements[0];
-   element_position[1] = position_in[1] % num_chunk_elements[1];
-   element_position[2] = position_in[2] % num_chunk_elements[2];
-
-   if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
-   if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
-   if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
 
 }
 

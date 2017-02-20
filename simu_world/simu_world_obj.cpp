@@ -218,7 +218,7 @@ void Simu_world_obj::idle( void)
                                     (int)floorf(user_position[1]),
                                     (int)floorf(user_position[2]) };
 
-         map->get_abs_element( i_user_position, &text);
+         map->diagnostics( i_user_position, &text);
 
       }
 
@@ -245,7 +245,7 @@ void Simu_world_obj::display(void)
    // clear this openGL buffer
    ogl::opengl_clear();
 
-   map->render_chunk( &user);
+   map->render_chunk( &user );
 
    hud::display();
 
