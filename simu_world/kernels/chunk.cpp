@@ -478,7 +478,10 @@ Chunks_new::Chunks_new( int* size_in )
 
    Node* row;
    Node* vert;
+   Node* vert_start;
 
+   vert       = new Node;
+   vert_start = vert;
    for (int k = 0; k < size[2]; k++)
    {
 
@@ -492,7 +495,6 @@ Chunks_new::Chunks_new( int* size_in )
       ** --+--+--+--+--
       **   |         
       */
-      vert = new Node;
       row  = vert;
       for (int j = 0; j < size[1]; j++)
       {
@@ -506,7 +508,7 @@ Chunks_new::Chunks_new( int* size_in )
          node->front = row;
          row->back   = node;
 
-         if (j < size[1])
+         if (j + 1 < size[1])
          {
             row->left        = new Node;
             row->left->right = row;
@@ -543,6 +545,16 @@ Chunks_new::Chunks_new( int* size_in )
          row1 = row;
          row2 = row->left;
       }
-      
+
+      if (k + 1 < size[2])
+      {
+         vert->top         = new Node;
+         vert->top->bottom = vert;
+         vert              = vert->top;
+      }
    }
+   vert->top          = vert_start;
+   vert_start->bottom = vert;
+
+   // connect all nodes between each plane
 }
