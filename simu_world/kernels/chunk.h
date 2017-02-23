@@ -12,7 +12,7 @@
 class Chunk
 {
    public:
-      Chunk( void);
+      Chunk( void );
 
       Chunk( unsigned int  id_in,
              int           abs_pos_id_in[3],
@@ -55,6 +55,39 @@ class Chunk
       void create_flat( void );
       void generate_chunk( void );
       void write_chunk( void );
+
+};
+
+/*
+** class name: Node
+*/
+class Node
+{
+   public:
+      Chunk* chunk;
+
+      Node* front;
+      Node* back;
+      Node* left;
+      Node* right;
+      Node* top;
+      Node* bottom;
+};
+
+/*
+** class name: Chunks_new
+*/
+class Chunks_new
+{
+   public:
+
+      Chunks_new( int* size );
+     ~Chunks_new( void );
+
+   private:
+
+      int size[3];
+      Node* node;
 
 };
 

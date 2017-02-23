@@ -60,6 +60,7 @@ class Map
           *virtual_chunk_id_z;
 
       std::vector<Chunk*> chunks;
+      Chunks_new* chunks_new;
 
       float *vertices;
 

@@ -59,11 +59,11 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    int ind;
    int abs_pos_id[3];
 
-   for (int ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++)
+   for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
    {
-      for (int ind_y = -num_chunks[1]/2; ind_y <= num_chunks[1]/2; ind_y++)
+      for (int j = 0, ind_y = -num_chunks[1]/2; ind_y <= num_chunks[1]/2; ind_y++, j++)
       {
-         for (int ind_x = -num_chunks[0]/2; ind_x <= num_chunks[0]/2; ind_x++, ind++)
+         for (int i = 0, ind_x = -num_chunks[0]/2; ind_x <= num_chunks[0]/2; ind_x++, ind++, i++)
          {
            float position[3] = { (float)(ind_x * num_chunk_elements[0]),
                                  (float)(ind_y * num_chunk_elements[1]),

@@ -469,3 +469,80 @@ void Chunk::get_color( float *color_out )
    color_out[1] = color[1];
    color_out[2] = color[2];
 }
+
+Chunks_new::Chunks_new( int* size_in )
+{
+   size[0] = size_in[0];
+   size[1] = size_in[1];
+   size[2] = size_in[2];
+
+   Node* row;
+   Node* vert;
+
+   for (int k = 0; k < size[2]; k++)
+   {
+
+      /*   |
+      ** --+--+--+--+--
+      **   |         
+      ** --+--+--+--+--
+      **   |         
+      ** --+--+--+--+--
+      **   |         
+      ** --+--+--+--+--
+      **   |         
+      */
+      vert = new Node;
+      row  = vert;
+      for (int j = 0; j < size[1]; j++)
+      {
+         node = row;
+         for (int i = 0; i < size[0]; i++)
+         {
+            node->front       = new Node;
+            node->front->back = node;
+            node              = node->front;
+         }
+         node->front = row;
+         row->back   = node;
+
+         if (j < size[1])
+         {
+            row->left        = new Node;
+            row->left->right = row;
+            row              = row->left;
+         }
+      }
+      row->left   = vert;
+      vert->right = row;
+
+      /*   |  |  |  |
+      ** --+--+--+--+--
+      **   |  |  |  |
+      ** --+--+--+--+--
+      **   |  |  |  |
+      ** --+--+--+--+--
+      **   |  |  |  |
+      ** --+--+--+--+--
+      **   |  |  |  |
+      */
+      row = vert;
+      Node* row1 = row;
+      Node* row2 = row->left;
+      for (int j = 0; j < size[1]; j++)
+      {
+         for (int i = 0; i < size[0]; i++)
+         {
+            row1->left  = row2;
+            row2->right = row1;
+
+            row1 = row1->front;
+            row2 = row2->front;
+         }
+         row  = row->left;
+         row1 = row;
+         row2 = row->left;
+      }
+      
+   }
+}
