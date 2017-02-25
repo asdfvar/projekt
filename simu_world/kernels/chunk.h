@@ -87,7 +87,8 @@ class Chunks_new
    private:
 
       int size[3];
-      Node* node;
+      Node* current_node;
+      Node* base_node;
 
 };
 
