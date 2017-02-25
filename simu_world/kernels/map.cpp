@@ -18,6 +18,8 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    num_chunks[2] = 13;
    int total_local_grid_size = num_chunks[0] * num_chunks[1] * num_chunks[2];
 
+   chunks_new = new Chunks_new( num_chunks );
+
    /*
    ** Initialize the mapping from the virtual grid index
    ** to the physical grid index

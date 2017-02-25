@@ -499,7 +499,7 @@ Chunks_new::Chunks_new( int* size_in )
       for (int j = 0; j < size[1]; j++)
       {
          node = row;
-         for (int i = 0; i < size[0]; i++)
+         for (int i = 0; i + 1 < size[0]; i++)
          {
             node->front       = new Node;
             node->front->back = node;
@@ -517,6 +517,31 @@ Chunks_new::Chunks_new( int* size_in )
       }
       row->left   = vert;
       vert->right = row;
+
+{
+Node* temp = vert_start;
+for (int jj = 1; jj < size[1]; jj++) temp = temp->left;
+
+for (int jj = 0; jj < size[1]; jj++) {
+   for (int ii = 0; ii < size[0]; ii++) {
+      printf("-1,%d,-1,",(long int)temp->left);
+      temp = temp->front;
+   }
+   std::cout << std::endl;
+   for (int ii = 0; ii < size[0]; ii++) {
+      printf("%d,%d,%d,", (long int)temp->back, (long int)temp, (long int)temp->front);
+      temp = temp->front;
+   }
+   std::cout << std::endl;
+   for (int ii = 0; ii < size[0]; ii++) {
+      printf("-1,%d,-1,",(long int)temp->right);
+      temp = temp->front;
+   }
+   temp = temp->right;
+   std::cout << std::endl;
+}
+std::cout << std::endl;
+}
 
       /*   |  |  |  |
       ** --+--+--+--+--
