@@ -445,8 +445,7 @@ void Chunk::write_chunk( void )
       std::cout << "writing chunk (" << prev_abs_pos_id[0] << ", "
                                      << prev_abs_pos_id[1] << ", "
                                      << prev_abs_pos_id[2] << ") "
-<< chunk_name
-                                     << std::endl;
+                                     << chunk_name << std::endl;
 
       fio::write( chunk_name,
                   0,
@@ -480,8 +479,8 @@ Chunks_new::Chunks_new( int* size_in )
    Node* row;
    Node* vert;
 
-   vert       = new Node;
-   base_node = vert;
+   base_node = new Node;
+   vert      = base_node;
    for (int k = 0; k < size[2]; k++)
    {
 
@@ -503,6 +502,7 @@ Chunks_new::Chunks_new( int* size_in )
          {
             node->front       = new Node;
             node->front->back = node;
+            node->next        = node->front;
             node              = node->front;
          }
          node->front = row;
@@ -513,35 +513,11 @@ Chunks_new::Chunks_new( int* size_in )
             row->left        = new Node;
             row->left->right = row;
             row              = row->left;
+            node->next       = row;
          }
       }
       row->left   = vert;
       vert->right = row;
-
-{
-Node* temp = base_node;
-for (int jj = 1; jj < size[1]; jj++) temp = temp->left;
-
-for (int jj = 0; jj < size[1]; jj++) {
-   for (int ii = 0; ii < size[0]; ii++) {
-      printf("-1,%d,-1,",(long int)temp->left);
-      temp = temp->front;
-   }
-   std::cout << std::endl;
-   for (int ii = 0; ii < size[0]; ii++) {
-      printf("%d,%d,%d,", (long int)temp->back, (long int)temp, (long int)temp->front);
-      temp = temp->front;
-   }
-   std::cout << std::endl;
-   for (int ii = 0; ii < size[0]; ii++) {
-      printf("-1,%d,-1,",(long int)temp->right);
-      temp = temp->front;
-   }
-   temp = temp->right;
-   std::cout << std::endl;
-}
-std::cout << std::endl;
-}
 
       /*   |  |  |  |
       ** --+--+--+--+--
@@ -573,13 +549,46 @@ std::cout << std::endl;
 
       if (k + 1 < size[2])
       {
-         vert->top         = new Node;
-         vert->top->bottom = vert;
-         vert              = vert->top;
+         vert->top              = new Node;
+         vert->top->bottom      = vert;
+         row->back->right->next = vert->top;
+         vert                   = vert->top;
       }
+
+{
+std::cout << "plane " << k << std::endl;
+printf("base_node = %ld\n", (long int)base_node);
+Node* temp = vert->bottom;
+temp = temp->right;
+
+for (int jj = 0; jj < size[1]; jj++) {
+   for (int ii = 0; ii < size[0]; ii++) {
+      printf(",%ld,%ld,",(long int)temp->left, (long int)temp->next);
+      temp = temp->front;
    }
-   vert->top          = base_node;
+   std::cout << std::endl;
+   for (int ii = 0; ii < size[0]; ii++) {
+      printf("%ld,%ld,%ld,", (long int)temp->back, (long int)temp, (long int)temp->front);
+      temp = temp->front;
+   }
+   std::cout << std::endl;
+   for (int ii = 0; ii < size[0]; ii++) {
+      printf(",%ld,,",(long int)temp->right);
+      temp = temp->front;
+   }
+   temp = temp->right;
+   std::cout << std::endl;
+}
+std::cout << std::endl;
+}
+
+   }
+   vert->top         = base_node;
    base_node->bottom = vert;
+
+   // connect the last node to the first node
+   vert->back->right->next = base_node;
+printf("vert->back->right = %ld\n", (long int)vert->back->right);
 
    // connect all nodes between each plane
       /*    /  /  /  /

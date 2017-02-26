@@ -72,6 +72,7 @@ class Node
       Node* right;
       Node* top;
       Node* bottom;
+      Node* next;
 };
 
 /*
