@@ -583,8 +583,10 @@ std::cout << std::endl;
 }
 
    }
-   vert->top         = base_node;
-   base_node->bottom = vert;
+   vert->top              = base_node;
+   base_node->bottom      = vert;
+   row->back->right->next = vert->top;
+   vert                   = vert->top;
 
    // connect the last node to the first node
    vert->back->right->next = base_node;
