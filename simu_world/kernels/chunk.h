@@ -64,6 +64,8 @@ class Chunk
 class Node
 {
    public:
+     ~Node( void );
+
       Chunk* chunk;
 
       Node* front;

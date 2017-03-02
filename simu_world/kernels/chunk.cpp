@@ -634,3 +634,29 @@ for (int kk = 0; kk < size[0]*size[1]*size[2] + 1; kk++) {
 }
 
 }
+
+/*
+** destructor name: ~Chunks_new
+*/
+Chunks_new::~Chunks_new( void )
+{
+   const int total_size = size[0] * size[1] * size[2];
+
+   Node* node      = base_node;
+   Node* node_next = node->next;
+
+   for (int k = 0; k < total_size; k++)
+   {
+      node_next = node->next;
+      delete node;
+      node      = node_next;
+   }
+}
+
+/*
+** destructor name: ~Node
+*/
+Node::~Node( void )
+{
+   delete chunk;
+}
