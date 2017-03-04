@@ -5,6 +5,8 @@
 #include "fileio.h"
 #include <cmath>
 
+#define USE_CHUNKS
+
 /*
 ** constructor name: Map
 */
@@ -77,7 +79,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
            /*
            ** Create the chunks for this map
            */
-           chunks.push_back( new Chunk(ind, abs_pos_id, num_chunk_elements, position));
+           Chunk* new_chunk = new Chunk(ind, abs_pos_id, num_chunk_elements, position);
+           chunks.push_back( new_chunk );
+           chunks_new->insert_chunk( new_chunk );
 
            if (sz < chunks.capacity())
            {
@@ -103,6 +107,7 @@ Map::~Map(void)
 {
    std::size_t total_grid_size = num_chunks[0] * num_chunks[1] * num_chunks[2];
    chunks.erase (chunks.begin(), chunks.begin() + total_grid_size);
+   delete chunks_new;
 
    delete[] physical_chunk_id_x;
    delete[] physical_chunk_id_y;
@@ -417,7 +422,12 @@ Chunk *Map::access_chunk( int p_id_x,
                          p_id_y * num_chunks[0] +
                          p_id_z * num_chunks[0] * num_chunks[1];
 
+#ifdef USE_CHUNKS
    return chunks.at( index );
+#else
+   return chunks_new->at( index );
+#endif
+
 }
 
 void Map::set_phys_chunk_color( int    p_ind_x,

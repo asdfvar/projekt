@@ -475,6 +475,8 @@ Chunks_new::Chunks_new( int* size_in )
    size[1] = size_in[1];
    size[2] = size_in[2];
 
+   ind[0] = ind[1] = ind[2] = 0;
+
    Node* node;
    Node* row;
    Node* vert;
@@ -633,6 +635,68 @@ for (int kk = 0; kk < size[0]*size[1]*size[2] + 1; kk++) {
 }
 }
 
+}
+
+/*
+** function name: insert_chunk from: Chunks_new
+**
+** set the new chunk in this node then advance to
+** the next node.
+*/
+void Chunks_new::insert_chunk( Chunk* new_chunk )
+{
+   current_node->chunk = new_chunk;
+   current_node = current_node->next;
+
+   // increment the index
+   ind[0]++;
+   if (ind[0] >= size[0])
+   {
+      ind[0] = 0;
+      ind[1]++;
+      if (ind[1] >= size[1])
+      {
+         ind[1] = 0;
+         ind[2]++;
+         if (ind[2] >= size[2])
+         {
+            ind[2] = 0;
+         }
+      }
+   }
+}
+
+/*
+** function name: at from: Chunks_new
+*/
+Chunk* Chunks_new::at( int chunk_ind )
+{
+   current_node = base_node;
+   ind[0] = ind[1] = ind[2] = 0;
+
+   for (int k = 0; k < chunk_ind; k++)
+   {
+      current_node = current_node->next;
+
+      // increment the index
+      ind[0]++;
+      if (ind[0] >= size[0])
+      {
+         ind[0] = 0;
+         ind[1]++;
+         if (ind[1] >= size[1])
+         {
+            ind[1] = 0;
+            ind[2]++;
+            if (ind[2] >= size[2])
+            {
+               ind[2] = 0;
+            }
+         }
+      }
+   }
+
+   return current_node->chunk;
 }
 
 /*
