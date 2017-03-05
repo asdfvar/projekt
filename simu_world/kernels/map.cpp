@@ -45,12 +45,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    for (int k = 0; k < num_chunks[2]; k++) virtual_chunk_id_z[k] = k;
 
    /*
-   ** Reserve space for the map chunks
-   */
-   chunks.reserve( total_local_grid_size);
-   std::vector<Chunk*>::size_type sz = chunks.capacity();
-
-   /*
    ** Create the save directory
    */
    fio::directory();
@@ -77,15 +71,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
            /*
            ** Create the chunks for this map
            */
-           Chunk* new_chunk = new Chunk(ind, abs_pos_id, num_chunk_elements, position);
-           chunks.push_back( new_chunk );
-           chunks_new->insert_chunk( new_chunk );
-
-           if (sz < chunks.capacity())
-           {
-              std::cout << "Chunk grid capacity increased" << std::endl;
-              sz = chunks.capacity();
-           }
+           chunks_new->insert_chunk( new Chunk(ind, abs_pos_id, num_chunk_elements, position) );
 
          }
       }
@@ -105,8 +91,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 */
 Map::~Map(void)
 {
-   std::size_t total_grid_size = num_chunks[0] * num_chunks[1] * num_chunks[2];
-   chunks.erase (chunks.begin(), chunks.begin() + total_grid_size);
    delete chunks_new;
 
    delete[] physical_chunk_id_x;
@@ -422,14 +406,7 @@ Chunk *Map::access_chunk( int p_id_x,
                          p_id_y * num_chunks[0] +
                          p_id_x;
 
-   Chunk* chunks_at = chunks.at( index );
-   Chunk* chunks_new_at = chunks_new->at( index );
-
-   Chunk* ret_chunk = chunks_at;
-
-ret_chunk = chunks_new_at;
-
-   return ret_chunk;
+   return chunks_new->at( index );
 
 }
 

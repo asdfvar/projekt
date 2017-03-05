@@ -49,6 +49,7 @@ class Chunk
       bool         valid;
       bool         changed;
       bool         first_populated;
+      bool         deleting_chunk;
 
       // Functions:
       void create_random( void );

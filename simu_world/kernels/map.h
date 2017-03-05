@@ -3,7 +3,6 @@
 
 #include "chunk.h"
 #include <iostream>
-#include <vector>
 #include <pthread.h>
 #include "opengl_interface.h"
 #include "user.h"
@@ -59,7 +58,6 @@ class Map
           *virtual_chunk_id_y,
           *virtual_chunk_id_z;
 
-      std::vector<Chunk*> chunks;
       Chunks_new* chunks_new;
 
       float *vertices;
