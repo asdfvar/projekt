@@ -88,6 +88,7 @@ class Chunks_new
      ~Chunks_new( void );
 
       void insert_chunk( Chunk* );
+      void set_base( void );
       Chunk* at( int ind );
 
    private:
@@ -95,10 +96,10 @@ class Chunks_new
       int size[3];
       int position;
 
-      int ind[3];
-
       Node* current_node;
       Node* base_node;
+
+      Node** all_nodes;
 
 };
 

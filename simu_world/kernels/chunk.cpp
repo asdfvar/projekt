@@ -475,7 +475,9 @@ Chunks_new::Chunks_new( int* size_in )
    size[1] = size_in[1];
    size[2] = size_in[2];
 
-   ind[0] = ind[1] = ind[2] = 0;
+   int total_size = size[0] * size[1] * size[2];
+
+   all_nodes = new Node*[total_size];
 
    Node* node;
    Node* row;
@@ -600,6 +602,7 @@ Chunks_new::Chunks_new( int* size_in )
 
    current_node = base_node;
 
+#if 0
 {
 printf("base_node = %ld\n", (long int)base_node);
 Node* temp = base_node->right;
@@ -634,6 +637,15 @@ for (int kk = 0; kk < size[0]*size[1]*size[2] + 1; kk++) {
    temp = temp->next;
 }
 }
+#endif
+
+   for (int k = 0; k < total_size; k++)
+   {
+      all_nodes[k] = current_node;
+      current_node = current_node->next;
+   }
+
+   current_node = base_node;
 
 }
 
@@ -647,23 +659,14 @@ void Chunks_new::insert_chunk( Chunk* new_chunk )
 {
    current_node->chunk = new_chunk;
    current_node = current_node->next;
+}
 
-   // increment the index
-   ind[0]++;
-   if (ind[0] >= size[0])
-   {
-      ind[0] = 0;
-      ind[1]++;
-      if (ind[1] >= size[1])
-      {
-         ind[1] = 0;
-         ind[2]++;
-         if (ind[2] >= size[2])
-         {
-            ind[2] = 0;
-         }
-      }
-   }
+/*
+** function name: set_base from: Chunks_new
+*/
+void Chunks_new::set_base( void )
+{
+   current_node = base_node;
 }
 
 /*
@@ -671,32 +674,7 @@ void Chunks_new::insert_chunk( Chunk* new_chunk )
 */
 Chunk* Chunks_new::at( int chunk_ind )
 {
-   current_node = base_node;
-   ind[0] = ind[1] = ind[2] = 0;
-
-   for (int k = 0; k < chunk_ind; k++)
-   {
-      current_node = current_node->next;
-
-      // increment the index
-      ind[0]++;
-      if (ind[0] >= size[0])
-      {
-         ind[0] = 0;
-         ind[1]++;
-         if (ind[1] >= size[1])
-         {
-            ind[1] = 0;
-            ind[2]++;
-            if (ind[2] >= size[2])
-            {
-               ind[2] = 0;
-            }
-         }
-      }
-   }
-
-   return current_node->chunk;
+   return all_nodes[chunk_ind]->chunk;
 }
 
 /*
@@ -715,6 +693,8 @@ Chunks_new::~Chunks_new( void )
       delete node;
       node      = node_next;
    }
+
+   delete[] all_nodes;
 }
 
 /*

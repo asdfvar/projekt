@@ -5,8 +5,6 @@
 #include "fileio.h"
 #include <cmath>
 
-#define USE_CHUNKS
-
 /*
 ** constructor name: Map
 */
@@ -93,6 +91,8 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
       }
    }
 
+   chunks_new->set_base();
+
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
 
@@ -158,18 +158,18 @@ void Map::update( float *position)
    /*
    ** find which chunk (virtual location) the position is at
    */
-   for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
+   for (int z_dir = 0; z_dir < num_chunks[2]; z_dir++)
    {
       for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
       {
-         for (int z_dir = 0; z_dir < num_chunks[2]; z_dir++)
+         for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
          {
 
             Chunk *this_chunk = access_chunk( x_dir,
                                               y_dir,
-                                              z_dir);
+                                              z_dir );
 
-            if (this_chunk->position_in_chunk( position))
+            if (this_chunk->position_in_chunk( position ))
             {
                virtual_grid[0] = virtual_chunk_id_x[x_dir];
                virtual_grid[1] = virtual_chunk_id_y[y_dir];
@@ -235,11 +235,11 @@ void Map::render_chunk( User *user)
    float window_distance = user->get_window_distance();
    float window_width    = user->get_window_width();
 
-   for (int chunk_ind_x = 0; chunk_ind_x < num_chunks[0]; chunk_ind_x++)
+   for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
    {
       for (int chunk_ind_y = 0; chunk_ind_y < num_chunks[1]; chunk_ind_y++)
       {
-         for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
+         for (int chunk_ind_x = 0; chunk_ind_x < num_chunks[0]; chunk_ind_x++)
          {
             chunk = access_chunk( chunk_ind_x, chunk_ind_y, chunk_ind_z);
 
@@ -406,7 +406,7 @@ void Map::render_chunk( User *user)
 */
 Chunk *Map::access_chunk( int p_id_x,
                           int p_id_y,
-                          int p_id_z)
+                          int p_id_z )
 {
    if ((p_id_x < 0) || (p_id_x >= num_chunks[0]) ||
        (p_id_y < 0) || (p_id_y >= num_chunks[1]) ||
@@ -418,15 +418,18 @@ Chunk *Map::access_chunk( int p_id_x,
                                          num_chunks[2] << std::endl;
    }
 
-   unsigned int index =  p_id_x + 
+   unsigned int index =  p_id_z * num_chunks[0] * num_chunks[1] +
                          p_id_y * num_chunks[0] +
-                         p_id_z * num_chunks[0] * num_chunks[1];
+                         p_id_x;
 
-#ifdef USE_CHUNKS
-   return chunks.at( index );
-#else
-   return chunks_new->at( index );
-#endif
+   Chunk* chunks_at = chunks.at( index );
+   Chunk* chunks_new_at = chunks_new->at( index );
+
+   Chunk* ret_chunk = chunks_at;
+
+ret_chunk = chunks_new_at;
+
+   return ret_chunk;
 
 }
 
