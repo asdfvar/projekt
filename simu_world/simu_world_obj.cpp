@@ -204,7 +204,7 @@ void Simu_world_obj::idle( void)
          float user_position[3];
 
          user.get_position( user_position);
-         map->update( user_position);
+         map->map_shift( user_position );
 
          text.populate("user position: ");
          text.populate( user_position[0] );

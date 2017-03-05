@@ -469,7 +469,7 @@ void Chunk::get_color( float *color_out )
    color_out[2] = color[2];
 }
 
-Chunks_new::Chunks_new( int* size_in )
+Chunks::Chunks( int* size_in )
 {
    size[0] = size_in[0];
    size[1] = size_in[1];
@@ -650,37 +650,37 @@ for (int kk = 0; kk < size[0]*size[1]*size[2] + 1; kk++) {
 }
 
 /*
-** function name: insert_chunk from: Chunks_new
+** function name: insert_chunk from: Chunks
 **
 ** set the new chunk in this node then advance to
 ** the next node.
 */
-void Chunks_new::insert_chunk( Chunk* new_chunk )
+void Chunks::insert_chunk( Chunk* new_chunk )
 {
    current_node->chunk = new_chunk;
-   current_node = current_node->next;
+   current_node        = current_node->next;
 }
 
 /*
-** function name: set_base from: Chunks_new
+** function name: set_base from: Chunks
 */
-void Chunks_new::set_base( void )
+void Chunks::set_base( void )
 {
    current_node = base_node;
 }
 
 /*
-** function name: at from: Chunks_new
+** function name: at from: Chunks
 */
-Chunk* Chunks_new::at( int chunk_ind )
+Chunk* Chunks::at( int chunk_ind )
 {
    return all_nodes[chunk_ind]->chunk;
 }
 
 /*
-** destructor name: ~Chunks_new
+** destructor name: ~Chunks
 */
-Chunks_new::~Chunks_new( void )
+Chunks::~Chunks( void )
 {
    const int total_size = size[0] * size[1] * size[2];
 

@@ -18,7 +18,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    num_chunks[2] = 13;
    int total_local_grid_size = num_chunks[0] * num_chunks[1] * num_chunks[2];
 
-   chunks_new = new Chunks_new( num_chunks );
+   chunks = new Chunks( num_chunks );
 
    /*
    ** Initialize the mapping from the virtual grid index
@@ -71,13 +71,13 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
            /*
            ** Create the chunks for this map
            */
-           chunks_new->insert_chunk( new Chunk(ind, abs_pos_id, num_chunk_elements, position) );
+           chunks->insert_chunk( new Chunk(ind, abs_pos_id, num_chunk_elements, position) );
 
          }
       }
    }
 
-   chunks_new->set_base();
+   chunks->set_base();
 
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
@@ -91,7 +91,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 */
 Map::~Map(void)
 {
-   delete chunks_new;
+   delete chunks;
 
    delete[] physical_chunk_id_x;
    delete[] physical_chunk_id_y;
@@ -128,14 +128,14 @@ void Map::update( void )
 }
 
 /*
-** function name: update from: Map
+** function name: map_shift from: Map
 **
-** update map information from user position.
+** determine if there is a map shift based from user position.
 ** when the user is no longer at the center of
 ** the map, shift the chunks until the user is
 ** at the center of the map
 */
-void Map::update( float *position)
+void Map::map_shift( float *position )
 {
    int virtual_grid[3] = { -1, -1, -1 };
 
@@ -406,7 +406,7 @@ Chunk *Map::access_chunk( int p_id_x,
                          p_id_y * num_chunks[0] +
                          p_id_x;
 
-   return chunks_new->at( index );
+   return chunks->at( index );
 
 }
 

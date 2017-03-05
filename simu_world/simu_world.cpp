@@ -135,13 +135,13 @@ std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std
    glutInitWindowPosition( 50, 50);
    glutCreateWindow( "simu");
 
-   glutDisplayFunc(       display);
-   glutMouseFunc(         mouse);
-   glutMotionFunc(        mouseMotion);
-   glutPassiveMotionFunc( mousePassive);
-   glutKeyboardUpFunc(    keyboardUp);
-   glutKeyboardFunc(      keyboardDown);
-   glutIdleFunc(          idle);
+   glutDisplayFunc(       display      );
+   glutMouseFunc(         mouse        );
+   glutMotionFunc(        mouseMotion  );
+   glutPassiveMotionFunc( mousePassive );
+   glutKeyboardUpFunc(    keyboardUp   );
+   glutKeyboardFunc(      keyboardDown );
+   glutIdleFunc(          idle         );
 
    glutMainLoop();
 

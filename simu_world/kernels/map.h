@@ -18,7 +18,7 @@ class Map
      ~Map( void );
 
       void update( void );
-      void update( float *position );
+      void map_shift( float* position );
       void render_chunk( User *user );
 
       Chunk *access_chunk( int v_id_x,
@@ -30,7 +30,7 @@ class Map
       void set_phys_chunk_color( int    p_ind_x,
                                  int    p_ind_y,
                                  int    p_ind_z,
-                                 float *color );
+                                 float* color );
 
       void diagnostics( int* position, Text* text );
 
@@ -58,9 +58,9 @@ class Map
           *virtual_chunk_id_y,
           *virtual_chunk_id_z;
 
-      Chunks_new* chunks_new;
+      Chunks* chunks;
 
-      float *vertices;
+      float* vertices;
 
 };
 

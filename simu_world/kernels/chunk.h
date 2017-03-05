@@ -79,14 +79,14 @@ class Node
 };
 
 /*
-** class name: Chunks_new
+** class name: Chunks
 */
-class Chunks_new
+class Chunks
 {
    public:
 
-      Chunks_new( int* size );
-     ~Chunks_new( void );
+      Chunks( int* size );
+     ~Chunks( void );
 
       void insert_chunk( Chunk* );
       void set_base( void );
