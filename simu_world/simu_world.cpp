@@ -14,6 +14,7 @@
 
 pthread_t         IO_thread;
 pthread_barrier_t IO_barrier;
+pthread_mutex_t   IO_mutex;
 
 /* Define the interface with openGL */
 Simu_world_obj simu_world_obj( &IO_barrier );
@@ -78,8 +79,8 @@ void mousePassive(int x, int y)
 /*****************
  ** Keyboard up **
  *****************/
-void keyboardUp(unsigned char key, int x, int y) {
-
+void keyboardUp(unsigned char key, int x, int y)
+{
    simu_world_obj.keyboardUp( key);
 }
 
@@ -88,15 +89,7 @@ void keyboardUp(unsigned char key, int x, int y) {
  *******************/
 void keyboardDown(unsigned char key, int x, int y)
 {
-   switch (key)
-   {
-      case 'q':
-         std::cout << "program exit" << std::endl;
-         exit(1);
-         break;
-   }
-
-   simu_world_obj.keyboardDown( key);
+   simu_world_obj.keyboardDown( key );
 }
 
 
@@ -112,12 +105,14 @@ std::cout << "Linux" << std::endl;
 std::cout << "Windows" << std::endl;
 #endif
 
-//   pthread_barrier_init( &IO_barrier, NULL, 2);
+   pthread_barrier_init( &IO_barrier, NULL, 2);
+   pthread_mutex_init( &IO_mutex, NULL );
 
    ARGS args;
 
    args.simu_world_obj = &simu_world_obj;
    args.IO_barrier     = &IO_barrier;
+   args.IO_mutex       = &IO_mutex;
 
 std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std::endl;
 
@@ -149,5 +144,6 @@ std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std
    ** wait for the IO manager thread to finish
    */
    pthread_join( IO_thread, NULL);
+   pthread_mutex_destroy( &IO_mutex );
 
 }

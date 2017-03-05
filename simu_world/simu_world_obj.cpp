@@ -17,6 +17,7 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
    map = new Map( IO_barrier_in );
 
 //   pthread_barrier_wait( IO_barrier_in );
+   program_done = false;
 
    first_frame      = true;
    time_manager     = new Time_manager( 1.0 / 120.0 );
@@ -41,13 +42,20 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 ** function name: keyboardDown from: Simu_world_obj
 ** glutGetModifiers() is true if the shift key is depressed
 */
-void Simu_world_obj::keyboardDown( const char key)
+void Simu_world_obj::keyboardDown( const char key )
 {
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
    int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
    switch (key)
    {
+      case 'q':
+         std::cout << "program exit" << std::endl;
+         program_done = true;
+         // wait for IO threads to finish
+         pthread_barrier_wait( IO_barrier );
+         exit(1);
+         break;
       case 13: // enter key
          mode = 1;
          glutWarpPointer( window_center_x, window_center_y);

@@ -59,6 +59,8 @@ class Simu_world_obj
 
       void update_map( void );
 
+      bool program_done;
+
       pthread_barrier_t* IO_barrier;
 
    private:
