@@ -14,6 +14,7 @@
 class Map
 {
    public:
+
       Map( pthread_barrier_t* );
      ~Map( void );
 
@@ -39,6 +40,7 @@ class Map
       pthread_barrier_t* IO_barrier;
 
    private:
+
       void shift( int x, int y, int z);
 
       int num_chunks[3];

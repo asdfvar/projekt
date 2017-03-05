@@ -129,10 +129,10 @@ std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std
    int windowsizex = 800;
    int windowsizey = 800;
 
-   glutInit( &argc, argv);
-   glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-   glutInitWindowSize( windowsizex, windowsizey);
-   glutInitWindowPosition( 50, 50);
+   glutInit( &argc, argv );
+   glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
+   glutInitWindowSize( windowsizex, windowsizey );
+   glutInitWindowPosition( 50, 50 );
    glutCreateWindow( "simu");
 
    glutDisplayFunc(       display      );
