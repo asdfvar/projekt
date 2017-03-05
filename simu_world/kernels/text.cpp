@@ -171,10 +171,10 @@ static void LCD_font(unsigned int plick,
 Text::Text( void )
 {
    row = 0;
-   edit_buffer = buffer_1;
-   disp_buffer = buffer_2;
-   edit_complete = false;
-   display_complete = false;
+   edit_buffer  = buffer_1;
+   disp_buffer  = buffer_2;
+   edit_done    = false;
+   display_done = false;
 }
 
 /*
@@ -594,6 +594,9 @@ void Text::write_to_screen( std::string input,
 
    offset = 0.0f;
 
+   /*
+   ** draw the background for contrasting the text
+   */
    for (int k = 0; k < input.length(); k++)
    {
       float vertices_x[4] = { offset + x + 0.01f - hor * 0.5f * scale,
@@ -606,25 +609,29 @@ void Text::write_to_screen( std::string input,
                               y + ver * 0.5f * scale,
                               y + ver * 0.5f * scale };
 
-      float color[3]     = { 0.0f, 0.0f, 0.0f };
+      float color[3] = { 0.0f, 0.0f, 0.0f };
 
       ogl::draw_2d_polygon( vertices_x,
                             vertices_y,
                             color,
-                            4);
+                            4 );
 
       offset += hor * 3.0f * scale;
    }
+
+   display_done = true;
 }
 
-void Text::new_line( void )
-{
-   row++;
-}
-
+/*
+** function: clear from: Text
+**
+** once editing and displaying are done
+** on their respective buffers, swap the buffers
+** and clear the new editing buffer
+*/
 void Text::clear( void )
 {
-   if ( display_complete )
+   if ( edit_done && display_done )
    {
       // swap buffers
       if (edit_buffer == buffer_1 && disp_buffer == buffer_2)
@@ -644,58 +651,77 @@ void Text::clear( void )
                    << std::endl;
       }
 
-      display_complete = false;
+      edit_done    = false;
+      display_done = false;
+
+      for (int k = 0; k <= row; k++)
+         edit_buffer[k].clear();
+
+      row = 0;
+
    }
 
-   for (int k = 0; k <= row; k++)
-      edit_buffer[k].clear();
+}
 
-   row = 0;
+void Text::new_line( void )
+{
+   if ( !edit_done )
+   {
+      row++;
+   }
 }
 
 void Text::populate( std::string input )
 {
-   edit_buffer[row] += input;
+   if ( !edit_done )
+   {
+      edit_buffer[row] += input;
+   }
 }
 
 void Text::populate( int number )
 {
-   std::ostringstream id_str;
-   id_str << number;
-   edit_buffer[row] += id_str.str();
+   if ( !edit_done )
+   {
+      std::ostringstream id_str;
+      id_str << number;
+      edit_buffer[row] += id_str.str();
+   }
 }
 
 void Text::populate( float number )
 {
-   std::ostringstream id_str;
-   id_str << number;
-   edit_buffer[row] += id_str.str();
+   if ( !edit_done )
+   {
+      std::ostringstream id_str;
+      id_str << number;
+      edit_buffer[row] += id_str.str();
+   }
 }
 
-void Text::done( void )
+void Text::done_editing( void )
 {
-   edit_complete = true;
+   edit_done = true;
 }
 
+/*
+** function: display_contents from: Text
+*/
 void Text::display_contents( const float x,
                              const float y,
                              const float scale )
 {
 
-   float ver = 0.02f;
+   const float ver = 0.02f;
 
-   if ( edit_complete )
+   for (int k = 0; k <= row; k++)
    {
-      for (int k = 0; k <= row; k++)
-      {
-         write_to_screen( disp_buffer[k],
-                          x,
-                          y - (float)k * ver * 3.0f * scale,
-                          scale );
-      }
-
-      edit_complete    = false;
-      display_complete = true;
+      write_to_screen( disp_buffer[k],
+                       x,
+                       y - (float)k * ver * 3.0f * scale,
+                       scale );
    }
+
+   if ( edit_done ) display_done = true;
 
 }

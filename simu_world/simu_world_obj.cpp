@@ -151,8 +151,6 @@ Simu_world_obj::~Simu_world_obj(void)
 void Simu_world_obj::idle( void)
 {
 
-   text.clear();
-
 #ifdef DEBUG
    map->debug_info();
    user.debug_info();
@@ -189,6 +187,8 @@ void Simu_world_obj::idle( void)
       }
       if (mode == 1)
       {
+
+         text.clear();
 
          glutSetCursor(GLUT_CURSOR_NONE);
 
@@ -228,6 +228,8 @@ void Simu_world_obj::idle( void)
 
          map->diagnostics( i_user_position, &text);
 
+         text.done_editing();
+
       }
 
       /*
@@ -235,9 +237,6 @@ void Simu_world_obj::idle( void)
       */
       semaphore->decrement_task(1);
    }
-
-   // Tell the display that text is done editing the text buffer
-   text.done();
 
    /*
    ** Tell openGL to re-display

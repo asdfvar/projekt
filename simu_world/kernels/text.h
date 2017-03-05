@@ -21,7 +21,7 @@ class Text
       void populate( std::string );
       void populate( int );
       void populate( float );
-      void done( void );
+      void done_editing( void );
 
       void display_contents( const float x,
                              const float y,
@@ -31,11 +31,12 @@ class Text
 
       std::string *edit_buffer;
       std::string *disp_buffer;
-      std::string  buffer_1[20];
-      std::string  buffer_2[20];
-      int row;
-      bool edit_complete;
-      bool display_complete;
+      std::string  buffer_1[200];
+      std::string  buffer_2[200];
+
+      int  row;
+      bool edit_done;
+      bool display_done;
 };
 
 #endif
