@@ -22,7 +22,8 @@ class Chunk
       ~Chunk( void );
 
       // Functions
-      int  get_position(float *position_out, int block_index);
+      int  get_position(float* position_out, int block_index);
+      int  get_position(float* position_out, int* block_index);
       int  get_block( int *block_index);
       void change(float *position_in);
       unsigned int get_dimensions(void);
@@ -90,7 +91,9 @@ class Chunks
 
       void insert_chunk( Chunk* );
       void set_base( void );
+      void next( void );
       Chunk* at( int ind );
+      int get_block( int* block_ind ); 
 
    private:
 

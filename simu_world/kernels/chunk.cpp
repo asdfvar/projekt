@@ -242,8 +242,8 @@ unsigned int Chunk::get_dimensions( unsigned int *dimensions_out)
 /*
 ** function name: get_position from Chunk
 */
-int Chunk::get_position(float* position_out,
-                        int    block_index)
+int Chunk::get_position( float* position_out,
+                         int    block_index)
 {
 
    if ( position_out == NULL ) return blocks[block_index];
@@ -275,6 +275,19 @@ int Chunk::get_position(float* position_out,
 
    return blocks[block_index];
 
+}
+
+/*
+** function name: get_position from Chunk
+*/
+int Chunk::get_position( float* position_out,
+                         int*   block_index)
+{
+   int index = block_index[2] * chunk_dim[0] * chunk_dim[1] +
+               block_index[1] * chunk_dim[0]                +
+               block_index[0];
+
+   return get_position( position_out, index );
 }
 
 /*
@@ -670,11 +683,65 @@ void Chunks::set_base( void )
 }
 
 /*
+** function name: next from: Chunks
+*/
+void Chunks::next( void )
+{
+   current_node = current_node->next;
+}
+
+/*
 ** function name: at from: Chunks
 */
 Chunk* Chunks::at( int chunk_ind )
 {
    return all_nodes[chunk_ind]->chunk;
+}
+
+int Chunks::get_block( int *block_ind )
+{
+   unsigned int chunk_dim[3];
+   current_node->chunk->get_dimensions( chunk_dim );
+
+   int l_block_ind[3] = { block_ind[0], block_ind[1], block_ind[2] };
+
+   int block = 0;
+
+   Node* block_node = current_node;
+
+   while ( l_block_ind[0] >= chunk_dim[0] )
+   {
+      block_node      = block_node->front;
+      l_block_ind[0] -= chunk_dim[0];
+   }
+   while ( l_block_ind[1] >= chunk_dim[1] )
+   {
+      block_node      = block_node->left;
+      l_block_ind[1] -= chunk_dim[1];
+   }
+   while ( l_block_ind[2] >= chunk_dim[2] )
+   {
+      block_node      = block_node->top;
+      l_block_ind[2] -= chunk_dim[2];
+   }
+   while ( l_block_ind[0] < 0 )
+   {
+      block_node      = block_node->back;
+      l_block_ind[0] += chunk_dim[0];
+   }
+   while ( l_block_ind[1] < 0 )
+   {
+      block_node      = block_node->right;
+      l_block_ind[1] += chunk_dim[1];
+   }
+   while ( l_block_ind[2] < 0 )
+   {
+      block_node      = block_node->bottom;
+      l_block_ind[2] += chunk_dim[2];
+   }
+
+   block = block_node->chunk->get_position( NULL, l_block_ind );
+
 }
 
 /*
