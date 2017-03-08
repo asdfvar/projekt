@@ -21,7 +21,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    chunks = new Chunks( num_chunks );
 
    /*
-   ** Initialize the mapping from the virtual grid index
+   ** initialize the mapping from the virtual grid index
    ** to the physical grid index
    */
    physical_chunk_id_x = new int[num_chunks[0]];
@@ -33,7 +33,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    for (int k = 0; k < num_chunks[2]; k++) physical_chunk_id_z[k] = k;
 
    /*
-   ** Initialize the mapping from the physical grid
+   ** initialize the mapping from the physical grid
    ** to the virtual grid index
    */
    virtual_chunk_id_x = new int[num_chunks[0]];
@@ -45,10 +45,13 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    for (int k = 0; k < num_chunks[2]; k++) virtual_chunk_id_z[k] = k;
 
    /*
-   ** Create the save directory
+   ** create the save directory
    */
    fio::directory();
 
+   /*
+   ** build the chunks
+   */
    num_chunk_elements[0] = 5;
    num_chunk_elements[1] = 5;
    num_chunk_elements[2] = 5;
@@ -269,10 +272,6 @@ void Map::render_chunk( User *user)
                      {
 
                         int block_sides = 0;
-                        int i_block_position[3];
-                        bool front_open, back_open, left_open, right_open, top_open, bottom_open;
-                        front_open = back_open = left_open =
-                        right_open = top_open = bottom_open = true;
       
                         int block = chunk->get_position( block_position, block_ind );
                         if ( block == 0 ) continue;
