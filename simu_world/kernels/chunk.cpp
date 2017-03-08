@@ -208,7 +208,6 @@ void Chunk::move( int x, int y, int z)
                                 << std::endl;
 
    valid   = false;
-   //changed = true;
 }
 
 /*
@@ -220,23 +219,11 @@ Chunk::~Chunk(void)
 }
 
 /*
-** function name: get_dimensions from Chunk 
+** function name: get_dimension from: Chunk
 */
-unsigned int Chunk::get_dimensions(void)
+unsigned int Chunk::get_dimension( unsigned int dim )
 {
-   return chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
-}
-
-/*
-** function name: get_dimensions from Chunk 
-*/
-unsigned int Chunk::get_dimensions( unsigned int *dimensions_out)
-{
-   dimensions_out[0] = chunk_dim[0];
-   dimensions_out[1] = chunk_dim[1];
-   dimensions_out[2] = chunk_dim[2];
-
-   return chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+   return chunk_dim[dim];
 }
 
 /*
@@ -701,7 +688,9 @@ Chunk* Chunks::at( int chunk_ind )
 int Chunks::get_block( int *block_ind )
 {
    unsigned int chunk_dim[3];
-   current_node->chunk->get_dimensions( chunk_dim );
+   chunk_dim[0] = current_node->chunk->get_dimension(0);
+   chunk_dim[1] = current_node->chunk->get_dimension(1);
+   chunk_dim[2] = current_node->chunk->get_dimension(2);
 
    int l_block_ind[3] = { block_ind[0], block_ind[1], block_ind[2] };
 

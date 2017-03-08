@@ -22,15 +22,14 @@ class Chunk
       ~Chunk( void );
 
       // Functions
-      int  get_position(float* position_out, int block_index);
-      int  get_position(float* position_out, int* block_index);
-      int  get_block( int *block_index);
-      void change(float *position_in);
-      unsigned int get_dimensions(void);
-      unsigned int get_dimensions( unsigned int *dimensions_out);
-      void display_info( void);
-      bool position_in_chunk( float *poisition_in);
-      void move( int x, int y, int z);
+      int  get_position( float* position_out, int block_index );
+      int  get_position( float* position_out, int* block_index );
+      int  get_block( int *block_index );
+      void change(float *position_in );
+      unsigned int get_dimension( unsigned int dim );
+      void display_info( void );
+      bool position_in_chunk( float *poisition_in );
+      void move( int x, int y, int z );
       void update( void );
       void get_abs_pos_id( int *abs_pos_id );
       bool is_valid( void );
