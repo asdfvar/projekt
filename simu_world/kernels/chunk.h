@@ -92,7 +92,7 @@ class Chunks
       void set_base( void );
       void next( void );
       Chunk* at( int ind );
-      int get_block( int* block_ind ); 
+      int get_block( int ind_x, int ind_y, int ind_z ); 
 
    private:
 

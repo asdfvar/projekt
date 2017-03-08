@@ -685,51 +685,55 @@ Chunk* Chunks::at( int chunk_ind )
    return all_nodes[chunk_ind]->chunk;
 }
 
-int Chunks::get_block( int *block_ind )
+int Chunks::get_block( int ind_x, int ind_y, int ind_z )
 {
    unsigned int chunk_dim[3];
    chunk_dim[0] = current_node->chunk->get_dimension(0);
    chunk_dim[1] = current_node->chunk->get_dimension(1);
    chunk_dim[2] = current_node->chunk->get_dimension(2);
 
-   int l_block_ind[3] = { block_ind[0], block_ind[1], block_ind[2] };
-
    int block = 0;
 
    Node* block_node = current_node;
 
-   while ( l_block_ind[0] >= chunk_dim[0] )
+   while ( ind_x >= chunk_dim[0] )
    {
-      block_node      = block_node->front;
-      l_block_ind[0] -= chunk_dim[0];
+      block_node = block_node->front;
+      ind_x -= chunk_dim[0];
    }
-   while ( l_block_ind[1] >= chunk_dim[1] )
+   while ( ind_y >= chunk_dim[1] )
    {
-      block_node      = block_node->left;
-      l_block_ind[1] -= chunk_dim[1];
+      block_node = block_node->left;
+      ind_y -= chunk_dim[1];
    }
-   while ( l_block_ind[2] >= chunk_dim[2] )
+   while ( ind_z >= chunk_dim[2] )
    {
-      block_node      = block_node->top;
-      l_block_ind[2] -= chunk_dim[2];
+      block_node = block_node->top;
+      ind_z -= chunk_dim[2];
    }
-   while ( l_block_ind[0] < 0 )
+   while ( ind_x < 0 )
    {
-      block_node      = block_node->back;
-      l_block_ind[0] += chunk_dim[0];
+      block_node = block_node->back;
+      ind_x += chunk_dim[0];
    }
-   while ( l_block_ind[1] < 0 )
+   while ( ind_y < 0 )
    {
-      block_node      = block_node->right;
-      l_block_ind[1] += chunk_dim[1];
+      block_node = block_node->right;
+      ind_y += chunk_dim[1];
    }
-   while ( l_block_ind[2] < 0 )
+   while ( ind_z < 0 )
    {
-      block_node      = block_node->bottom;
-      l_block_ind[2] += chunk_dim[2];
+      block_node = block_node->bottom;
+      ind_z += chunk_dim[2];
    }
 
-   block = block_node->chunk->get_position( NULL, l_block_ind );
+   int block_ind = ind_z * chunk_dim[0] * chunk_dim[1] +
+                   ind_y * chunk_dim[0]                +
+                   ind_x;
+
+   block = block_node->chunk->get_position( NULL, block_ind );
+
+   return block;
 
 }
 

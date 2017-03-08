@@ -307,7 +307,10 @@ void Map::render_chunk( User *user)
                            if (left_block != 0) left_open = false;
                         }
 #else
-                        int left_block = chunks->get_block( neighbor_block_ind );
+                        int left_block = chunks->get_block( block_ind_x,
+                                                            block_ind_y + 1,
+                                                            block_ind_z );
+
                         if (left_block != 0) left_open = false;
 #endif
       
