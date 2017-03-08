@@ -277,44 +277,44 @@ void Map::render_chunk( User *user)
                         int block = chunk->get_position( block_position, block_ind );
                         if ( block == 0 ) continue;
       
-                        // determine which faces of the block have neighboring blocks
+                        /*
+                        ** draw each face of the block that doesn't have a neighboring block
+                        */
+                        // front
                         int front_block = chunks->get_block( block_ind_x + 1,
                                                              block_ind_y,
                                                              block_ind_z );
-                        if (front_block != 0) front_open = false;
+                        if (front_block == 0) block_sides |= DRAW_FRONT;
       
-      
+                        // back
                         int back_block = chunks->get_block( block_ind_x - 1,
                                                             block_ind_y,
                                                             block_ind_z );
-                        if (back_block != 0) back_open = false;
+                        if (back_block == 0) block_sides |= DRAW_BACK;
       
+                        // left
                         int left_block = chunks->get_block( block_ind_x,
                                                             block_ind_y + 1,
                                                             block_ind_z );
-                        if (left_block != 0) left_open = false;
+                        if (left_block == 0) block_sides |= DRAW_LEFT;
 
+                        // right
                         int right_block = chunks->get_block( block_ind_x,
                                                              block_ind_y - 1,
                                                              block_ind_z );
-                        if (right_block != 0) right_open = false;
+                        if (right_block == 0) block_sides |= DRAW_RIGHT;
       
+                        // top
                         int top_block = chunks->get_block( block_ind_x,
                                                            block_ind_y,
                                                            block_ind_z + 1 );
-                        if (top_block != 0) top_open = false;
+                        if (top_block == 0) block_sides |= DRAW_TOP;
       
+                        // bottom
                         int bottom_block = chunks->get_block( block_ind_x,
                                                               block_ind_y,
                                                               block_ind_z - 1 );
-                        if (bottom_block != 0) bottom_open = false;
-      
-                        if ( front_open  ) block_sides |= DRAW_FRONT;
-                        if ( back_open   ) block_sides |= DRAW_BACK;
-                        if ( right_open  ) block_sides |= DRAW_RIGHT;
-                        if ( left_open   ) block_sides |= DRAW_LEFT;
-                        if ( top_open    ) block_sides |= DRAW_TOP;
-                        if ( bottom_open ) block_sides |= DRAW_BOTTOM;
+                        if (bottom_block == 0) block_sides |= DRAW_BOTTOM;
       
                         float color[3];
                         chunk->get_color( color );
