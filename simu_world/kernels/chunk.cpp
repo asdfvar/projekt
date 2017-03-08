@@ -602,7 +602,7 @@ Chunks::Chunks( int* size_in )
 
    current_node = base_node;
 
-#if 0
+#if 1
 {
 printf("base_node = %ld\n", (long int)base_node);
 Node* temp = base_node->right;
@@ -687,7 +687,7 @@ Chunk* Chunks::at( int chunk_ind )
 
 int Chunks::get_block( int ind_x, int ind_y, int ind_z )
 {
-   unsigned int chunk_dim[3];
+   int chunk_dim[3];
    chunk_dim[0] = current_node->chunk->get_dimension(0);
    chunk_dim[1] = current_node->chunk->get_dimension(1);
    chunk_dim[2] = current_node->chunk->get_dimension(2);

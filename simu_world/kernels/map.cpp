@@ -273,117 +273,41 @@ void Map::render_chunk( User *user)
                         bool front_open, back_open, left_open, right_open, top_open, bottom_open;
                         front_open = back_open = left_open =
                         right_open = top_open = bottom_open = true;
-                        int neighbor_block_ind[3];
       
                         int block = chunk->get_position( block_position, block_ind );
                         if ( block == 0 ) continue;
       
                         // determine which faces of the block have neighboring blocks
-                        neighbor_block_ind[0] = block_ind_x + 1;
-                        neighbor_block_ind[1] = block_ind_y;
-                        neighbor_block_ind[2] = block_ind_z;
-                        if( block_ind % num_chunk_elements[0] + 1 < num_chunk_elements[0] )
-                        {
-                           int front_block = chunk->get_position( NULL, neighbor_block_ind );
-                           if (front_block != 0) front_open = false;
-                        }
+                        int front_block = chunks->get_block( block_ind_x + 1,
+                                                             block_ind_y,
+                                                             block_ind_z );
+                        if (front_block != 0) front_open = false;
       
-                        neighbor_block_ind[0] = block_ind_x - 1;
-                        neighbor_block_ind[1] = block_ind_y;
-                        neighbor_block_ind[2] = block_ind_z;
-                        if( block_ind % num_chunk_elements[0] > 0 )
-                        {
-                           int back_block = chunk->get_position( NULL, neighbor_block_ind );
-                           if (back_block != 0) back_open = false;
-                        }
       
-                        neighbor_block_ind[0] = block_ind_x;
-                        neighbor_block_ind[1] = block_ind_y + 1;
-                        neighbor_block_ind[2] = block_ind_z;
-#if 1
-                        if( neighbor_block_ind[1] < num_chunk_elements[1] )
-                        {
-                           int left_block = chunk->get_position( NULL, neighbor_block_ind );
-                           if (left_block != 0) left_open = false;
-                        }
-#else
+                        int back_block = chunks->get_block( block_ind_x - 1,
+                                                            block_ind_y,
+                                                            block_ind_z );
+                        if (back_block != 0) back_open = false;
+      
                         int left_block = chunks->get_block( block_ind_x,
                                                             block_ind_y + 1,
                                                             block_ind_z );
-
                         if (left_block != 0) left_open = false;
-#endif
+
+                        int right_block = chunks->get_block( block_ind_x,
+                                                             block_ind_y - 1,
+                                                             block_ind_z );
+                        if (right_block != 0) right_open = false;
       
-                        neighbor_block_ind[0] = block_ind_x;
-                        neighbor_block_ind[1] = block_ind_y - 1;
-                        neighbor_block_ind[2] = block_ind_z;
-                        if( (block_ind % (num_chunk_elements[0] * num_chunk_elements[1]))/num_chunk_elements[0] > 0)
-                        {
-                           int right_block = chunk->get_position( NULL, neighbor_block_ind );
-                           if (right_block != 0) right_open = false;
-                        }
+                        int top_block = chunks->get_block( block_ind_x,
+                                                           block_ind_y,
+                                                           block_ind_z + 1 );
+                        if (top_block != 0) top_open = false;
       
-                        neighbor_block_ind[0] = block_ind_x;
-                        neighbor_block_ind[1] = block_ind_y;
-                        neighbor_block_ind[2] = block_ind_z + 1;
-                        if( block_ind / (num_chunk_elements[0] * num_chunk_elements[1]) + 1 < num_chunk_elements[2] )
-                        {
-                           int top_block = chunk->get_position( NULL, neighbor_block_ind );
-                           if (top_block != 0) top_open = false;
-                        }
-      
-                        neighbor_block_ind[0] = block_ind_x;
-                        neighbor_block_ind[1] = block_ind_y;
-                        neighbor_block_ind[2] = block_ind_z - 1;
-                        if( block_ind / (num_chunk_elements[0] * num_chunk_elements[1]) > 0)
-                        {
-                           int bottom_block = chunk->get_position( NULL, neighbor_block_ind );
-                           if (bottom_block != 0) bottom_open = false;
-                        }
-      
-      #if 0
-                        i_block_position[0] = floorf( block_position[0] );
-                        i_block_position[1] = floorf( block_position[1] );
-                        i_block_position[2] = floorf( block_position[2] );
-      
-                        int near_block_position[3];
-      
-                        near_block_position[0] = i_block_position[0] + 1;
-                        near_block_position[1] = i_block_position[1];
-                        near_block_position[2] = i_block_position[2];
-      
-                        front_open = get_abs_element( near_block_position ) == 0;
-      
-                        near_block_position[0] = i_block_position[0] - 1;
-                        near_block_position[1] = i_block_position[1];
-                        near_block_position[2] = i_block_position[2];
-      
-                        back_open = get_abs_element( near_block_position ) == 0;
-      
-                        near_block_position[0] = i_block_position[0];
-                        near_block_position[1] = i_block_position[1] + 1;
-                        near_block_position[2] = i_block_position[2];
-      
-                        left_open = get_abs_element( near_block_position ) == 0;
-      
-                        near_block_position[0] = i_block_position[0];
-                        near_block_position[1] = i_block_position[1] - 1;
-                        near_block_position[2] = i_block_position[2];
-      
-                        right_open = get_abs_element( near_block_position ) == 0;
-      
-                        near_block_position[0] = i_block_position[0];
-                        near_block_position[1] = i_block_position[1];
-                        near_block_position[2] = i_block_position[2] + 1;
-      
-                        top_open = get_abs_element( near_block_position ) == 0;
-      
-                        near_block_position[0] = i_block_position[0];
-                        near_block_position[1] = i_block_position[1];
-                        near_block_position[2] = i_block_position[2] - 1;
-      
-                        bottom_open = get_abs_element( near_block_position ) == 0;
-      #endif
+                        int bottom_block = chunks->get_block( block_ind_x,
+                                                              block_ind_y,
+                                                              block_ind_z - 1 );
+                        if (bottom_block != 0) bottom_open = false;
       
                         if ( front_open  ) block_sides |= DRAW_FRONT;
                         if ( back_open   ) block_sides |= DRAW_BACK;
@@ -408,12 +332,13 @@ void Map::render_chunk( User *user)
                                        color );
                         }
 
-                     chunks->next();
-
                      }
                   }
                }
             }
+
+            chunks->next();
+
          }
       }
    }

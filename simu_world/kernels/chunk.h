@@ -94,12 +94,13 @@ class Chunks
       Chunk* at( int ind );
       int get_block( int ind_x, int ind_y, int ind_z ); 
 
+      Node* current_node;
+
    private:
 
       int size[3];
       int position;
 
-      Node* current_node;
       Node* base_node;
 
       Node** all_nodes;
