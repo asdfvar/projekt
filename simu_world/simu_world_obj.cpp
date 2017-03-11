@@ -19,7 +19,7 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
    program_done = false;
 
    first_frame      = true;
-   time_manager     = new Time_manager( 1.0 / 120.0 );
+   time_manager     = new Time_manager( 1.0 / 60.0 );
    semaphore        = new Semaphore(4);
    mode             = 1;
 
