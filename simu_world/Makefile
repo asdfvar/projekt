@@ -1,8 +1,8 @@
 CPPC    = g++
-FLAGS   = -O3 -Wall -lm -lGL -lGLU -lglut
+FLAGS   = -O3 -Wall -lm -lpthread -lGL -lGLU -lglut
 INC     = -Ikernels -Imap -I.
 LIBPATH = -Lkernels -Lmap
-LIBS    = -lmap -lsimu -lpthread
+LIBS    = -lmap -lsimu
 
 DEBUG ?= FALSE
 ifeq ($(DEBUG), TRUE)
