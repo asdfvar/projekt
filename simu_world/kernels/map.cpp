@@ -52,10 +52,8 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    /*
    ** build the chunks
    */
-   num_chunk_elements[0] = 5;
-   num_chunk_elements[1] = 5;
-   num_chunk_elements[2] = 5;
    int ind;
+   int num_chunk_elements[3] = { 5, 5, 5 };
    int abs_pos_id[3];
 
    for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
@@ -207,7 +205,6 @@ void Map::map_shift( float *position )
 void Map::render_chunk( User *user)
 {
    float block_position[3];
-   Chunk *chunk;
 
    int mid_chunk[3] = { num_chunks[0] / 2,
                         num_chunks[1] / 2,
@@ -224,6 +221,12 @@ void Map::render_chunk( User *user)
 
    // set the current chunk to the base chunk
    chunks->set_base();
+
+   int num_chunk_elements[3];
+   Chunk *chunk = access_chunk( 0, 0, 0 );
+   num_chunk_elements[0] = chunk->get_dimension( 0 );
+   num_chunk_elements[1] = chunk->get_dimension( 1 );
+   num_chunk_elements[2] = chunk->get_dimension( 2 );
 
    // iterate through all the chunks
    for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
@@ -571,6 +574,12 @@ int Map::get_abs_element( int* position_in)
 void Map::get_physical_chunk_position( int* abs_position,
                                        int* physical_chunk_position )
 {
+   int num_chunk_elements[3];
+   Chunk *chunk = access_chunk( 0, 0, 0 );
+   num_chunk_elements[0] = chunk->get_dimension( 0 );
+   num_chunk_elements[1] = chunk->get_dimension( 1 );
+   num_chunk_elements[2] = chunk->get_dimension( 2 );
+
    if (abs_position[0] >= 0)
    {
       physical_chunk_position[0] = ((abs_position[0] / num_chunk_elements[0]) +
@@ -611,6 +620,12 @@ void Map::get_physical_chunk_position( int* abs_position,
 
 void Map::get_relative_element_position( int* position_in, int* element_position )
 {
+   int num_chunk_elements[3];
+   Chunk *chunk = access_chunk( 0, 0, 0 );
+   num_chunk_elements[0] = chunk->get_dimension( 0 );
+   num_chunk_elements[1] = chunk->get_dimension( 1 );
+   num_chunk_elements[2] = chunk->get_dimension( 2 );
+
    element_position[0] = position_in[0] % num_chunk_elements[0];
    element_position[1] = position_in[1] % num_chunk_elements[1];
    element_position[2] = position_in[2] % num_chunk_elements[2];
@@ -618,7 +633,6 @@ void Map::get_relative_element_position( int* position_in, int* element_position
    if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
    if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
    if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
-
 }
 
 void Map::diagnostics( int *position_in, Text *text)
