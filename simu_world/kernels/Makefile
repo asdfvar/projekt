@@ -5,9 +5,7 @@ CL    = ar rcs
 FLAGS = -O3 -Wall -lGL -lGLU -lglut
 INC   = -I$(BASE)/kernels/
 
-OBJ = map.o              \
-      chunk.o            \
-      user.o             \
+OBJ = user.o             \
       point_conversion.o \
       draw_block.o       \
       hud.o              \
@@ -24,12 +22,6 @@ all: $(OBJ)
 
 clean:
 	rm $(OBJ) $(LIBEXE)
-
-map.o: map.cpp
-	$(CPPC) $^ -c
-
-chunk.o: chunk.cpp
-	$(CPPC) $^ -c
 
 user.o: user.cpp
 	$(CPPC) $^ $(INC) -c $(FLAGS)

@@ -1,8 +1,8 @@
-CPPC  = g++
-FLAGS = -O3 -Wall -lm -lGL -lGLU -lglut
-INC   = -Ikernels -I.
-LIBPATH = -Lkernels
-LIBS  = -lsimu -lpthread
+CPPC    = g++
+FLAGS   = -O3 -Wall -lm -lGL -lGLU -lglut
+INC     = -Ikernels -Imap -I.
+LIBPATH = -Lkernels -Lmap
+LIBS    = -lmap -lsimu -lpthread
 
 DEBUG ?= FALSE
 ifeq ($(DEBUG), TRUE)
@@ -25,6 +25,7 @@ all: SIMU_WORLD
 
 SIMU_WORLD: $(OBJ)
 	cd kernels/ && $(MAKE)
+	cd map/ && $(MAKE)
 	$(CPPC) $^ $(INC) $(DEFINES) $(LIBS) $(LIBPATH) -o $(EXE) $(FLAGS)
 
 clean:

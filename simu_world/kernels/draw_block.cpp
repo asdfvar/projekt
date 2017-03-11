@@ -1,6 +1,4 @@
 #include "draw_block.h"
-#include "user.h"
-#include "map.h"
 #include "point_conversion.h"
 #include "opengl_interface.h"
 #include "linalg.h"
