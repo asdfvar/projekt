@@ -4,6 +4,9 @@
 #include "linalg.h"
 #include <cmath>
 
+/*
+** function name: draw_block
+*/
 void draw_block( float  block_position[3],
                  float *user_position,
                  float *user_direction,

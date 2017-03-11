@@ -3,9 +3,7 @@
 
 namespace hud
 {
-
-   void display( void);
-
+   void display( void );
 }
 
 #endif

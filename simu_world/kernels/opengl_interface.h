@@ -1,10 +1,7 @@
 #ifndef OPENGL_INTERFACE_H
 #define OPENGL_INTERFACE_H
 
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-
+inline
 namespace ogl
 {
 
@@ -27,6 +24,12 @@ namespace ogl
                          float *vertices_y,
                          float *color,
                          int    num_vertices);
+
+   void vertex( float x, float y, float z );
+   void color( float x, float y, float z );
+   void line_width( float );
+   void begin_lines( void );
+   void end( void );
 
 }
 

@@ -42,128 +42,128 @@ static void LCD_font(unsigned int plick,
    switch( plick )
    {
       case 1:
-         glVertex3f(x,                      y,                      0.0f);
-         glVertex3f(x + hor * scale,        y,                      0.0f);
+         ogl::vertex(x,                      y,                      0.0f);
+         ogl::vertex(x + hor * scale,        y,                      0.0f);
         break;
 
       case 2:
-         glVertex3f(x +        hor * scale, y,                      0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y,                      0.0f);
+         ogl::vertex(x +        hor * scale, y,                      0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y,                      0.0f);
         break;
 
       case 3:
-         glVertex3f(x,                      y,                      0.0f);
-         glVertex3f(x,                      y - ver * scale,        0.0f);
+         ogl::vertex(x,                      y,                      0.0f);
+         ogl::vertex(x,                      y - ver * scale,        0.0f);
         break;
 
       case 4:
-         glVertex3f(x,                      y,                      0.0f);
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x,                      y,                      0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 5:
-         glVertex3f(x + hor * scale,        y,                      0.0f);
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x + hor * scale,        y,                      0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 6:
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y,                      0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y,                      0.0f);
         break;
 
       case 7:
-         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y,                      0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y,                      0.0f);
         break;
 
       case 8:
-         glVertex3f(x,                      y - ver * scale,        0.0f);
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x,                      y - ver * scale,        0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 9:
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
         break;
 
       case 10:
-         glVertex3f(x,                      y - ver * scale,        0.0f);
-         glVertex3f(x,                      y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x,                      y - ver * scale,        0.0f);
+         ogl::vertex(x,                      y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 11:
-         glVertex3f(x,                      y - 2.0f * ver * scale, 0.0f);
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x,                      y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
         break;
 
       case 12:
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
-         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 13:
-         glVertex3f(x + hor * scale,        y - ver * scale,        0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + hor * scale,        y - ver * scale,        0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 14:
-         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 15:
-         glVertex3f(x,                      y - 2.0f * ver * scale, 0.0f);
-         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x,                      y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
         break;
 
       case 16:
-         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - 2.0f * ver * scale, 0.0f);
         break;
 
       // SPECIAL CHARACTERS
 
       // right side of the "v" character's slope
       case 17:
-         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
-         glVertex3f(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
+         ogl::vertex(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x + 2.0f * hor * scale, y - ver * scale,        0.0f);
         break;
 
       // left side of the "v" character's slope
       case 18:
-         glVertex3f(x,                      y - ver * scale,        0.0f);
-         glVertex3f(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
+         ogl::vertex(x,                      y - ver * scale,        0.0f);
+         ogl::vertex(x + hor * scale,        y - 2.0f * ver * scale, 0.0f);
         break;
 
       // "." period
       case 19:
-         glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
-         glVertex3f(x + 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
-         glVertex3f(x + 0.002f * scale, y - (2.0f * ver * scale),            0.0f);
-         glVertex3f(x - 0.002f * scale, y - (2.0f * ver * scale),            0.0f);
-         glVertex3f(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
+         ogl::vertex(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
+         ogl::vertex(x + 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
+         ogl::vertex(x + 0.002f * scale, y - (2.0f * ver * scale),            0.0f);
+         ogl::vertex(x - 0.002f * scale, y - (2.0f * ver * scale),            0.0f);
+         ogl::vertex(x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   0.0f);
         break;
 
       // "," comma
       case 20:
-         glVertex3f(x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   0.0f);
-         glVertex3f(x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   0.0f);
+         ogl::vertex(x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   0.0f);
+         ogl::vertex(x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   0.0f);
         break;
 
       // ":" colon
       case 21:
-         glVertex3f(x + hor * scale, y - 0.333f * ver * scale,   0.0f);
-         glVertex3f(x + hor * scale, y - 0.666f * ver * scale,   0.0f);
-         glVertex3f(x + hor * scale, y - 1.333f * ver * scale,   0.0f);
-         glVertex3f(x + hor * scale, y - 1.666f * ver * scale,   0.0f);
+         ogl::vertex(x + hor * scale, y - 0.333f * ver * scale,   0.0f);
+         ogl::vertex(x + hor * scale, y - 0.666f * ver * scale,   0.0f);
+         ogl::vertex(x + hor * scale, y - 1.333f * ver * scale,   0.0f);
+         ogl::vertex(x + hor * scale, y - 1.666f * ver * scale,   0.0f);
         break;
 
       // "=" equal
       case 22:
-         glVertex3f(x + 0.25f * hor * scale, y - 0.75f * ver * scale,   0.0f);
-         glVertex3f(x + 1.75f * hor * scale, y - 0.75f * ver * scale,   0.0f);
-         glVertex3f(x + 0.25f * hor * scale, y - 1.25f * ver * scale,   0.0f);
-         glVertex3f(x + 1.75f * hor * scale, y - 1.25f * ver * scale,   0.0f);
+         ogl::vertex(x + 0.25f * hor * scale, y - 0.75f * ver * scale,   0.0f);
+         ogl::vertex(x + 1.75f * hor * scale, y - 0.75f * ver * scale,   0.0f);
+         ogl::vertex(x + 0.25f * hor * scale, y - 1.25f * ver * scale,   0.0f);
+         ogl::vertex(x + 1.75f * hor * scale, y - 1.25f * ver * scale,   0.0f);
         break;
    }
 }
@@ -195,9 +195,9 @@ void Text::write_to_screen( std::string input,
    {
 
       // setup the GL conditions
-      glColor3f( 0.0f, 0.8f, 0.0f );
-      glLineWidth( 3.0f );
-      glBegin( GL_LINES );
+      ogl::color( 0.0f, 0.8f, 0.0f );
+      ogl::line_width( 3.0f );
+      ogl::begin_lines();
 
       switch( std::toupper(input.at(k)) )
       {
@@ -587,7 +587,7 @@ void Text::write_to_screen( std::string input,
       }
 
       // end the GL
-      glEnd();
+      ogl::end();
 
       offset += hor * 3.0f * scale;
    }

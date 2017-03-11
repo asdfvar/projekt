@@ -1,6 +1,9 @@
 #include "change_direction.h"
 #include <cmath>
 
+/*
+** function name: change_direction
+*/
 void change_direction( float *direction,
                        int    window_center[2],
                        int    mousePassivePosition[2])
