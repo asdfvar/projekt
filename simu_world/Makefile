@@ -14,7 +14,6 @@ endif
 OBJ = main.o             \
       simu_world.o       \
       simu_world_obj.o   \
-      time_manager.o     \
       semaphore.o        \
       io_manager.o       \
 #
@@ -36,9 +35,6 @@ simu_world_obj.o: simu_world_obj.cpp
 	$(CPPC) $(INC) $(DEFINES) $^ -c
 
 simu_world.o: simu_world.cpp
-	$(CPPC) $(INC) $(DEFINES) $^ -c
-
-time_manager.o: time_manager.cpp
 	$(CPPC) $(INC) $(DEFINES) $^ -c
 
 semaphore.o: semaphore.cpp

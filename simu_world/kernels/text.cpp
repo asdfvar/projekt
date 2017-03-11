@@ -699,6 +699,16 @@ void Text::populate( float number )
    }
 }
 
+void Text::populate( double number )
+{
+   if ( !edit_done )
+   {
+      std::ostringstream id_str;
+      id_str << number;
+      edit_buffer[row] += id_str.str();
+   }
+}
+
 void Text::done_editing( void )
 {
    edit_done = true;

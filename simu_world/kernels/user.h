@@ -6,9 +6,9 @@ class User
 
    public:
 
-      User( void);
+      User( void );
 
-      void update( float dt);
+      void update( double dt );
 
       void move_forward( void );
       void move_backward( void );
@@ -28,7 +28,7 @@ class User
       float get_window_distance( void );
       float get_window_width( void );
 
-      void set_direction( float *direction);
+      void set_direction( float *direction );
 
       void debug_info( void );
 

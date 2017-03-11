@@ -11,6 +11,7 @@ OBJ = user.o             \
       hud.o              \
       change_direction.o \
       opengl_interface.o \
+      time_manager.o     \
       fileio.o           \
       text.o             \
 #
@@ -39,6 +40,9 @@ change_direction.o: change_direction.cpp
 	$(CPPC) $(INC) $^ -c
 
 opengl_interface.o: opengl_interface.cpp
+	$(CPPC) $(INC) $^ -c
+
+time_manager.o: time_manager.cpp
 	$(CPPC) $(INC) $^ -c
 
 fileio.o: fileio.cpp

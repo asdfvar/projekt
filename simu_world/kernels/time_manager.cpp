@@ -38,7 +38,7 @@ void Time_manager::wait_for_time( void )
    start_time = (start.tv_sec*1000000 + start.tv_usec) / 1000000.0;
 }
 
-float Time_manager::get_time_step( void)
+double Time_manager::get_time_step( void )
 {
    return time_step_actual;
 }

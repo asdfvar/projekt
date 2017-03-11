@@ -16,7 +16,6 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 
    map = new Map( IO_barrier_in );
 
-//   pthread_barrier_wait( IO_barrier_in );
    program_done = false;
 
    first_frame      = true;
@@ -68,7 +67,7 @@ void Simu_world_obj::keyboardDown( const char key )
       case 32: // space bar
          user.move_upward();
          break;
-      case 'c':
+      case 'x':
          user.move_downward();
          break;
       case 'w':
@@ -108,7 +107,7 @@ void Simu_world_obj::keyboardUp( const char key)
       case 32: // space bar
          user.stop_up();
          break;
-      case 'c':
+      case 'x':
          user.stop_down();
          break;
    }
@@ -117,7 +116,7 @@ void Simu_world_obj::keyboardUp( const char key)
 /*
 ** function name: mousePassive from Simu_world_obj
 */
-void Simu_world_obj::mousePassive( int x, int y)
+void Simu_world_obj::mousePassive( int x, int y )
 {
 
    int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
@@ -138,7 +137,7 @@ void Simu_world_obj::mousePassive( int x, int y)
 /*
 ** destructor name: ~Simu_world_obj
 */
-Simu_world_obj::~Simu_world_obj(void)
+Simu_world_obj::~Simu_world_obj( void )
 {
    delete map;
    delete time_manager;
@@ -148,7 +147,7 @@ Simu_world_obj::~Simu_world_obj(void)
 /*
 ** function name: idle from: Simu_world_obj
 */
-void Simu_world_obj::idle( void)
+void Simu_world_obj::idle( void )
 {
 
 #ifdef DEBUG
@@ -173,7 +172,7 @@ void Simu_world_obj::idle( void)
    {
       ogl::opengl_initial_settings();
 
-      glutWarpPointer( window_center[0], window_center[1]);
+      glutWarpPointer( window_center[0], window_center[1] );
       mousePassivePosition[0] = window_center[0];
       mousePassivePosition[1] = window_center[1];
       first_frame             = false;
@@ -221,6 +220,9 @@ void Simu_world_obj::idle( void)
          text.populate( ", " );
          text.populate( user_position[2] );
          text.new_line();
+         text.populate("frame time: ");
+         text.populate( time_manager->get_time_step() );
+         text.new_line();
 
          int i_user_position[3] = { (int)floorf(user_position[0]),
                                     (int)floorf(user_position[1]),
@@ -247,7 +249,7 @@ void Simu_world_obj::idle( void)
 /*
 ** function name: Simu_world_obj
 */
-void Simu_world_obj::display(void)
+void Simu_world_obj::display( void )
 {
    // clear this openGL buffer
    ogl::opengl_clear();

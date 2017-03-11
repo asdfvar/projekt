@@ -21,6 +21,7 @@ class Text
       void populate( std::string );
       void populate( int );
       void populate( float );
+      void populate( double );
       void done_editing( void );
 
       void display_contents( const float x,

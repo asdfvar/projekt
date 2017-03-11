@@ -13,8 +13,8 @@ class Time_manager
       Time_manager( double time_step);
       ~Time_manager( void);
 
-      void wait_for_time( void);
-      float get_time_step( void);
+      void wait_for_time( void );
+      double get_time_step( void );
 
    private:
 

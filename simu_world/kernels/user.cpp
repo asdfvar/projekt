@@ -7,7 +7,7 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
-User::User( void)
+User::User( void )
 {
    /*
    ** User positional attributes
@@ -35,7 +35,7 @@ User::User( void)
 
 }
 
-void User::get_direction( float *direction_out)
+void User::get_direction( float *direction_out )
 {
 
    direction_out[0] = direction[0];
@@ -45,7 +45,7 @@ void User::get_direction( float *direction_out)
    return;
 }
 
-void User::set_direction( float *direction_in)
+void User::set_direction( float *direction_in )
 {
 
    direction[0] = direction_in[0];
@@ -55,7 +55,7 @@ void User::set_direction( float *direction_in)
    return;
 }
 
-void User::get_position( float *position_out)
+void User::get_position( float *position_out )
 {
 
    position_out[0] = position[0];
@@ -65,17 +65,17 @@ void User::get_position( float *position_out)
    return;
 }
 
-float User::get_window_distance( void)
+float User::get_window_distance( void )
 {
    return window_distance;
 }
 
-float User::get_window_width( void)
+float User::get_window_width( void )
 {
    return window_width;
 }
 
-void User::update( float dt)
+void User::update( double dt )
 {
    position[0] += direction[0] * forward_speed * dt;
    position[1] += direction[1] * forward_speed * dt;
@@ -100,62 +100,62 @@ void User::update( float dt)
    position[2] += -down_speed * dt;
 }
 
-void User::move_upward( void)
+void User::move_upward( void )
 {
    up_speed = 10.0f;
 }
 
-void User::move_downward( void)
+void User::move_downward( void )
 {
    down_speed = 10.0f;
 }
 
-void User::move_right( void)
+void User::move_right( void )
 {
    right_speed = 10.0f;
 }
 
-void User::move_left( void)
+void User::move_left( void )
 {
    left_speed = 10.0f;
 }
 
-void User::move_forward( void)
+void User::move_forward( void )
 {
    forward_speed = 10.0f;
 }
 
-void User::move_backward( void)
+void User::move_backward( void )
 {
    forward_speed = -10.0f;
 }
 
-void User::stop_forward( void)
+void User::stop_forward( void )
 {
    forward_speed = 0.0f;
 }
 
-void User::stop_right( void)
+void User::stop_right( void )
 {
    right_speed = 0.0f;
 }
 
-void User::stop_left( void)
+void User::stop_left( void )
 {
    left_speed = 0.0f;
 }
 
-void User::stop_up( void)
+void User::stop_up( void )
 {
    up_speed = 0.0f;
 }
 
-void User::stop_down( void)
+void User::stop_down( void )
 {
    down_speed = 0.0f;
 }
 
-void User::debug_info( void)
+void User::debug_info( void )
 {
    std::cout << "User position = ("  <<
                  position[0] << ", " <<
