@@ -5,8 +5,8 @@
 /*
 ** function name: change_direction
 **
-** change the user's look direction based on the new mouse
-** location
+** change the user's look direction based on the x and y offsets on the
+** view window
 **
 ** the direction is assumed to be of unit length on input
 */
@@ -47,6 +47,9 @@ void change_direction( float*      direction,
 
          float temp[3];
 
+         /*
+         ** apply a rotation about the z-axis
+         */
          temp[0] =         direction[0] - sin_x * direction[1];
          temp[1] = sin_x * direction[0] +         direction[1];
       
