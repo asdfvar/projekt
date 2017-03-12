@@ -5,6 +5,9 @@
 /*
 ** function name: change_direction
 **
+** change the user's look direction based on the new mouse
+** location
+**
 ** the direction is assumed to be of unit length on input
 */
 void change_direction( float*      direction,
