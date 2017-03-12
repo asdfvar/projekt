@@ -30,7 +30,6 @@ void Time_manager::wait_for_time( void )
 
       dt = end_time - start_time;
 
-std::cout << "dt = " << dt << std::endl;
    } while (dt < time_step);
 
    time_step_actual = floor(dt / time_step) * time_step;

@@ -75,6 +75,11 @@ float User::get_window_width( void )
    return window_width;
 }
 
+float User::get_window_height( void )
+{
+   return window_height;
+}
+
 void User::update( double dt )
 {
    position[0] += direction[0] * forward_speed * dt;

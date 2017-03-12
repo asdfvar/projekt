@@ -43,8 +43,8 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 */
 void Simu_world_obj::keyboardDown( const char key )
 {
-   int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
-   int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+   int window_center_x = glutGet( GLUT_WINDOW_WIDTH  ) / 2;
+   int window_center_y = glutGet( GLUT_WINDOW_HEIGHT ) / 2;
 
    switch (key)
    {
@@ -57,7 +57,7 @@ void Simu_world_obj::keyboardDown( const char key )
          break;
       case 13: // enter key
          mode = 1;
-         glutWarpPointer( window_center_x, window_center_y);
+         glutWarpPointer( window_center_x, window_center_y );
          glutSetCursor(GLUT_CURSOR_NONE);
          break;
       case 27: // escape key
@@ -115,12 +115,16 @@ void Simu_world_obj::keyboardUp( const char key)
 
 /*
 ** function name: mousePassive from Simu_world_obj
+**
+** (0,0) is defined in the top left corner of the window
+** x is the column number of cells from left
+** y is the row number of cells from top
 */
 void Simu_world_obj::mousePassive( int x, int y )
 {
 
-   int window_center_x = glutGet(GLUT_WINDOW_WIDTH)  / 2;
-   int window_center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+   int window_center_x = glutGet( GLUT_WINDOW_WIDTH  ) / 2;
+   int window_center_y = glutGet( GLUT_WINDOW_HEIGHT ) / 2;
 
    if ( semaphore->task_pool(1) == 0 )
    {
@@ -163,18 +167,20 @@ void Simu_world_obj::idle( void )
 
    user.update( time_manager->get_time_step() );
 
-   int window_center_x  = glutGet(GLUT_WINDOW_WIDTH)  / 2;
-   int window_center_y  = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+   int window_width  = glutGet( GLUT_WINDOW_WIDTH );
+   int window_height = glutGet( GLUT_WINDOW_HEIGHT );
+   int window_center_x = window_width  / 2;
+   int window_center_y = window_height / 2;
    int window_center[2] = { glutGet(GLUT_WINDOW_WIDTH)  / 2,
                             glutGet(GLUT_WINDOW_HEIGHT) / 2 };
 
-   if (first_frame)
+   if ( first_frame )
    {
       ogl::opengl_initial_settings();
 
-      glutWarpPointer( window_center[0], window_center[1] );
-      mousePassivePosition[0] = window_center[0];
-      mousePassivePosition[1] = window_center[1];
+      glutWarpPointer( window_center_x, window_center_y );
+      mousePassivePosition[0] = window_center_x;
+      mousePassivePosition[1] = window_center_y;
       first_frame             = false;
    }
    if( semaphore->task_pool(0) == 0 )
@@ -182,14 +188,14 @@ void Simu_world_obj::idle( void )
       semaphore->increment_task(0);
       if (mode == 0)
       {
-         glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+         glutSetCursor( GLUT_CURSOR_LEFT_ARROW );
       }
       if (mode == 1)
       {
 
          text.clear();
 
-         glutSetCursor(GLUT_CURSOR_NONE);
+         glutSetCursor( GLUT_CURSOR_NONE );
 
          /*
          ** Move the direction of the user based from mouse motion
@@ -197,13 +203,25 @@ void Simu_world_obj::idle( void )
          float direction[3];
          user.get_direction( direction );
 
+         /*
+         ** define x/y offsets in physical units invariant
+         ** to the window cell dimensions with +x in the right
+         ** directions and +y in the up direction
+         */
+         float x_offset = (float)( mousePassivePosition[0] - window_center[0] ) *
+                          user.get_window_width() / (float)window_width;
+         float y_offset = (float)( window_center[1] - mousePassivePosition[1] ) *
+                          user.get_window_height() / (float)window_height;
+
          change_direction( direction,
-                           window_center,
-                           mousePassivePosition);
+                           user.get_window_distance(),
+                           x_offset,
+                           y_offset,
+                           3.5f );
    
          user.set_direction( direction);
       
-         glutWarpPointer( window_center_x, window_center_y);
+         glutWarpPointer( window_center_x, window_center_y );
 
          /*
          ** Update the chunk grid if the user position has exceeded the threshold
