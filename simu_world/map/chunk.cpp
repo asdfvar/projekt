@@ -63,7 +63,7 @@ Chunk::Chunk( unsigned int  id_in,
 */
 void Chunk::update( void )
 {
-   if ( (changed && !valid) || first_populated )
+   if ( ( changed && !valid ) || first_populated )
    {
       /*
       ** write old data to file

@@ -107,6 +107,13 @@ Map::~Map(void)
 /*
 ** function name: update from: Map
 ** Update chunks from the IO thread
+**
+** TODO: create a queueing system where
+**       chunks that are to be written to file
+**       are copied to a queue and the chunks
+**       in the queue are written to file. chunks
+**       that attempt to read from file that is
+**       not yet written to must wait
 */
 void Map::update( void )
 {
@@ -401,7 +408,7 @@ void Map::shift( int x, int y, int z)
       if (virtual_chunk_id_x[k] >= num_chunks[0])
       {
          for (;virtual_chunk_id_x[k] >= num_chunks[0];
-               virtual_chunk_id_x[k] -= num_chunks[0]) { /* NA */}
+               virtual_chunk_id_x[k] -= num_chunks[0]) { /* NA */ }
 
          for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
          {
@@ -421,7 +428,7 @@ void Map::shift( int x, int y, int z)
 
       if (virtual_chunk_id_x[k] < 0)
       {
-         for (;virtual_chunk_id_x[k] < 0; virtual_chunk_id_x[k] += num_chunks[0]) { /* NA */}
+         for (;virtual_chunk_id_x[k] < 0; virtual_chunk_id_x[k] += num_chunks[0]) { /* NA */ }
 
          for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
          {
@@ -450,7 +457,7 @@ void Map::shift( int x, int y, int z)
       if (virtual_chunk_id_y[k] >= num_chunks[1])
       {
          for (;virtual_chunk_id_y[k] >= num_chunks[1];
-               virtual_chunk_id_y[k] -= num_chunks[1]) { /* NA */}
+               virtual_chunk_id_y[k] -= num_chunks[1]) { /* NA */ }
 
          for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
          {
@@ -470,7 +477,7 @@ void Map::shift( int x, int y, int z)
 
       if (virtual_chunk_id_y[k] < 0)
       {
-         for (;virtual_chunk_id_y[k] < 0; virtual_chunk_id_y[k] += num_chunks[1]) { /* NA */}
+         for (;virtual_chunk_id_y[k] < 0; virtual_chunk_id_y[k] += num_chunks[1]) { /* NA */ }
 
          for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
          {
@@ -500,7 +507,7 @@ void Map::shift( int x, int y, int z)
       if (virtual_chunk_id_z[k] >= num_chunks[2])
       {
          for (;virtual_chunk_id_z[k] >= num_chunks[2];
-               virtual_chunk_id_z[k] -= num_chunks[2]) { /* NA */}
+               virtual_chunk_id_z[k] -= num_chunks[2]) { /* NA */ }
 
          for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
          {
@@ -520,7 +527,7 @@ void Map::shift( int x, int y, int z)
 
       if (virtual_chunk_id_z[k] < 0)
       {
-         for (;virtual_chunk_id_z[k] < 0; virtual_chunk_id_z[k] += num_chunks[2]) { /* NA */}
+         for (;virtual_chunk_id_z[k] < 0; virtual_chunk_id_z[k] += num_chunks[2]) { /* NA */ }
 
          for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
          {
@@ -558,7 +565,7 @@ int Map::get_abs_element( int* position_in)
 
    Chunk *this_chunk = access_chunk( physical_chunk_position[0],
                                      physical_chunk_position[1],
-                                     physical_chunk_position[2]);
+                                     physical_chunk_position[2] );
 
    int element_position[3];
    get_relative_element_position( position_in, element_position );
@@ -630,9 +637,9 @@ void Map::get_relative_element_position( int* position_in, int* element_position
    element_position[1] = position_in[1] % num_chunk_elements[1];
    element_position[2] = position_in[2] % num_chunk_elements[2];
 
-   if (element_position[0] < 0) element_position[0] += num_chunk_elements[0];
-   if (element_position[1] < 0) element_position[1] += num_chunk_elements[1];
-   if (element_position[2] < 0) element_position[2] += num_chunk_elements[2];
+   if ( element_position[0] < 0 ) element_position[0] += num_chunk_elements[0];
+   if ( element_position[1] < 0 ) element_position[1] += num_chunk_elements[1];
+   if ( element_position[2] < 0 ) element_position[2] += num_chunk_elements[2];
 }
 
 void Map::diagnostics( int *position_in, Text *text)
@@ -643,7 +650,7 @@ void Map::diagnostics( int *position_in, Text *text)
    int element_position[3];
    get_relative_element_position( position_in, element_position );
 
-   text->populate("position in: ");
+   text->populate( "position in: ");
    text->populate( position_in[0] );
    text->populate( ", ");
    text->populate( position_in[1] );
