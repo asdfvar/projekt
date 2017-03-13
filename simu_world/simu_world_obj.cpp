@@ -43,8 +43,8 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
 */
 void Simu_world_obj::keyboardDown( const char key )
 {
-   int window_center_x = glutGet( GLUT_WINDOW_WIDTH  ) / 2;
-   int window_center_y = glutGet( GLUT_WINDOW_HEIGHT ) / 2;
+   int window_center_x = ogl::get_window_width() / 2;
+   int window_center_y = ogl::get_window_height() / 2;
 
    switch (key)
    {
@@ -57,12 +57,12 @@ void Simu_world_obj::keyboardDown( const char key )
          break;
       case 13: // enter key
          mode = 1;
-         glutWarpPointer( window_center_x, window_center_y );
-         glutSetCursor(GLUT_CURSOR_NONE);
+         ogl::warp_pointer( window_center_x, window_center_y );
+         ogl::set_cursor_none();
          break;
       case 27: // escape key
          mode = 0;
-         glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+         ogl::set_cursor_arrow();
          break;
       case 32: // space bar
          user.move_upward();
@@ -123,8 +123,8 @@ void Simu_world_obj::keyboardUp( const char key)
 void Simu_world_obj::mousePassive( int x, int y )
 {
 
-   int window_center_x = glutGet( GLUT_WINDOW_WIDTH  ) / 2;
-   int window_center_y = glutGet( GLUT_WINDOW_HEIGHT ) / 2;
+   int window_center_x = ogl::get_window_width() / 2;
+   int window_center_y = ogl::get_window_height() / 2;
 
    if ( semaphore->task_pool(1) == 0 )
    {
@@ -186,14 +186,14 @@ void Simu_world_obj::idle( void )
       semaphore->increment_task(0);
       if (mode == 0)
       {
-         glutSetCursor( GLUT_CURSOR_LEFT_ARROW );
+         ogl::set_cursor_arrow();
       }
       if (mode == 1)
       {
 
          text.clear();
 
-         glutSetCursor( GLUT_CURSOR_NONE );
+         ogl::set_cursor_none();
 
          /*
          ** Move the direction of the user based from mouse motion
@@ -219,7 +219,7 @@ void Simu_world_obj::idle( void )
    
          user.set_direction( direction);
       
-         glutWarpPointer( window_center_x, window_center_y );
+         ogl::warp_pointer( window_center_x, window_center_y );
 
          /*
          ** Update the chunk grid if the user position has exceeded the threshold

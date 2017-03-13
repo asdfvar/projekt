@@ -10,6 +10,8 @@ namespace ogl
    void swap_buffers ( void );
    void redisplay ( void );
    void warp_pointer( int x, int y );
+   void set_cursor_none( void );
+   void set_cursor_arrow( void );
 
    void draw_polygon( float *vertices_x,
                       float *vertices_y,
@@ -29,6 +31,7 @@ namespace ogl
    void begin_lines( void );
    int  get_window_width( void );
    int  get_window_height( void );
+   void normal( float x, float y, float z );
    void end( void );
 
 }

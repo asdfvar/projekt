@@ -55,6 +55,16 @@ void ogl::warp_pointer( int x, int y )
    glutWarpPointer( x, y );
 }
 
+void ogl::set_cursor_none( void )
+{
+   glutSetCursor( GLUT_CURSOR_NONE );
+}
+
+void ogl::set_cursor_arrow( void )
+{
+   glutSetCursor( GLUT_CURSOR_LEFT_ARROW );
+}
+
 /* function name: draw_polygon */
 void ogl::draw_polygon( float *vertices_x,
                         float *vertices_y,
@@ -121,6 +131,11 @@ int ogl::get_window_width( void )
 int ogl::get_window_height( void )
 {
    return glutGet( GLUT_WINDOW_HEIGHT );
+}
+
+void ogl::normal( float x, float y, float z )
+{
+   glNormal3f( x, y, z );
 }
 
 void ogl::end( void )

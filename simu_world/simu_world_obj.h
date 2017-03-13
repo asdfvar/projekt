@@ -1,11 +1,8 @@
 #ifndef SIMU_WORLD_H
 #define SIMU_WORLD_H
 
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
 #include <pthread.h>
-
+#include <stdlib.h>
 #include "time_manager.h"
 #include "user.h"
 #include "map.h"

@@ -172,9 +172,9 @@ void change_direction( float*      direction,
          direction[2] = temp[2];
    
          /*
-         ** renormalise to enforce the unity of the direction.
-         ** this is necessary because any perturbation will be
-         ** propagated to the next iteration otherwise.
+         ** renormalise to enforce the unit length of the direction.
+         ** this is necessary because any perturbation will
+         ** aggregate over the iterations otherwise.
          */
          float norm = sqrtf( direction[0] * direction[0] +
                              direction[1] * direction[1] +
