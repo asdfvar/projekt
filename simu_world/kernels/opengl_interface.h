@@ -6,12 +6,10 @@ namespace ogl
 {
 
    void opengl_initial_settings ( void );
-
    void opengl_clear ( void );
-
    void swap_buffers ( void );
-
    void redisplay ( void );
+   void warp_pointer( int x, int y );
 
    void draw_polygon( float *vertices_x,
                       float *vertices_y,
@@ -29,6 +27,8 @@ namespace ogl
    void color( float x, float y, float z );
    void line_width( float );
    void begin_lines( void );
+   int  get_window_width( void );
+   int  get_window_height( void );
    void end( void );
 
 }

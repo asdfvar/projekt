@@ -2,13 +2,13 @@
 #include <iostream>
 #include <cmath>
 
-Time_manager::Time_manager( double time_step_in)
+Time_manager::Time_manager( double time_step_desired_in)
 {
-   time_step = time_step_in;
+   time_step_desired = time_step_desired_in;
    init_done = false;
 }
 
-Time_manager::~Time_manager( void)
+Time_manager::~Time_manager( void )
 {
 }
 
@@ -25,20 +25,31 @@ void Time_manager::wait_for_time( void )
    double dt;
 
    do {
-      gettimeofday(&end, NULL);
-      end_time = (end.tv_sec*1000000 + end.tv_usec) / 1000000.0;
+      gettimeofday( &end, NULL );
+      end_time = ( end.tv_sec*1000000 + end.tv_usec ) / 1000000.0;
 
       dt = end_time - start_time;
 
-   } while (dt < time_step);
+   } while ( dt < time_step_desired );
 
-   time_step_actual = floor(dt / time_step) * time_step;
+   gettimeofday( &start, NULL );
+   start_time = ( start.tv_sec*1000000 + start.tv_usec ) / 1000000.0;
 
-   gettimeofday(&start, NULL);
-   start_time = (start.tv_sec*1000000 + start.tv_usec) / 1000000.0;
+   /*
+   ** report the actual time step factor as an integer multiple of the desired
+   ** that is closest to the actual time step
+   */
+   time_step_actual_factor = floor( dt / time_step_desired + 0.5 ) * time_step_desired;
+
+   time_step_actual = dt;
 }
 
-double Time_manager::get_time_step( void )
+double Time_manager::get_time_step_actual_factor( void )
+{
+   return time_step_actual_factor;
+}
+
+double Time_manager::get_time_step_actual( void )
 {
    return time_step_actual;
 }

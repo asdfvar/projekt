@@ -165,20 +165,18 @@ void Simu_world_obj::idle( void )
    */
    time_manager->wait_for_time();
 
-   user.update( time_manager->get_time_step() );
+   user.update( time_manager->get_time_step_actual_factor() );
 
-   int window_width  = glutGet( GLUT_WINDOW_WIDTH );
-   int window_height = glutGet( GLUT_WINDOW_HEIGHT );
-   int window_center_x = window_width  / 2;
-   int window_center_y = window_height / 2;
-   int window_center[2] = { glutGet(GLUT_WINDOW_WIDTH)  / 2,
-                            glutGet(GLUT_WINDOW_HEIGHT) / 2 };
+   int window_width     = ogl::get_window_width();
+   int window_height    = ogl::get_window_height();
+   int window_center_x  = window_width  / 2;
+   int window_center_y  = window_height / 2;
 
    if ( first_frame )
    {
       ogl::opengl_initial_settings();
 
-      glutWarpPointer( window_center_x, window_center_y );
+      ogl::warp_pointer( window_center_x, window_center_y );
       mousePassivePosition[0] = window_center_x;
       mousePassivePosition[1] = window_center_y;
       first_frame             = false;
@@ -208,9 +206,9 @@ void Simu_world_obj::idle( void )
          ** to the window cell dimensions with +x in the right
          ** directions and +y in the up direction
          */
-         float x_offset = (float)( mousePassivePosition[0] - window_center[0] ) *
+         float x_offset = (float)( mousePassivePosition[0] - window_center_x ) *
                           user.get_window_width() / (float)window_width;
-         float y_offset = (float)( window_center[1] - mousePassivePosition[1] ) *
+         float y_offset = (float)( window_center_y - mousePassivePosition[1] ) *
                           user.get_window_height() / (float)window_height;
 
          change_direction( direction,
@@ -239,7 +237,7 @@ void Simu_world_obj::idle( void )
          text.populate( user_position[2] );
          text.new_line();
          text.populate("frame time: ");
-         text.populate( time_manager->get_time_step() );
+         text.populate( time_manager->get_time_step_actual() );
          text.new_line();
 
          int i_user_position[3] = { (int)floorf(user_position[0]),

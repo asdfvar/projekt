@@ -50,6 +50,11 @@ void ogl::redisplay ( void )
    glutPostRedisplay();
 }
 
+void ogl::warp_pointer( int x, int y )
+{
+   glutWarpPointer( x, y );
+}
+
 /* function name: draw_polygon */
 void ogl::draw_polygon( float *vertices_x,
                         float *vertices_y,
@@ -106,6 +111,16 @@ void ogl::line_width( float width )
 void ogl::begin_lines( void )
 {
    glBegin( GL_LINES );
+}
+
+int ogl::get_window_width( void )
+{
+   return glutGet( GLUT_WINDOW_WIDTH );
+}
+
+int ogl::get_window_height( void )
+{
+   return glutGet( GLUT_WINDOW_HEIGHT );
 }
 
 void ogl::end( void )
