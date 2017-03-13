@@ -52,10 +52,11 @@ class Chunk
       bool         deleting_chunk;
 
       // Functions:
-      void create_random( void );
-      void create_flat( void );
       void generate_chunk( void );
       void write_chunk( void );
+      void create_random( void );
+      void create_flat( void );
+      void create_solid( void );
 
 };
 

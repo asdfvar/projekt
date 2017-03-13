@@ -49,6 +49,7 @@ Chunk::Chunk( unsigned int  id_in,
    ** Attempt to read from file upon creation
    */
    generate_chunk();
+   valid = true;
 
 }
 
@@ -105,8 +106,6 @@ void Chunk::create_random( void )
 */
 void Chunk::create_flat( void )
 {
-std::cout << "abs_pos_id = " << abs_pos_id[0] << ", "
-           << abs_pos_id[1] << ", " << abs_pos_id[2] << std::endl;
    int chunk_dim_tot = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
    if (abs_pos_id[2] < 0)
    {
@@ -121,6 +120,19 @@ std::cout << "abs_pos_id = " << abs_pos_id[0] << ", "
       {
          blocks[ind] = 0;
       }
+   }
+}
+
+/*
+** function name: create_solid from: Chunk 
+*/
+void Chunk::create_solid( void )
+{
+   int chunk_dim_tot = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+
+   for (int ind = 0; ind < chunk_dim_tot; ind++)
+   {
+      blocks[ind] = 1;
    }
 }
 
@@ -215,7 +227,9 @@ void Chunk::move( int x, int y, int z)
 */
 Chunk::~Chunk(void)
 {
+
    delete[] blocks;
+
 }
 
 /*
@@ -379,6 +393,7 @@ void Chunk::generate_chunk( void )
                                  << std::endl;
       create_random();
 //      create_flat();
+//      create_solid();
       changed         = true;
    }
    else
@@ -390,8 +405,6 @@ void Chunk::generate_chunk( void )
       changed         = false;
       first_populated = false;
    }
-
-   valid = true;
 }
 
 /*
@@ -444,8 +457,8 @@ void Chunk::write_chunk( void )
 
       std::cout << "writing chunk (" << prev_abs_pos_id[0] << ", "
                                      << prev_abs_pos_id[1] << ", "
-                                     << prev_abs_pos_id[2] << ") "
-                                     << chunk_name << std::endl;
+                                     << prev_abs_pos_id[2] << ")"
+                                     << std::endl;
 
       fio::write( chunk_name,
                   0,
@@ -602,43 +615,6 @@ Chunks::Chunks( int* size_in )
 
    current_node = base_node;
 
-#if 1
-{
-printf("base_node = %ld\n", (long int)base_node);
-Node* temp = base_node->right;
-
-for (int kk = 0; kk < size[2]; kk++) {
-   std::cout << "plane " << kk << std::endl;
-   for (int jj = 0; jj < size[1]; jj++) {
-      for (int ii = 0; ii < size[0]; ii++) {
-         printf("%ld,%ld,%ld,", (long int)temp->top, (long int)temp->left, (long int)temp->next);
-         temp = temp->front;
-      }
-      std::cout << std::endl;
-      for (int ii = 0; ii < size[0]; ii++) {
-         printf("%ld,%ld,%ld,", (long int)temp->back, (long int)temp, (long int)temp->front);
-         temp = temp->front;
-      }
-      std::cout << std::endl;
-      for (int ii = 0; ii < size[0]; ii++) {
-         printf("%ld,%ld,,", (long int)temp->bottom, (long int)temp->right);
-         temp = temp->front;
-      }
-      temp = temp->right;
-      std::cout << std::endl;
-   }
-   std::cout << std::endl;
-   temp = temp->top;
-}
-std::cout << "next list" << std::endl;
-temp = base_node;
-for (int kk = 0; kk < size[0]*size[1]*size[2] + 1; kk++) {
-   printf("%ld\n", (long int)temp);
-   temp = temp->next;
-}
-}
-#endif
-
    for (int k = 0; k < total_size; k++)
    {
       all_nodes[k] = current_node;
@@ -646,7 +622,6 @@ for (int kk = 0; kk < size[0]*size[1]*size[2] + 1; kk++) {
    }
 
    current_node = base_node;
-
 }
 
 /*
