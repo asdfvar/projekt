@@ -29,6 +29,7 @@ SIMU_WORLD: $(OBJ)
 
 clean:
 	make -C kernels/ clean
+	make -C map/ clean
 	rm $(OBJ) $(EXE)
 
 simu_world_obj.o: simu_world_obj.cpp

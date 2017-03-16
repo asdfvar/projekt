@@ -2,6 +2,7 @@
 #define MAP_H
 
 #include "chunk.h"
+#include "chunks.h"
 #include <iostream>
 #include <pthread.h>
 #include "opengl_interface.h"
