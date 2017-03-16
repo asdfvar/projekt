@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cstdlib>
 
+Chunk::Chunk( void ) {}
+
 /*
 ** constructor name: Chunk 
 */
@@ -48,6 +50,7 @@ Chunk::Chunk( unsigned int  id_in,
    */
    generate_chunk();
    valid = true;
+   has_moved = false;
 
 }
 

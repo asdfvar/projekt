@@ -27,7 +27,37 @@ void Map::update( void )
             Chunk *this_chunk = access_chunk( x_dir,
                                               y_dir,
                                               z_dir );
+
+            //TODO: pass the queue into the chunk update. from there,
+            //      it will add the new chunk to the queue to be saved
             this_chunk->update();
+
+            bool has_moved = this_chunk->has_moved;
+            bool changed   = this_chunk->changed;
+
+#if 0
+            //TODO: adjust this logic appropriately once the previous stuff has been
+            //      flushed out
+            if ( has_moved && changed )
+            {
+               this_chunk->has_moved = false;
+#if 1
+               Chunk* chunk = new Chunk();
+              *chunk = *this_chunk;
+#else
+int abs_pos_id_in[3] = {1, 1, 1};
+int chunk_dim_in[3] = {5, 5, 5};
+float position_in[3] = {0.0f, 0.0f, 0.0f};
+Chunk* chunk = new Chunk( 0,
+       abs_pos_id_in,
+       chunk_dim_in,
+       position_in);
+#endif
+std::cout << "new chunk at " << chunk << " original chunk at " << this_chunk << std::endl;
+               queue.new_chunk( chunk );
+delete chunk;
+            }
+#endif
          }
       }
    }

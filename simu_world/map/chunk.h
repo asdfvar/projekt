@@ -36,6 +36,10 @@ class Chunk
       void set_color( float *color_in );
       void get_color( float *color_out );
 
+      void write_chunk( void );
+      bool has_moved;
+      bool changed;
+
    private:
 
       // Parameters:
@@ -46,14 +50,12 @@ class Chunk
       int          abs_pos_id[3];
       int          prev_abs_pos_id[3];
       float        color[3];
-      bool         valid;
-      bool         changed;
-      bool         first_populated;
       bool         deleting_chunk;
+      bool         valid;
+      bool         first_populated;
 
       // Functions:
       void generate_chunk( void );
-      void write_chunk( void );
       void create_random( void );
       void create_flat( void );
       void create_solid( void );

@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include "opengl_interface.h"
 #include "user.h"
+#include "queue.h"
 #include "text.h"
 
 /*
@@ -35,9 +36,8 @@ class Map
                                  float* color );
 
       void diagnostics( int* position, Text* text );
-
       void debug_info( void );
-
+      Queue queue;
       pthread_barrier_t* IO_barrier;
 
    private:

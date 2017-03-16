@@ -101,6 +101,7 @@ void Map::shift( int x, int y, int z)
                                                  z_dir);
 
                this_chunk->move( -num_chunks[0], 0, 0);
+               this_chunk->has_moved = true;
             }
          }
 
@@ -121,6 +122,7 @@ void Map::shift( int x, int y, int z)
                                                  z_dir);
 
                this_chunk->move( num_chunks[0], 0, 0);
+               this_chunk->has_moved = true;
             }
          }
       }
@@ -150,6 +152,7 @@ void Map::shift( int x, int y, int z)
                                                  z_dir);
 
                this_chunk->move( 0, -num_chunks[1], 0);
+               this_chunk->has_moved = true;
             }
          }
 
@@ -170,6 +173,7 @@ void Map::shift( int x, int y, int z)
                                                  z_dir);
 
                this_chunk->move( 0, num_chunks[1], 0);
+               this_chunk->has_moved = true;
             }
          }
       }
@@ -200,6 +204,7 @@ void Map::shift( int x, int y, int z)
                                                  k);
 
                this_chunk->move( 0, 0, -num_chunks[2]);
+               this_chunk->has_moved = true;
             }
          }
 
@@ -220,6 +225,7 @@ void Map::shift( int x, int y, int z)
                                                  k);
 
                this_chunk->move( 0, 0, num_chunks[2]);
+               this_chunk->has_moved = true;
             }
          }
       }
