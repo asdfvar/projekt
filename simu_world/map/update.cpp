@@ -1,5 +1,7 @@
 #include "map.h"
 #include "chunk.h"
+#include "fileio.h"
+#include <sstream>
 
 /*
 ** function name: update from: Map
@@ -61,5 +63,147 @@ void Chunk::update( void )
       generate_chunk();
 
       valid = true;
+   }
+}
+
+/*
+** function name: write_chunk from Chunk
+*/
+void Chunk::write_chunk( void )
+{
+
+      std::string chunk_name = "saves/chunk_";
+      std::ostringstream id_str;
+
+      if (prev_abs_pos_id[0] < 0)
+      {
+         id_str << -prev_abs_pos_id[0];
+         chunk_name += "n";
+      }
+      else
+      {
+         id_str << prev_abs_pos_id[0];
+      }
+      chunk_name += id_str.str();
+      chunk_name += "_";
+
+      id_str.clear();
+      id_str.str("");
+      if (prev_abs_pos_id[1] < 0)
+      {
+         id_str << -prev_abs_pos_id[1];
+         chunk_name += "n";
+      }
+      else
+      {
+         id_str << prev_abs_pos_id[1];
+      }
+      chunk_name += id_str.str();
+      chunk_name += "_";
+
+      id_str.clear();
+      id_str.str("");
+      if (prev_abs_pos_id[2] < 0)
+      {
+         id_str << -prev_abs_pos_id[2];
+         chunk_name += "n";
+      }
+      else
+      {
+         id_str << prev_abs_pos_id[2];
+      }
+      chunk_name += id_str.str();
+
+      std::cout << "writing chunk (" << prev_abs_pos_id[0] << ", "
+                                     << prev_abs_pos_id[1] << ", "
+                                     << prev_abs_pos_id[2] << ")"
+                                     << std::endl;
+
+      fio::write( chunk_name,
+                  0,
+                 (char*)blocks,
+                  chunk_dim[0] *
+                  chunk_dim[1] *
+                  chunk_dim[2] * sizeof(chunk_dim[0]));
+}
+
+/*
+** function name: generate_chunk from Chunk
+*/
+void Chunk::generate_chunk( void )
+{
+#ifdef __linux__
+   std::string chunk_name = "saves/chunk_";
+#elif _WIN32
+   std::string chunk_name = "saves\chunk_";
+#else
+   std::cout << __FILE__ << ":" << __LINE__ << ": unknown OS" << std::endl;
+#endif
+
+   std::ostringstream id_str;
+   if (abs_pos_id[0] < 0)
+   {
+      id_str << -abs_pos_id[0];
+      chunk_name += "n";
+   }
+   else
+   {
+      id_str << abs_pos_id[0];
+   }
+   chunk_name += id_str.str();
+   chunk_name += "_";
+
+   id_str.clear();
+   id_str.str("");
+   if (abs_pos_id[1] < 0)
+   {
+      id_str << -abs_pos_id[1];
+      chunk_name += "n";
+   }
+   else
+   {
+      id_str << abs_pos_id[1];
+   }
+   chunk_name += id_str.str();
+   chunk_name += "_";
+
+   id_str.clear();
+   id_str.str("");
+   if (abs_pos_id[2] < 0)
+   {
+      id_str << -abs_pos_id[2];
+      chunk_name += "n";
+   }
+   else
+   {
+      id_str << abs_pos_id[2];
+   }
+   chunk_name += id_str.str();
+
+   if( !fio::read( chunk_name,       // path and file name included
+                   0,                // offset in bytes from the beginning of file
+                   (void*)blocks,    // buffer to hold the data
+                   chunk_dim[0] *
+                      chunk_dim[1] *
+                      chunk_dim[2] *
+                      sizeof(chunk_dim[0])) ) // number of bytes to read
+   {
+      std::cout << "new chunk (" << abs_pos_id[0] << ", "
+                                 << abs_pos_id[1] << ", "
+                                 << abs_pos_id[2] << ")"
+                                 << std::endl;
+      create_random();
+//      create_flat();
+//      create_solid();
+      changed         = true;
+   }
+   else
+   {
+      std::cout << "reading chunk (" << abs_pos_id[0] << ", "
+                                     << abs_pos_id[1] << ", "
+                                     << abs_pos_id[2] << ")"
+                                     << std::endl;
+      changed         = false;
+      first_populated = false;
    }
 }
