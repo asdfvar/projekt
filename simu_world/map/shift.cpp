@@ -100,8 +100,7 @@ void Map::shift( int x, int y, int z)
                                                  y_dir,
                                                  z_dir);
 
-               this_chunk->move( -num_chunks[0], 0, 0);
-               this_chunk->has_moved = true;
+               this_chunk->move( -num_chunks[0], 0, 0, queue);
             }
          }
 
@@ -121,8 +120,7 @@ void Map::shift( int x, int y, int z)
                                                  y_dir,
                                                  z_dir);
 
-               this_chunk->move( num_chunks[0], 0, 0);
-               this_chunk->has_moved = true;
+               this_chunk->move( num_chunks[0], 0, 0, queue);
             }
          }
       }
@@ -151,8 +149,7 @@ void Map::shift( int x, int y, int z)
                                                  k,
                                                  z_dir);
 
-               this_chunk->move( 0, -num_chunks[1], 0);
-               this_chunk->has_moved = true;
+               this_chunk->move( 0, -num_chunks[1], 0, queue);
             }
          }
 
@@ -172,8 +169,7 @@ void Map::shift( int x, int y, int z)
                                                  k,
                                                  z_dir);
 
-               this_chunk->move( 0, num_chunks[1], 0);
-               this_chunk->has_moved = true;
+               this_chunk->move( 0, num_chunks[1], 0, queue);
             }
          }
       }
@@ -203,8 +199,7 @@ void Map::shift( int x, int y, int z)
                                                  y_dir,
                                                  k);
 
-               this_chunk->move( 0, 0, -num_chunks[2]);
-               this_chunk->has_moved = true;
+               this_chunk->move( 0, 0, -num_chunks[2], queue);
             }
          }
 
@@ -222,10 +217,9 @@ void Map::shift( int x, int y, int z)
                // shift the local chunk position
                Chunk *this_chunk = access_chunk( x_dir,
                                                  y_dir,
-                                                 k);
+                                                 k );
 
-               this_chunk->move( 0, 0, num_chunks[2]);
-               this_chunk->has_moved = true;
+               this_chunk->move( 0, 0, num_chunks[2], queue);
             }
          }
       }
@@ -235,4 +229,24 @@ void Map::shift( int x, int y, int z)
       */
       physical_chunk_id_z[virtual_chunk_id_z[k]] = k;
    }
+
+#if 1
+   // update the queue if any movement has happened
+   for (int z_dir = 0; z_dir < num_chunks[2]; z_dir++)
+   {
+      for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
+      {
+         for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
+         {
+
+            Chunk *this_chunk = access_chunk( x_dir,
+                                              y_dir,
+                                              z_dir );
+
+            this_chunk->populate( queue );
+
+         }
+      }
+   }
+#endif
 }

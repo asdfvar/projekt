@@ -5,6 +5,7 @@
 #include <vector>
 #include "opengl_interface.h"
 #include "user.h"
+#include "queue.h"
 
 /*
 ** class name: Chunk
@@ -29,15 +30,15 @@ class Chunk
       unsigned int get_dimension( unsigned int dim );
       void display_info( void );
       bool position_in_chunk( float *poisition_in );
-      void move( int x, int y, int z );
-      void update( void );
+      void move( int x, int y, int z, Queue* );
+      void update( Queue* );
+      void populate( Queue* );
       void get_abs_pos_id( int *abs_pos_id );
       bool is_valid( void );
       void set_color( float *color_in );
       void get_color( float *color_out );
 
       void write_chunk( void );
-      bool has_moved;
       bool changed;
 
    private:

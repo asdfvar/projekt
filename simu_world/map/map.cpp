@@ -80,6 +80,12 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    chunks->set_base();
 
+   int total_num_chunk_elements = num_chunk_elements[0] *
+                                  num_chunk_elements[1] *
+                                  num_chunk_elements[2];
+
+   queue = new Queue( total_num_chunk_elements );
+
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
 
@@ -93,6 +99,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 Map::~Map(void)
 {
    delete chunks;
+   delete queue;
 
    delete[] physical_chunk_id_x;
    delete[] physical_chunk_id_y;

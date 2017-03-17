@@ -30,34 +30,8 @@ void Map::update( void )
 
             //TODO: pass the queue into the chunk update. from there,
             //      it will add the new chunk to the queue to be saved
-            this_chunk->update();
+            this_chunk->update( queue );
 
-            bool has_moved = this_chunk->has_moved;
-            bool changed   = this_chunk->changed;
-
-#if 0
-            //TODO: adjust this logic appropriately once the previous stuff has been
-            //      flushed out
-            if ( has_moved && changed )
-            {
-               this_chunk->has_moved = false;
-#if 1
-               Chunk* chunk = new Chunk();
-              *chunk = *this_chunk;
-#else
-int abs_pos_id_in[3] = {1, 1, 1};
-int chunk_dim_in[3] = {5, 5, 5};
-float position_in[3] = {0.0f, 0.0f, 0.0f};
-Chunk* chunk = new Chunk( 0,
-       abs_pos_id_in,
-       chunk_dim_in,
-       position_in);
-#endif
-std::cout << "new chunk at " << chunk << " original chunk at " << this_chunk << std::endl;
-               queue.new_chunk( chunk );
-delete chunk;
-            }
-#endif
          }
       }
    }
@@ -72,10 +46,13 @@ delete chunk;
 ** chunks are written to file if they leave the field
 ** of view (a.k.a. chunks are reassigned).
 */
-void Chunk::update( void )
+void Chunk::update( Queue* queue )
 {
    if ( ( changed && !valid ) || first_populated )
    {
+
+//TODO: get this up and running and remove the write_chunk from Chunk;
+//      queue->write_chunk();
       /*
       ** write old data to file
       */
@@ -83,6 +60,7 @@ void Chunk::update( void )
 
       changed         = false;
       first_populated = false;
+
    }
 
    if ( !valid )
@@ -93,6 +71,29 @@ void Chunk::update( void )
       generate_chunk();
 
       valid = true;
+   }
+}
+
+/*
+** function name: populate from: Chunk
+*/
+void Chunk::populate( Queue* queue )
+{
+
+   if ( ( changed && !valid ) || first_populated )
+   {
+      int total_chunk_dim = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+      int* chunk_elements = new int[total_chunk_dim];
+
+      for( int k = 0; k < total_chunk_dim; k++) chunk_elements[k] = blocks[k];
+
+// TODO: enable this
+#if 0
+      queue->new_chunk( chunk_elements,
+                        abs_pos_id[0],
+                        abs_pos_id[1],
+                        abs_pos_id[2] );
+#endif
    }
 }
 

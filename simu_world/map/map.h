@@ -37,7 +37,8 @@ class Map
 
       void diagnostics( int* position, Text* text );
       void debug_info( void );
-      Queue queue;
+      Queue *queue;
+
       pthread_barrier_t* IO_barrier;
 
    private:

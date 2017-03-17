@@ -50,7 +50,6 @@ Chunk::Chunk( unsigned int  id_in,
    */
    generate_chunk();
    valid = true;
-   has_moved = false;
 
 }
 
@@ -164,7 +163,7 @@ bool Chunk::position_in_chunk( float *position_in)
 **
 ** move the chunk a discrete number of chunks
 */
-void Chunk::move( int x, int y, int z)
+void Chunk::move( int x, int y, int z, Queue* queue )
 {
 
    prev_abs_pos_id[0] = abs_pos_id[0];
@@ -188,7 +187,12 @@ void Chunk::move( int x, int y, int z)
                                 << abs_pos_id[2]
                                 << std::endl;
 
-   valid   = false;
+   if ( valid )
+   {
+      populate( queue );
+   }
+
+   valid = false;
 }
 
 /*
