@@ -14,6 +14,7 @@ void draw_block( float  block_position[3],
                  float  window_distance,
                  float  window_width,
                  int    side,
+                 float *rot,
                  float *color );
 
 #endif

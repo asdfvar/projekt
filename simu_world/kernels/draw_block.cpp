@@ -12,7 +12,8 @@ void draw_block( float  block_position[3],
                  float *user_direction,
                  float  window_distance,
                  float  window_width,
-                 int    side,
+                 int    sides,
+                 float *rot,
                  float *color )
 {
 
@@ -65,11 +66,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yp;
    corner_point[2] = face_zp;
 
-   output_point_distance[0] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_FRONT || DRAW_LEFT || DRAW_TOP) )
+   {
+      output_point_distance[0] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[0]     = output_point[0] / window_width;
@@ -81,11 +86,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yp;
    corner_point[2] = face_zn;
 
-   output_point_distance[1] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_FRONT || DRAW_LEFT || DRAW_BOTTOM) )
+   {
+      output_point_distance[1] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[1]     = output_point[0] / window_width;
@@ -97,11 +106,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yn;
    corner_point[2] = face_zp;
 
-   output_point_distance[2] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_FRONT || DRAW_RIGHT || DRAW_TOP) )
+   {
+      output_point_distance[2] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[2]     = output_point[0] / window_width;
@@ -113,11 +126,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yn;
    corner_point[2] = face_zn;
 
-   output_point_distance[3] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_FRONT || DRAW_RIGHT || DRAW_BOTTOM) )
+   {
+      output_point_distance[3] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[3]     = output_point[0] / window_width;
@@ -129,11 +146,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yp;
    corner_point[2] = face_zp;
 
-   output_point_distance[4] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_BACK || DRAW_LEFT || DRAW_TOP) )
+   {
+      output_point_distance[4] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[4]     = output_point[0] / window_width;
@@ -145,11 +166,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yp;
    corner_point[2] = face_zn;
 
-   output_point_distance[5] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_BACK || DRAW_LEFT || DRAW_BOTTOM) )
+   {
+      output_point_distance[5] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[5]     = output_point[0] / window_width;
@@ -161,11 +186,15 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yn;
    corner_point[2] = face_zp;
 
-   output_point_distance[6] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_BACK || DRAW_RIGHT || DRAW_TOP) )
+   {
+      output_point_distance[6] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[6]     = output_point[0] / window_width;
@@ -177,18 +206,22 @@ void draw_block( float  block_position[3],
    corner_point[1] = face_yn;
    corner_point[2] = face_zn;
 
-   output_point_distance[7] = point_conversion( user_position,
-                                                user_direction,
-                                                window_distance,
-                                                corner_point,
-                                                output_point );
+   if( sides && (DRAW_BACK || DRAW_RIGHT || DRAW_BOTTOM) )
+   {
+      output_point_distance[7] = point_conversion( user_position,
+                                                   user_direction,
+                                                   window_distance,
+                                                   corner_point,
+                                                   rot,
+                                                   output_point );
+   }
 
    // scale to [-1, 1]
    view_x[7]     = output_point[0] / window_width;
    view_y[7]     = output_point[1] / window_width;
    valid_view[7] = ( output_point[2] < 0.0f );
 
-   if ( side & DRAW_FRONT )
+   if ( sides & DRAW_FRONT )
    {
       if (valid_view[0] && valid_view[1] && valid_view[3] && valid_view[2])
       {
@@ -230,7 +263,7 @@ void draw_block( float  block_position[3],
       }
    }
 
-   if ( side & DRAW_BACK )
+   if ( sides & DRAW_BACK )
    {
       if (valid_view[4] && valid_view[5] && valid_view[7] && valid_view[6])
       {
@@ -272,7 +305,7 @@ void draw_block( float  block_position[3],
       }
    }
 
-   if ( side & DRAW_LEFT )
+   if ( sides & DRAW_LEFT )
    {
       if (valid_view[0] && valid_view[1] && valid_view[5] && valid_view[4])
       {
@@ -314,7 +347,7 @@ void draw_block( float  block_position[3],
       }
    }
 
-   if ( side & DRAW_RIGHT )
+   if ( sides & DRAW_RIGHT )
    {
       if (valid_view[2] && valid_view[3] && valid_view[7] && valid_view[6])
       {
@@ -356,7 +389,7 @@ void draw_block( float  block_position[3],
       }
    }
 
-   if ( side & DRAW_TOP )
+   if ( sides & DRAW_TOP )
    {
       if (valid_view[0] && valid_view[2] && valid_view[6] && valid_view[4])
       {
@@ -398,7 +431,7 @@ void draw_block( float  block_position[3],
       }
    }
 
-   if ( side & DRAW_BOTTOM )
+   if ( sides & DRAW_BOTTOM )
    {
       if (valid_view[1] && valid_view[3] && valid_view[7] && valid_view[5])
       {

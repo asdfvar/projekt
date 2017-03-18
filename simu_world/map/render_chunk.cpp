@@ -1,5 +1,6 @@
 #include "map.h"
 #include "draw_block.h"
+#include "point_conversion.h"
 
 /*
 ** function name: render_chunk from: Map
@@ -17,6 +18,10 @@ void Map::render_chunk( User *user)
 
    float user_direction[3];
    user->get_direction( user_direction );
+
+   float rot[9];
+   rotation( user_direction,
+             rot );
 
    float window_distance = user->get_window_distance();
    float window_width    = user->get_window_width();
@@ -133,6 +138,7 @@ void Map::render_chunk( User *user)
                                        window_distance,
                                        window_width,
                                        sides,
+                                       rot,
                                        color );
                         }
 
