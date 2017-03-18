@@ -1,6 +1,7 @@
 #include "map.h"
 #include "chunk.h"
 #include "fileio.h"
+#include "queue.h"
 #include <sstream>
 
 /*
@@ -48,11 +49,14 @@ void Map::update( void )
 */
 void Chunk::update( Queue* queue )
 {
+
+#ifdef ENABLE_QUEUE
+   queue->write_chunk();
+#endif
+
    if ( ( changed && !valid ) || first_populated )
    {
 
-//TODO: get this up and running and remove the write_chunk from Chunk;
-//      queue->write_chunk();
       /*
       ** write old data to file
       */
@@ -80,21 +84,23 @@ void Chunk::update( Queue* queue )
 void Chunk::populate( Queue* queue )
 {
 
-   if ( ( changed && !valid ) || first_populated )
+#ifdef ENABLE_QUEUE
+   if ( reassigned )
    {
       int total_chunk_dim = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
       int* chunk_elements = new int[total_chunk_dim];
 
       for( int k = 0; k < total_chunk_dim; k++) chunk_elements[k] = blocks[k];
 
-// TODO: enable this
-#if 0
       queue->new_chunk( chunk_elements,
                         abs_pos_id[0],
                         abs_pos_id[1],
                         abs_pos_id[2] );
-#endif
+
+      reassigned = false;
    }
+#endif
+
 }
 
 /*
@@ -145,10 +151,12 @@ void Chunk::write_chunk( void )
       }
       chunk_name += id_str.str();
 
+#if 0
       std::cout << "writing chunk (" << prev_abs_pos_id[0] << ", "
                                      << prev_abs_pos_id[1] << ", "
                                      << prev_abs_pos_id[2] << ")"
                                      << std::endl;
+#endif
 
       fio::write( chunk_name,
                   0,
@@ -219,10 +227,12 @@ void Chunk::generate_chunk( void )
                       chunk_dim[2] *
                       sizeof(chunk_dim[0])) ) // number of bytes to read
    {
+#if 0
       std::cout << "new chunk (" << abs_pos_id[0] << ", "
                                  << abs_pos_id[1] << ", "
                                  << abs_pos_id[2] << ")"
                                  << std::endl;
+#endif
       create_random();
 //      create_flat();
 //      create_solid();
@@ -230,10 +240,12 @@ void Chunk::generate_chunk( void )
    }
    else
    {
+#if 0
       std::cout << "reading chunk (" << abs_pos_id[0] << ", "
                                      << abs_pos_id[1] << ", "
                                      << abs_pos_id[2] << ")"
                                      << std::endl;
+#endif
       changed         = false;
       first_populated = false;
    }

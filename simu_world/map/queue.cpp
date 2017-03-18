@@ -3,6 +3,9 @@
 #include <iostream>
 #include <sstream>
 
+/*
+** function name: write_chunk from QNode
+*/
 void QNode::write_chunk( int num_chunk_elements )
 {
    std::string chunk_name = "saves/chunk_";
@@ -48,29 +51,35 @@ void QNode::write_chunk( int num_chunk_elements )
        chunk_name += id_str.str();
  
        std::cout << __FILE__ << ":" << __LINE__ <<
-                   ":writing chunk (" << abs_pos_x << ", "
+                   ":please enable writing chunk (" << abs_pos_x << ", "
                                       << abs_pos_y << ", "
                                       << abs_pos_z << ")"
                                       << std::endl;
-std::cout << "chunk_elements = " << chunk_elements[0] << std::endl;
  
+#if 0
        fio::write( chunk_name,
                    0,
                   (char*)chunk_elements,
                    num_chunk_elements * sizeof(*chunk_elements));
+#endif
 
 }
 
+/*
+** function name: write_chunk from Queue
+*/
 void Queue::write_chunk( void )
 {
-   if (first != 0)
+   if ( count > 0 )
    {
+std::cout << "count = " << count << std::endl;
       first->write_chunk( num_chunk_elements );
 
       QNode* qnode = first;
       if (first != last) first = first->next;
       delete qnode;
-      qnode = 0;
+
+      count--;
    }
 }
 
@@ -94,6 +103,7 @@ Queue::Queue( int num_chunk_elements_in )
 {
    num_chunk_elements = num_chunk_elements_in;
    first = last = 0;
+   count = 0;
 }
 
 /*
@@ -101,11 +111,13 @@ Queue::Queue( int num_chunk_elements_in )
 */
 Queue::~Queue( void )
 {
-   while( first != last )
+   while( count > 0 )
    {
-      QNode* qnode = first->next;
-      delete first;
-      first = qnode;
+      QNode* qnode = first;
+      if( count > 1 ) first = first->next;
+      delete qnode;
+
+      count--;
    }
 
    if ( first != 0 ) delete first;
@@ -120,11 +132,14 @@ void Queue::new_chunk( int* chunk_elements,
                        int  abs_pos_z )
 {
 
-std::cout << __FILE__ << ":" << __LINE__ << ":new chunk" << std::endl;
-   if( last == 0)
+   std::cout << __FILE__ << ":" << __LINE__ << ":new chunk at ("
+             << abs_pos_x << ", "
+             << abs_pos_y << ", "
+             << abs_pos_z << ")"
+             << std::endl;
+   if( count == 0 )
    {
-      last = new QNode;
-      first = last;
+      first = last = new QNode;
    }
    else
    {
@@ -136,11 +151,7 @@ std::cout << __FILE__ << ":" << __LINE__ << ":new chunk" << std::endl;
    last->abs_pos_y = abs_pos_y;
    last->abs_pos_z = abs_pos_z;
 
-   if( first == 0)
-   {
-      first = last;
-   }
-
+   count++;
 }
 
 /*

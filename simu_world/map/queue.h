@@ -1,6 +1,8 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+//#define ENABLE_QUEUE
+
 class QNode
 {
    public:
@@ -31,6 +33,7 @@ class Queue
       void write_chunk( void );
 
    private:
+      unsigned int count;
       int num_chunk_elements;
       QNode* first;
       QNode* last;

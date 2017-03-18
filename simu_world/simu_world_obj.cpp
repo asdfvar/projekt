@@ -29,12 +29,14 @@ Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
    the_word += ss.str();
    std::cout << the_word << std::endl;
 
+#if 0
    float color[3] = { 0.2f, 1.0f, 0.2f };
    map->set_phys_chunk_color( 6, 6, 6, color );
    color[0] = 1.0f; color[1] = 0.2f; color[2] = 0.2f;
    map->set_phys_chunk_color( 6, 7, 6, color );
    color[0] = 0.2f; color[1] = 0.2f; color[2] = 1.0f;
    map->set_phys_chunk_color( 6, 5, 6, color );
+#endif
 }
 
 /*

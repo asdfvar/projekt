@@ -1,4 +1,5 @@
 #include "map.h"
+#include "queue.h"
 
 /*
 ** function name: map_shift from: Map

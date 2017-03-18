@@ -50,10 +50,12 @@ class Chunk
       float        position[3];
       int          abs_pos_id[3];
       int          prev_abs_pos_id[3];
+      int          prev_abs_pos_id_new[3];
       float        color[3];
       bool         deleting_chunk;
       bool         valid;
       bool         first_populated;
+      bool         reassigned;
 
       // Functions:
       void generate_chunk( void );
