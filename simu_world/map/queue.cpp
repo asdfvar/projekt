@@ -51,7 +51,7 @@ void QNode::write_chunk( int num_chunk_elements )
        chunk_name += id_str.str();
  
        std::cout << __FILE__ << ":" << __LINE__ <<
-                   ":please enable writing chunk (" << abs_pos_x << ", "
+                   " writing chunk (" << abs_pos_x << ", "
                                       << abs_pos_y << ", "
                                       << abs_pos_z << ")"
                                       << std::endl;
