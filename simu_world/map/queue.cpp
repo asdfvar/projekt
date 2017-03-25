@@ -56,13 +56,10 @@ void QNode::write_chunk( int num_chunk_elements )
                                       << abs_pos_z << ")"
                                       << std::endl;
  
-#if 0
        fio::write( chunk_name,
                    0,
                   (char*)chunk_elements,
                    num_chunk_elements * sizeof(*chunk_elements));
-#endif
-
 }
 
 /*
@@ -70,9 +67,9 @@ void QNode::write_chunk( int num_chunk_elements )
 */
 void Queue::write_chunk( void )
 {
-   if ( count > 0 )
+   while ( count > 0 )
    {
-std::cout << "writing chunk " << count << std::endl;
+      std::cout << "writing chunk " << count << std::endl;
       first->write_chunk( num_chunk_elements );
 
       QNode* qnode = first;

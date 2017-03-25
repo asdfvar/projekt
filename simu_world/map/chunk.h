@@ -39,7 +39,6 @@ class Chunk
       void get_color( float *color_out );
       void save_prev_abs_pos_id( void );
 
-      void write_chunk( void );
       bool changed;
       bool changed_new;
 

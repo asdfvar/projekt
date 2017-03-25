@@ -231,7 +231,6 @@ void Map::shift( int x, int y, int z)
       physical_chunk_id_z[virtual_chunk_id_z[k]] = k;
    }
 
-#if 1
    // update the queue if any movement has happened
    for (int z_dir = 0; z_dir < num_chunks[2]; z_dir++)
    {
@@ -250,5 +249,4 @@ void Map::shift( int x, int y, int z)
          }
       }
    }
-#endif
 }

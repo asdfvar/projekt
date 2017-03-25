@@ -18,6 +18,11 @@
 void Map::update( void )
 {
 
+   /*
+   ** write all chunks in queue to file
+   */
+   queue->write_chunk();
+
    for (int z_dir = 0; z_dir < num_chunks[2]; z_dir++)
    {
       for (int y_dir = 0; y_dir < num_chunks[1]; y_dir++)
@@ -29,8 +34,6 @@ void Map::update( void )
                                               y_dir,
                                               z_dir );
 
-            //TODO: pass the queue into the chunk update. from there,
-            //      it will add the new chunk to the queue to be saved
             this_chunk->update( queue );
 
          }
@@ -49,23 +52,6 @@ void Map::update( void )
 */
 void Chunk::update( Queue* queue )
 {
-
-#ifdef ENABLE_QUEUE
-   queue->write_chunk();
-#endif
-
-   if ( ( changed && !valid ) || first_populated )
-   {
-
-      /*
-      ** write old data to file
-      */
-      write_chunk();
-
-      changed         = false;
-      first_populated = false;
-
-   }
 
    if ( !valid )
    {
@@ -104,69 +90,6 @@ void Chunk::populate( Queue* queue )
    }
 #endif
 
-}
-
-/*
-** function name: write_chunk from Chunk
-*/
-void Chunk::write_chunk( void )
-{
-
-      std::string chunk_name = "saves/chunk_";
-      std::ostringstream id_str;
-
-      if (prev_abs_pos_id[0] < 0)
-      {
-         id_str << -prev_abs_pos_id[0];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << prev_abs_pos_id[0];
-      }
-      chunk_name += id_str.str();
-      chunk_name += "_";
-
-      id_str.clear();
-      id_str.str("");
-      if (prev_abs_pos_id[1] < 0)
-      {
-         id_str << -prev_abs_pos_id[1];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << prev_abs_pos_id[1];
-      }
-      chunk_name += id_str.str();
-      chunk_name += "_";
-
-      id_str.clear();
-      id_str.str("");
-      if (prev_abs_pos_id[2] < 0)
-      {
-         id_str << -prev_abs_pos_id[2];
-         chunk_name += "n";
-      }
-      else
-      {
-         id_str << prev_abs_pos_id[2];
-      }
-      chunk_name += id_str.str();
-
-#if 0
-      std::cout << "writing chunk (" << prev_abs_pos_id[0] << ", "
-                                     << prev_abs_pos_id[1] << ", "
-                                     << prev_abs_pos_id[2] << ")"
-                                     << std::endl;
-#endif
-
-      fio::write( chunk_name,
-                  0,
-                 (char*)blocks,
-                  chunk_dim[0] *
-                  chunk_dim[1] *
-                  chunk_dim[2] * sizeof(chunk_dim[0]));
 }
 
 /*
