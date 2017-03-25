@@ -72,7 +72,7 @@ void Queue::write_chunk( void )
 {
    if ( count > 0 )
    {
-std::cout << "count = " << count << std::endl;
+std::cout << "writing chunk " << count << std::endl;
       first->write_chunk( num_chunk_elements );
 
       QNode* qnode = first;
@@ -91,7 +91,8 @@ QNode::~QNode( void )
    std::cout << "deleting chunk_elements at " <<
               abs_pos_x << ", " <<
               abs_pos_y << ", " <<
-              abs_pos_z << std::endl;
+              abs_pos_z << std::endl
+              << std::endl;
 
    delete chunk_elements;
 }
@@ -120,7 +121,6 @@ Queue::~Queue( void )
       count--;
    }
 
-   if ( first != 0 ) delete first;
 }
 
 /*

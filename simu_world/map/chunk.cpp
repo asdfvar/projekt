@@ -25,6 +25,10 @@ Chunk::Chunk( unsigned int  id_in,
    prev_abs_pos_id_new[1] = abs_pos_id[1];
    prev_abs_pos_id_new[2] = abs_pos_id[2];
 
+   prev_abs_pos_id_new[0] = abs_pos_id[0];
+   prev_abs_pos_id_new[1] = abs_pos_id[1];
+   prev_abs_pos_id_new[2] = abs_pos_id[2];
+
    for (int ind = 0; ind < 3; ind++)
    {
       if (chunk_dim_in[ind] % 2 == 0)
@@ -47,6 +51,7 @@ Chunk::Chunk( unsigned int  id_in,
 
    valid           = false;
    changed         = false;
+   changed_new     = false;
    first_populated = true;
 
    /*
@@ -163,6 +168,13 @@ bool Chunk::position_in_chunk( float *position_in)
    return false;
 }
 
+void Chunk::save_prev_abs_pos_id( void )
+{
+   prev_abs_pos_id_new[0] = abs_pos_id[0];
+   prev_abs_pos_id_new[1] = abs_pos_id[1];
+   prev_abs_pos_id_new[2] = abs_pos_id[2];
+}
+
 /*
 ** function name: move from Chunk 
 **
@@ -194,10 +206,12 @@ void Chunk::move( int x, int y, int z, Queue* queue )
                                 << std::endl;
 #endif
 
+#if 0
    if ( valid )
    {
       populate( queue );
    }
+#endif
 
    valid      = false;
    reassigned = true;
