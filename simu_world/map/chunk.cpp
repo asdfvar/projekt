@@ -51,14 +51,13 @@ Chunk::Chunk( unsigned int  id_in,
 
    valid           = false;
    changed         = false;
-   changed_new     = false;
    first_populated = true;
 
    /*
    ** Attempt to read from file upon creation
    */
    generate_chunk();
-   valid = true;
+   valid      = true;
    reassigned = false;
 
 }
@@ -173,48 +172,6 @@ void Chunk::save_prev_abs_pos_id( void )
    prev_abs_pos_id_new[0] = abs_pos_id[0];
    prev_abs_pos_id_new[1] = abs_pos_id[1];
    prev_abs_pos_id_new[2] = abs_pos_id[2];
-}
-
-/*
-** function name: move from Chunk 
-**
-** move the chunk a discrete number of chunks
-*/
-void Chunk::move( int x, int y, int z, Queue* queue )
-{
-
-   prev_abs_pos_id[0] = abs_pos_id[0];
-   prev_abs_pos_id[1] = abs_pos_id[1];
-   prev_abs_pos_id[2] = abs_pos_id[2];
-
-   abs_pos_id[0] += x;
-   abs_pos_id[1] += y;
-   abs_pos_id[2] += z;
-
-   position[0] += static_cast<float>(x) * chunk_dim[0];
-   position[1] += static_cast<float>(y) * chunk_dim[1];
-   position[2] += static_cast<float>(z) * chunk_dim[2];
-
-#if 0
-   std::cout << "moving chunk " << prev_abs_pos_id[0] << ", "
-                                << prev_abs_pos_id[1] << ", "
-                                << prev_abs_pos_id[2]
-             << " to "
-                                << abs_pos_id[0] << ", "
-                                << abs_pos_id[1] << ", "
-                                << abs_pos_id[2]
-                                << std::endl;
-#endif
-
-#if 0
-   if ( valid )
-   {
-      populate( queue );
-   }
-#endif
-
-   valid      = false;
-   reassigned = true;
 }
 
 /*

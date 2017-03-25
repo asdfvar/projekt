@@ -40,7 +40,6 @@ class Chunk
       void save_prev_abs_pos_id( void );
 
       bool changed;
-      bool changed_new;
 
    private:
 

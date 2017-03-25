@@ -250,3 +250,28 @@ void Map::shift( int x, int y, int z)
       }
    }
 }
+
+/*
+** function name: move from Chunk 
+**
+** move the chunk a discrete number of chunks
+*/
+void Chunk::move( int x, int y, int z, Queue* queue )
+{
+
+   prev_abs_pos_id[0] = abs_pos_id[0];
+   prev_abs_pos_id[1] = abs_pos_id[1];
+   prev_abs_pos_id[2] = abs_pos_id[2];
+
+   abs_pos_id[0] += x;
+   abs_pos_id[1] += y;
+   abs_pos_id[2] += z;
+
+   position[0] += static_cast<float>(x) * chunk_dim[0];
+   position[1] += static_cast<float>(y) * chunk_dim[1];
+   position[2] += static_cast<float>(z) * chunk_dim[2];
+
+   valid      = false;
+   reassigned = true;
+}
+

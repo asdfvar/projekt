@@ -1,8 +1,6 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#define ENABLE_QUEUE
-
 class QNode
 {
    public:

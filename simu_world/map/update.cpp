@@ -86,7 +86,6 @@ void Chunk::update( Queue* queue )
 void Chunk::populate( Queue* queue )
 {
 
-#ifdef ENABLE_QUEUE
    if ( reassigned )
    {
       int total_chunk_dim = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
@@ -94,7 +93,7 @@ void Chunk::populate( Queue* queue )
 
       for( int k = 0; k < total_chunk_dim; k++) chunk_elements[k] = blocks[k];
 
-      if ( changed_new )
+      if ( changed )
       {
       queue->new_chunk( chunk_elements,
                         prev_abs_pos_id_new[0],
@@ -104,7 +103,6 @@ void Chunk::populate( Queue* queue )
 
       reassigned = false;
    }
-#endif
 
 }
 
@@ -178,8 +176,7 @@ void Chunk::generate_chunk( void )
       create_random();
 //      create_flat();
 //      create_solid();
-      changed         = true;
-      changed_new     = true;
+      changed = true;
    }
    else
    {
@@ -190,7 +187,6 @@ void Chunk::generate_chunk( void )
                                      << std::endl;
 #endif
       changed         = false;
-      changed_new     = false;
       first_populated = false;
    }
 }
