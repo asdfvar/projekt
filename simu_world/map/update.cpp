@@ -58,6 +58,7 @@ void Chunk::update( Queue* queue )
       /*
       ** Attempt to read from file
       */
+      // TODO: check if the queue is in process to be written to file first
       generate_chunk();
 
       valid = true;
@@ -159,13 +160,16 @@ void Chunk::generate_chunk( void )
    }
    chunk_name += id_str.str();
 
-   if( !fio::read( chunk_name,       // path and file name included
+   int file_exists =
+         fio::read( chunk_name,       // path and file name included
                    0,                // offset in bytes from the beginning of file
                    (void*)blocks,    // buffer to hold the data
                    chunk_dim[0] *
                       chunk_dim[1] *
                       chunk_dim[2] *
-                      sizeof(chunk_dim[0])) ) // number of bytes to read
+                      sizeof(chunk_dim[0]));
+
+   if( !file_exists ) // number of bytes to read
    {
 #if 0
       std::cout << "new chunk (" << abs_pos_id[0] << ", "

@@ -134,6 +134,7 @@ void Queue::new_chunk( int* chunk_elements,
              << abs_pos_y << ", "
              << abs_pos_z << ")"
              << std::endl;
+
    if( count == 0 )
    {
       first = last = new QNode;
@@ -143,6 +144,7 @@ void Queue::new_chunk( int* chunk_elements,
       last->next  = new QNode;
       last        = last->next;
    }
+
    last->chunk_elements = chunk_elements;
    last->abs_pos_x = abs_pos_x;
    last->abs_pos_y = abs_pos_y;
@@ -152,7 +154,7 @@ void Queue::new_chunk( int* chunk_elements,
 }
 
 /*
-** function: pop from: Queue
+** function name: pop from: Queue
 */
 void Queue::pop( void )
 {
@@ -163,4 +165,21 @@ void Queue::pop( void )
    ** delete will write to file (eventually)
    */
    delete qnode;
+}
+
+/*
+** function name: abs_pos from: Queue
+TODO: rethink this
+*/
+int Queue::abs_pos( int dim )
+{
+
+   if ( count > 0 )
+   {
+      if ( dim == 0) return first->abs_pos_x;
+      if ( dim == 1) return first->abs_pos_y;
+      if ( dim == 2) return first->abs_pos_z;
+   }
+
+   return 0;
 }
