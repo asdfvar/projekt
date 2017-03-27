@@ -160,7 +160,7 @@ void Chunk::generate_chunk( void )
    }
    chunk_name += id_str.str();
 
-   int file_exists =
+   bool file_exists =
          fio::read( chunk_name,       // path and file name included
                    0,                // offset in bytes from the beginning of file
                    (void*)blocks,    // buffer to hold the data

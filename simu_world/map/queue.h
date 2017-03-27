@@ -27,9 +27,6 @@ class Queue
                       int  abs_pos_y,
                       int  abs_pos_z );
 
-      int abs_pos( int );
-
-      void pop( void );
       void write_chunk( void );
 
    private:

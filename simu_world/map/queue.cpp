@@ -152,34 +152,3 @@ void Queue::new_chunk( int* chunk_elements,
 
    count++;
 }
-
-/*
-** function name: pop from: Queue
-*/
-void Queue::pop( void )
-{
-   QNode* qnode = first;
-   if (first != last) first = first->next;
-
-   /*
-   ** delete will write to file (eventually)
-   */
-   delete qnode;
-}
-
-/*
-** function name: abs_pos from: Queue
-TODO: rethink this
-*/
-int Queue::abs_pos( int dim )
-{
-
-   if ( count > 0 )
-   {
-      if ( dim == 0) return first->abs_pos_x;
-      if ( dim == 1) return first->abs_pos_y;
-      if ( dim == 2) return first->abs_pos_z;
-   }
-
-   return 0;
-}
