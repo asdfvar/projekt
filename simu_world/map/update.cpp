@@ -8,12 +8,6 @@
 ** function name: update from: Map
 ** Update chunks from the IO thread
 **
-** TODO: create a queueing system where
-**       chunks that are to be written to file
-**       are copied to a queue and the chunks
-**       in the queue are written to file. chunks
-**       that attempt to read from file that is
-**       not yet written to must wait
 */
 void Map::update( void )
 {
@@ -39,6 +33,12 @@ void Map::update( void )
          }
       }
    }
+
+   /* TODO: create logic to have the queue manage reading data from
+   **       disc as well and have the chunks pop the data off the queue
+   **       when they are ready to read them. eventually, make the above
+   **       read-operation OBE
+   */
 
 }
 
