@@ -16,7 +16,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    num_chunks[0] = 13;
    num_chunks[1] = 13;
    num_chunks[2] = 13;
-   int total_local_grid_size = num_chunks[0] * num_chunks[1] * num_chunks[2];
+   int total_num_chunks = num_chunks[0] * num_chunks[1] * num_chunks[2];
 
    chunks = new Chunks( num_chunks );
 
@@ -54,7 +54,12 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    */
    int ind;
    int num_chunk_elements[3] = { 5, 5, 5 };
+   int total_num_chunk_elements = num_chunk_elements[0] *
+                                  num_chunk_elements[1] *
+                                  num_chunk_elements[2];
    int abs_pos_id[3];
+
+   blocks = new int[ total_num_chunks * total_num_chunk_elements ];
 
    for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
    {
@@ -80,10 +85,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    chunks->set_base();
 
-   int total_num_chunk_elements = num_chunk_elements[0] *
-                                  num_chunk_elements[1] *
-                                  num_chunk_elements[2];
-
    queue = new Queue( total_num_chunk_elements );
 
    // wait for the IO thread to have finished its initialization before continuing
@@ -98,6 +99,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 */
 Map::~Map(void)
 {
+   delete blocks;
    delete chunks;
    delete queue;
 

@@ -63,6 +63,8 @@ class Map
 
       Chunks* chunks;
 
+      int* blocks;
+
       float* vertices;
 
 };
