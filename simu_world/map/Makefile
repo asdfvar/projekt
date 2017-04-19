@@ -13,6 +13,7 @@ OBJ = map.o          \
       render_chunk.o \
       update.o       \
       queue.o        \
+      read_chunk.o   \
 #
 
 LIBEXE = libmap.a
@@ -45,4 +46,7 @@ update.o: update.cpp
 	$(CPPC) $(INC) $^ -c
 
 queue.o: queue.cpp
+	$(CPPC) $(INC) $^ -c
+
+read_chunk.o: read_chunk.cpp
 	$(CPPC) $(INC) $^ -c

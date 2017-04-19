@@ -58,7 +58,6 @@ void Chunk::update( Queue* queue )
       /*
       ** Attempt to read from file
       */
-      // TODO: check if the queue is in process to be written to file first
       generate_chunk();
 
       valid = true;
@@ -83,30 +82,36 @@ void Chunk::update( Queue* queue )
 
 /*
 ** function name: populate from: Chunk
+**
 */
 void Chunk::populate( Queue* queue )
 {
 
    if ( reassigned )
    {
-      int total_chunk_dim = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
-      int* chunk_elements = new int[total_chunk_dim];
+      int  total_chunk_dim = chunk_dim[0] * chunk_dim[1] * chunk_dim[2];
+      int* chunk_elements  = new int[total_chunk_dim];
 
       for( int k = 0; k < total_chunk_dim; k++) chunk_elements[k] = blocks[k];
 
       if ( changed )
       {
-      queue->new_chunk( chunk_elements,
-                        prev_abs_pos_id_new[0],
-                        prev_abs_pos_id_new[1],
-                        prev_abs_pos_id_new[2] );
+         queue->new_chunk( chunk_elements,
+                           prev_abs_pos_id_new[0],
+                           prev_abs_pos_id_new[1],
+                           prev_abs_pos_id_new[2] );
       }
 
       reassigned = false;
    }
 
+   prev_abs_pos_id_new[0] = abs_pos_id[0];
+   prev_abs_pos_id_new[1] = abs_pos_id[1];
+   prev_abs_pos_id_new[2] = abs_pos_id[2];
+
 }
 
+// TODO: remove this
 /*
 ** function name: generate_chunk from Chunk
 */
@@ -171,12 +176,6 @@ void Chunk::generate_chunk( void )
 
    if( !file_exists ) // number of bytes to read
    {
-#if 0
-      std::cout << "new chunk (" << abs_pos_id[0] << ", "
-                                 << abs_pos_id[1] << ", "
-                                 << abs_pos_id[2] << ")"
-                                 << std::endl;
-#endif
       create_random();
 //      create_flat();
 //      create_solid();
@@ -184,12 +183,6 @@ void Chunk::generate_chunk( void )
    }
    else
    {
-#if 0
-      std::cout << "reading chunk (" << abs_pos_id[0] << ", "
-                                     << abs_pos_id[1] << ", "
-                                     << abs_pos_id[2] << ")"
-                                     << std::endl;
-#endif
       changed         = false;
       first_populated = false;
    }

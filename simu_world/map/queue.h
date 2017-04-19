@@ -4,7 +4,12 @@
 class QNode
 {
    public:
+
       void write_chunk( int num_chunk_elements );
+
+// TODO:
+//   private:
+
       int* chunk_elements;
       QNode* next;
      ~QNode( void );

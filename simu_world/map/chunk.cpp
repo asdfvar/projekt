@@ -62,6 +62,7 @@ Chunk::Chunk( unsigned int  id_in,
 
 }
 
+// TODO: remove this
 /*
 ** function name: create_random from: Chunk 
 */
@@ -165,13 +166,6 @@ bool Chunk::position_in_chunk( float *position_in)
    }
 
    return false;
-}
-
-void Chunk::save_prev_abs_pos_id( void )
-{
-   prev_abs_pos_id_new[0] = abs_pos_id[0];
-   prev_abs_pos_id_new[1] = abs_pos_id[1];
-   prev_abs_pos_id_new[2] = abs_pos_id[2];
 }
 
 /*

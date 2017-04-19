@@ -37,7 +37,6 @@ class Chunk
       bool is_valid( void );
       void set_color( float *color_in );
       void get_color( float *color_out );
-      void save_prev_abs_pos_id( void );
 
       bool changed;
 

@@ -244,7 +244,6 @@ void Map::shift( int x, int y, int z)
                                               z_dir );
 
             this_chunk->populate( queue );
-            this_chunk->save_prev_abs_pos_id();
 
          }
       }
