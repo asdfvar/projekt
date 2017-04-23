@@ -13,6 +13,94 @@ void Map::map_shift( float *position )
 {
    int virtual_grid[3] = { -1, -1, -1 };
 
+// TODO: finish the rest of this
+#ifdef BLOCKS
+
+   // TODO: properly handle this
+   int buf[1000];
+
+   float displacement_x = position[0] - map_pos_x;
+
+   if (displacement_x > chunk_dim_x)
+   {
+      // Shift the blocks back modulo the chunk_dim_x
+      for (int k = 0; k < dim_z; k++)
+      {
+         for (int j = 0; j < dim_y; j++)
+         {
+            for (int i = 0; i < chunk_dim_x; i++)
+            {
+               buf[i] = blocks[ i                 +
+                                j * dim_x         +
+                                k * dim_x * dim_y ];
+            }
+      
+            for (int i = 0; i < dim_x - chunk_dim_x; i++)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y   ] =
+
+                       blocks[ i                 +
+                               j * dim_x         +
+                               k * dim_x * dim_y +
+                               chunk_dim_x         ];
+            }
+
+            for (int ind = 0, i = dim_x - chunk_dim_x; i < dim_x; i++, ind++)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y ] = buf[ind];
+            }
+         }
+      }
+
+      // move the blocks, as a whole, appropriately
+      map_pos_x += (float)chunk_dim_x;
+   }
+
+   else if (displacement_x < 0.0f)
+   {
+      // Shift the blocks forward modulo the chunk_dim_x
+      for (int k = 0; k < dim_z; k++)
+      {
+         for (int j = 0; j < dim_y; j++)
+         {
+            for (int ind = 0, i = dim_x - chunk_dim_x; i < dim_x; i++, ind++)
+            {
+               buf[ind] = blocks[ i                 +
+                                  j * dim_x         +
+                                  k * dim_x * dim_y ];
+            }
+      
+            for (int i = dim_x - 1; i >= chunk_dim_x; i--)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y ] =
+
+                       blocks[ i                 +
+                               j * dim_x         +
+                               k * dim_x * dim_y -
+                               chunk_dim_x        ];
+            }
+
+            for (int i = 0; i < chunk_dim_x; i++)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y ] = buf[i];
+            }
+         }
+      }
+
+      // move the blocks, as a whole, appropriately
+      map_pos_x -= (float)chunk_dim_x;
+   }
+
+#endif
+
    /*
    ** find which chunk (virtual location) the position is at
    */

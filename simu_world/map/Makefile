@@ -2,8 +2,10 @@ BASE  = ../
 
 CPPC  = g++
 CL    = ar rcs
-FLAGS = -O3 -Wall -lGL -lGLU -lglut
+FLAGS = -O3 -Wall
+DIRECTIVE_FLAGS = #-DBLOCKS
 INC   = -I$(BASE)/kernels/ \
+#
 
 OBJ = map.o          \
       chunk.o        \
@@ -25,28 +27,28 @@ clean:
 	rm $(OBJ) $(LIBEXE)
 
 map.o: map.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 chunk.o: chunk.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 chunks.o: chunks.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 access_chunk.o: access_chunk.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 shift.o: shift.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 render_chunk.o: render_chunk.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 update.o: update.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 queue.o: queue.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 read_chunk.o: read_chunk.cpp
-	$(CPPC) $(INC) $^ -c
+	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)

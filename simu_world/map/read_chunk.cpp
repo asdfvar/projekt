@@ -4,8 +4,7 @@
 #include <sstream>
 #include <cstdlib>
 
-static void create_random( int* blocks,
-                           int  num_chunk_elements )
+void create_random( int* blocks, int  num_chunk_elements )
 {
    for (int ind = 0; ind < num_chunk_elements; ind++)
    {

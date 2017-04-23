@@ -219,7 +219,7 @@ void Simu_world_obj::idle( void )
                            y_offset,
                            3.5f );
    
-         user.set_direction( direction);
+         user.set_direction( direction );
       
          ogl::warp_pointer( window_center_x, window_center_y );
 
@@ -228,7 +228,7 @@ void Simu_world_obj::idle( void )
          */
          float user_position[3];
 
-         user.get_position( user_position);
+         user.get_position( user_position );
          map->map_shift( user_position );
 
          text.populate("user position: ");
@@ -246,7 +246,7 @@ void Simu_world_obj::idle( void )
                                     (int)floorf(user_position[1]),
                                     (int)floorf(user_position[2]) };
 
-         map->diagnostics( i_user_position, &text);
+         map->diagnostics( i_user_position, &text );
 
          text.done_editing();
 

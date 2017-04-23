@@ -35,6 +35,40 @@ void Map::render_chunk( User *user)
    num_chunk_elements[1] = chunk->get_dimension( 1 );
    num_chunk_elements[2] = chunk->get_dimension( 2 );
 
+#ifdef BLOCKS
+   int total_dim = dim_x * dim_y * dim_z;
+
+   // iterate through all the blocks
+   for (int block_ind = 0, block_ind_z = 0; block_ind_z < dim_z; block_ind_z++)
+   {
+      for (int block_ind_y = 0; block_ind_y < dim_y; block_ind_y++)
+      {
+         for (int block_ind_x = 0; block_ind_x < dim_x; block_ind_x++, block_ind++)
+         {
+            int block = blocks[ block_ind ];
+            if ( block == 0 ) continue;
+
+            block_position[0] = (float)(block_ind_x - dim_x/2) + map_pos_x;
+            block_position[1] = (float)(block_ind_y - dim_y/2) + map_pos_y;
+            block_position[2] = (float)(block_ind_z - dim_z/2) + map_pos_z;
+
+            float color[3] = { 1.0f, 1.0f, 1.0f };
+
+            int sides = DRAW_TOP  | DRAW_BOTTOM | DRAW_RIGHT |
+                        DRAW_LEFT | DRAW_BACK   | DRAW_FRONT;
+
+            draw_block( block_position,
+                        user_position,
+                        user_direction,
+                        window_distance,
+                        window_width,
+                        sides,
+                        rot,
+                        color );
+         }
+      }
+   }
+#else
    // iterate through all the chunks
    for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
    {
@@ -152,4 +186,5 @@ void Map::render_chunk( User *user)
          }
       }
    }
+#endif
 }

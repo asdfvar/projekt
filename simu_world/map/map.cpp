@@ -4,6 +4,7 @@
 #include "draw_block.h"
 #include "fileio.h"
 #include <cmath>
+#include "read_chunk.h"
 
 /*
 ** constructor name: Map
@@ -59,7 +60,23 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
                                   num_chunk_elements[2];
    int abs_pos_id[3];
 
-   blocks = new int[ total_num_chunks * total_num_chunk_elements ];
+   dim_x = num_chunk_elements[0] * num_chunks[0];
+   dim_y = num_chunk_elements[1] * num_chunks[1];
+   dim_z = num_chunk_elements[2] * num_chunks[2];
+
+   chunk_dim_x = num_chunk_elements[0];
+   chunk_dim_y = num_chunk_elements[1];
+   chunk_dim_z = num_chunk_elements[2];
+
+   map_pos_x = 0.0f;
+   map_pos_y = 0.0f;
+   map_pos_z = 0.0f;
+
+   int total_dim = dim_x * dim_y * dim_z;
+
+   blocks = new int[ total_dim ];
+
+   create_random( blocks, total_dim );
 
    for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
    {
@@ -90,7 +107,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
 
-   std::cout << __FILE__ << ":" << __LINE__ << ":finished creating map" << std::endl;
+   std::cout  << "finished creating map" << std::endl;
 
 }
 
@@ -99,9 +116,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 */
 Map::~Map(void)
 {
-   delete blocks;
-   delete chunks;
-   delete queue;
+   delete[] blocks;
+   delete   chunks;
+   delete   queue;
 
    delete[] physical_chunk_id_x;
    delete[] physical_chunk_id_y;
@@ -113,6 +130,9 @@ Map::~Map(void)
 
 }
 
+/*
+** function name: set_phys_chunk_color from: Map
+*/
 void Map::set_phys_chunk_color( int    p_ind_x,
                                 int    p_ind_y,
                                 int    p_ind_z,

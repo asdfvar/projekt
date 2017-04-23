@@ -64,6 +64,17 @@ class Map
       Chunks* chunks;
 
       int* blocks;
+      int dim_x;
+      int dim_y;
+      int dim_z;
+
+      int chunk_dim_x;
+      int chunk_dim_y;
+      int chunk_dim_z;
+
+      float map_pos_x;
+      float map_pos_y;
+      float map_pos_z;
 
       float* vertices;
 
