@@ -78,6 +78,8 @@ class Map
 
       float* vertices;
 
+      float* buf;
+
 };
 
 #endif

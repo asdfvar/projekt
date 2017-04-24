@@ -48,9 +48,9 @@ void Map::render_chunk( User *user)
             int block = blocks[ block_ind ];
             if ( block == 0 ) continue;
 
-            block_position[0] = (float)(block_ind_x - dim_x/2) + map_pos_x;
-            block_position[1] = (float)(block_ind_y - dim_y/2) + map_pos_y;
-            block_position[2] = (float)(block_ind_z - dim_z/2) + map_pos_z;
+            block_position[0] = (float)(block_ind_x - dim_x / 2) + map_pos_x;
+            block_position[1] = (float)(block_ind_y - dim_y / 2) + map_pos_y;
+            block_position[2] = (float)(block_ind_z - dim_z / 2) + map_pos_z;
 
             float color[3] = { 1.0f, 1.0f, 1.0f };
 

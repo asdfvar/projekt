@@ -240,6 +240,9 @@ void Simu_world_obj::idle( void )
          text.new_line();
          text.populate("frame time: ");
          text.populate( time_manager->get_time_step_actual() );
+         text.populate(", ");
+         text.populate( 1.0f / time_manager->get_time_step_actual() );
+         text.populate(" Hz");
          text.new_line();
 
          int i_user_position[3] = { (int)floorf(user_position[0]),

@@ -3,7 +3,7 @@ BASE  = ../
 CPPC  = g++
 CL    = ar rcs
 FLAGS = -O3 -Wall
-DIRECTIVE_FLAGS = #-DBLOCKS
+DIRECTIVE_FLAGS = -DBLOCKS
 INC   = -I$(BASE)/kernels/ \
 #
 

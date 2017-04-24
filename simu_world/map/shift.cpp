@@ -17,7 +17,6 @@ void Map::map_shift( float *position )
 #ifdef BLOCKS
 
    // TODO: properly handle this
-   int buf[1000];
 
    float displacement_x = position[0] - map_pos_x;
 
@@ -97,6 +96,55 @@ void Map::map_shift( float *position )
 
       // move the blocks, as a whole, appropriately
       map_pos_x -= (float)chunk_dim_x;
+   }
+
+   float displacement_y = position[1] - map_pos_y;
+
+   if (displacement_y > chunk_dim_y)
+   {
+      for (int k = 0; k < dim_z; k++)
+      {
+         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
+         {
+            for (int i = 0; i < dim_x; i++, ind++)
+            {
+               buf[ind] = blocks[ind +
+                                 k * dim_x * dim_y];
+            }
+         }
+
+         for (int j = 0; j < dim_y - chunk_dim_y; j++)
+         {
+            for (int i = 0; i < dim_x; i++)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y ] =
+                  blocks[ i                 +
+                          j * dim_x         +
+                          k * dim_x * dim_y +
+                          chunk_dim_y * dim_x ];
+            }
+         }
+
+         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
+         {
+            for (int i = 0; i < dim_x; i++, ind++)
+            {
+               blocks[ i +
+                       j * dim_x +
+                       k * dim_x * dim_y +
+                       (dim_y - chunk_dim_y) * dim_x] = buf[ind];
+            }
+         }
+
+      }
+
+      // move the blocks, as a whole, appropriately
+      map_pos_y += (float)chunk_dim_y;
+   }
+   else if (displacement_y < 0.0f)
+   {
    }
 
 #endif

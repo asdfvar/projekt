@@ -102,6 +102,13 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    chunks->set_base();
 
+   int max_chunk_elements = (num_chunk_elements[0] > num_chunk_elements[1]) ? num_chunk_elements[0] : num_chunk_elements[1];
+   if (max_chunk_elements < num_chunk_elements[2]) max_chunk_elements = num_chunk_elements[2];
+   int max_dim = (dim_x > dim_y) ? dim_x : dim_y;
+   if (max_dim < dim_z) max_dim = dim_z;
+
+   buf = new float[ max_dim * max_dim * max_chunk_elements ];
+
    queue = new Queue( total_num_chunk_elements );
 
    // wait for the IO thread to have finished its initialization before continuing
@@ -117,6 +124,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 Map::~Map(void)
 {
    delete[] blocks;
+   delete[] buf;
    delete   chunks;
    delete   queue;
 
