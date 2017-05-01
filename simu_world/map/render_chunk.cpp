@@ -4,8 +4,9 @@
 
 /*
 ** function name: render_chunk from: Map
+TODO: remove dependence on "User"
 */
-void Map::render_chunk( User *user)
+void Map::render_chunk( User *user )
 {
    float block_position[3];
 
@@ -45,17 +46,68 @@ void Map::render_chunk( User *user)
       {
          for (int block_ind_x = 0; block_ind_x < dim_x; block_ind_x++, block_ind++)
          {
+
             int block = blocks[ block_ind ];
             if ( block == 0 ) continue;
 
+            // absolute block position
             block_position[0] = (float)(block_ind_x - dim_x / 2) + map_pos_x;
             block_position[1] = (float)(block_ind_y - dim_y / 2) + map_pos_y;
             block_position[2] = (float)(block_ind_z - dim_z / 2) + map_pos_z;
 
             float color[3] = { 1.0f, 1.0f, 1.0f };
 
-            int sides = DRAW_TOP  | DRAW_BOTTOM | DRAW_RIGHT |
-                        DRAW_LEFT | DRAW_BACK   | DRAW_FRONT;
+            int sides = 0;
+
+            if (blocks[ std::min(block_ind + 1, total_dim) ] <= 0)
+            {
+               sides |= DRAW_FRONT;
+            }
+            if (blocks[ std::max(block_ind - 1, 0) ] <= 0)
+            {
+               sides |= DRAW_BACK;
+            }
+            if (blocks[ std::min(block_ind + dim_x, total_dim) ] <= 0)
+            {
+               sides |= DRAW_LEFT;
+            }
+            if (blocks[ std::max(block_ind - dim_x, 0) ] <= 0)
+            {
+               sides |= DRAW_RIGHT;
+            }
+            if (blocks[ std::min(block_ind + dim_x * dim_y, total_dim) ] <= 0)
+            {
+               sides |= DRAW_TOP;
+            }
+            if (blocks[ std::max(block_ind - dim_x * dim_y, 0) ] <= 0)
+            {
+               sides |= DRAW_BOTTOM;
+            }
+
+            if (block_position[0] > user_position[0])
+            {
+               sides &= ~DRAW_FRONT;
+            }
+            if (block_position[1] > user_position[1])
+            {
+               sides &= ~DRAW_LEFT;
+            }
+            if (block_position[2] > user_position[2])
+            {
+               sides &= ~DRAW_TOP;
+            }
+            if (block_position[0] < user_position[0])
+            {
+               sides &= ~DRAW_BACK;
+            }
+            if (block_position[1] < user_position[1])
+            {
+               sides &= ~DRAW_RIGHT;
+            }
+            if (block_position[2] < user_position[2])
+            {
+               sides &= ~DRAW_BOTTOM;
+            }
 
             draw_block( block_position,
                         user_position,
