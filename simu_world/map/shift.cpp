@@ -108,8 +108,8 @@ void Map::map_shift( float *position )
          {
             for (int i = 0; i < dim_x; i++, ind++)
             {
-               buf[ind] = blocks[ind +
-                                 k * dim_x * dim_y];
+               buf[ind] = blocks[ ind +
+                                  k * dim_x * dim_y ];
             }
          }
 
@@ -131,10 +131,10 @@ void Map::map_shift( float *position )
          {
             for (int i = 0; i < dim_x; i++, ind++)
             {
-               blocks[ i +
-                       j * dim_x +
+               blocks[ i                 +
+                       j * dim_x         +
                        k * dim_x * dim_y +
-                       (dim_y - chunk_dim_y) * dim_x] = buf[ind];
+                       (dim_y - chunk_dim_y) * dim_x ] = buf[ind];
             }
          }
 
@@ -145,6 +145,46 @@ void Map::map_shift( float *position )
    }
    else if (displacement_y < 0.0f)
    {
+      for (int k = 0; k < dim_z; k++)
+      {
+         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
+         {
+            for (int i = 0; i < dim_x; i++, ind++)
+            {
+               buf[ind] = blocks[ i                 +
+                                  j * dim_x         +
+                                  k * dim_x * dim_y +
+                                  (dim_y - chunk_dim_y) * dim_x ];
+            }
+         }
+
+         for (int j = dim_y - 1; j >= chunk_dim_y; j--)
+         {
+            for (int i = 0; i < dim_x; i++)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y ] =
+
+                  blocks[ i                 +
+                          j * dim_x         +
+                          k * dim_x * dim_y -
+                          chunk_dim_y * dim_x ];
+            }
+         }
+
+         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
+         {
+            for (int i = 0; i < dim_x; i++, ind++)
+            {
+               blocks[ i                 +
+                       j * dim_x         +
+                       k * dim_x * dim_y ] = buf[ind];
+            }
+         }
+      }
+      // move the blocks, as a whole, appropriately
+      map_pos_y -= (float)chunk_dim_y;
    }
 
 #endif

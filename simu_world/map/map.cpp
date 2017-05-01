@@ -14,10 +14,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    IO_barrier = IO_barrier_in;
 
-   num_chunks[0] = 13;
-   num_chunks[1] = 13;
-   num_chunks[2] = 13;
-   int total_num_chunks = num_chunks[0] * num_chunks[1] * num_chunks[2];
+   num_chunks[0] = 5;
+   num_chunks[1] = 5;
+   num_chunks[2] = 5;
 
    chunks = new Chunks( num_chunks );
 
@@ -53,7 +52,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    /*
    ** build the chunks
    */
-   int ind;
    int num_chunk_elements[3] = { 5, 5, 5 };
    int total_num_chunk_elements = num_chunk_elements[0] *
                                   num_chunk_elements[1] *
