@@ -13,7 +13,6 @@ void Map::map_shift( float *position )
 {
    int virtual_grid[3] = { -1, -1, -1 };
 
-// TODO: finish the rest of this
 #ifdef BLOCKS
 
    // TODO: properly handle this
