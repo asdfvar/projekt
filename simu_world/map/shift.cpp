@@ -187,6 +187,72 @@ void Map::map_shift( float *position )
       map_pos_y -= (float)chunk_dim_y;
    }
 
+   float displacement_z = position[2] - map_pos_z;
+
+   if (displacement_z > chunk_dim_z)
+   {
+      int dim_xy = dim_x * dim_y;
+
+      for (int k = 0, ind = 0; k < chunk_dim_z; k++)
+      {
+         for ( int ij = 0; ij < dim_xy; ij++, ind++)
+         {
+            buf[ind] = blocks[ind];
+         }
+      }
+
+      for (int k = 0; k < dim_z - chunk_dim_z; k++)
+      {
+         for ( int ij = 0; ij < dim_xy; ij++)
+         {
+            blocks[ k * dim_xy + ij ] =
+               blocks[ (k + chunk_dim_z) * dim_xy + ij ];
+         }
+      }
+
+      for (int k = dim_z - chunk_dim_z, ind = 0; k < dim_z; k++)
+      {
+         for ( int ij = 0; ij < dim_xy; ij++, ind++)
+         {
+            blocks[ k * dim_xy + ij ] =
+               buf[ind];
+         }
+      }
+
+      map_pos_z += (float)chunk_dim_z;
+   }
+   else if (displacement_z < 0.0f)
+   {
+      int dim_xy = dim_x * dim_y;
+
+      for (int k = dim_z - chunk_dim_z, ind = 0; k < dim_z; k++)
+      {
+         for (int ij = 0; ij < dim_xy; ij++, ind++)
+         {
+            buf[ind] = blocks[ k * dim_xy + ij ];
+         }
+      }
+
+      for (int k = dim_z - 1; k >= chunk_dim_z; k--)
+      {
+         for (int ij = 0; ij < dim_xy; ij++)
+         {
+            blocks[ k * dim_xy + ij ] =
+               blocks[ (k - chunk_dim_z) * dim_xy + ij ];
+         }
+      }
+
+      for (int k = 0, ind = 0; k < chunk_dim_z; k++)
+      {
+         for (int ij = 0; ij < dim_xy; ij++, ind++)
+         {
+            blocks[ k * dim_xy + ij ] = buf[ind];
+         }
+      }
+
+      map_pos_z -= (float)chunk_dim_z;
+   }
+
 #endif
 
    /*
