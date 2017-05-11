@@ -53,6 +53,11 @@ class Map
       void get_relative_element_position( int* position_in,
                                           int* element_position );
 
+      void set_chunk( int* src,
+                      int chunk_x,
+                      int chunk_y,
+                      int chunk_z );
+
       int *physical_chunk_id_x,
           *physical_chunk_id_y,
           *physical_chunk_id_z;
@@ -64,9 +69,9 @@ class Map
       Chunks* chunks;
 
       int* blocks;
-      int dim_x;
-      int dim_y;
-      int dim_z;
+      int  dim_x;
+      int  dim_y;
+      int  dim_z;
 
       int chunk_dim_x;
       int chunk_dim_y;

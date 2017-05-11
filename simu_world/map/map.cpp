@@ -89,6 +89,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
            abs_pos_id[0] = ind_x;
            abs_pos_id[1] = ind_y;
            abs_pos_id[2] = ind_z;
+
            /*
            ** Create the chunks for this map
            */
@@ -100,7 +101,8 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    chunks->set_base();
 
-   int max_chunk_elements = (num_chunk_elements[0] > num_chunk_elements[1]) ? num_chunk_elements[0] : num_chunk_elements[1];
+   int max_chunk_elements = (num_chunk_elements[0] > num_chunk_elements[1]) ?
+                             num_chunk_elements[0] : num_chunk_elements[1];
    if (max_chunk_elements < num_chunk_elements[2]) max_chunk_elements = num_chunk_elements[2];
    int max_dim = (dim_x > dim_y) ? dim_x : dim_y;
    if (max_dim < dim_z) max_dim = dim_z;
@@ -111,6 +113,13 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
+
+   int junk[125];
+   for (int ind = 0; ind < 125; ind++) junk[ind] = 1;
+   set_chunk( junk,
+              0,
+              0,
+              0 );
 
    std::cout  << "finished creating map" << std::endl;
 
@@ -325,9 +334,32 @@ void Map::debug_info( void )
    int abs_pos_id[3];
    this_chunk->get_abs_pos_id( abs_pos_id );
    std::cout << "absolute chunk position id at center = (" <<
-                 abs_pos_id[0] << ", "            <<
-                 abs_pos_id[1] << ", "            <<
-                 abs_pos_id[2] << ")"             <<
+                 abs_pos_id[0] << ", "                     <<
+                 abs_pos_id[1] << ", "                     <<
+                 abs_pos_id[2] << ")"                      <<
                  std::endl;
 
+}
+
+/*
+** function name: set_chunk from: Map
+*/
+void Map::set_chunk( int* src,
+                     int chunk_x,
+                     int chunk_y,
+                     int chunk_z )
+{
+   int ind = 0;
+   for (int k = chunk_z * chunk_dim_z; k < (chunk_z + 1) * chunk_dim_z; k++)
+   {
+      for (int j = chunk_y * chunk_dim_y; j < (chunk_y + 1) * chunk_dim_y; j++)
+      {
+         for (int i = chunk_x * chunk_dim_x; i < (chunk_x + 1) * chunk_dim_x; i++, ind++)
+         {
+            blocks[ i +
+                    j * dim_x +
+                    k * dim_x * dim_y ] = src[ind];
+         }
+      }
+   }
 }
