@@ -275,7 +275,24 @@ void Map::diagnostics( int *position_in, Text *text)
                                      physical_chunk_position[1],
                                      physical_chunk_position[2]);
 
+#ifdef BLOCKS
+   float block_position[3];
+//FIXME
+int num_chunk_elements[3] = {5, 5, 5};
+   block_position[0] = (float)(position_in[0] % num_chunk_elements[0] + dim_x / 2);
+   block_position[1] = (float)(position_in[1] % num_chunk_elements[1] + dim_y / 2);
+   block_position[2] = (float)(position_in[2] % num_chunk_elements[2] + dim_z / 2);
+
+   int ind = block_position[0] +
+             block_position[1] * dim_x +
+             block_position[2] * dim_x * dim_y;
+//ind = block_position[0];
+
+   int element = blocks[ind];
+//   int element = ind;
+#else
    int element = this_chunk->get_block( element_position );
+#endif
 
    text->new_line();
    text->populate("Chunk element value: ");
@@ -345,9 +362,9 @@ void Map::debug_info( void )
 ** function name: set_chunk from: Map
 */
 void Map::set_chunk( int* src,
-                     int chunk_x,
-                     int chunk_y,
-                     int chunk_z )
+                     int  chunk_x,
+                     int  chunk_y,
+                     int  chunk_z )
 {
    int ind = 0;
    for (int k = chunk_z * chunk_dim_z; k < (chunk_z + 1) * chunk_dim_z; k++)
@@ -359,6 +376,29 @@ void Map::set_chunk( int* src,
             blocks[ i +
                     j * dim_x +
                     k * dim_x * dim_y ] = src[ind];
+         }
+      }
+   }
+}
+
+/*
+** function name: set_chunk from: Map
+*/
+void Map::get_chunk( int* dst,
+                     int  chunk_x,
+                     int  chunk_y,
+                     int  chunk_z )
+{
+   int ind = 0;
+   for (int k = chunk_z * chunk_dim_z; k < (chunk_z + 1) * chunk_dim_z; k++)
+   {
+      for (int j = chunk_y * chunk_dim_y; j < (chunk_y + 1) * chunk_dim_y; j++)
+      {
+         for (int i = chunk_x * chunk_dim_x; i < (chunk_x + 1) * chunk_dim_x; i++, ind++)
+         {
+            dst[ind] = blocks[ i +
+                               j * dim_x +
+                               k * dim_x * dim_y ];
          }
       }
    }

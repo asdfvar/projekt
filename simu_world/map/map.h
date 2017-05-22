@@ -54,9 +54,14 @@ class Map
                                           int* element_position );
 
       void set_chunk( int* src,
-                      int chunk_x,
-                      int chunk_y,
-                      int chunk_z );
+                      int  chunk_x,
+                      int  chunk_y,
+                      int  chunk_z );
+
+      void get_chunk( int* dst,
+                      int  chunk_x,
+                      int  chunk_y,
+                      int  chunk_z );
 
       int *physical_chunk_id_x,
           *physical_chunk_id_y,
