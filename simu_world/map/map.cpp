@@ -14,9 +14,16 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    IO_barrier = IO_barrier_in;
 
-   num_chunks[0] = 13;
-   num_chunks[1] = 13;
-   num_chunks[2] = 13;
+   num_chunks[0] = 3;
+   num_chunks[1] = 3;
+   num_chunks[2] = 3;
+
+   /*
+   ** build the chunks
+   */
+   num_chunk_elements[0] = 3;
+   num_chunk_elements[1] = 3;
+   num_chunk_elements[2] = 3;
 
    chunks = new Chunks( num_chunks );
 
@@ -49,10 +56,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    */
    fio::directory();
 
-   /*
-   ** build the chunks
-   */
-   int num_chunk_elements[3] = { 5, 5, 5 };
    int total_num_chunk_elements = num_chunk_elements[0] *
                                   num_chunk_elements[1] *
                                   num_chunk_elements[2];
@@ -114,11 +117,28 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
 
+//FIXME
+for (int ind = 0; ind < total_dim; ind++) blocks[ind] = 0;
    int junk[125];
    for (int ind = 0; ind < 125; ind++) junk[ind] = 1;
    set_chunk( junk,
               0,
               0,
+              0 );
+   for (int ind = 0; ind < 125; ind++) junk[ind] = 2;
+   set_chunk( junk,
+              1,
+              0,
+              0 );
+   for (int ind = 0; ind < 125; ind++) junk[ind] = 3;
+   set_chunk( junk,
+              2,
+              0,
+              0 );
+   for (int ind = 0; ind < 125; ind++) junk[ind] = 4;
+   set_chunk( junk,
+              0,
+              1,
               0 );
 
    std::cout  << "finished creating map" << std::endl;
@@ -273,23 +293,29 @@ void Map::diagnostics( int *position_in, Text *text)
    
    Chunk *this_chunk = access_chunk( physical_chunk_position[0],
                                      physical_chunk_position[1],
-                                     physical_chunk_position[2]);
+                                     physical_chunk_position[2] );
 
 #ifdef BLOCKS
-   float block_position[3];
-//FIXME
-int num_chunk_elements[3] = {5, 5, 5};
-   block_position[0] = (float)(position_in[0] % num_chunk_elements[0] + dim_x / 2);
-   block_position[1] = (float)(position_in[1] % num_chunk_elements[1] + dim_y / 2);
-   block_position[2] = (float)(position_in[2] % num_chunk_elements[2] + dim_z / 2);
+   int block_position[3];
+   block_position[0] = (position_in[0] % num_chunk_elements[0] + num_chunk_elements[0]) % num_chunk_elements[0] + num_chunk_elements[0] * (num_chunks[0] / 2);
+   block_position[1] = (position_in[1] % num_chunk_elements[1] + num_chunk_elements[1]) % num_chunk_elements[1] + num_chunk_elements[1] * (num_chunks[1] / 2);
+   block_position[2] = (position_in[2] % num_chunk_elements[2] + num_chunk_elements[2]) % num_chunk_elements[2] + num_chunk_elements[2] * (num_chunks[2] / 2);
 
    int ind = block_position[0] +
              block_position[1] * dim_x +
              block_position[2] * dim_x * dim_y;
-//ind = block_position[0];
+
+   text->new_line();
+   text->populate("block index: ");
+   text->populate( ind );
+   text->populate(" = ");
+   text->populate( block_position[0] );
+   text->populate(", ");
+   text->populate( block_position[1] );
+   text->populate(", ");
+   text->populate( block_position[2] );
 
    int element = blocks[ind];
-//   int element = ind;
 #else
    int element = this_chunk->get_block( element_position );
 #endif

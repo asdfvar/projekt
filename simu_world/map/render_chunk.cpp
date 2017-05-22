@@ -47,15 +47,32 @@ void Map::render_chunk( User *user )
          for (int block_ind_x = 0; block_ind_x < dim_x; block_ind_x++, block_ind++)
          {
 
+            float color[3] = { 1.0f, 1.0f, 1.0f };
+
             int block = blocks[ block_ind ];
             if ( block == 0 ) continue;
 
-            // absolute block position
-            block_position[0] = (float)(block_ind_x - dim_x / 2) + map_pos_x;
-            block_position[1] = (float)(block_ind_y - dim_y / 2) + map_pos_y;
-            block_position[2] = (float)(block_ind_z - dim_z / 2) + map_pos_z;
+            if ( block == 1 )
+            {
+               color[0] = 1.0f; color[1] = 1.0f; color[2] = 1.0f;
+            }
+            else if ( block == 2 )
+            {
+               color[0] = 1.0f; color[1] = 0.0f; color[2] = 0.0f;
+            }
+            else if ( block == 3 )
+            {
+               color[0] = 0.0f; color[1] = 1.0f; color[2] = 0.0f;
+            }
+            else if ( block == 4 )
+            {
+               color[0] = 0.0f; color[1] = 0.0f; color[2] = 1.0f;
+            }
 
-            float color[3] = { 1.0f, 1.0f, 1.0f };
+            // absolute block position
+            block_position[0] = (float)(block_ind_x - num_chunks[0] / 2 * num_chunk_elements[0]) + map_pos_x;
+            block_position[1] = (float)(block_ind_y - num_chunks[1] / 2 * num_chunk_elements[1]) + map_pos_y;
+            block_position[2] = (float)(block_ind_z - num_chunks[2] / 2 * num_chunk_elements[2]) + map_pos_z;
 
             int sides = 0;
 

@@ -33,7 +33,7 @@ Chunk::Chunk( unsigned int  id_in,
    {
       if (chunk_dim_in[ind] % 2 == 0)
       {
-         std::cout << "Chunk dimension must be odd" << std::endl;
+         std::cout << "Chunk dimension " << chunk_dim_in[ind] << " must be odd" << std::endl;
       }
    }
 
