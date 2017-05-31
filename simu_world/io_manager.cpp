@@ -5,7 +5,7 @@
 /*
 ** function name: io_manager
 */
-void *io_manager( void *args_in )
+void* io_manager( void *args_in )
 {
 
    ARGS *args = (ARGS*)args_in;
