@@ -44,7 +44,7 @@ class Chunk
 
       // Parameters:
       int         *blocks;
-      unsigned int chunk_dim[3];
+      int          chunk_dim[3];
       unsigned int id;
       float        position[3];
       int          abs_pos_id[3];

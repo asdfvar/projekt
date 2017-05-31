@@ -11,9 +11,9 @@ Chunks::Chunks( int* size_in )
 
    all_nodes = new Node*[total_size];
 
-   Node* node;
-   Node* row;
-   Node* vert;
+   Node* node = NULL;
+   Node* row  = NULL;
+   Node* vert = NULL;
 
    base_node = new Node;
    vert      = base_node;

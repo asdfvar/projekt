@@ -12,10 +12,6 @@ void Map::render_chunk( float* user_position,
 {
    float block_position[3];
 
-   int mid_chunk[3] = { num_chunks[0] / 2,
-                        num_chunks[1] / 2,
-                        num_chunks[2] / 2 };
-
    float rot[9];
    rotation( user_direction,
              rot );
@@ -131,6 +127,10 @@ void Map::render_chunk( float* user_position,
       }
    }
 #else
+   int mid_chunk[3] = { num_chunks[0] / 2,
+                        num_chunks[1] / 2,
+                        num_chunks[2] / 2 };
+
    // iterate through all the chunks
    for (int chunk_ind_z = 0; chunk_ind_z < num_chunks[2]; chunk_ind_z++)
    {
