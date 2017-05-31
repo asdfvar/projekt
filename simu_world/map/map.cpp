@@ -14,16 +14,16 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    IO_barrier = IO_barrier_in;
 
-   num_chunks[0] = 3;
-   num_chunks[1] = 3;
-   num_chunks[2] = 3;
+   num_chunks[0] = 5;
+   num_chunks[1] = 5;
+   num_chunks[2] = 5;
 
    /*
    ** build the chunks
    */
-   num_chunk_elements[0] = 3;
-   num_chunk_elements[1] = 3;
-   num_chunk_elements[2] = 3;
+   num_chunk_elements[0] = 13;
+   num_chunk_elements[1] = 13;
+   num_chunk_elements[2] = 13;
 
    chunks = new Chunks( num_chunks );
 
@@ -75,9 +75,16 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    int total_dim = dim_x * dim_y * dim_z;
 
-   blocks = new int[ total_dim ];
+   int max_chunk_elements = (num_chunk_elements[0] > num_chunk_elements[1]) ?
+                             num_chunk_elements[0] : num_chunk_elements[1];
+   if (max_chunk_elements < num_chunk_elements[2]) max_chunk_elements = num_chunk_elements[2];
 
-   create_random( blocks, total_dim );
+   int max_dim = (dim_x > dim_y) ? dim_x : dim_y;
+   if (max_dim < dim_z) max_dim = dim_z;
+
+   blocks  = new int[ total_dim ];
+   buf     = new float[ max_dim * max_dim * max_chunk_elements ];
+   int_buf = new int[ total_num_chunk_elements ];
 
    for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
    {
@@ -98,48 +105,20 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
            */
            chunks->insert_chunk( new Chunk(ind, abs_pos_id, num_chunk_elements, position) );
 
+           create_random( int_buf, total_num_chunk_elements );
+
+           set_chunk( int_buf, i, j, k );
+
          }
       }
    }
 
    chunks->set_base();
 
-   int max_chunk_elements = (num_chunk_elements[0] > num_chunk_elements[1]) ?
-                             num_chunk_elements[0] : num_chunk_elements[1];
-   if (max_chunk_elements < num_chunk_elements[2]) max_chunk_elements = num_chunk_elements[2];
-   int max_dim = (dim_x > dim_y) ? dim_x : dim_y;
-   if (max_dim < dim_z) max_dim = dim_z;
-
-   buf = new float[ max_dim * max_dim * max_chunk_elements ];
-
    queue = new Queue( total_num_chunk_elements );
 
    // wait for the IO thread to have finished its initialization before continuing
    //pthread_barrier_wait( IO_barrier );
-
-//FIXME
-for (int ind = 0; ind < total_dim; ind++) blocks[ind] = 0;
-   int junk[125];
-   for (int ind = 0; ind < 125; ind++) junk[ind] = 1;
-   set_chunk( junk,
-              0,
-              0,
-              0 );
-   for (int ind = 0; ind < 125; ind++) junk[ind] = 2;
-   set_chunk( junk,
-              1,
-              0,
-              0 );
-   for (int ind = 0; ind < 125; ind++) junk[ind] = 3;
-   set_chunk( junk,
-              2,
-              0,
-              0 );
-   for (int ind = 0; ind < 125; ind++) junk[ind] = 4;
-   set_chunk( junk,
-              0,
-              1,
-              0 );
 
    std::cout  << "finished creating map" << std::endl;
 
