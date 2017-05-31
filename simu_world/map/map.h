@@ -6,7 +6,6 @@
 #include <iostream>
 #include <pthread.h>
 #include "opengl_interface.h"
-#include "user.h"
 #include "queue.h"
 #include "text.h"
 
@@ -21,8 +20,13 @@ class Map
      ~Map( void );
 
       void update( void );
+
       void map_shift( float* position );
-      void render_chunk( User *user );
+
+      void render_chunk( float* user_position,
+                         float* user_direction,
+                         float  window_distance,
+                         float  window_width );
 
       Chunk *access_chunk( int v_id_x,
                            int v_id_y,

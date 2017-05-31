@@ -275,7 +275,18 @@ void Simu_world_obj::display( void )
    // clear this openGL buffer
    ogl::opengl_clear();
 
-   map->render_chunk( &user );
+   float user_position[3];
+   float user_direction[3];
+   float window_distance = user.get_window_distance();
+   float window_width    = user.get_window_width();
+
+   user.get_position(  user_position );
+   user.get_direction( user_direction );
+
+   map->render_chunk( user_position,
+                      user_direction,
+                      window_distance,
+                      window_width );
 
    hud::display();
 

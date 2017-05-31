@@ -4,9 +4,11 @@
 
 /*
 ** function name: render_chunk from: Map
-TODO: remove dependence on "User"
 */
-void Map::render_chunk( User *user )
+void Map::render_chunk( float* user_position,
+                        float* user_direction,
+                        float  window_distance,
+                        float  window_width )
 {
    float block_position[3];
 
@@ -14,18 +16,9 @@ void Map::render_chunk( User *user )
                         num_chunks[1] / 2,
                         num_chunks[2] / 2 };
 
-   float user_position[3];
-   user->get_position( user_position );
-
-   float user_direction[3];
-   user->get_direction( user_direction );
-
    float rot[9];
    rotation( user_direction,
              rot );
-
-   float window_distance = user->get_window_distance();
-   float window_width    = user->get_window_width();
 
    // set the current chunk to the base chunk
    chunks->set_base();
