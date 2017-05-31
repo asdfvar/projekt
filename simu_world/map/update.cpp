@@ -138,6 +138,7 @@ void Map::update( void )
 ** chunks are written to file if they leave the field
 ** of view (a.k.a. chunks are reassigned).
 */
+#ifndef BLOCKS
 void Chunk::update( Queue* queue )
 {
 
@@ -167,7 +168,9 @@ void Chunk::update( Queue* queue )
    }
 
 }
+#endif
 
+#ifndef BLOCKS
 /*
 ** function name: populate from: Chunk
 **
@@ -198,6 +201,7 @@ void Chunk::populate( Queue* queue )
    prev_abs_pos_id_new[2] = abs_pos_id[2];
 
 }
+#endif
 
 // TODO: remove this
 /*

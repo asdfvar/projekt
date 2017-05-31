@@ -25,6 +25,10 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    num_chunk_elements[1] = 13;
    num_chunk_elements[2] = 13;
 
+   int total_num_chunk_elements = num_chunk_elements[0] *
+                                  num_chunk_elements[1] *
+                                  num_chunk_elements[2];
+
    chunks = new Chunks( num_chunks );
 
    /*
@@ -56,9 +60,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    */
    fio::directory();
 
-   int total_num_chunk_elements = num_chunk_elements[0] *
-                                  num_chunk_elements[1] *
-                                  num_chunk_elements[2];
    int abs_pos_id[3];
 
    dim_x = num_chunk_elements[0] * num_chunks[0];
@@ -83,6 +84,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    if (max_dim < dim_z) max_dim = dim_z;
 
    blocks  = new int[ total_dim ];
+   io_ids  = new int[ total_num_chunk_elements ];
    buf     = new float[ max_dim * max_dim * max_chunk_elements ];
    int_buf = new int[ total_num_chunk_elements ];
 
@@ -130,6 +132,8 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 Map::~Map(void)
 {
    delete[] blocks;
+   delete[] io_ids;
+   delete[] int_buf;
    delete[] buf;
    delete   chunks;
    delete   queue;

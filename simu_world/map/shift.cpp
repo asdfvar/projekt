@@ -480,11 +480,13 @@ void Map::shift( int x, int y, int z)
          for (int x_dir = 0; x_dir < num_chunks[0]; x_dir++)
          {
 
+#ifndef BLOCKS
             Chunk *this_chunk = access_chunk( x_dir,
                                               y_dir,
                                               z_dir );
 
             this_chunk->populate( queue );
+#endif
 
          }
       }

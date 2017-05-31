@@ -79,6 +79,7 @@ class Map
       Chunks* chunks;
 
       int* blocks;
+      int* io_ids;
       int  dim_x;
       int  dim_y;
       int  dim_z;
