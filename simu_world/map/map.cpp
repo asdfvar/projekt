@@ -85,8 +85,7 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
 
    blocks  = new int[ total_dim ];
    io_ids  = new int[ total_num_chunk_elements ];
-   buf     = new float[ max_dim * max_dim * max_chunk_elements ];
-   int_buf = new int[ total_num_chunk_elements ];
+   buf     = new int[ max_dim * max_dim * max_chunk_elements ];
 
    for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
    {
@@ -107,9 +106,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
            */
            chunks->insert_chunk( new Chunk(ind, abs_pos_id, num_chunk_elements, position) );
 
-           create_random( int_buf, total_num_chunk_elements );
+           create_random( buf, total_num_chunk_elements );
 
-           set_chunk( int_buf, i, j, k );
+           set_chunk( buf, i, j, k );
 
          }
       }
@@ -133,7 +132,6 @@ Map::~Map(void)
 {
    delete[] blocks;
    delete[] io_ids;
-   delete[] int_buf;
    delete[] buf;
    delete   chunks;
    delete   queue;

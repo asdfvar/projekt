@@ -94,8 +94,7 @@ class Map
 
       float* vertices;
 
-      float* buf;
-      int*   int_buf;
+      int* buf;
 
 };
 

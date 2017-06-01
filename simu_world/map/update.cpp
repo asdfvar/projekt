@@ -74,7 +74,7 @@ void Map::update( void )
    bool file_exists =
          fio::read( chunk_name,       // path and file name included
                     0,                // offset in bytes from the beginning of file
-                    (void*)int_buf,   // buffer to hold the data
+                    (void*)buf,       // buffer to hold the data
                     total_num_chunk_el * sizeof(int) );
 
    if( !file_exists ) // number of bytes to read

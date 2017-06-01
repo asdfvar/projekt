@@ -4,6 +4,63 @@
 #include <sstream>
 #include <cstdlib>
 
+std::string create_filename( int   chunk_x,
+                             int   chunk_y,
+                             int   chunk_z )
+{
+
+   std::string filename;
+#ifdef __linux__
+   filename = "saves/chunk_";
+#elif _WIN32
+   filename = "saves\chunk_";
+#else
+   std::cout << __FILE__ << ":" << __LINE__ << ": unknown OS" << std::endl;
+#endif
+
+   std::ostringstream id_str;
+   if (chunk_x < 0)
+   {
+      id_str << -chunk_x;
+      filename += "n";
+   }
+   else
+   {
+      id_str << chunk_x;
+   }
+   filename += id_str.str();
+   filename += "_";
+
+   id_str.clear();
+   id_str.str("");
+   if (chunk_y < 0)
+   {
+      id_str << -chunk_y;
+      filename += "n";
+   }
+   else
+   {
+      id_str << chunk_y;
+   }
+   filename += id_str.str();
+   filename += "_";
+
+   id_str.clear();
+   id_str.str("");
+   if (chunk_z < 0)
+   {
+      id_str << -chunk_z;
+      filename += "n";
+   }
+   else
+   {
+      id_str << chunk_z;
+   }
+   filename += id_str.str();
+
+   return filename;
+}
+
 /*
 ** function name: write_chunk from QNode
 */
@@ -161,22 +218,27 @@ void Queue::new_chunk( int* chunk_elements,
 #endif
 
 #ifdef BLOCKS
-QNode::QNode( const std::string file_in,
-              char*             data_in,
-              int               data_id_in,
-              int               data_size_in )
+QNode::QNode( const std::string& file_in,
+              int*               data_in,
+              int                data_id_in,
+              int                data_size_in )
 {
    file      = file_in;
-   data      = data_in;
    data_id   = data_id_in;
    data_size = data_size_in;
+
+   data = new int[data_size];
+
+   for (int k = 0; k < data_size; k++) data[k] = data_in[k];
 }
 
-void Queue::fill_buffer( const std::string file,
-                         char* data,
-                         int   data_id,
-                         int   data_size )
+void Queue::fill_buffer( const std::string& file,
+                         int*               data,
+                         int                data_id,
+                         int                data_size )
 {
+
+   std::cout << "added to queue: " << file << std::endl;
 
    if( count == 0 )
    {

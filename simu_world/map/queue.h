@@ -21,15 +21,15 @@ class QNode
       void write( void );
 
 #ifdef BLOCKS
-      QNode( const std::string file,
-             char* data,
+      QNode( const std::string& file,
+             int*  data,
              int   data_id,
              int   data_size );
 
    private:
 
       std::string file;
-      char*       data;
+      int*        data;
       int         data_size;
       int         data_id;
 #endif
@@ -52,14 +52,15 @@ class Queue
 
       void write_chunk( void );
 
-      void fill_buffer( const std::string file,
-                        char* data,
+      void fill_buffer( const std::string& file,
+                        int*  data,
                         int   data_id,
                         int   data_size );
 
       void write_all( void );
 
    private:
+
       unsigned int count;
       int num_chunk_elements;
       QNode* first;
@@ -70,5 +71,9 @@ class Queue
       QNode* first_read;
       QNode* last_read;
 };
+
+std::string create_filename( int   chunk_x,
+                             int   chunk_y,
+                             int   chunk_z );
 
 #endif

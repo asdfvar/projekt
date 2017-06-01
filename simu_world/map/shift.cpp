@@ -14,13 +14,40 @@ void Map::map_shift( float *position )
    int virtual_grid[3] = { -1, -1, -1 };
 
 #ifdef BLOCKS
-
-   // TODO: properly handle this
+   int total_num_chunk_elements = num_chunk_elements[0] *
+                                  num_chunk_elements[1] *
+                                  num_chunk_elements[2];
 
    float displacement_x = position[0] - map_pos_x;
 
    if (displacement_x > chunk_dim_x)
    {
+
+      for (int k = 0; k < num_chunks[2]; k++)
+      {
+         for (int j = 0; j < num_chunks[1]; j++)
+         {
+            get_chunk( buf,
+                       0,
+                       j,
+                       k );
+
+            //TODO: move this logic to after all shifting is complete
+            int abs_chunk_x = map_pos_x / num_chunk_elements[0];
+            int abs_chunk_y = map_pos_y / num_chunk_elements[1];
+            int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+
+            std::string filename = create_filename( abs_chunk_x + 0,
+                                                    abs_chunk_y + j,
+                                                    abs_chunk_z + k );
+
+            queue->fill_buffer( filename,
+                                buf,
+                                0,
+                                total_num_chunk_elements );
+         }
+      }
+
       // Shift the blocks back modulo the chunk_dim_x
       for (int k = 0; k < dim_z; k++)
       {
