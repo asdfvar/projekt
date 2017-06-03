@@ -13,6 +13,9 @@ void Map::map_shift( float *position )
 {
    int virtual_grid[3] = { -1, -1, -1 };
 
+   bool disp_forward  = false;
+   bool disp_backward = false;
+
 #ifdef BLOCKS
    int total_num_chunk_elements = num_chunk_elements[0] *
                                   num_chunk_elements[1] *
@@ -22,6 +25,9 @@ void Map::map_shift( float *position )
 
    if (displacement_x > chunk_dim_x)
    {
+
+      disp_forward = true;
+
       for (int k = 0; k < num_chunks[2]; k++)
       {
          for (int j = 0; j < num_chunks[1]; j++)
@@ -85,6 +91,8 @@ void Map::map_shift( float *position )
 
    else if (displacement_x < 0.0f)
    {
+      disp_backward = true;
+
       for (int k = 0; k < num_chunks[2]; k++)
       {
          for (int j = 0; j < num_chunks[1]; j++)
@@ -150,6 +158,34 @@ void Map::map_shift( float *position )
 
    if (displacement_y > chunk_dim_y)
    {
+      for (int k = 0; k < num_chunks[2]; k++)
+      {
+         for (int i = 0; i < num_chunks[0]; i++)
+         {
+            if ( (disp_forward  == false || i < num_chunks[1] - 1) &&
+                 (disp_backward == false || i > 0) )
+            {
+               get_chunk( buf,
+                          i,
+                          0,
+                          k );
+
+               int abs_chunk_x = map_pos_x / num_chunk_elements[0];
+               int abs_chunk_y = map_pos_y / num_chunk_elements[1];
+               int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+
+               std::string filename = create_filename( abs_chunk_x + i,
+                                                       abs_chunk_y + 0,
+                                                       abs_chunk_z + k );
+
+               queue->fill_buffer( filename,
+                                   buf,
+                                   0,
+                                   total_num_chunk_elements );
+            }
+         }
+      }
+
       for (int k = 0; k < dim_z; k++)
       {
          for (int ind = 0, j = 0; j < chunk_dim_y; j++)
@@ -193,6 +229,34 @@ void Map::map_shift( float *position )
    }
    else if (displacement_y < 0.0f)
    {
+      for (int k = 0; k < num_chunks[2]; k++)
+      {
+         for (int i = 0; i < num_chunks[0]; i++)
+         {
+            if ( (disp_forward  == false || i < num_chunks[1] - 1) &&
+                 (disp_backward == false || i > 0) )
+            {
+               get_chunk( buf,
+                          i,
+                          num_chunks[1] - 1,
+                          k );
+
+               int abs_chunk_x = map_pos_x / num_chunk_elements[0];
+               int abs_chunk_y = map_pos_y / num_chunk_elements[1];
+               int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+
+               std::string filename = create_filename( abs_chunk_x + i,
+                                                       abs_chunk_y + num_chunks[1] - 1,
+                                                       abs_chunk_z + k );
+
+               queue->fill_buffer( filename,
+                                   buf,
+                                   0,
+                                   total_num_chunk_elements );
+            }
+         }
+      }
+
       for (int k = 0; k < dim_z; k++)
       {
          for (int ind = 0, j = 0; j < chunk_dim_y; j++)
