@@ -16,6 +16,9 @@ void Map::update( void )
 
    queue->write_all();
 
+   // read in chunk data
+   // if file doesn't exist, create it
+
 #else
 
    /*
