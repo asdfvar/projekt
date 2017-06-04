@@ -15,6 +15,8 @@ void Map::map_shift( float *position )
 
    bool disp_forward  = false;
    bool disp_backward = false;
+   bool disp_left     = false;
+   bool disp_right    = false;
 
 #ifdef BLOCKS
    int total_num_chunk_elements = num_chunk_elements[0] *
@@ -91,6 +93,7 @@ void Map::map_shift( float *position )
 
    else if (displacement_x < 0.0f)
    {
+
       disp_backward = true;
 
       for (int k = 0; k < num_chunks[2]; k++)
@@ -158,11 +161,14 @@ void Map::map_shift( float *position )
 
    if (displacement_y > chunk_dim_y)
    {
+
+      disp_left = true;
+
       for (int k = 0; k < num_chunks[2]; k++)
       {
          for (int i = 0; i < num_chunks[0]; i++)
          {
-            if ( (disp_forward  == false || i < num_chunks[1] - 1) &&
+            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
                  (disp_backward == false || i > 0) )
             {
                get_chunk( buf,
@@ -229,11 +235,14 @@ void Map::map_shift( float *position )
    }
    else if (displacement_y < 0.0f)
    {
+
+      disp_right = true;
+
       for (int k = 0; k < num_chunks[2]; k++)
       {
          for (int i = 0; i < num_chunks[0]; i++)
          {
-            if ( (disp_forward  == false || i < num_chunks[1] - 1) &&
+            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
                  (disp_backward == false || i > 0) )
             {
                get_chunk( buf,
@@ -303,6 +312,37 @@ void Map::map_shift( float *position )
 
    if (displacement_z > chunk_dim_z)
    {
+
+      for (int i = 0; i < num_chunks[0]; i++)
+      {
+         for (int j = 0; j < num_chunks[1]; j++)
+         {
+            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
+                 (disp_backward == false || i > 0) &&
+                 (disp_left     == false || j < num_chunks[1] - 1) &&
+                 (disp_right    == false || j > 0) )
+            {
+               get_chunk( buf,
+                          i,
+                          j,
+                          0 );
+
+               int abs_chunk_x = map_pos_x / num_chunk_elements[0];
+               int abs_chunk_y = map_pos_y / num_chunk_elements[1];
+               int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+
+               std::string filename = create_filename( abs_chunk_x + i,
+                                                       abs_chunk_y + j,
+                                                       abs_chunk_z + 0 );
+
+               queue->fill_buffer( filename,
+                                   buf,
+                                   0,
+                                   total_num_chunk_elements );
+            }
+         }
+      }
+
       int dim_xy = dim_x * dim_y;
 
       for (int k = 0, ind = 0; k < chunk_dim_z; k++)
@@ -335,6 +375,36 @@ void Map::map_shift( float *position )
    }
    else if (displacement_z < 0.0f)
    {
+
+      for (int i = 0; i < num_chunks[0]; i++)
+      {
+         for (int j = 0; j < num_chunks[1]; j++)
+         {
+            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
+                 (disp_backward == false || i > 0) &&
+                 (disp_left     == false || j < num_chunks[1] - 1) &&
+                 (disp_right    == false || j > 0) )
+            {
+               get_chunk( buf,
+                          i,
+                          j,
+                          num_chunks[2] - 1 );
+
+               int abs_chunk_x = map_pos_x / num_chunk_elements[0];
+               int abs_chunk_y = map_pos_y / num_chunk_elements[1];
+               int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+
+               std::string filename = create_filename( abs_chunk_x + i,
+                                                       abs_chunk_y + j,
+                                                       abs_chunk_z + num_chunks[2] - 1 );
+
+               queue->fill_buffer( filename,
+                                   buf,
+                                   0,
+                                   total_num_chunk_elements );
+            }
+         }
+      }
       int dim_xy = dim_x * dim_y;
 
       for (int k = dim_z - chunk_dim_z, ind = 0; k < dim_z; k++)
