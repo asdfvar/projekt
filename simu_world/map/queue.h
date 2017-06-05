@@ -59,6 +59,17 @@ class Queue
 
       void write_all( void );
 
+      void read_chunk( int* data,
+                       int  abs_chunk_x,
+                       int  abs_chunk_y,
+                       int  abs_chunk_z,
+                       int  num_chunk_elements_x,
+                       int  num_chunk_elements_y,
+                       int  num_chunk_elements_z,
+                       int  num_chunks_x,
+                       int  num_chunks_y,
+                       int  num_chunks_z );
+
    private:
 
       unsigned int count;
