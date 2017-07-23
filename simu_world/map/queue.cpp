@@ -246,8 +246,11 @@ void Queue::fill_buffer( const std::string& file,
    }
    else
    {
+std::cout << __LINE__ << ":got here" << std::endl;
       last->next  = new QNode( file, data, data_id, data_size );
+std::cout << __LINE__ << ":got here" << std::endl;
       last        = last->next;
+std::cout << __LINE__ << ":got here" << std::endl;
    }
 
    count++;
@@ -274,9 +277,11 @@ void QNode::write( void )
    std::cout << __FILE__ << ":" << __LINE__ <<
                ":writing data at " << file << std::endl;;
 
+#if 0
    fio::write( file,
                0,
               (char*)data,
                data_size );
+#endif
 }
 #endif

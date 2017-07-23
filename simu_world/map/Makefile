@@ -9,8 +9,6 @@ INC   = -I$(BASE)/kernels/ \
 
 OBJ = map.o          \
       chunk.o        \
-      chunks.o       \
-      access_chunk.o \
       shift.o        \
       render_chunk.o \
       update.o       \
@@ -30,12 +28,6 @@ map.o: map.cpp
 	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 chunk.o: chunk.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
-
-chunks.o: chunks.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
-
-access_chunk.o: access_chunk.cpp
 	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 shift.o: shift.cpp

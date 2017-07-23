@@ -29,8 +29,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
                                   num_chunk_elements[1] *
                                   num_chunk_elements[2];
 
-   chunks = new Chunks( num_chunks );
-
    /*
    ** initialize the mapping from the virtual grid index
    ** to the physical grid index
@@ -59,8 +57,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    ** create the save directory
    */
    fio::directory();
-
-   int abs_pos_id[3];
 
    dim_x = num_chunk_elements[0] * num_chunks[0];
    dim_y = num_chunk_elements[1] * num_chunks[1];
@@ -93,28 +89,11 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
       {
          for (int i = 0, ind_x = -num_chunks[0]/2; ind_x <= num_chunks[0]/2; ind_x++, ind++, i++)
          {
-           float position[3] = { (float)(ind_x * num_chunk_elements[0]),
-                                 (float)(ind_y * num_chunk_elements[1]),
-                                 (float)(ind_z * num_chunk_elements[2]) };
-
-           abs_pos_id[0] = ind_x;
-           abs_pos_id[1] = ind_y;
-           abs_pos_id[2] = ind_z;
-
-           /*
-           ** Create the chunks for this map
-           */
-           chunks->insert_chunk( new Chunk(ind, abs_pos_id, num_chunk_elements, position) );
-
-           create_random( buf, total_num_chunk_elements );
-
-           set_chunk( buf, i, j, k );
-
+           create_random ( buf, total_num_chunk_elements );
+           set_chunk ( buf, i, j, k );
          }
       }
    }
-
-   chunks->set_base();
 
    queue = new Queue( total_num_chunk_elements );
 
@@ -133,7 +112,6 @@ Map::~Map(void)
    delete[] blocks;
    delete[] io_ids;
    delete[] buf;
-   delete   chunks;
    delete   queue;
 
    delete[] physical_chunk_id_x;
@@ -147,32 +125,11 @@ Map::~Map(void)
 }
 
 /*
-** function name: set_phys_chunk_color from: Map
-*/
-void Map::set_phys_chunk_color( int    p_ind_x,
-                                int    p_ind_y,
-                                int    p_ind_z,
-                                float *color )
-{
-   Chunk *chunk = access_chunk( p_ind_x,
-                                p_ind_y,
-                                p_ind_z );
-
-   chunk->set_color( color );
-}
-
-/*
 ** function name: get_physical_chunk_position from: Map
 */
 void Map::get_physical_chunk_position( int* abs_position,
                                        int* physical_chunk_position )
 {
-   int num_chunk_elements[3];
-   Chunk *chunk = access_chunk( 0, 0, 0 );
-   num_chunk_elements[0] = chunk->get_dimension( 0 );
-   num_chunk_elements[1] = chunk->get_dimension( 1 );
-   num_chunk_elements[2] = chunk->get_dimension( 2 );
-
    if (abs_position[0] >= 0)
    {
       physical_chunk_position[0] = ((abs_position[0] / num_chunk_elements[0]) +
@@ -216,12 +173,6 @@ void Map::get_physical_chunk_position( int* abs_position,
 */
 void Map::get_relative_element_position( int* position_in, int* element_position )
 {
-   int num_chunk_elements[3];
-   Chunk *chunk = access_chunk( 0, 0, 0 );
-   num_chunk_elements[0] = chunk->get_dimension( 0 );
-   num_chunk_elements[1] = chunk->get_dimension( 1 );
-   num_chunk_elements[2] = chunk->get_dimension( 2 );
-
    element_position[0] = position_in[0] % num_chunk_elements[0];
    element_position[1] = position_in[1] % num_chunk_elements[1];
    element_position[2] = position_in[2] % num_chunk_elements[2];
@@ -270,13 +221,7 @@ void Map::diagnostics( int *position_in, Text *text)
    text->populate( element_position[1] );
    text->populate( ", ");
    text->populate( element_position[2] );
-
    
-   Chunk *this_chunk = access_chunk( physical_chunk_position[0],
-                                     physical_chunk_position[1],
-                                     physical_chunk_position[2] );
-
-#ifdef BLOCKS
    int block_position[3];
    block_position[0] = (position_in[0] % num_chunk_elements[0] + num_chunk_elements[0]) % num_chunk_elements[0] + num_chunk_elements[0] * (num_chunks[0] / 2);
    block_position[1] = (position_in[1] % num_chunk_elements[1] + num_chunk_elements[1]) % num_chunk_elements[1] + num_chunk_elements[1] * (num_chunks[1] / 2);
@@ -297,24 +242,10 @@ void Map::diagnostics( int *position_in, Text *text)
    text->populate( block_position[2] );
 
    int element = blocks[ind];
-#else
-   int element = this_chunk->get_block( element_position );
-#endif
 
    text->new_line();
    text->populate("Chunk element value: ");
    text->populate( element );
-
-   int abs_pos_id[3];
-   this_chunk->get_abs_pos_id( abs_pos_id );
-   text->new_line();
-   text->populate("Chunk absolute position: ");
-   text->populate( abs_pos_id[0] );
-   text->populate( ", ");
-   text->populate( abs_pos_id[1] );
-   text->populate( ", ");
-   text->populate( abs_pos_id[2] );
-
 }
 
 /*
@@ -350,18 +281,6 @@ void Map::debug_info( void )
       std::cout << "(" << k << "," << virtual_chunk_id_z[k] << "), ";
    }
    std::cout << std::endl;
-
-   Chunk *this_chunk = access_chunk( physical_chunk_id_x[num_chunks[0]/2],
-                                     physical_chunk_id_y[num_chunks[1]/2],
-                                     physical_chunk_id_z[num_chunks[2]/2]);
-
-   int abs_pos_id[3];
-   this_chunk->get_abs_pos_id( abs_pos_id );
-   std::cout << "absolute chunk position id at center = (" <<
-                 abs_pos_id[0] << ", "                     <<
-                 abs_pos_id[1] << ", "                     <<
-                 abs_pos_id[2] << ")"                      <<
-                 std::endl;
 
 }
 

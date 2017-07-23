@@ -2,7 +2,6 @@
 #define MAP_H
 
 #include "chunk.h"
-#include "chunks.h"
 #include <iostream>
 #include <pthread.h>
 #include "opengl_interface.h"
@@ -76,8 +75,6 @@ class Map
           *virtual_chunk_id_y,
           *virtual_chunk_id_z;
 
-      Chunks* chunks;
-
       int* blocks;
       int* io_ids;
       int  dim_x;
@@ -95,7 +92,6 @@ class Map
       float* vertices;
 
       int* buf;
-
 };
 
 #endif
