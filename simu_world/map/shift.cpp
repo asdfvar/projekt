@@ -25,7 +25,7 @@ void Map::map_shift( float *position )
 
    float displacement_x = position[0] - map_pos_x;
 
-   if (displacement_x > chunk_dim_x)
+   if (displacement_x > chunk_dim_x * 1.5f)
    {
 
       disp_forward = true;
@@ -91,7 +91,7 @@ void Map::map_shift( float *position )
       map_pos_x += (float)chunk_dim_x;
    }
 
-   else if (displacement_x < 0.0f)
+   else if (displacement_x < -chunk_dim_x * 0.5f)
    {
 
       disp_backward = true;
@@ -159,7 +159,7 @@ void Map::map_shift( float *position )
 
    float displacement_y = position[1] - map_pos_y;
 
-   if (displacement_y > chunk_dim_y)
+   if (displacement_y > chunk_dim_y * 1.5f)
    {
 
       disp_left = true;
@@ -233,7 +233,8 @@ void Map::map_shift( float *position )
       // move the blocks, as a whole, appropriately
       map_pos_y += (float)chunk_dim_y;
    }
-   else if (displacement_y < 0.0f)
+
+   else if (displacement_y < -chunk_dim_y * 0.5f)
    {
 
       disp_right = true;
@@ -310,7 +311,7 @@ void Map::map_shift( float *position )
 
    float displacement_z = position[2] - map_pos_z;
 
-   if (displacement_z > chunk_dim_z)
+   if (displacement_z > chunk_dim_z * 1.5f)
    {
 
       for (int i = 0; i < num_chunks[0]; i++)
@@ -373,7 +374,8 @@ void Map::map_shift( float *position )
 
       map_pos_z += (float)chunk_dim_z;
    }
-   else if (displacement_z < 0.0f)
+
+   else if (displacement_z < -chunk_dim_z * 0.5f)
    {
 
       for (int i = 0; i < num_chunks[0]; i++)
