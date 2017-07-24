@@ -8,7 +8,7 @@ void create_random( int* blocks, int  num_chunk_elements )
 {
    for (int ind = 0; ind < num_chunk_elements; ind++)
    {
-      int random_num = std::rand() % 100;
+      int random_num = std::rand() % 40;
       if (random_num == 0)
          blocks[ind] = 1;
       else

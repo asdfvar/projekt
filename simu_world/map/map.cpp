@@ -16,16 +16,16 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    IO_barrier     = IO_barrier_in;
    update_barrier = update_barrier_in;
 
-   num_chunks[0] = 5;
-   num_chunks[1] = 5;
-   num_chunks[2] = 5;
+   num_chunks[0] = 3;
+   num_chunks[1] = 3;
+   num_chunks[2] = 3;
 
    /*
    ** build the chunks
    */
-   num_chunk_elements[0] = 13;
-   num_chunk_elements[1] = 13;
-   num_chunk_elements[2] = 13;
+   num_chunk_elements[0] = 3;
+   num_chunk_elements[1] = 3;
+   num_chunk_elements[2] = 3;
 
    int total_num_chunk_elements = num_chunk_elements[0] *
                                   num_chunk_elements[1] *
@@ -220,6 +220,13 @@ void Map::diagnostics( int *position_in, Text *text)
    text->populate( element_position[1] );
    text->populate( ", ");
    text->populate( element_position[2] );
+   text->new_line();
+   text->populate("map position: ");
+   text->populate( map_pos_x );
+   text->populate(",");
+   text->populate( map_pos_y );
+   text->populate(",");
+   text->populate( map_pos_z );
    
    int block_position[3];
    block_position[0] = (position_in[0] % num_chunk_elements[0] + num_chunk_elements[0]) %
@@ -228,6 +235,18 @@ void Map::diagnostics( int *position_in, Text *text)
                         num_chunk_elements[1] + num_chunk_elements[1] * (num_chunks[1] / 2);
    block_position[2] = (position_in[2] % num_chunk_elements[2] + num_chunk_elements[2]) %
                         num_chunk_elements[2] + num_chunk_elements[2] * (num_chunks[2] / 2);
+
+   block_position[0] = (position_in[0] - map_pos_x) +
+                       num_chunk_elements[0] *
+                       num_chunks[0] / 2;
+
+   block_position[1] = (position_in[1] - map_pos_y) +
+                       num_chunk_elements[1] *
+                       num_chunks[1] / 2;
+
+   block_position[2] = (position_in[2] - map_pos_z) +
+                       num_chunk_elements[2] *
+                       num_chunks[2] / 2;
 
    int ind = block_position[0]                 +
              block_position[1] * dim_x         +
