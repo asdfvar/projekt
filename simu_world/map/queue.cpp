@@ -143,17 +143,7 @@ void Queue::write_chunk( void )
 */
 QNode::~QNode( void )
 {
-#ifdef BLOCKS
    delete[] data;
-#else
-   std::cout << "deleting chunk_elements at " <<
-              abs_pos_x << ", " <<
-              abs_pos_y << ", " <<
-              abs_pos_z << std::endl
-              << std::endl;
-
-   delete chunk_elements;
-#endif
 }
 
 /*
@@ -182,42 +172,7 @@ Queue::~Queue( void )
 
 }
 
-#ifndef BLOCKS
-/*
-** function: new_chunk from: Queue
-*/
-void Queue::new_chunk( int* chunk_elements,
-                       int  abs_pos_x,
-                       int  abs_pos_y,
-                       int  abs_pos_z )
-{
 
-   std::cout << __FILE__ << ":" << __LINE__ << ":new chunk at ("
-             << abs_pos_x << ", "
-             << abs_pos_y << ", "
-             << abs_pos_z << ")"
-             << std::endl;
-
-   if( count == 0 )
-   {
-      first = last = new QNode;
-   }
-   else
-   {
-      last->next  = new QNode;
-      last        = last->next;
-   }
-
-   last->chunk_elements = chunk_elements;
-   last->abs_pos_x = abs_pos_x;
-   last->abs_pos_y = abs_pos_y;
-   last->abs_pos_z = abs_pos_z;
-
-   count++;
-}
-#endif
-
-#ifdef BLOCKS
 QNode::QNode( const std::string& file_in,
               int*               data_in,
               int                data_id_in,
@@ -246,11 +201,8 @@ void Queue::fill_buffer( const std::string& file,
    }
    else
    {
-std::cout << __LINE__ << ":got here" << std::endl;
       last->next  = new QNode( file, data, data_id, data_size );
-std::cout << __LINE__ << ":got here" << std::endl;
       last        = last->next;
-std::cout << __LINE__ << ":got here" << std::endl;
    }
 
    count++;
@@ -277,11 +229,8 @@ void QNode::write( void )
    std::cout << __FILE__ << ":" << __LINE__ <<
                ":writing data at " << file << std::endl;;
 
-#if 0
    fio::write( file,
                0,
               (char*)data,
                data_size );
-#endif
 }
-#endif

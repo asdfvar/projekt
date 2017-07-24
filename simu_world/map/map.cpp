@@ -223,12 +223,15 @@ void Map::diagnostics( int *position_in, Text *text)
    text->populate( element_position[2] );
    
    int block_position[3];
-   block_position[0] = (position_in[0] % num_chunk_elements[0] + num_chunk_elements[0]) % num_chunk_elements[0] + num_chunk_elements[0] * (num_chunks[0] / 2);
-   block_position[1] = (position_in[1] % num_chunk_elements[1] + num_chunk_elements[1]) % num_chunk_elements[1] + num_chunk_elements[1] * (num_chunks[1] / 2);
-   block_position[2] = (position_in[2] % num_chunk_elements[2] + num_chunk_elements[2]) % num_chunk_elements[2] + num_chunk_elements[2] * (num_chunks[2] / 2);
+   block_position[0] = (position_in[0] % num_chunk_elements[0] + num_chunk_elements[0]) %
+                        num_chunk_elements[0] + num_chunk_elements[0] * (num_chunks[0] / 2);
+   block_position[1] = (position_in[1] % num_chunk_elements[1] + num_chunk_elements[1]) %
+                        num_chunk_elements[1] + num_chunk_elements[1] * (num_chunks[1] / 2);
+   block_position[2] = (position_in[2] % num_chunk_elements[2] + num_chunk_elements[2]) %
+                        num_chunk_elements[2] + num_chunk_elements[2] * (num_chunks[2] / 2);
 
-   int ind = block_position[0] +
-             block_position[1] * dim_x +
+   int ind = block_position[0]                 +
+             block_position[1] * dim_x         +
              block_position[2] * dim_x * dim_y;
 
    text->new_line();
@@ -240,12 +243,24 @@ void Map::diagnostics( int *position_in, Text *text)
    text->populate( block_position[1] );
    text->populate(", ");
    text->populate( block_position[2] );
-
-   int element = blocks[ind];
-
    text->new_line();
    text->populate("Chunk element value: ");
-   text->populate( element );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
+   text->populate( blocks[ind++] );
 }
 
 /*
