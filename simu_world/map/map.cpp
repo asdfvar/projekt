@@ -9,10 +9,12 @@
 /*
 ** constructor name: Map
 */
-Map::Map( pthread_barrier_t* IO_barrier_in )
+Map::Map( pthread_barrier_t* IO_barrier_in,
+          pthread_barrier_t* update_barrier_in )
 {
 
-   IO_barrier = IO_barrier_in;
+   IO_barrier     = IO_barrier_in;
+   update_barrier = update_barrier_in;
 
    num_chunks[0] = 5;
    num_chunks[1] = 5;
@@ -96,9 +98,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in )
    }
 
    queue = new Queue( total_num_chunk_elements );
-
-   // wait for the IO thread to have finished its initialization before continuing
-   //pthread_barrier_wait( IO_barrier );
 
    std::cout  << "finished creating map" << std::endl;
 

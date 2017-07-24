@@ -448,6 +448,11 @@ void Map::map_shift( float *position )
       map_pos_z -= (float)chunk_dim_z;
    }
 
+   if ( disp_forward || disp_backward || disp_left || disp_right )
+   {
+      pthread_barrier_wait( update_barrier );
+   }
+
 }
 
 /*

@@ -14,10 +14,12 @@
 
 pthread_t         IO_thread;
 pthread_barrier_t IO_barrier;
+pthread_barrier_t update_barrier;
 pthread_mutex_t   IO_mutex;
 
 /* Define the interface with openGL */
-Simu_world_obj simu_world_obj( &IO_barrier );
+Simu_world_obj simu_world_obj( &IO_barrier,
+                               &update_barrier );
 
 /***********************
  ** Display to screen **
@@ -106,15 +108,15 @@ std::cout << "Windows" << std::endl;
 #endif
 
    pthread_barrier_init( &IO_barrier, NULL, 2);
+   pthread_barrier_init( &update_barrier, NULL, 2);
    pthread_mutex_init( &IO_mutex, NULL );
 
    ARGS args;
 
    args.simu_world_obj = &simu_world_obj;
    args.IO_barrier     = &IO_barrier;
+   args.update_barrier = &update_barrier;
    args.IO_mutex       = &IO_mutex;
-
-std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std::endl;
 
    /*
    ** Create the IO manager thread
@@ -128,7 +130,7 @@ std::cout << __FILE__ << ":" << __LINE__ << ":barrier at " << &IO_barrier << std
    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
    glutInitWindowSize( windowsizex, windowsizey );
    glutInitWindowPosition( 50, 50 );
-   glutCreateWindow( "simu");
+   glutCreateWindow( "simu" );
 
    glutDisplayFunc(       display      );
    glutMouseFunc(         mouse        );

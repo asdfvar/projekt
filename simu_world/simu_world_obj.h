@@ -16,7 +16,9 @@ class Simu_world_obj
 
    public:
 
-      Simu_world_obj( pthread_barrier_t* IO_barrier_in );
+      Simu_world_obj( pthread_barrier_t* IO_barrier_in,
+                      pthread_barrier_t* update_barrier_in );
+
      ~Simu_world_obj(void);
 
       /*
@@ -59,6 +61,7 @@ class Simu_world_obj
       bool program_done;
 
       pthread_barrier_t* IO_barrier;
+      pthread_barrier_t* update_barrier;
 
    private:
 

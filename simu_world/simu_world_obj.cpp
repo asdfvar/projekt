@@ -9,12 +9,14 @@
 /*
 ** function name: Simu_world_obj from: Simu_world_obj
 */
-Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in )
+Simu_world_obj::Simu_world_obj( pthread_barrier_t* IO_barrier_in,
+                                pthread_barrier_t* update_barrier_in )
 {
+   IO_barrier     = IO_barrier_in;
+   update_barrier = update_barrier_in;
 
-   IO_barrier = IO_barrier_in;
-
-   map = new Map( IO_barrier_in );
+   map = new Map( IO_barrier,
+                  update_barrier );
 
    program_done = false;
 
@@ -54,6 +56,7 @@ void Simu_world_obj::keyboardDown( const char key )
          std::cout << "program exit" << std::endl;
          program_done = true;
          // wait for IO threads to finish
+         pthread_barrier_wait( update_barrier );
          pthread_barrier_wait( IO_barrier );
          exit(1);
          break;
@@ -297,7 +300,7 @@ void Simu_world_obj::display( void )
 }
 
 /*
-** function name: simu_world_obj
+** function name: update_map from:  simu_world_obj
 */
 void Simu_world_obj::update_map()
 {

@@ -12,6 +12,10 @@
 void Map::update( void )
 {
 
+/*
+** note to self: this may be disabled during
+** development to mitigate excessive writes to the SSD
+*/
 //   queue->write_all();
 
    // read in chunk data

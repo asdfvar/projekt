@@ -15,7 +15,9 @@ class Map
 {
    public:
 
-      Map( pthread_barrier_t* );
+      Map( pthread_barrier_t*,
+           pthread_barrier_t* );
+
      ~Map( void );
 
       void update( void );
@@ -43,6 +45,7 @@ class Map
       Queue* queue;
 
       pthread_barrier_t* IO_barrier;
+      pthread_barrier_t* update_barrier;
 
    private:
 
