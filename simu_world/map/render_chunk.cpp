@@ -1,3 +1,4 @@
+#include <cmath>
 #include "map.h"
 #include "draw_block.h"
 #include "point_conversion.h"
