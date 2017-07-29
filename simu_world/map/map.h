@@ -6,7 +6,6 @@
 #include <pthread.h>
 #include "opengl_interface.h"
 #include "queue.h"
-#include "text.h"
 
 /*
 ** class name: Map
@@ -40,7 +39,7 @@ class Map
                                  int    p_ind_z,
                                  float* color );
 
-      void diagnostics( int* position, Text* text );
+      void diagnostics( int* position );
       void debug_info( void );
       Queue* queue;
 

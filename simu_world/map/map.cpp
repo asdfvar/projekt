@@ -5,6 +5,7 @@
 #include "fileio.h"
 #include <cmath>
 #include "read_chunk.h"
+#include "diagnostics.h"
 
 /*
 ** constructor name: Map
@@ -184,7 +185,7 @@ void Map::get_relative_element_position( int* position_in, int* element_position
 /*
 ** function name: diagnostics from: Map
 */
-void Map::diagnostics( int *position_in, Text *text)
+void Map::diagnostics( int *position_in )
 {
    int physical_chunk_position[3];
    get_physical_chunk_position( position_in, physical_chunk_position );
@@ -192,41 +193,41 @@ void Map::diagnostics( int *position_in, Text *text)
    int element_position[3];
    get_relative_element_position( position_in, element_position );
 
-   text->populate( "position in: ");
-   text->populate( position_in[0] );
-   text->populate( ", ");
-   text->populate( position_in[1] );
-   text->populate( ", ");
-   text->populate( position_in[2] );
-   text->populate( ", ");
-   text->new_line();
-   text->populate("Physical Chunk ids x: ");
+   g_text.populate( "position in: ");
+   g_text.populate( position_in[0] );
+   g_text.populate( ", ");
+   g_text.populate( position_in[1] );
+   g_text.populate( ", ");
+   g_text.populate( position_in[2] );
+   g_text.populate( ", ");
+   g_text.new_line();
+   g_text.populate("Physical Chunk ids x: ");
    for (int k = 0; k < num_chunks[0]; k++)
    {
-      text->populate( physical_chunk_id_x[k] );
-      text->populate( ", ");
+      g_text.populate( physical_chunk_id_x[k] );
+      g_text.populate( ", ");
    }
-   text->new_line();
-   text->populate("Physical Chunk: ");
-   text->populate( physical_chunk_position[0] );
-   text->populate( ", ");
-   text->populate( physical_chunk_position[1] );
-   text->populate( ", ");
-   text->populate( physical_chunk_position[2] );
-   text->new_line();
-   text->populate("Relative element: ");
-   text->populate( element_position[0] );
-   text->populate( ", ");
-   text->populate( element_position[1] );
-   text->populate( ", ");
-   text->populate( element_position[2] );
-   text->new_line();
-   text->populate("map position: ");
-   text->populate( map_pos_x );
-   text->populate(",");
-   text->populate( map_pos_y );
-   text->populate(",");
-   text->populate( map_pos_z );
+   g_text.new_line();
+   g_text.populate("Physical Chunk: ");
+   g_text.populate( physical_chunk_position[0] );
+   g_text.populate( ", ");
+   g_text.populate( physical_chunk_position[1] );
+   g_text.populate( ", ");
+   g_text.populate( physical_chunk_position[2] );
+   g_text.new_line();
+   g_text.populate("Relative element: ");
+   g_text.populate( element_position[0] );
+   g_text.populate( ", ");
+   g_text.populate( element_position[1] );
+   g_text.populate( ", ");
+   g_text.populate( element_position[2] );
+   g_text.new_line();
+   g_text.populate("map position: ");
+   g_text.populate( map_pos_x );
+   g_text.populate(",");
+   g_text.populate( map_pos_y );
+   g_text.populate(",");
+   g_text.populate( map_pos_z );
    
    int block_position[3];
 
@@ -249,33 +250,33 @@ void Map::diagnostics( int *position_in, Text *text)
              block_position[1] * dim_x         +
              block_position[2] * dim_x * dim_y;
 
-   text->new_line();
-   text->populate("block index: ");
-   text->populate( ind );
-   text->populate(" = ");
-   text->populate( block_position[0] );
-   text->populate(", ");
-   text->populate( block_position[1] );
-   text->populate(", ");
-   text->populate( block_position[2] );
-   text->new_line();
-   text->populate("Chunk element value: ");
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
-   text->populate( blocks[ind++] );
+   g_text.new_line();
+   g_text.populate("block index: ");
+   g_text.populate( ind );
+   g_text.populate(" = ");
+   g_text.populate( block_position[0] );
+   g_text.populate(", ");
+   g_text.populate( block_position[1] );
+   g_text.populate(", ");
+   g_text.populate( block_position[2] );
+   g_text.new_line();
+   g_text.populate("Chunk element value: ");
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
+   g_text.populate( blocks[ind++] );
 }
 
 /*

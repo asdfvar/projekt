@@ -4,7 +4,7 @@
 #include "change_direction.h"
 #include "opengl_interface.h"
 #include "hud.h"
-#include "text.h"
+#include "diagnostics.h"
 
 /*
 ** function name: Simu_world_obj from: Simu_world_obj
@@ -196,7 +196,7 @@ void Simu_world_obj::idle( void )
       if (mode == 1)
       {
 
-         text.clear();
+         g_text.clear();
 
          ogl::set_cursor_none();
 
@@ -234,27 +234,27 @@ void Simu_world_obj::idle( void )
          user.get_position( user_position );
          map->map_shift( user_position );
 
-         text.populate("user position: ");
-         text.populate( user_position[0] );
-         text.populate( ", " );
-         text.populate( user_position[1] );
-         text.populate( ", " );
-         text.populate( user_position[2] );
-         text.new_line();
-         text.populate("frame time: ");
-         text.populate( time_manager->get_time_step_actual() );
-         text.populate(", ");
-         text.populate( 1.0f / time_manager->get_time_step_actual() );
-         text.populate(" Hz");
-         text.new_line();
+         g_text.populate("user position: ");
+         g_text.populate( user_position[0] );
+         g_text.populate( ", " );
+         g_text.populate( user_position[1] );
+         g_text.populate( ", " );
+         g_text.populate( user_position[2] );
+         g_text.new_line();
+         g_text.populate("frame time: ");
+         g_text.populate( time_manager->get_time_step_actual() );
+         g_text.populate(", ");
+         g_text.populate( 1.0f / time_manager->get_time_step_actual() );
+         g_text.populate(" Hz");
+         g_text.new_line();
 
          int i_user_position[3] = { (int)floorf(user_position[0]),
                                     (int)floorf(user_position[1]),
                                     (int)floorf(user_position[2]) };
 
-         map->diagnostics( i_user_position, &text );
+         map->diagnostics( i_user_position );
 
-         text.done_editing();
+         g_text.done_editing();
 
       }
 
@@ -293,7 +293,7 @@ void Simu_world_obj::display( void )
 
    hud::display();
 
-   text.display_contents( -1.0f, 1.0f, 1.0f);
+   g_text.display_contents( -1.0f, 1.0f, 1.0f);
 
    // swap this buffer for the old one
    ogl::swap_buffers();

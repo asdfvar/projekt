@@ -24,13 +24,16 @@ all: SIMU_WORLD
 
 SIMU_WORLD: $(OBJ)
 	cd kernels/ && $(MAKE)
-	cd map/ && $(MAKE)
+	cd map/ &&     $(MAKE)
 	$(CPPC) $^ $(INC) $(DEFINES) $(LIBS) $(LIBPATH) -o $(EXE) $(FLAGS)
 
 clean:
 	make -C kernels/ clean
-	make -C map/ clean
+	make -C map/     clean
 	rm $(OBJ) $(EXE)
+
+main.o: main.cpp
+	$(CPPC) $(INC) $(DEFINES) $^ -c
 
 simu_world_obj.o: simu_world_obj.cpp
 	$(CPPC) $(INC) $(DEFINES) $^ -c

@@ -1,10 +1,11 @@
 BASE  = ../
 
-CPPC  = g++
-CL    = ar rcs
-FLAGS = -O3 -Wall
+CPPC            = g++
+CL              = ar rcs
+FLAGS           = -O3 -Wall
 DIRECTIVE_FLAGS = -DBLOCKS
-INC   = -I$(BASE)/kernels/ \
+INC             = -I$(BASE)          \
+                  -I$(BASE)/kernels/ \
 #
 
 OBJ = map.o          \
