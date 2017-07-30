@@ -86,14 +86,33 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    io_ids  = new int[ total_num_chunk_elements ];
    buf     = new int[ max_dim * max_dim * max_chunk_elements ];
 
-   for (int k = 0, ind_z = -num_chunks[2]/2, ind = 0; ind_z <= num_chunks[2]/2; ind_z++, k++)
+   for (int k = 0; k < num_chunks[2]; k++)
    {
-      for (int j = 0, ind_y = -num_chunks[1]/2; ind_y <= num_chunks[1]/2; ind_y++, j++)
+      for (int j = 0; j < num_chunks[1]; j++)
       {
-         for (int i = 0, ind_x = -num_chunks[0]/2; ind_x <= num_chunks[0]/2; ind_x++, ind++, i++)
+         for (int i = 0; i < num_chunks[0]; i++)
          {
-           create_random ( buf, total_num_chunk_elements );
-           set_chunk ( buf, i, j, k );
+            std::string filename = create_filename( i, j, k );
+
+            bool file_exists =
+               read_chunk( filename, buf, total_num_chunk_elements );
+
+            if( !file_exists )
+            {
+               create_random( buf, total_num_chunk_elements );
+
+               std::cout << filename << " does not exist."
+                  << " chunk created." << std::endl;
+               // TODO: give permission to write this chunk to disk
+            }
+            else
+            {
+               std::cout << "reading " << filename << std::endl;
+               // TODO: remove permission to write this chunk to disk
+            }
+
+            create_random ( buf, total_num_chunk_elements );
+            set_chunk ( buf, i, j, k );
          }
       }
    }

@@ -154,6 +154,7 @@ Queue::Queue( int num_chunk_elements_in )
    num_chunk_elements = num_chunk_elements_in;
    first = last = 0;
    count = 0;
+   read_count = 0;
 }
 
 /*
@@ -227,10 +228,31 @@ void Queue::write_all( void )
 void QNode::write( void )
 {
    std::cout << __FILE__ << ":" << __LINE__ <<
-               ":writing data at " << file << std::endl;;
+               ":writing data to " << file << std::endl;;
 
    fio::write( file,
                0,
               (char*)data,
                data_size );
+}
+
+void Queue::add_read( const std::string& file, int data_size )
+{
+
+   std::cout << "added to queue: " << file << std::endl;
+
+   int* data = new int[data_size];
+
+   if( read_count == 0 )
+   {
+      first_read = last_read = new QNode( file, data, 0, data_size );
+   }
+   else
+   {
+      last_read->next  = new QNode( file, data, 0, data_size );
+      last_read        = last_read->next;
+   }
+
+   read_count++;
+
 }
