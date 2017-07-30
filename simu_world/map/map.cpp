@@ -28,9 +28,15 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    num_chunk_elements[1] = 13;
    num_chunk_elements[2] = 13;
 
-   int total_num_chunk_elements = num_chunk_elements[0] *
-                                  num_chunk_elements[1] *
-                                  num_chunk_elements[2];
+   chunk_dim_x = num_chunk_elements[0];
+   chunk_dim_y = num_chunk_elements[1];
+   chunk_dim_z = num_chunk_elements[2];
+
+   int total_num_chunk_elements = chunk_dim_x *
+                                  chunk_dim_y *
+                                  chunk_dim_z;
+
+   write_permissions = new bool[ total_num_chunk_elements ];
 
    /*
    ** initialize the mapping from the virtual grid index
@@ -61,13 +67,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    */
    fio::directory();
 
-   dim_x = num_chunk_elements[0] * num_chunks[0];
-   dim_y = num_chunk_elements[1] * num_chunks[1];
-   dim_z = num_chunk_elements[2] * num_chunks[2];
-
-   chunk_dim_x = num_chunk_elements[0];
-   chunk_dim_y = num_chunk_elements[1];
-   chunk_dim_z = num_chunk_elements[2];
+   dim_x = chunk_dim_x * num_chunks[0];
+   dim_y = chunk_dim_y * num_chunks[1];
+   dim_z = chunk_dim_z * num_chunks[2];
 
    map_pos_x = 0.0f;
    map_pos_y = 0.0f;
@@ -86,11 +88,11 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    io_ids  = new int[ total_num_chunk_elements ];
    buf     = new int[ max_dim * max_dim * max_chunk_elements ];
 
-   for (int k = 0; k < num_chunks[2]; k++)
+   for (int k = 0, ind = 0; k < num_chunks[2]; k++)
    {
       for (int j = 0; j < num_chunks[1]; j++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks[0]; i++, ind++)
          {
             std::string filename = create_filename( i, j, k );
 
@@ -103,12 +105,12 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
-               // TODO: give permission to write this chunk to disk
+               write_permissions[ind] = true;
             }
             else
             {
                std::cout << "reading " << filename << std::endl;
-               // TODO: remove permission to write this chunk to disk
+               write_permissions[ind] = false;
             }
 
             create_random ( buf, total_num_chunk_elements );
@@ -131,6 +133,7 @@ Map::~Map(void)
    delete[] blocks;
    delete[] io_ids;
    delete[] buf;
+   delete[] write_permissions;
    delete   queue;
 
    delete[] physical_chunk_id_x;

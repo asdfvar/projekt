@@ -50,8 +50,9 @@ class Map
 
       void shift( int x, int y, int z);
 
-      int num_chunks[3];
-      int num_chunk_elements[3];
+      int   num_chunks[3];
+      int   num_chunk_elements[3];
+      bool* write_permissions;
 
       void get_physical_chunk_position( int* abs_position,
                                         int* physical_chunk_position );
