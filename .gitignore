@@ -1,5 +1,6 @@
 # Pre-compiled object files
 *.o
 *.a
+
 # swap files
 *.swp
