@@ -53,7 +53,7 @@ void Map::map_shift( float *position )
             queue->fill_buffer( filename,
                                 buf,
                                 0,
-                                total_num_chunk_elements );
+                                total_num_chunk_elements * sizeof(*buf) );
 #endif
          }
       }
@@ -121,7 +121,7 @@ void Map::map_shift( float *position )
             queue->fill_buffer( filename,
                                 buf,
                                 0,
-                                total_num_chunk_elements );
+                                total_num_chunk_elements * sizeof(*buf) );
 #endif
          }
       }
@@ -194,7 +194,7 @@ void Map::map_shift( float *position )
                queue->fill_buffer( filename,
                                    buf,
                                    0,
-                                   total_num_chunk_elements );
+                                   total_num_chunk_elements * sizeof(*buf) );
 #endif
             }
          }
@@ -271,7 +271,7 @@ void Map::map_shift( float *position )
                queue->fill_buffer( filename,
                                    buf,
                                    0,
-                                   total_num_chunk_elements );
+                                   total_num_chunk_elements * sizeof(*buf) );
 #endif
             }
          }
@@ -352,7 +352,7 @@ void Map::map_shift( float *position )
                queue->fill_buffer( filename,
                                    buf,
                                    0,
-                                   total_num_chunk_elements );
+                                   total_num_chunk_elements * sizeof(*buf) );
 #endif
             }
          }
@@ -420,7 +420,7 @@ void Map::map_shift( float *position )
                queue->fill_buffer( filename,
                                    buf,
                                    0,
-                                   total_num_chunk_elements );
+                                   total_num_chunk_elements * sizeof(*buf) );
 #endif
             }
          }
@@ -455,8 +455,6 @@ void Map::map_shift( float *position )
       map_pos_z -= (float)chunk_dim_z;
    }
 
-   int tot_num_chunk_elements = chunk_dim_x * chunk_dim_y * chunk_dim_z;
-
    /**************************************************************************
    ** identify files to be read in
    ***************************************************************************/
@@ -480,11 +478,11 @@ void Map::map_shift( float *position )
             bool file_exists =
             read_chunk( filename,
                         buf, 
-                        tot_num_chunk_elements );
+                        total_num_chunk_elements );
 
             if( !file_exists )
             {
-               create_random( buf, tot_num_chunk_elements );
+               create_random( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -495,7 +493,7 @@ void Map::map_shift( float *position )
                std::cout << "reading " << filename << std::endl;
                // TODO: remove permission to write this chunk to disk
             }
-//for (int asdf = 0; asdf < tot_num_chunk_elements; asdf++) buf[asdf] = 1;
+//for (int asdf = 0; asdf < total_num_chunk_elements; asdf++) buf[asdf] = 1;
 
             // copy the contents of buf into the block
             set_chunk( buf,
@@ -525,11 +523,11 @@ void Map::map_shift( float *position )
             bool file_exists =
             read_chunk( filename,
                         buf, 
-                        tot_num_chunk_elements );
+                        total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, tot_num_chunk_elements );
+               create_random( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -569,11 +567,11 @@ void Map::map_shift( float *position )
             bool file_exists =
             read_chunk( filename,
                         buf, 
-                        tot_num_chunk_elements );
+                        total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, tot_num_chunk_elements );
+               create_random( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -613,11 +611,11 @@ void Map::map_shift( float *position )
             bool file_exists =
             read_chunk( filename,
                         buf, 
-                        tot_num_chunk_elements );
+                        total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, tot_num_chunk_elements );
+               create_random( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -657,11 +655,11 @@ void Map::map_shift( float *position )
             bool file_exists =
             read_chunk( filename,
                         buf, 
-                        tot_num_chunk_elements );
+                        total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, tot_num_chunk_elements );
+               create_random( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -701,11 +699,11 @@ void Map::map_shift( float *position )
             bool file_exists =
             read_chunk( filename,
                         buf, 
-                        tot_num_chunk_elements );
+                        total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, tot_num_chunk_elements );
+               create_random( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
