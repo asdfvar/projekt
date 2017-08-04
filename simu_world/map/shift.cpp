@@ -345,22 +345,19 @@ void Map::map_shift( float *position )
                         0,
                         total_num_chunk_elements * sizeof(*buf) );
                }
-            }
 
-//TODO:
-         #if 0
-            // circularly shift the write permissions cube to the right (the other way)
-            // for this (i,:,k) th row
+               // circularly shift the write permissions cube to the right (the other way)
+               // for this (i,:,k) th row
 
-            bool temp = write_permissions[ind];
-            int sh_ind;
-            for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
-            {
-               write_permissions[ind + sh_ind * num_chunks[0]] =
-                  write_permissions[ind + (sh_ind - 1) * num_chunks[0]];
+               bool temp = write_permissions[ind];
+               int sh_ind;
+               for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
+               {
+                  write_permissions[ind - sh_ind * num_chunks[0]] =
+                     write_permissions[ind - (sh_ind + 1) * num_chunks[0]];
+               }
+               write_permissions[ind - sh_ind * num_chunks[0]] = temp;
             }
-            write_permissions[ind + sh_ind * num_chunks[0]] = temp;
-         #endif
          }
       }
 #endif
@@ -429,7 +426,7 @@ void Map::map_shift( float *position )
                  (disp_right    == false || j > 0) )
             {
                int ind = i +
-                         j * num_chunks[0];
+                  j * num_chunks[0];
 
                if (write_permissions[ind] == true)
                {
@@ -450,21 +447,18 @@ void Map::map_shift( float *position )
                         0,
                         total_num_chunk_elements * sizeof(*buf) );
                }
-            }
-//TODO:
-         #if 0
-            // circularly shift the write permissions cube to the right (the other way)
-            // for this (i,:,k) th row
+               // circularly shift the write permissions cube to the up
+               // for this (i,j,:) th row
 
-            bool temp = write_permissions[ind];
-            int sh_ind;
-            for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
-            {
-               write_permissions[ind + sh_ind * num_chunks[0]] =
-                  write_permissions[ind + (sh_ind - 1) * num_chunks[0]];
+               bool temp = write_permissions[ind];
+               int sh_ind;
+               for (sh_ind = 0; sh_ind < num_chunks[2] - 1; sh_ind++)
+               {
+                  write_permissions[ind + sh_ind * num_chunks[0] * num_chunks[1]] =
+                     write_permissions[ind + (sh_ind + 1) * num_chunks[0] * num_chunks[1]];
+               }
+               write_permissions[ind + sh_ind * num_chunks[0] * num_chunks[1]] = temp;
             }
-            write_permissions[ind + sh_ind * num_chunks[0]] = temp;
-         #endif
          }
       }
 #endif
@@ -520,8 +514,8 @@ void Map::map_shift( float *position )
                  (disp_right    == false || j > 0) )
             {
                int ind = i +
-                         j * num_chunks[0] +
-                         (num_chunks[2] - 1) * num_chunks[0] * num_chunks[1];
+                  j * num_chunks[0] +
+                  (num_chunks[2] - 1) * num_chunks[0] * num_chunks[1];
 
                if (write_permissions[ind] == true)
                {
@@ -542,21 +536,18 @@ void Map::map_shift( float *position )
                         0,
                         total_num_chunk_elements * sizeof(*buf) );
                }
-            }
-//TODO:
-         #if 0
-            // circularly shift the write permissions cube to the right (the other way)
-            // for this (i,:,k) th row
+               // circularly shift the write permissions cube down
+               // for this (i,j,:) th row
 
-            bool temp = write_permissions[ind];
-            int sh_ind;
-            for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
-            {
-               write_permissions[ind + sh_ind * num_chunks[0]] =
-                  write_permissions[ind + (sh_ind - 1) * num_chunks[0]];
+               bool temp = write_permissions[ind];
+               int sh_ind;
+               for (sh_ind = 0; sh_ind < num_chunks[2] - 1; sh_ind++)
+               {
+                  write_permissions[ind - sh_ind * num_chunks[0] * num_chunks[1]] =
+                     write_permissions[ind + (sh_ind - 1) * num_chunks[0] * num_chunks[1]];
+               }
+               write_permissions[ind - sh_ind * num_chunks[0] * num_chunks[1]] = temp;
             }
-            write_permissions[ind + sh_ind * num_chunks[0]] = temp;
-         #endif
          }
       }
 #endif
