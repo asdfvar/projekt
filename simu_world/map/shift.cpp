@@ -68,7 +68,6 @@ void Map::map_shift( float *position )
             // circularly shift the write permissions cube backward (the other way)
             // for this (:,j,k) th row
 
-            bool temp = write_permissions[ind];
             int sh_ind;
             for (sh_ind = 0; sh_ind < num_chunks[0] - 1; sh_ind++)
             {
@@ -156,7 +155,6 @@ void Map::map_shift( float *position )
             // circularly shift the write permissions cube forward (the other way)
             // for this (:,j,k) th row
 
-            bool temp = write_permissions[ind];
             int sh_ind;
             for (sh_ind = 0; sh_ind < num_chunks[0] - 1; sh_ind++)
             {
@@ -248,7 +246,6 @@ void Map::map_shift( float *position )
                // circularly shift the write permissions cube to the right (the other way)
                // for this (i,:,k) th row
 
-               bool temp = write_permissions[ind];
                int sh_ind;
                for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
                {
@@ -346,7 +343,6 @@ void Map::map_shift( float *position )
                // circularly shift the write permissions cube to the right (the other way)
                // for this (i,:,k) th row
 
-               bool temp = write_permissions[ind];
                int sh_ind;
                for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
                {
@@ -446,7 +442,6 @@ void Map::map_shift( float *position )
                // circularly shift the write permissions cube to the up
                // for this (i,j,:) th row
 
-               bool temp = write_permissions[ind];
                int sh_ind;
                for (sh_ind = 0; sh_ind < num_chunks[2] - 1; sh_ind++)
                {
@@ -534,7 +529,6 @@ void Map::map_shift( float *position )
                // circularly shift the write permissions cube down
                // for this (i,j,:) th row
 
-               bool temp = write_permissions[ind];
                int sh_ind;
                for (sh_ind = 0; sh_ind < num_chunks[2] - 1; sh_ind++)
                {
