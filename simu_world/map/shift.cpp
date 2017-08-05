@@ -74,7 +74,6 @@ void Map::map_shift( float *position )
             {
                write_permissions[ind + sh_ind] = write_permissions[ind + sh_ind + 1];
             }
-            write_permissions[ind + sh_ind] = temp;
          }
       }
 #endif
@@ -163,7 +162,6 @@ void Map::map_shift( float *position )
             {
                write_permissions[ind - sh_ind] = write_permissions[ind - sh_ind - 1];
             }
-            write_permissions[ind - sh_ind] = temp;
          }
       }
 #endif
@@ -225,7 +223,7 @@ void Map::map_shift( float *position )
                   (disp_backward == false || i > 0) )
             {
                int ind = i +
-                  k * num_chunks[0] * num_chunks[1];
+                         k * num_chunks[0] * num_chunks[1];
 
                if (write_permissions[ind] == true)
                {
@@ -255,9 +253,8 @@ void Map::map_shift( float *position )
                for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
                {
                   write_permissions[ind + sh_ind * num_chunks[0]] =
-                     write_permissions[ind + (sh_ind - 1) * num_chunks[0]];
+                     write_permissions[ind + (sh_ind + 1) * num_chunks[0]];
                }
-               write_permissions[ind + sh_ind * num_chunks[0]] = temp;
             }
          }
       }
@@ -323,8 +320,8 @@ void Map::map_shift( float *position )
                   (disp_backward == false || i > 0) )
             {
                int ind = i +
-                  (num_chunks[1] - 1) * num_chunks[0] +
-                  k * num_chunks[0] * num_chunks[1];
+                         (num_chunks[1] - 1) * num_chunks[0] +
+                         k * num_chunks[0] * num_chunks[1];
 
                if (write_permissions[ind] == true)
                {
@@ -356,7 +353,6 @@ void Map::map_shift( float *position )
                   write_permissions[ind - sh_ind * num_chunks[0]] =
                      write_permissions[ind - (sh_ind + 1) * num_chunks[0]];
                }
-               write_permissions[ind - sh_ind * num_chunks[0]] = temp;
             }
          }
       }
@@ -457,7 +453,6 @@ void Map::map_shift( float *position )
                   write_permissions[ind + sh_ind * num_chunks[0] * num_chunks[1]] =
                      write_permissions[ind + (sh_ind + 1) * num_chunks[0] * num_chunks[1]];
                }
-               write_permissions[ind + sh_ind * num_chunks[0] * num_chunks[1]] = temp;
             }
          }
       }
@@ -546,7 +541,6 @@ void Map::map_shift( float *position )
                   write_permissions[ind - sh_ind * num_chunks[0] * num_chunks[1]] =
                      write_permissions[ind + (sh_ind - 1) * num_chunks[0] * num_chunks[1]];
                }
-               write_permissions[ind - sh_ind * num_chunks[0] * num_chunks[1]] = temp;
             }
          }
       }
