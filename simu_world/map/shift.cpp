@@ -600,7 +600,13 @@ void Map::map_shift( float *position )
 
             if( !file_exists )
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x + chunk_dim_x * (num_chunks_x - 1),
+                               map_pos_y + chunk_dim_y * j,
+                               map_pos_z + chunk_dim_z * k,
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -648,7 +654,13 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x,
+                               map_pos_y + chunk_dim_y * j,
+                               map_pos_z + chunk_dim_z * k,
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -696,7 +708,13 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x + chunk_dim_x * i,
+                               map_pos_y + chunk_dim_y * (num_chunks_y - 1),
+                               map_pos_z + chunk_dim_z * k,
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -743,7 +761,13 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x + chunk_dim_x * i,
+                               map_pos_y,
+                               map_pos_z + chunk_dim_z * k,
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -791,7 +815,13 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x + chunk_dim_x * i,
+                               map_pos_y + chunk_dim_y * j,
+                               map_pos_z + chunk_dim_z * (num_chunks_z - 1),
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -838,7 +868,13 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x + chunk_dim_x * i,
+                               map_pos_y + chunk_dim_y * j,
+                               map_pos_z,
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;

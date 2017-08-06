@@ -97,7 +97,13 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
 
             if( !file_exists )
             {
-               generate_chunk( buf, total_num_chunk_elements );
+               generate_chunk( buf,
+                               map_pos_x + chunk_dim_x * i,
+                               map_pos_y + chunk_dim_y * j,
+                               map_pos_z + chunk_dim_z * k,
+                               chunk_dim_x,
+                               chunk_dim_y,
+                               chunk_dim_z );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -109,7 +115,6 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
                write_permissions[ind] = false;
             }
 
-            generate_chunk ( buf, total_num_chunk_elements );
             set_chunk ( buf, i, j, k );
          }
       }
