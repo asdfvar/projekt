@@ -600,7 +600,7 @@ void Map::map_shift( float *position )
 
             if( !file_exists )
             {
-               create_random( buf, total_num_chunk_elements );
+               generate_chunk( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -648,7 +648,7 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, total_num_chunk_elements );
+               generate_chunk( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -696,7 +696,7 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, total_num_chunk_elements );
+               generate_chunk( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -743,7 +743,7 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, total_num_chunk_elements );
+               generate_chunk( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -791,7 +791,7 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, total_num_chunk_elements );
+               generate_chunk( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;
@@ -838,7 +838,7 @@ void Map::map_shift( float *position )
 
             if( !file_exists ) // number of bytes to read
             {
-               create_random( buf, total_num_chunk_elements );
+               generate_chunk( buf, total_num_chunk_elements );
 
                std::cout << filename << " does not exist."
                   << " chunk created." << std::endl;

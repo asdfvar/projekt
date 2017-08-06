@@ -4,7 +4,10 @@
 #include <sstream>
 #include <cstdlib>
 
-void create_random( int* blocks, int  num_chunk_elements )
+/*
+** function name: create_random
+*/
+void create_random( int* blocks, int num_chunk_elements )
 {
    for (int ind = 0; ind < num_chunk_elements; ind++)
    {
@@ -16,6 +19,20 @@ void create_random( int* blocks, int  num_chunk_elements )
    }
 }
 
+/*
+** function name: generate_chunk
+*/
+void generate_chunk( int* blocks, int num_chunk_elements )
+{
+   for (int ind = 0; ind < num_chunk_elements; ind++)
+   {
+      int random_num = std::rand() % 100;
+      if (random_num == 0)
+         blocks[ind] = 1;
+      else
+         blocks[ind] = 0;
+   }
+}
 
 /*
 ** function name: read_chunk
