@@ -63,7 +63,8 @@ class Map
       void get_chunk( int* dst,
                       int  chunk_x,
                       int  chunk_y,
-                      int  chunk_z );
+                      int  chunk_z,
+                      int  aug );
 
       int *physical_chunk_id_x,
           *physical_chunk_id_y,

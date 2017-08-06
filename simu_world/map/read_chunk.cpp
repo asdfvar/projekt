@@ -24,7 +24,7 @@ void create_random( int* blocks, int num_chunk_elements )
 /*
 ** function name: generate_chunk
 */
-void generate_chunk( int* blocks,
+void generate_chunk( int* dst,
                      int  pos_x,
                      int  pos_y,
                      int  pos_z,
@@ -48,14 +48,14 @@ void generate_chunk( int* blocks,
             float result = sigmoid * 110.0f;
             int   random_num = 1 + (int)result;
 
-            if (random_num > 100) blocks[ind] = 0;
+            if (random_num > 100) dst[ind] = 0;
             else
             {
                int number = std::rand() % random_num;
                if (number == 0)
-                  blocks[ind] = 1;
+                  dst[ind] = 1;
                else
-                  blocks[ind] = 0;
+                  dst[ind] = 0;
             }
          }
       }

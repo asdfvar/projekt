@@ -328,18 +328,32 @@ void Map::set_chunk( int* src,
 void Map::get_chunk( int* dst,
                      int  chunk_x,
                      int  chunk_y,
-                     int  chunk_z )
+                     int  chunk_z,
+                     int  aug )
 {
    int ind = 0;
-   for (int k = chunk_z * chunk_dim_z; k < (chunk_z + 1) * chunk_dim_z; k++)
+   for (int k = chunk_z * chunk_dim_z - aug;
+        k < (chunk_z + 1) * chunk_dim_z + aug;
+        k++)
    {
-      for (int j = chunk_y * chunk_dim_y; j < (chunk_y + 1) * chunk_dim_y; j++)
+      for (int j = chunk_y * chunk_dim_y - aug;
+           j < (chunk_y + 1) * chunk_dim_y + aug;
+           j++)
       {
-         for (int i = chunk_x * chunk_dim_x; i < (chunk_x + 1) * chunk_dim_x; i++, ind++)
+         for (int i = chunk_x * chunk_dim_x - aug;
+              i < (chunk_x + 1) * chunk_dim_x + aug;
+              i++, ind++)
          {
-            dst[ind] = blocks[ i +
-                               j * dim_x +
-                               k * dim_x * dim_y ];
+            if (i < 0 || i >= dim_x || j < 0 || j >= dim_y || k < 0 || k >= dim_z)
+            {
+               dst[ind] = 0;
+            }
+            else
+            {
+               dst[ind] = blocks[ i +
+                                  j * dim_x +
+                                  k * dim_x * dim_y ];
+            }
          }
       }
    }

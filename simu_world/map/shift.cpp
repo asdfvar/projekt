@@ -51,7 +51,8 @@ void Map::map_shift( float *position )
                      buf,
                      0,
                      j,
-                     k );
+                     k,
+                     0 );
 
                std::string filename = create_filename(
                      abs_chunk_x + 0,
@@ -138,7 +139,8 @@ void Map::map_shift( float *position )
                      buf,
                      num_chunks_x - 1,
                      j,
-                     k );
+                     k,
+                     0 );
 
                std::string filename = create_filename(
                      abs_chunk_x + num_chunks_x - 1,
@@ -229,7 +231,8 @@ void Map::map_shift( float *position )
                         buf,
                         i,
                         0,
-                        k );
+                        k,
+                        0 );
 
                   std::string filename = create_filename(
                         abs_chunk_x + i,
@@ -326,7 +329,8 @@ void Map::map_shift( float *position )
                         buf,
                         i,
                         num_chunks_y - 1,
-                        k );
+                        k,
+                        0 );
 
                   std::string filename = create_filename(
                         abs_chunk_x + i,
@@ -426,6 +430,7 @@ void Map::map_shift( float *position )
                         buf,
                         i,
                         j,
+                        0,
                         0 );
 
                   std::string filename = create_filename(
@@ -513,7 +518,8 @@ void Map::map_shift( float *position )
                         buf,
                         i,
                         j,
-                        num_chunks_z - 1 );
+                        num_chunks_z - 1,
+                        0 );
 
                   std::string filename = create_filename(
                         abs_chunk_x + i,
