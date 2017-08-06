@@ -1,5 +1,4 @@
 #include "map.h"
-#include "chunk.h"
 #include "fileio.h"
 #include "queue.h"
 #include <sstream>

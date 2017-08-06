@@ -1,7 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "chunk.h"
 #include <iostream>
 #include <pthread.h>
 #include "opengl_interface.h"
@@ -27,10 +26,6 @@ class Map
                          float* user_direction,
                          float  window_distance,
                          float  window_width );
-
-      Chunk *access_chunk( int v_id_x,
-                           int v_id_y,
-                           int v_id_z );
 
       int  get_abs_element( int* position );
 

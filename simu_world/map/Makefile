@@ -9,7 +9,6 @@ INC             = -I$(BASE)          \
 #
 
 OBJ = map.o          \
-      chunk.o        \
       shift.o        \
       render_chunk.o \
       update.o       \
@@ -26,9 +25,6 @@ clean:
 	rm $(OBJ) $(LIBEXE)
 
 map.o: map.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
-
-chunk.o: chunk.cpp
 	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 shift.o: shift.cpp
