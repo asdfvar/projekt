@@ -5,11 +5,11 @@ Semaphore::Semaphore( unsigned int num_tasks_in)
 {
    num_tasks   = num_tasks_in;
 
-   tasks             = new int[num_tasks];
+   tasks       = new int[num_tasks];
 
    for (unsigned int task = 0; task < num_tasks; task++)
    {
-      tasks[task]            = 0;
+      tasks[task] = 0;
    }
 }
 

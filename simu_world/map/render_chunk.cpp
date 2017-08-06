@@ -51,18 +51,18 @@ void Map::render_chunk( float* user_position,
 
             // absolute block position
             block_position[0] = (float)( block_ind_x -
-                                         num_chunks[0] / 2 *
-                                         num_chunk_elements[0] ) +
+                                         num_chunks_x / 2 *
+                                         chunk_dim_x ) +
                                          map_pos_x;
 
             block_position[1] = (float)( block_ind_y -
-                                         num_chunks[1] / 2 *
-                                         num_chunk_elements[1] ) +
+                                         num_chunks_y / 2 *
+                                         chunk_dim_y ) +
                                          map_pos_y;
 
             block_position[2] = (float)( block_ind_z -
-                                         num_chunks[2] / 2 *
-                                         num_chunk_elements[2] ) +
+                                         num_chunks_z / 2 *
+                                         chunk_dim_z ) +
                                          map_pos_z;
 
             int sides = 0;

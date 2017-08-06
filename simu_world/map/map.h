@@ -40,7 +40,6 @@ class Map
                                  float* color );
 
       void diagnostics( int* position );
-      void debug_info( void );
       Queue* queue;
 
       pthread_barrier_t* IO_barrier;
@@ -50,8 +49,9 @@ class Map
 
       void shift( int x, int y, int z);
 
-      int   num_chunks[3];
-      int   num_chunk_elements[3];
+      int   num_chunks_x;
+      int   num_chunks_y;
+      int   num_chunks_z;
       bool* write_permissions;
 
       void get_physical_chunk_position( int* abs_position,

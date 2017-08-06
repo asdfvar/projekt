@@ -159,12 +159,6 @@ Simu_world_obj::~Simu_world_obj( void )
 void Simu_world_obj::idle( void )
 {
 
-#ifdef DEBUG
-   map->debug_info();
-   user.debug_info();
-   std::cout << std::endl;
-#endif
-
    /*
    ** wait for the prescribed time to pass
    */
@@ -234,6 +228,7 @@ void Simu_world_obj::idle( void )
          user.get_position( user_position );
          map->map_shift( user_position );
 
+#ifdef DEBUG
          g_text.populate("user position: ");
          g_text.populate( user_position[0] );
          g_text.populate( ", " );
@@ -247,6 +242,7 @@ void Simu_world_obj::idle( void )
          g_text.populate( 1.0f / time_manager->get_time_step_actual() );
          g_text.populate(" Hz");
          g_text.new_line();
+#endif
 
          int i_user_position[3] = { (int)floorf(user_position[0]),
                                     (int)floorf(user_position[1]),
@@ -271,7 +267,7 @@ void Simu_world_obj::idle( void )
 }
 
 /*
-** function name: Simu_world_obj
+** function name: display from: Simu_world_obj
 */
 void Simu_world_obj::display( void )
 {
@@ -283,7 +279,7 @@ void Simu_world_obj::display( void )
    float window_distance = user.get_window_distance();
    float window_width    = user.get_window_width();
 
-   user.get_position(  user_position );
+   user.get_position(  user_position  );
    user.get_direction( user_direction );
 
    map->render_chunk( user_position,

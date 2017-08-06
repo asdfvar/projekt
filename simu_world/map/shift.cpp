@@ -21,9 +21,9 @@ void Map::map_shift( float *position )
    bool disp_up       = false;
    bool disp_down     = false;
 
-   int total_num_chunk_elements = num_chunk_elements[0] *
-                                  num_chunk_elements[1] *
-                                  num_chunk_elements[2];
+   int total_num_chunk_elements = chunk_dim_x *
+                                  chunk_dim_y *
+                                  chunk_dim_z;
 
    float displacement_x = position[0] - map_pos_x;
 
@@ -32,18 +32,18 @@ void Map::map_shift( float *position )
 
       disp_forward = true;
 
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
 #ifdef DO_QUEUE
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int j = 0; j < num_chunks[1]; j++)
+         for (int j = 0; j < num_chunks_y; j++)
          {
 
-            int ind = j * num_chunks[0] +
-                      k * num_chunks[0] * num_chunks[1];
+            int ind = j * num_chunks_x +
+                      k * num_chunks_x * num_chunks_y;
 
             if (write_permissions[ind] == true)
             {
@@ -69,7 +69,7 @@ void Map::map_shift( float *position )
             // for this (:,j,k) th row
 
             int sh_ind;
-            for (sh_ind = 0; sh_ind < num_chunks[0] - 1; sh_ind++)
+            for (sh_ind = 0; sh_ind < num_chunks_x - 1; sh_ind++)
             {
                write_permissions[ind + sh_ind] = write_permissions[ind + sh_ind + 1];
             }
@@ -119,29 +119,29 @@ void Map::map_shift( float *position )
 
       disp_backward = true;
 
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
 #ifdef DO_QUEUE
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int j = 0; j < num_chunks[1]; j++)
+         for (int j = 0; j < num_chunks_y; j++)
          {
-            int ind = num_chunks[0] - 1 +
-                      j * num_chunks[0] +
-                      k * num_chunks[0] * num_chunks[1];
+            int ind = num_chunks_x - 1 +
+                      j * num_chunks_x +
+                      k * num_chunks_x * num_chunks_y;
 
             if (write_permissions[ind] == true)
             {
                get_chunk(
                      buf,
-                     num_chunks[0] - 1,
+                     num_chunks_x - 1,
                      j,
                      k );
 
                std::string filename = create_filename(
-                     abs_chunk_x + num_chunks[0] - 1,
+                     abs_chunk_x + num_chunks_x - 1,
                      abs_chunk_y + j,
                      abs_chunk_z + k );
 
@@ -156,7 +156,7 @@ void Map::map_shift( float *position )
             // for this (:,j,k) th row
 
             int sh_ind;
-            for (sh_ind = 0; sh_ind < num_chunks[0] - 1; sh_ind++)
+            for (sh_ind = 0; sh_ind < num_chunks_x - 1; sh_ind++)
             {
                write_permissions[ind - sh_ind] = write_permissions[ind - sh_ind - 1];
             }
@@ -208,20 +208,20 @@ void Map::map_shift( float *position )
 
       disp_left = true;
 
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
 #ifdef DO_QUEUE
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks_x; i++)
          {
-            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
+            if ( (disp_forward  == false || i < num_chunks_x - 1) &&
                   (disp_backward == false || i > 0) )
             {
                int ind = i +
-                         k * num_chunks[0] * num_chunks[1];
+                         k * num_chunks_x * num_chunks_y;
 
                if (write_permissions[ind] == true)
                {
@@ -247,10 +247,10 @@ void Map::map_shift( float *position )
                // for this (i,:,k) th row
 
                int sh_ind;
-               for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
+               for (sh_ind = 0; sh_ind < num_chunks_y - 1; sh_ind++)
                {
-                  write_permissions[ind + sh_ind * num_chunks[0]] =
-                     write_permissions[ind + (sh_ind + 1) * num_chunks[0]];
+                  write_permissions[ind + sh_ind * num_chunks_x] =
+                     write_permissions[ind + (sh_ind + 1) * num_chunks_x];
                }
             }
          }
@@ -304,33 +304,33 @@ void Map::map_shift( float *position )
 
       disp_right = true;
 
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
 #ifdef DO_QUEUE
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks_x; i++)
          {
-            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
+            if ( (disp_forward  == false || i < num_chunks_x - 1) &&
                   (disp_backward == false || i > 0) )
             {
                int ind = i +
-                         (num_chunks[1] - 1) * num_chunks[0] +
-                         k * num_chunks[0] * num_chunks[1];
+                         (num_chunks_y - 1) * num_chunks_x +
+                         k * num_chunks_x * num_chunks_y;
 
                if (write_permissions[ind] == true)
                {
                   get_chunk(
                         buf,
                         i,
-                        num_chunks[1] - 1,
+                        num_chunks_y - 1,
                         k );
 
                   std::string filename = create_filename(
                         abs_chunk_x + i,
-                        abs_chunk_y + num_chunks[1] - 1,
+                        abs_chunk_y + num_chunks_y - 1,
                         abs_chunk_z + k );
 
                   queue->fill_buffer(
@@ -344,10 +344,10 @@ void Map::map_shift( float *position )
                // for this (i,:,k) th row
 
                int sh_ind;
-               for (sh_ind = 0; sh_ind < num_chunks[1] - 1; sh_ind++)
+               for (sh_ind = 0; sh_ind < num_chunks_y - 1; sh_ind++)
                {
-                  write_permissions[ind - sh_ind * num_chunks[0]] =
-                     write_permissions[ind - (sh_ind + 1) * num_chunks[0]];
+                  write_permissions[ind - sh_ind * num_chunks_x] =
+                     write_permissions[ind - (sh_ind + 1) * num_chunks_x];
                }
             }
          }
@@ -403,22 +403,22 @@ void Map::map_shift( float *position )
 
       disp_up = true;
 
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
 #ifdef DO_QUEUE
-      for (int i = 0; i < num_chunks[0]; i++)
+      for (int i = 0; i < num_chunks_x; i++)
       {
-         for (int j = 0; j < num_chunks[1]; j++)
+         for (int j = 0; j < num_chunks_y; j++)
          {
-            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
+            if ( (disp_forward  == false || i < num_chunks_x - 1) &&
                  (disp_backward == false || i > 0) &&
-                 (disp_left     == false || j < num_chunks[1] - 1) &&
+                 (disp_left     == false || j < num_chunks_y - 1) &&
                  (disp_right    == false || j > 0) )
             {
                int ind = i +
-                  j * num_chunks[0];
+                  j * num_chunks_x;
 
                if (write_permissions[ind] == true)
                {
@@ -443,10 +443,10 @@ void Map::map_shift( float *position )
                // for this (i,j,:) th row
 
                int sh_ind;
-               for (sh_ind = 0; sh_ind < num_chunks[2] - 1; sh_ind++)
+               for (sh_ind = 0; sh_ind < num_chunks_z - 1; sh_ind++)
                {
-                  write_permissions[ind + sh_ind * num_chunks[0] * num_chunks[1]] =
-                     write_permissions[ind + (sh_ind + 1) * num_chunks[0] * num_chunks[1]];
+                  write_permissions[ind + sh_ind * num_chunks_x * num_chunks_y] =
+                     write_permissions[ind + (sh_ind + 1) * num_chunks_x * num_chunks_y];
                }
             }
          }
@@ -489,23 +489,23 @@ void Map::map_shift( float *position )
 
       disp_down = true;
 
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
 #ifdef DO_QUEUE
-      for (int i = 0; i < num_chunks[0]; i++)
+      for (int i = 0; i < num_chunks_x; i++)
       {
-         for (int j = 0; j < num_chunks[1]; j++)
+         for (int j = 0; j < num_chunks_y; j++)
          {
-            if ( (disp_forward  == false || i < num_chunks[0] - 1) &&
+            if ( (disp_forward  == false || i < num_chunks_x - 1) &&
                  (disp_backward == false || i > 0) &&
-                 (disp_left     == false || j < num_chunks[1] - 1) &&
+                 (disp_left     == false || j < num_chunks_y - 1) &&
                  (disp_right    == false || j > 0) )
             {
                int ind = i +
-                  j * num_chunks[0] +
-                  (num_chunks[2] - 1) * num_chunks[0] * num_chunks[1];
+                  j * num_chunks_x +
+                  (num_chunks_z - 1) * num_chunks_x * num_chunks_y;
 
                if (write_permissions[ind] == true)
                {
@@ -513,12 +513,12 @@ void Map::map_shift( float *position )
                         buf,
                         i,
                         j,
-                        num_chunks[2] - 1 );
+                        num_chunks_z - 1 );
 
                   std::string filename = create_filename(
                         abs_chunk_x + i,
                         abs_chunk_y + j,
-                        abs_chunk_z + num_chunks[2] - 1 );
+                        abs_chunk_z + num_chunks_z - 1 );
 
                   queue->fill_buffer(
                         filename,
@@ -530,10 +530,10 @@ void Map::map_shift( float *position )
                // for this (i,j,:) th row
 
                int sh_ind;
-               for (sh_ind = 0; sh_ind < num_chunks[2] - 1; sh_ind++)
+               for (sh_ind = 0; sh_ind < num_chunks_z - 1; sh_ind++)
                {
-                  write_permissions[ind - sh_ind * num_chunks[0] * num_chunks[1]] =
-                     write_permissions[ind + (sh_ind - 1) * num_chunks[0] * num_chunks[1]];
+                  write_permissions[ind - sh_ind * num_chunks_x * num_chunks_y] =
+                     write_permissions[ind + (sh_ind - 1) * num_chunks_x * num_chunks_y];
                }
             }
          }
@@ -575,23 +575,23 @@ void Map::map_shift( float *position )
 
    if (disp_forward)
    {
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int j = 0; j < num_chunks[1]; j++)
+         for (int j = 0; j < num_chunks_y; j++)
          {
-            std::string filename = create_filename( abs_chunk_x + num_chunks[0] - 1,
+            std::string filename = create_filename( abs_chunk_x + num_chunks_x - 1,
                                                     abs_chunk_y + j,
                                                     abs_chunk_z + k );
 
             // TODO: move this logic to the IO thread
 
-            int ind = num_chunks[0] - 1 +
-                      j * num_chunks[0] +
-                      k * num_chunks[0] * num_chunks[1];
+            int ind = num_chunks_x - 1 +
+                      j * num_chunks_x +
+                      k * num_chunks_x * num_chunks_y;
 
             bool file_exists =
             read_chunk( filename,
@@ -614,7 +614,7 @@ void Map::map_shift( float *position )
 
             // copy the contents of buf into the block
             set_chunk( buf,
-                       num_chunks[0] - 1,
+                       num_chunks_x - 1,
                        j,
                        k );
          }
@@ -622,13 +622,13 @@ void Map::map_shift( float *position )
    }
    else if (disp_backward)
    {
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int j = 0; j < num_chunks[1]; j++)
+         for (int j = 0; j < num_chunks_y; j++)
          {
             // use set_chunk to populate the buffer contents into the blocks
             std::string filename = create_filename( abs_chunk_x,
@@ -638,8 +638,8 @@ void Map::map_shift( float *position )
             // TODO: move this logic to the IO thread
 
             int ind = 0                 +
-                      j * num_chunks[0] +
-                      k * num_chunks[0] * num_chunks[1];
+                      j * num_chunks_x +
+                      k * num_chunks_x * num_chunks_y;
 
             bool file_exists =
             read_chunk( filename,
@@ -670,24 +670,24 @@ void Map::map_shift( float *position )
    }
    if (disp_left)
    {
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks_x; i++)
          {
             // use set_chunk to populate the buffer contents into the blocks
             std::string filename = create_filename( abs_chunk_x + i,
-                                                    abs_chunk_y + num_chunks[1] - 1,
+                                                    abs_chunk_y + num_chunks_y - 1,
                                                     abs_chunk_z + k );
 
             // TODO: move this logic to the IO thread
 
             int ind = i +
-                      (num_chunks[1] - 1) * num_chunks[0] +
-                      k * num_chunks[0] * num_chunks[1];
+                      (num_chunks_y - 1) * num_chunks_x +
+                      k * num_chunks_x * num_chunks_y;
 
             bool file_exists =
             read_chunk( filename,
@@ -711,20 +711,20 @@ void Map::map_shift( float *position )
             // copy the contents of buf into the block
             set_chunk( buf,
                        i,
-                       num_chunks[0] - 1,
+                       num_chunks_x - 1,
                        k );
          }
       }
    }
    else if (disp_right)
    {
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-      for (int k = 0; k < num_chunks[2]; k++)
+      for (int k = 0; k < num_chunks_z; k++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks_x; i++)
          {
             // use set_chunk to populate the buffer contents into the blocks
             std::string filename = create_filename( abs_chunk_x + i,
@@ -734,7 +734,7 @@ void Map::map_shift( float *position )
             // TODO: move this logic to the IO thread
 
             int ind = i +
-                      k * num_chunks[0] * num_chunks[1];
+                      k * num_chunks_x * num_chunks_y;
 
             bool file_exists =
             read_chunk( filename,
@@ -765,24 +765,24 @@ void Map::map_shift( float *position )
    }
    if (disp_up)
    {
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-      for (int j = 0; j < num_chunks[1]; j++)
+      for (int j = 0; j < num_chunks_y; j++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks_x; i++)
          {
             // use set_chunk to populate the buffer contents into the blocks
             std::string filename = create_filename( abs_chunk_x + i,
                                                     abs_chunk_y + j,
-                                                    abs_chunk_z + num_chunks[2] - 1 );
+                                                    abs_chunk_z + num_chunks_z - 1 );
 
             // TODO: move this logic to the IO thread
 
             int ind = i +
-                      j * num_chunks[0] +
-                      (num_chunks[0] - 1) * num_chunks[0] * num_chunks[1];
+                      j * num_chunks_x +
+                      (num_chunks_x - 1) * num_chunks_x * num_chunks_y;
 
             bool file_exists =
             read_chunk( filename,
@@ -807,19 +807,19 @@ void Map::map_shift( float *position )
             set_chunk( buf,
                        i,
                        j,
-                       num_chunks[2] - 1 );
+                       num_chunks_z - 1 );
          }
       }
    }
    else if (disp_down)
    {
-      int abs_chunk_x = map_pos_x / num_chunk_elements[0];
-      int abs_chunk_y = map_pos_y / num_chunk_elements[1];
-      int abs_chunk_z = map_pos_z / num_chunk_elements[2];
+      int abs_chunk_x = map_pos_x / chunk_dim_x;
+      int abs_chunk_y = map_pos_y / chunk_dim_y;
+      int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-      for (int j = 0; j < num_chunks[1]; j++)
+      for (int j = 0; j < num_chunks_y; j++)
       {
-         for (int i = 0; i < num_chunks[0]; i++)
+         for (int i = 0; i < num_chunks_x; i++)
          {
             // use set_chunk to populate the buffer contents into the blocks
             std::string filename = create_filename( abs_chunk_x + i,
@@ -829,7 +829,7 @@ void Map::map_shift( float *position )
             // TODO: move this logic to the IO thread
 
             int ind = i +
-                      j * num_chunks[0];
+                      j * num_chunks_x;
 
             bool file_exists =
             read_chunk( filename,

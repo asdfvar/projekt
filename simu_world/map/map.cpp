@@ -17,20 +17,16 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    IO_barrier     = IO_barrier_in;
    update_barrier = update_barrier_in;
 
-   num_chunks[0] = 3;
-   num_chunks[1] = 3;
-   num_chunks[2] = 3;
+   num_chunks_x = 3;
+   num_chunks_y = 3;
+   num_chunks_z = 3;
 
    /*
    ** build the chunks
    */
-   num_chunk_elements[0] = 13;
-   num_chunk_elements[1] = 13;
-   num_chunk_elements[2] = 13;
-
-   chunk_dim_x = num_chunk_elements[0];
-   chunk_dim_y = num_chunk_elements[1];
-   chunk_dim_z = num_chunk_elements[2];
+   chunk_dim_x = 13;
+   chunk_dim_y = 13;
+   chunk_dim_z = 13;
 
    int total_num_chunk_elements = chunk_dim_x *
                                   chunk_dim_y *
@@ -42,34 +38,34 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    ** initialize the mapping from the virtual grid index
    ** to the physical grid index
    */
-   physical_chunk_id_x = new int[num_chunks[0]];
-   physical_chunk_id_y = new int[num_chunks[1]];
-   physical_chunk_id_z = new int[num_chunks[2]];
+   physical_chunk_id_x = new int[num_chunks_x];
+   physical_chunk_id_y = new int[num_chunks_y];
+   physical_chunk_id_z = new int[num_chunks_z];
 
-   for (int k = 0; k < num_chunks[0]; k++) physical_chunk_id_x[k] = k;
-   for (int k = 0; k < num_chunks[1]; k++) physical_chunk_id_y[k] = k;
-   for (int k = 0; k < num_chunks[2]; k++) physical_chunk_id_z[k] = k;
+   for (int k = 0; k < num_chunks_x; k++) physical_chunk_id_x[k] = k;
+   for (int k = 0; k < num_chunks_y; k++) physical_chunk_id_y[k] = k;
+   for (int k = 0; k < num_chunks_z; k++) physical_chunk_id_z[k] = k;
 
    /*
    ** initialize the mapping from the physical grid
    ** to the virtual grid index
    */
-   virtual_chunk_id_x = new int[num_chunks[0]];
-   virtual_chunk_id_y = new int[num_chunks[1]];
-   virtual_chunk_id_z = new int[num_chunks[2]];
+   virtual_chunk_id_x = new int[num_chunks_x];
+   virtual_chunk_id_y = new int[num_chunks_y];
+   virtual_chunk_id_z = new int[num_chunks_z];
 
-   for (int k = 0; k < num_chunks[0]; k++) virtual_chunk_id_x[k] = k;
-   for (int k = 0; k < num_chunks[1]; k++) virtual_chunk_id_y[k] = k;
-   for (int k = 0; k < num_chunks[2]; k++) virtual_chunk_id_z[k] = k;
+   for (int k = 0; k < num_chunks_x; k++) virtual_chunk_id_x[k] = k;
+   for (int k = 0; k < num_chunks_y; k++) virtual_chunk_id_y[k] = k;
+   for (int k = 0; k < num_chunks_z; k++) virtual_chunk_id_z[k] = k;
 
    /*
    ** create the save directory
    */
    fio::directory();
 
-   dim_x = chunk_dim_x * num_chunks[0];
-   dim_y = chunk_dim_y * num_chunks[1];
-   dim_z = chunk_dim_z * num_chunks[2];
+   dim_x = chunk_dim_x * num_chunks_x;
+   dim_y = chunk_dim_y * num_chunks_y;
+   dim_z = chunk_dim_z * num_chunks_z;
 
    map_pos_x = 0.0f;
    map_pos_y = 0.0f;
@@ -77,9 +73,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
 
    int total_dim = dim_x * dim_y * dim_z;
 
-   int max_chunk_elements = (num_chunk_elements[0] > num_chunk_elements[1]) ?
-                             num_chunk_elements[0] : num_chunk_elements[1];
-   if (max_chunk_elements < num_chunk_elements[2]) max_chunk_elements = num_chunk_elements[2];
+   int max_chunk_elements = (chunk_dim_x > chunk_dim_y) ?
+                             chunk_dim_x : chunk_dim_y;
+   if (max_chunk_elements < chunk_dim_z) max_chunk_elements = chunk_dim_z;
 
    int max_dim = (dim_x > dim_y) ? dim_x : dim_y;
    if (max_dim < dim_z) max_dim = dim_z;
@@ -88,11 +84,11 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
    io_ids  = new int[ total_num_chunk_elements ];
    buf     = new int[ max_dim * max_dim * max_chunk_elements ];
 
-   for (int k = 0, ind = 0; k < num_chunks[2]; k++)
+   for (int k = 0, ind = 0; k < num_chunks_z; k++)
    {
-      for (int j = 0; j < num_chunks[1]; j++)
+      for (int j = 0; j < num_chunks_y; j++)
       {
-         for (int i = 0; i < num_chunks[0]; i++, ind++)
+         for (int i = 0; i < num_chunks_x; i++, ind++)
          {
             std::string filename = create_filename( i, j, k );
 
@@ -154,39 +150,39 @@ void Map::get_physical_chunk_position( int* abs_position,
 {
    if (abs_position[0] >= 0)
    {
-      physical_chunk_position[0] = ((abs_position[0] / num_chunk_elements[0]) +
-                                     num_chunks[0] / 2) % num_chunks[0];
+      physical_chunk_position[0] = ((abs_position[0] / chunk_dim_x) +
+                                     num_chunks_x / 2) % num_chunks_x;
    }
    else
    {
-      physical_chunk_position[0] = (((abs_position[0] + 1) / num_chunk_elements[0]) +
-                                     num_chunks[0] / 2 - 1) % num_chunks[0];
+      physical_chunk_position[0] = (((abs_position[0] + 1) / chunk_dim_x) +
+                                     num_chunks_x / 2 - 1) % num_chunks_x;
    }
-   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks[0];
+   if (physical_chunk_position[0] < 0) physical_chunk_position[0] += num_chunks_x;
 
    if (abs_position[1] >= 0)
    {
-      physical_chunk_position[1] = ((abs_position[1] / num_chunk_elements[1]) +
-                                     num_chunks[1] / 2) % num_chunks[1];
+      physical_chunk_position[1] = ((abs_position[1] / chunk_dim_y) +
+                                     num_chunks_y / 2) % num_chunks_y;
    }
    else
    {
-      physical_chunk_position[1] = (((abs_position[1] + 1) / num_chunk_elements[1]) +
-                                     num_chunks[1] / 2 - 1) % num_chunks[1];
+      physical_chunk_position[1] = (((abs_position[1] + 1) / chunk_dim_y) +
+                                     num_chunks_y / 2 - 1) % num_chunks_y;
    }
-   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks[1];
+   if (physical_chunk_position[1] < 0) physical_chunk_position[1] += num_chunks_y;
 
    if (abs_position[2] >= 0)
    {
-      physical_chunk_position[2] = ((abs_position[2] / num_chunk_elements[2]) +
-                                     num_chunks[2] / 2) % num_chunks[2];
+      physical_chunk_position[2] = ((abs_position[2] / chunk_dim_z) +
+                                     num_chunks_z / 2) % num_chunks_z;
    }
    else
    {
-      physical_chunk_position[2] = (((abs_position[2] + 1) / num_chunk_elements[2]) +
-                                     num_chunks[2] / 2 - 1) % num_chunks[2];
+      physical_chunk_position[2] = (((abs_position[2] + 1) / chunk_dim_z) +
+                                     num_chunks_z / 2 - 1) % num_chunks_z;
    }
-   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks[2];
+   if (physical_chunk_position[2] < 0) physical_chunk_position[2] += num_chunks_z;
 
 }
 
@@ -195,13 +191,13 @@ void Map::get_physical_chunk_position( int* abs_position,
 */
 void Map::get_relative_element_position( int* position_in, int* element_position )
 {
-   element_position[0] = position_in[0] % num_chunk_elements[0];
-   element_position[1] = position_in[1] % num_chunk_elements[1];
-   element_position[2] = position_in[2] % num_chunk_elements[2];
+   element_position[0] = position_in[0] % chunk_dim_x;
+   element_position[1] = position_in[1] % chunk_dim_y;
+   element_position[2] = position_in[2] % chunk_dim_z;
 
-   if ( element_position[0] < 0 ) element_position[0] += num_chunk_elements[0];
-   if ( element_position[1] < 0 ) element_position[1] += num_chunk_elements[1];
-   if ( element_position[2] < 0 ) element_position[2] += num_chunk_elements[2];
+   if ( element_position[0] < 0 ) element_position[0] += chunk_dim_x;
+   if ( element_position[1] < 0 ) element_position[1] += chunk_dim_y;
+   if ( element_position[2] < 0 ) element_position[2] += chunk_dim_z;
 }
 
 /*
@@ -224,7 +220,7 @@ void Map::diagnostics( int *position_in )
    g_text.populate( ", ");
    g_text.new_line();
    g_text.populate("Physical Chunk ids x: ");
-   for (int k = 0; k < num_chunks[0]; k++)
+   for (int k = 0; k < num_chunks_x; k++)
    {
       g_text.populate( physical_chunk_id_x[k] );
       g_text.populate( ", ");
@@ -253,19 +249,19 @@ void Map::diagnostics( int *position_in )
    
    int block_position[3];
 
-   int num_chunks_x_2 = num_chunks[0] / 2;
+   int num_chunks_x_2 = num_chunks_x / 2;
    block_position[0] = (position_in[0] - map_pos_x) +
-                       (num_chunk_elements[0] *
+                       (chunk_dim_x *
                        num_chunks_x_2);
 
-   int num_chunks_y_2 = num_chunks[1] / 2;
+   int num_chunks_y_2 = num_chunks_y / 2;
    block_position[1] = (position_in[1] - map_pos_y) +
-                       (num_chunk_elements[1] *
+                       (chunk_dim_y *
                        num_chunks_y_2);
 
-   int num_chunks_z_2 = num_chunks[2] / 2;
+   int num_chunks_z_2 = num_chunks_z / 2;
    block_position[2] = (position_in[2] - map_pos_z) +
-                       (num_chunk_elements[2] *
+                       (chunk_dim_z *
                        num_chunks_z_2);
 
    int ind = block_position[0]                 +
@@ -299,42 +295,6 @@ void Map::diagnostics( int *position_in )
 }
 
 /*
-** function name: debug_info from: Map
-*/
-void Map::debug_info( void )
-{
-
-   std::cout << "virtual id 0 -> physical grid id (" <<
-                 physical_chunk_id_x[0] << ", "       <<
-                 physical_chunk_id_y[0] << ", "       <<
-                 physical_chunk_id_z[0] << ")"        <<
-                 std::endl;
-
-   std::cout << "physical -> virtual grid id:" << std::endl;
-   std::cout << "x: ";
-   for (int k = 0; k < num_chunks[0]; k++)
-   {
-      std::cout << "(" << k << "," << virtual_chunk_id_x[k] << "), ";
-   }
-   std::cout << std::endl;
-
-   std::cout << "y: ";
-   for (int k = 0; k < num_chunks[1]; k++)
-   {
-      std::cout << "(" << k << "," << virtual_chunk_id_y[k] << "), ";
-   }
-   std::cout << std::endl;
-
-   std::cout << "z: ";
-   for (int k = 0; k < num_chunks[2]; k++)
-   {
-      std::cout << "(" << k << "," << virtual_chunk_id_z[k] << "), ";
-   }
-   std::cout << std::endl;
-
-}
-
-/*
 ** function name: set_chunk from: Map
 */
 void Map::set_chunk( int* src,
@@ -358,7 +318,7 @@ void Map::set_chunk( int* src,
 }
 
 /*
-** function name: set_chunk from: Map
+** function name: get_chunk from: Map
 */
 void Map::get_chunk( int* dst,
                      int  chunk_x,

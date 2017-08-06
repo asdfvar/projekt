@@ -159,12 +159,3 @@ void User::stop_down( void )
 {
    down_speed = 0.0f;
 }
-
-void User::debug_info( void )
-{
-   std::cout << "User position = ("  <<
-                 position[0] << ", " <<
-                 position[1] << ", " <<
-                 position[2] << ")"  <<
-                 std::endl;
-}
