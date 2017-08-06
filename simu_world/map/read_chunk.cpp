@@ -62,6 +62,81 @@ void generate_chunk( int* dst,
    }
 }
 
+#define PREC 10000
+/*
+** function name: generate_chunk
+*/
+void generate_chunk2( int* src,
+                      int* dst,
+                      int  pos_x,
+                      int  pos_y,
+                      int  pos_z,
+                      int  src_dim_x,
+                      int  src_dim_y,
+                      int  src_dim_z,
+                      int  dst_dim_x,
+                      int  dst_dim_y,
+                      int  dst_dim_z )
+{
+   std::srand( std::time(0) );
+
+   int aug = (dst_dim_x - src_dim_x) / 2;
+
+   int total_dst_dim = dst_dim_x * dst_dim_y * dst_dim_z;
+
+   for (int cycle = 0; cycle < 10000; cycle++)
+   {
+
+      int ind = std::rand() % total_dst_dim;
+      int ind_x = ind % dst_dim_x;
+      int ind_y = (ind / dst_dim_x) % dst_dim_z;
+      int ind_z = ind / (dst_dim_x * dst_dim_y);
+
+      // get the equivalent source index for the destination index
+      int src_ind = src_dim_x * src_dim_y * (aug + ind_z) +
+                    src_dim_x * (aug + ind_y) +
+                    aug + ind_x;
+
+      if (dst[ind] == 0)
+      {
+         if ((src[src_ind - 1] != 0)         ||
+               (src[src_ind + 1] != 0)         ||
+               (src[src_ind - src_dim_x] != 0) ||
+               (src[src_ind + src_dim_x] != 0))
+         {
+            // generate a random number between [0, 1)
+            int random_int     = std::rand() % PREC;
+            float random_float = (float)random_int;
+            random_float      /= (float)PREC;
+
+            if (random_float < 0.95f) dst[ind] = 1;
+            else dst[ind] = 0;
+         }
+         else if (src[src_ind - src_dim_x * src_dim_y] != 0)
+         {
+            // generate a random number between [0, 1)
+            int random_int     = std::rand() % PREC;
+            float random_float = (float)random_int;
+            random_float      /= (float)PREC;
+
+            if (random_float < 0.05f) dst[ind] = 1;
+            else dst[ind] = 0;
+         }
+         else if (src[src_ind + src_dim_x * src_dim_y] != 0)
+         {
+            // generate a random number between [0, 1)
+            int random_int     = std::rand() % PREC;
+            float random_float = (float)random_int;
+            random_float      /= (float)PREC;
+
+            if (random_float < 1.0f) dst[ind] = 1;
+            else dst[ind] = 0;
+         }
+         else dst[ind] = 0;
+      }
+   }
+}
+
 /*
 ** function name: read_chunk
 */
