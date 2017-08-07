@@ -7,27 +7,6 @@
 #include <cmath>
 #include <cstdio>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #define maxPrimeIndex 10
 
 static double Noise(int i, int x, int y)
@@ -127,6 +106,33 @@ void generate_chunk( int* dst,
                      int  dim_y,
                      int  dim_z )
 {
+   std::srand( std::time(0) );
+
+#if 1
+   for (int ind = 0, ind_z = 0; ind_z < dim_z; ind_z++)
+   {
+      for (int ind_y = 0; ind_y < dim_y; ind_y++)
+      {
+
+         for (int ind_x = 0; ind_x < dim_x; ind_x++, ind++)
+         {
+            int x = pos_x + ind_x;
+            int y = pos_y + ind_y;
+            int z = pos_z + ind_z;
+
+            float noise = ValueNoise_2D(x, y, 7, 0.5f);
+            noise *= 100.0f;
+            int height = (int)noise;
+            if ( z <= height )
+            {
+               dst[ind] = 1;
+            } else {
+               dst[ind] = 0;
+            }
+         }
+      }
+   }
+#else
    std::srand(std::time(0));
    for (int ind = 0, ind_z = 0; ind_z < dim_z; ind_z++)
    {
@@ -155,44 +161,7 @@ void generate_chunk( int* dst,
          }
       }
    }
-}
-
-/*
-** function name: generate_chunk2
-*/
-void generate_chunk2( int* dst,
-                      int  pos_x,
-                      int  pos_y,
-                      int  pos_z,
-                      int  dim_x,
-                      int  dim_y,
-                      int  dim_z )
-{
-   std::srand( std::time(0) );
-
-   for (int ind = 0, ind_z = 0; ind_z < dim_z; ind_z++)
-   {
-      for (int ind_y = 0; ind_y < dim_y; ind_y++)
-      {
-
-         for (int ind_x = 0; ind_x < dim_x; ind_x++, ind++)
-         {
-            int x = pos_x + ind_x;
-            int y = pos_y + ind_y;
-            int z = pos_z + ind_z;
-
-            float noise = ValueNoise_2D(x, y, 7, 0.5f);
-            noise *= 100.0f;
-            int height = (int)noise;
-            if ( z <= height )
-            {
-               dst[ind] = 1;
-            } else {
-               dst[ind] = 0;
-            }
-         }
-      }
-   }
+#endif
 }
 
 /*
