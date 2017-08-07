@@ -13,17 +13,13 @@ void generate_chunk( int* blocks,
                      int  dim_y,
                      int  dim_z );
 
-void generate_chunk2( int* src,
-                      int* dst,
+void generate_chunk2( int* dst,
                       int  pos_x,
                       int  pos_y,
                       int  pos_z,
-                      int  src_dim_x,
-                      int  src_dim_y,
-                      int  src_dim_z,
-                      int  dst_dim_x,
-                      int  dst_dim_y,
-                      int  dst_dim_z );
+                      int  dim_x,
+                      int  dim_y,
+                      int  dim_z );
 
 bool read_chunk( std::string& filename,
                  int*         chunk_elements,
