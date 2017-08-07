@@ -64,6 +64,7 @@ static double InterpolatedNoise(int i, double x, double y)
    return Interpolate(i1, i2, fractional_Y);
 }
 
+// generate Perlin noise value
 static float ValueNoise_2D(double x, double y, int numOctaves, float persistence)
 {
    double total = 0,
