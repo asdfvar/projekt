@@ -14,6 +14,11 @@
 */
 void Map::map_shift( float *position )
 {
+
+   // reserve space for work buffer
+   Workspace l_workspace = workspace;
+   int* buffer = l_workspace.reserve<int>( 1024 );
+
    bool disp_forward  = false;
    bool disp_backward = false;
    bool disp_left     = false;
@@ -48,7 +53,7 @@ void Map::map_shift( float *position )
             if (write_permissions[ind] == true)
             {
                get_chunk(
-                     buf,
+                     buffer,
                      0,
                      j,
                      k,
@@ -61,9 +66,9 @@ void Map::map_shift( float *position )
 
                queue->fill_buffer(
                      filename,
-                     buf,
+                     buffer,
                      0,
-                     total_num_chunk_elements * sizeof(*buf) );
+                     total_num_chunk_elements * sizeof(*buffer) );
             }
 
             // circularly shift the write permissions cube backward (the other way)
@@ -85,7 +90,7 @@ void Map::map_shift( float *position )
          {
             for (int i = 0; i < chunk_dim_x; i++)
             {
-               buf[i] = blocks[ i                 +
+               buffer[i] = blocks[ i                 +
                                 j * dim_x         +
                                 k * dim_x * dim_y ];
             }
@@ -106,7 +111,7 @@ void Map::map_shift( float *position )
             {
                blocks[ i                 +
                        j * dim_x         +
-                       k * dim_x * dim_y ] = buf[ind];
+                       k * dim_x * dim_y ] = buffer[ind];
             }
          }
       }
@@ -136,7 +141,7 @@ void Map::map_shift( float *position )
             if (write_permissions[ind] == true)
             {
                get_chunk(
-                     buf,
+                     buffer,
                      num_chunks_x - 1,
                      j,
                      k,
@@ -149,9 +154,9 @@ void Map::map_shift( float *position )
 
                queue->fill_buffer(
                      filename,
-                     buf,
+                     buffer,
                      0,
-                     total_num_chunk_elements * sizeof(*buf) );
+                     total_num_chunk_elements * sizeof(*buffer) );
             }
 
             // circularly shift the write permissions cube forward (the other way)
@@ -173,7 +178,7 @@ void Map::map_shift( float *position )
          {
             for (int ind = 0, i = dim_x - chunk_dim_x; i < dim_x; i++, ind++)
             {
-               buf[ind] = blocks[ i                 +
+               buffer[ind] = blocks[ i                 +
                                   j * dim_x         +
                                   k * dim_x * dim_y ];
             }
@@ -194,7 +199,7 @@ void Map::map_shift( float *position )
             {
                blocks[ i                 +
                        j * dim_x         +
-                       k * dim_x * dim_y ] = buf[i];
+                       k * dim_x * dim_y ] = buffer[i];
             }
          }
       }
@@ -228,7 +233,7 @@ void Map::map_shift( float *position )
                if (write_permissions[ind] == true)
                {
                   get_chunk(
-                        buf,
+                        buffer,
                         i,
                         0,
                         k,
@@ -241,9 +246,9 @@ void Map::map_shift( float *position )
 
                   queue->fill_buffer(
                         filename,
-                        buf,
+                        buffer,
                         0,
-                        total_num_chunk_elements * sizeof(*buf) );
+                        total_num_chunk_elements * sizeof(*buffer) );
                }
 
                // circularly shift the write permissions cube to the right (the other way)
@@ -266,7 +271,7 @@ void Map::map_shift( float *position )
          {
             for (int i = 0; i < dim_x; i++, ind++)
             {
-               buf[ind] = blocks[ ind +
+               buffer[ind] = blocks[ ind +
                                   k * dim_x * dim_y ];
             }
          }
@@ -292,7 +297,7 @@ void Map::map_shift( float *position )
                blocks[ i                 +
                        j * dim_x         +
                        k * dim_x * dim_y +
-                       (dim_y - chunk_dim_y) * dim_x ] = buf[ind];
+                       (dim_y - chunk_dim_y) * dim_x ] = buffer[ind];
             }
          }
 
@@ -326,7 +331,7 @@ void Map::map_shift( float *position )
                if (write_permissions[ind] == true)
                {
                   get_chunk(
-                        buf,
+                        buffer,
                         i,
                         num_chunks_y - 1,
                         k,
@@ -339,9 +344,9 @@ void Map::map_shift( float *position )
 
                   queue->fill_buffer(
                         filename,
-                        buf,
+                        buffer,
                         0,
-                        total_num_chunk_elements * sizeof(*buf) );
+                        total_num_chunk_elements * sizeof(*buffer) );
                }
 
                // circularly shift the write permissions cube to the right (the other way)
@@ -364,7 +369,7 @@ void Map::map_shift( float *position )
          {
             for (int i = 0; i < dim_x; i++, ind++)
             {
-               buf[ind] = blocks[ i                 +
+               buffer[ind] = blocks[ i                 +
                                   j * dim_x         +
                                   k * dim_x * dim_y +
                                   (dim_y - chunk_dim_y) * dim_x ];
@@ -392,7 +397,7 @@ void Map::map_shift( float *position )
             {
                blocks[ i                 +
                        j * dim_x         +
-                       k * dim_x * dim_y ] = buf[ind];
+                       k * dim_x * dim_y ] = buffer[ind];
             }
          }
       }
@@ -427,7 +432,7 @@ void Map::map_shift( float *position )
                if (write_permissions[ind] == true)
                {
                   get_chunk(
-                        buf,
+                        buffer,
                         i,
                         j,
                         0,
@@ -440,9 +445,9 @@ void Map::map_shift( float *position )
 
                   queue->fill_buffer(
                         filename,
-                        buf,
+                        buffer,
                         0,
-                        total_num_chunk_elements * sizeof(*buf) );
+                        total_num_chunk_elements * sizeof(*buffer) );
                }
                // circularly shift the write permissions cube to the up
                // for this (i,j,:) th row
@@ -464,7 +469,7 @@ void Map::map_shift( float *position )
       {
          for ( int ij = 0; ij < dim_xy; ij++, ind++)
          {
-            buf[ind] = blocks[ind];
+            buffer[ind] = blocks[ind];
          }
       }
 
@@ -482,7 +487,7 @@ void Map::map_shift( float *position )
          for ( int ij = 0; ij < dim_xy; ij++, ind++)
          {
             blocks[ k * dim_xy + ij ] =
-               buf[ind];
+               buffer[ind];
          }
       }
 
@@ -515,7 +520,7 @@ void Map::map_shift( float *position )
                if (write_permissions[ind] == true)
                {
                   get_chunk(
-                        buf,
+                        buffer,
                         i,
                         j,
                         num_chunks_z - 1,
@@ -528,9 +533,9 @@ void Map::map_shift( float *position )
 
                   queue->fill_buffer(
                         filename,
-                        buf,
+                        buffer,
                         0,
-                        total_num_chunk_elements * sizeof(*buf) );
+                        total_num_chunk_elements * sizeof(*buffer) );
                }
                // circularly shift the write permissions cube down
                // for this (i,j,:) th row
@@ -551,7 +556,7 @@ void Map::map_shift( float *position )
       {
          for (int ij = 0; ij < dim_xy; ij++, ind++)
          {
-            buf[ind] = blocks[ k * dim_xy + ij ];
+            buffer[ind] = blocks[ k * dim_xy + ij ];
          }
       }
 
@@ -568,7 +573,7 @@ void Map::map_shift( float *position )
       {
          for (int ij = 0; ij < dim_xy; ij++, ind++)
          {
-            blocks[ k * dim_xy + ij ] = buf[ind];
+            blocks[ k * dim_xy + ij ] = buffer[ind];
          }
       }
 
@@ -601,12 +606,12 @@ void Map::map_shift( float *position )
 
             bool file_exists =
             read_chunk( filename,
-                        buf, 
+                        buffer, 
                         total_num_chunk_elements );
 
             if( !file_exists )
             {
-               generate_chunk( buf,
+               generate_chunk( buffer,
                                map_pos_x + chunk_dim_x * (num_chunks_x - 1),
                                map_pos_y + chunk_dim_y * j,
                                map_pos_z + chunk_dim_z * k,
@@ -624,8 +629,8 @@ void Map::map_shift( float *position )
                write_permissions[ind] = false;
             }
 
-            // copy the contents of buf into the block
-            set_chunk( buf,
+            // copy the contents of buffer into the block
+            set_chunk( buffer,
                        num_chunks_x - 1,
                        j,
                        k );
@@ -655,12 +660,12 @@ void Map::map_shift( float *position )
 
             bool file_exists =
             read_chunk( filename,
-                        buf, 
+                        buffer, 
                         total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf,
+               generate_chunk( buffer,
                                map_pos_x,
                                map_pos_y + chunk_dim_y * j,
                                map_pos_z + chunk_dim_z * k,
@@ -678,8 +683,8 @@ void Map::map_shift( float *position )
                write_permissions[ind] = false;
             }
 
-            // copy the contents of buf into the block
-            set_chunk( buf,
+            // copy the contents of buffer into the block
+            set_chunk( buffer,
                        0,
                        j,
                        k );
@@ -709,12 +714,12 @@ void Map::map_shift( float *position )
 
             bool file_exists =
             read_chunk( filename,
-                        buf, 
+                        buffer, 
                         total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf,
+               generate_chunk( buffer,
                                map_pos_x + chunk_dim_x * i,
                                map_pos_y + chunk_dim_y * (num_chunks_y - 1),
                                map_pos_z + chunk_dim_z * k,
@@ -732,8 +737,8 @@ void Map::map_shift( float *position )
                write_permissions[ind] = false;
             }
 
-            // copy the contents of buf into the block
-            set_chunk( buf,
+            // copy the contents of buffer into the block
+            set_chunk( buffer,
                        i,
                        num_chunks_x - 1,
                        k );
@@ -762,12 +767,12 @@ void Map::map_shift( float *position )
 
             bool file_exists =
             read_chunk( filename,
-                        buf, 
+                        buffer, 
                         total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf,
+               generate_chunk( buffer,
                                map_pos_x + chunk_dim_x * i,
                                map_pos_y,
                                map_pos_z + chunk_dim_z * k,
@@ -785,8 +790,8 @@ void Map::map_shift( float *position )
                write_permissions[ind] = false;
             }
 
-            // copy the contents of buf into the block
-            set_chunk( buf,
+            // copy the contents of buffer into the block
+            set_chunk( buffer,
                        i,
                        0,
                        k );
@@ -816,12 +821,12 @@ void Map::map_shift( float *position )
 
             bool file_exists =
             read_chunk( filename,
-                        buf, 
+                        buffer, 
                         total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf,
+               generate_chunk( buffer,
                                map_pos_x + chunk_dim_x * i,
                                map_pos_y + chunk_dim_y * j,
                                map_pos_z + chunk_dim_z * (num_chunks_z - 1),
@@ -839,8 +844,8 @@ void Map::map_shift( float *position )
                write_permissions[ind] = false;
             }
 
-            // copy the contents of buf into the block
-            set_chunk( buf,
+            // copy the contents of buffer into the block
+            set_chunk( buffer,
                        i,
                        j,
                        num_chunks_z - 1 );
@@ -869,12 +874,12 @@ void Map::map_shift( float *position )
 
             bool file_exists =
             read_chunk( filename,
-                        buf, 
+                        buffer, 
                         total_num_chunk_elements );
 
             if( !file_exists ) // number of bytes to read
             {
-               generate_chunk( buf,
+               generate_chunk( buffer,
                                map_pos_x + chunk_dim_x * i,
                                map_pos_y + chunk_dim_y * j,
                                map_pos_z,
@@ -892,8 +897,8 @@ void Map::map_shift( float *position )
                write_permissions[ind] = false;
             }
 
-            // copy the contents of buf into the block
-            set_chunk( buf,
+            // copy the contents of buffer into the block
+            set_chunk( buffer,
                        i,
                        j,
                        0 );

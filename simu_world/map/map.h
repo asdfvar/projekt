@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include "opengl_interface.h"
 #include "queue.h"
+#include "workspace.h"
 
 /*
 ** class name: Map
@@ -41,6 +42,8 @@ class Map
       pthread_barrier_t* update_barrier;
 
    private:
+
+      Workspace workspace;
 
       void shift( int x, int y, int z);
 
@@ -89,8 +92,6 @@ class Map
       float map_pos_z;
 
       float* vertices;
-
-      int* buf;
 };
 
 #endif

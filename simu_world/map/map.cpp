@@ -11,7 +11,8 @@
 ** constructor name: Map
 */
 Map::Map( pthread_barrier_t* IO_barrier_in,
-          pthread_barrier_t* update_barrier_in )
+          pthread_barrier_t* update_barrier_in ) :
+          workspace(4294967296)
 {
 
    IO_barrier     = IO_barrier_in;
@@ -82,7 +83,9 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
 
    blocks  = new int[ total_dim ];
    io_ids  = new int[ total_num_chunk_elements ];
-   buf     = new int[ max_dim * max_dim * max_chunk_elements ];
+
+   Workspace l_workspace = workspace;
+   int* buf = l_workspace.reserve<int>( max_dim * max_dim * max_chunk_elements );
 
    for (int k = 0, ind = 0; k < num_chunks_z; k++)
    {
@@ -131,9 +134,10 @@ Map::Map( pthread_barrier_t* IO_barrier_in,
 */
 Map::~Map(void)
 {
+   workspace.finalize();
+
    delete[] blocks;
    delete[] io_ids;
-   delete[] buf;
    delete[] write_permissions;
    delete   queue;
 
