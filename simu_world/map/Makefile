@@ -16,6 +16,14 @@ OBJ = map.o          \
       read_chunk.o   \
 #
 
+DEBUG ?= FALSE
+ifeq ($(DEBUG), TRUE)
+   DEFINES = -DDEBUG
+else
+   DEFINES =
+endif
+DEFINES = -DDEBUG
+
 LIBEXE = libmap.a
 
 all: $(OBJ)
@@ -25,19 +33,19 @@ clean:
 	rm $(OBJ) $(LIBEXE)
 
 map.o: map.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
+	$(CPPC) $(INC) $(DEFINES) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 shift.o: shift.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
+	$(CPPC) $(INC) $(DEFINES) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 render_chunk.o: render_chunk.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
+	$(CPPC) $(INC) $(DEFINES) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 update.o: update.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
+	$(CPPC) $(INC) $(DEFINES) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 queue.o: queue.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
+	$(CPPC) $(INC) $(DEFINES) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
 
 read_chunk.o: read_chunk.cpp
-	$(CPPC) $(INC) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)
+	$(CPPC) $(INC) $(DEFINES) $^ -c $(DIRECTIVE_FLAGS) $(FLAGS)

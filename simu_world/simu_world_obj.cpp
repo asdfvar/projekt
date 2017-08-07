@@ -190,7 +190,9 @@ void Simu_world_obj::idle( void )
       if (mode == 1)
       {
 
+#ifdef DEBUG
          g_text.clear();
+#endif
 
          ogl::set_cursor_none();
 
@@ -250,7 +252,9 @@ void Simu_world_obj::idle( void )
 
          map->diagnostics( i_user_position );
 
+#ifdef DEBUG
          g_text.done_editing();
+#endif
 
       }
 
@@ -289,7 +293,9 @@ void Simu_world_obj::display( void )
 
    hud::display();
 
+#ifdef DEBUG
    g_text.display_contents( -1.0f, 1.0f, 1.0f);
+#endif
 
    // swap this buffer for the old one
    ogl::swap_buffers();

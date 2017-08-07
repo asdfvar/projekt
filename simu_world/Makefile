@@ -4,7 +4,7 @@ INC     = -Ikernels -Imap -I.
 LIBPATH = -Lkernels -Lmap
 LIBS    = -lmap -lsimu
 
-DEBUG ?= FALSE
+DEBUG ?= TRUE
 ifeq ($(DEBUG), TRUE)
    DEFINES = -DDEBUG
 else

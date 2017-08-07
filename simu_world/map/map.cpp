@@ -220,6 +220,7 @@ void Map::diagnostics( int *position_in )
    int element_position[3];
    get_relative_element_position( position_in, element_position );
 
+#ifdef DEBUG
    g_text.populate( "position in: ");
    g_text.populate( position_in[0] );
    g_text.populate( ", ");
@@ -301,6 +302,7 @@ void Map::diagnostics( int *position_in )
    g_text.populate( blocks[ind++] );
    g_text.populate( blocks[ind++] );
    g_text.populate( blocks[ind++] );
+#endif
 }
 
 /*
