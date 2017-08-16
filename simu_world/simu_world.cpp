@@ -75,7 +75,7 @@ void mouseMotion(int x, int y)
 */
 void mousePassive(int x, int y)
 {
-   simu_world_obj.mousePassive( x, y);
+   simu_world_obj.mousePassive( x, y );
 }
 
 /*****************
@@ -83,7 +83,7 @@ void mousePassive(int x, int y)
  *****************/
 void keyboardUp(unsigned char key, int x, int y)
 {
-   simu_world_obj.keyboardUp( key);
+   simu_world_obj.keyboardUp( key );
 }
 
 /*******************
@@ -92,6 +92,11 @@ void keyboardUp(unsigned char key, int x, int y)
 void keyboardDown(unsigned char key, int x, int y)
 {
    simu_world_obj.keyboardDown( key );
+}
+
+void specialFunc(int key, int x, int y)
+{
+   simu_world_obj.specialFunc( key, x, y );
 }
 
 
@@ -123,8 +128,8 @@ std::cout << "Windows" << std::endl;
    */
    pthread_create( &IO_thread, NULL, io_manager, (void*)&args );
 
-   int windowsizex = 800;
-   int windowsizey = 800;
+   int windowsizex = 1600;
+   int windowsizey = 1000;
 
    glutInit( &argc, argv );
    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
@@ -138,6 +143,7 @@ std::cout << "Windows" << std::endl;
    glutPassiveMotionFunc( mousePassive );
    glutKeyboardUpFunc(    keyboardUp   );
    glutKeyboardFunc(      keyboardDown );
+   glutSpecialFunc(       specialFunc  );
    glutIdleFunc(          idle         );
 
    glutMainLoop();

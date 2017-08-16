@@ -34,6 +34,8 @@ namespace ogl
    void normal( float x, float y, float z );
    void end( void );
 
+   bool key_f1( int key );
+
 }
 
 #endif

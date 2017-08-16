@@ -91,6 +91,20 @@ void Simu_world_obj::keyboardDown( const char key )
 }
 
 /*
+** function name: specialFunc from: Simu_world_obj
+*/
+void Simu_world_obj::specialFunc(int key, int x, int y)
+{
+   if ( ogl::key_f1(key) )
+   {
+      if (screen_feedback == true)
+         screen_feedback = false;
+      else
+         screen_feedback = true;
+   }
+}
+
+/*
 ** function name: keyboardUp from: Simu_world_obj
 */
 void Simu_world_obj::keyboardUp( const char key)
@@ -191,76 +205,85 @@ void Simu_world_obj::idle( void )
       {
 
 #ifdef DEBUG
-         g_text.clear();
+         if (screen_feedback)
+         {
+            g_text.clear();
+         }
 #endif
 
          ogl::set_cursor_none();
 
          /*
-         ** Move the direction of the user based from mouse motion
-         */
+          ** Move the direction of the user based from mouse motion
+          */
          float direction[3];
          user.get_direction( direction );
 
          /*
-         ** define x/y offsets in physical units invariant
-         ** to the window cell dimensions with +x in the right
-         ** directions and +y in the up direction
-         */
+          ** define x/y offsets in physical units invariant
+          ** to the window cell dimensions with +x in the right
+          ** directions and +y in the up direction
+          */
          float x_offset = (float)( mousePassivePosition[0] - window_center_x ) *
-                          user.get_window_width() / (float)window_width;
+            user.get_window_width() / (float)window_width;
          float y_offset = (float)( window_center_y - mousePassivePosition[1] ) *
-                          user.get_window_height() / (float)window_height;
+            user.get_window_height() / (float)window_height;
 
          change_direction( direction,
-                           user.get_window_distance(),
-                           x_offset,
-                           y_offset,
-                           3.5f );
-   
+               user.get_window_distance(),
+               x_offset,
+               y_offset,
+               3.5f );
+
          user.set_direction( direction );
-      
+
          ogl::warp_pointer( window_center_x, window_center_y );
 
          /*
-         ** Update the chunk grid if the user position has exceeded the threshold
-         */
+          ** Update the chunk grid if the user position has exceeded the threshold
+          */
          float user_position[3];
 
          user.get_position( user_position );
          map->map_shift( user_position );
 
 #ifdef DEBUG
-         g_text.populate("user position: ");
-         g_text.populate( user_position[0] );
-         g_text.populate( ", " );
-         g_text.populate( user_position[1] );
-         g_text.populate( ", " );
-         g_text.populate( user_position[2] );
-         g_text.new_line();
-         g_text.populate("frame time: ");
-         g_text.populate( time_manager->get_time_step_actual() );
-         g_text.populate(", ");
-         g_text.populate( 1.0f / time_manager->get_time_step_actual() );
-         g_text.populate(" Hz");
-         g_text.new_line();
+         if (screen_feedback)
+         {
+            g_text.populate("user position: ");
+            g_text.populate( user_position[0] );
+            g_text.populate( ", " );
+            g_text.populate( user_position[1] );
+            g_text.populate( ", " );
+            g_text.populate( user_position[2] );
+            g_text.new_line();
+            g_text.populate("frame time: ");
+            g_text.populate( time_manager->get_time_step_actual() );
+            g_text.populate(", ");
+            g_text.populate( 1.0f / time_manager->get_time_step_actual() );
+            g_text.populate(" Hz");
+            g_text.new_line();
+         }
 #endif
 
          int i_user_position[3] = { (int)floorf(user_position[0]),
-                                    (int)floorf(user_position[1]),
-                                    (int)floorf(user_position[2]) };
+            (int)floorf(user_position[1]),
+            (int)floorf(user_position[2]) };
 
          map->diagnostics( i_user_position );
 
 #ifdef DEBUG
-         g_text.done_editing();
+         if (screen_feedback)
+         {
+            g_text.done_editing();
+         }
 #endif
 
       }
 
       /*
-      ** Tell the passive-mouse task to enable
-      */
+       ** Tell the passive-mouse task to enable
+       */
       semaphore->decrement_task(1);
    }
 
@@ -287,14 +310,17 @@ void Simu_world_obj::display( void )
    user.get_direction( user_direction );
 
    map->render_chunk( user_position,
-                      user_direction,
-                      window_distance,
-                      window_width );
+         user_direction,
+         window_distance,
+         window_width );
 
    hud::display();
 
 #ifdef DEBUG
-   g_text.display_contents( -1.0f, 1.0f, 1.0f);
+   if (screen_feedback)
+   {
+      g_text.display_contents( -1.0f, 1.0f, 1.0f);
+   }
 #endif
 
    // swap this buffer for the old one

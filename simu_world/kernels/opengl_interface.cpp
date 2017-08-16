@@ -142,3 +142,8 @@ void ogl::end( void )
 {
    glEnd();
 }
+
+bool ogl::key_f1( int key )
+{
+   return key == GLUT_KEY_F1;
+}

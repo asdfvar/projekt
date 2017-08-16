@@ -4,5 +4,6 @@
 #include "text.h"
 
 extern Text g_text;
+extern bool screen_feedback;
 
 #endif

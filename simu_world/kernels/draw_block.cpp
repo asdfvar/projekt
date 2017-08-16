@@ -4,6 +4,8 @@
 #include "linalg.h"
 #include <cmath>
 
+#define ENABLE_RENDERING
+
 /*
 ** function name: draw_block
 */
@@ -16,6 +18,8 @@ void draw_block( float  block_position[3],
                  float *rot,
                  float *color )
 {
+
+   if (sides == 0) return;
 
    int vertex_ind = 0;
 
@@ -254,12 +258,14 @@ void draw_block( float  block_position[3],
          distance[2] = output_point_distance[3];
          distance[3] = output_point_distance[2];
    
+#ifdef ENABLE_RENDERING
          ogl::draw_polygon( vertices_x,
                             vertices_y,
                             distance,
                             color,
                             brightness,
                             4 );
+#endif
       }
    }
 
@@ -296,12 +302,14 @@ void draw_block( float  block_position[3],
          distance[2] = output_point_distance[7];
          distance[3] = output_point_distance[6];
    
+#ifdef ENABLE_RENDERING
          ogl::draw_polygon( vertices_x,
                             vertices_y,
                             distance,
                             color,
                             brightness,
                             4 );
+#endif
       }
    }
 
@@ -338,12 +346,14 @@ void draw_block( float  block_position[3],
          distance[2] = output_point_distance[5];
          distance[3] = output_point_distance[4];
    
+#ifdef ENABLE_RENDERING
          ogl::draw_polygon( vertices_x,
                             vertices_y,
                             distance,
                             color,
                             brightness,
                             4 );
+#endif
       }
    }
 
@@ -380,12 +390,14 @@ void draw_block( float  block_position[3],
          distance[2] = output_point_distance[7];
          distance[3] = output_point_distance[6];
    
+#ifdef ENABLE_RENDERING
          ogl::draw_polygon( vertices_x,
                             vertices_y,
                             distance,
                             color,
                             brightness,
                             4 );
+#endif
       }
    }
 
@@ -422,12 +434,14 @@ void draw_block( float  block_position[3],
          distance[2] = output_point_distance[6];
          distance[3] = output_point_distance[4];
    
+#ifdef ENABLE_RENDERING
          ogl::draw_polygon( vertices_x,
                             vertices_y,
                             distance,
                             color,
                             brightness,
                             4 );
+#endif
       }
    }
 
@@ -464,12 +478,14 @@ void draw_block( float  block_position[3],
          distance[2] = output_point_distance[7];
          distance[3] = output_point_distance[5];
    
+#ifdef ENABLE_RENDERING
          ogl::draw_polygon( vertices_x,
                             vertices_y,
                             distance,
                             color,
                             brightness,
                             4 );
+#endif
       }
    }
 

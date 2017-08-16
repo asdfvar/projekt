@@ -51,6 +51,11 @@ class Simu_world_obj
       void keyboardDown( const char key);
 
       /*
+      ** Keyboard special keys input
+      */
+      void specialFunc(int key, int x, int y);
+
+      /*
       ** Passive mouse location
       */
       void mousePassive( int x, int y);
