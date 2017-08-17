@@ -594,56 +594,10 @@ void Map::map_shift( float *position )
       {
          for (int j = 0; j < num_chunks_y; j++)
          {
-// TODO: this for all directions
             int abs_chunk[3] = { abs_chunk_x + num_chunks_x - 1,
                                  abs_chunk_y + j,
                                  abs_chunk_z + k };
             readQueue.new_node( abs_chunk, 3 );
-
-// in place of this:
-#if 0
-            std::string filename = create_filename( abs_chunk_x + num_chunks_x - 1,
-                                                    abs_chunk_y + j,
-                                                    abs_chunk_z + k );
-
-            // TODO: move this logic to the IO thread
-
-            int ind = num_chunks_x - 1 +
-                      j * num_chunks_x +
-                      k * num_chunks_x * num_chunks_y;
-
-            bool file_exists =
-            read_chunk( filename,
-                        buffer, 
-                        total_num_chunk_elements );
-
-            if( !file_exists )
-            {
-               generate_chunk( buffer,
-                               map_pos_x + chunk_dim_x * (num_chunks_x - 1),
-                               map_pos_y + chunk_dim_y * j,
-                               map_pos_z + chunk_dim_z * k,
-                               chunk_dim_x,
-                               chunk_dim_y,
-                               chunk_dim_z );
-
-               std::cout << filename << " does not exist."
-                  << " chunk created." << std::endl;
-               write_permissions[ind] = true;
-            }
-            else
-            {
-               std::cout << "reading " << filename << std::endl;
-               write_permissions[ind] = false;
-            }
-
-            // copy the contents of buffer into the block
-            set_chunk( buffer,
-                       num_chunks_x - 1,
-                       j,
-                       k );
-#endif
-// end todo
          }
       }
    }
@@ -657,47 +611,10 @@ void Map::map_shift( float *position )
       {
          for (int j = 0; j < num_chunks_y; j++)
          {
-            // use set_chunk to populate the buffer contents into the blocks
-            std::string filename = create_filename( abs_chunk_x,
-                                                    abs_chunk_y + j,
-                                                    abs_chunk_z + k );
-
-            // TODO: move this logic to the IO thread
-
-            int ind = 0                 +
-                      j * num_chunks_x +
-                      k * num_chunks_x * num_chunks_y;
-
-            bool file_exists =
-            read_chunk( filename,
-                        buffer, 
-                        total_num_chunk_elements );
-
-            if( !file_exists ) // number of bytes to read
-            {
-               generate_chunk( buffer,
-                               map_pos_x,
-                               map_pos_y + chunk_dim_y * j,
-                               map_pos_z + chunk_dim_z * k,
-                               chunk_dim_x,
-                               chunk_dim_y,
-                               chunk_dim_z );
-
-               std::cout << filename << " does not exist."
-                  << " chunk created." << std::endl;
-               write_permissions[ind] = true;
-            }
-            else
-            {
-               std::cout << "reading " << filename << std::endl;
-               write_permissions[ind] = false;
-            }
-
-            // copy the contents of buffer into the block
-            set_chunk( buffer,
-                       0,
-                       j,
-                       k );
+            int abs_chunk[3] = { abs_chunk_x,
+                                 abs_chunk_y + j,
+                                 abs_chunk_z + k };
+            readQueue.new_node( abs_chunk, 3 );
          }
       }
    }
@@ -711,47 +628,10 @@ void Map::map_shift( float *position )
       {
          for (int i = 0; i < num_chunks_x; i++)
          {
-            // use set_chunk to populate the buffer contents into the blocks
-            std::string filename = create_filename( abs_chunk_x + i,
-                                                    abs_chunk_y + num_chunks_y - 1,
-                                                    abs_chunk_z + k );
-
-            // TODO: move this logic to the IO thread
-
-            int ind = i +
-                      (num_chunks_y - 1) * num_chunks_x +
-                      k * num_chunks_x * num_chunks_y;
-
-            bool file_exists =
-            read_chunk( filename,
-                        buffer, 
-                        total_num_chunk_elements );
-
-            if( !file_exists ) // number of bytes to read
-            {
-               generate_chunk( buffer,
-                               map_pos_x + chunk_dim_x * i,
-                               map_pos_y + chunk_dim_y * (num_chunks_y - 1),
-                               map_pos_z + chunk_dim_z * k,
-                               chunk_dim_x,
-                               chunk_dim_y,
-                               chunk_dim_z );
-
-               std::cout << filename << " does not exist."
-                  << " chunk created." << std::endl;
-               write_permissions[ind] = true;
-            }
-            else
-            {
-               std::cout << "reading " << filename << std::endl;
-               write_permissions[ind] = false;
-            }
-
-            // copy the contents of buffer into the block
-            set_chunk( buffer,
-                       i,
-                       num_chunks_x - 1,
-                       k );
+            int abs_chunk[3] = { abs_chunk_x + i,
+                                 abs_chunk_y + num_chunks_y - 1,
+                                 abs_chunk_z + k };
+            readQueue.new_node( abs_chunk, 3 );
          }
       }
    }
@@ -765,46 +645,10 @@ void Map::map_shift( float *position )
       {
          for (int i = 0; i < num_chunks_x; i++)
          {
-            // use set_chunk to populate the buffer contents into the blocks
-            std::string filename = create_filename( abs_chunk_x + i,
-                                                    abs_chunk_y,
-                                                    abs_chunk_z + k );
-
-            // TODO: move this logic to the IO thread
-
-            int ind = i +
-                      k * num_chunks_x * num_chunks_y;
-
-            bool file_exists =
-            read_chunk( filename,
-                        buffer, 
-                        total_num_chunk_elements );
-
-            if( !file_exists ) // number of bytes to read
-            {
-               generate_chunk( buffer,
-                               map_pos_x + chunk_dim_x * i,
-                               map_pos_y,
-                               map_pos_z + chunk_dim_z * k,
-                               chunk_dim_x,
-                               chunk_dim_y,
-                               chunk_dim_z );
-
-               std::cout << filename << " does not exist."
-                  << " chunk created." << std::endl;
-               write_permissions[ind] = true;
-            }
-            else
-            {
-               std::cout << "reading " << filename << std::endl;
-               write_permissions[ind] = false;
-            }
-
-            // copy the contents of buffer into the block
-            set_chunk( buffer,
-                       i,
-                       0,
-                       k );
+            int abs_chunk[3] = { abs_chunk_x + i,
+                                 abs_chunk_y,
+                                 abs_chunk_z + k };
+            readQueue.new_node( abs_chunk, 3 );
          }
       }
    }
@@ -818,47 +662,10 @@ void Map::map_shift( float *position )
       {
          for (int i = 0; i < num_chunks_x; i++)
          {
-            // use set_chunk to populate the buffer contents into the blocks
-            std::string filename = create_filename( abs_chunk_x + i,
-                                                    abs_chunk_y + j,
-                                                    abs_chunk_z + num_chunks_z - 1 );
-
-            // TODO: move this logic to the IO thread
-
-            int ind = i +
-                      j * num_chunks_x +
-                      (num_chunks_x - 1) * num_chunks_x * num_chunks_y;
-
-            bool file_exists =
-            read_chunk( filename,
-                        buffer, 
-                        total_num_chunk_elements );
-
-            if( !file_exists ) // number of bytes to read
-            {
-               generate_chunk( buffer,
-                               map_pos_x + chunk_dim_x * i,
-                               map_pos_y + chunk_dim_y * j,
-                               map_pos_z + chunk_dim_z * (num_chunks_z - 1),
-                               chunk_dim_x,
-                               chunk_dim_y,
-                               chunk_dim_z );
-
-               std::cout << filename << " does not exist."
-                  << " chunk created." << std::endl;
-               write_permissions[ind] = true;
-            }
-            else
-            {
-               std::cout << "reading " << filename << std::endl;
-               write_permissions[ind] = false;
-            }
-
-            // copy the contents of buffer into the block
-            set_chunk( buffer,
-                       i,
-                       j,
-                       num_chunks_z - 1 );
+            int abs_chunk[3] = { abs_chunk_x + i,
+                                 abs_chunk_y + j,
+                                 abs_chunk_z + num_chunks_z - 1 };
+            readQueue.new_node( abs_chunk, 3 );
          }
       }
    }
@@ -872,46 +679,10 @@ void Map::map_shift( float *position )
       {
          for (int i = 0; i < num_chunks_x; i++)
          {
-            // use set_chunk to populate the buffer contents into the blocks
-            std::string filename = create_filename( abs_chunk_x + i,
-                                                    abs_chunk_y + j,
-                                                    abs_chunk_z );
-
-            // TODO: move this logic to the IO thread
-
-            int ind = i +
-                      j * num_chunks_x;
-
-            bool file_exists =
-            read_chunk( filename,
-                        buffer, 
-                        total_num_chunk_elements );
-
-            if( !file_exists ) // number of bytes to read
-            {
-               generate_chunk( buffer,
-                               map_pos_x + chunk_dim_x * i,
-                               map_pos_y + chunk_dim_y * j,
-                               map_pos_z,
-                               chunk_dim_x,
-                               chunk_dim_y,
-                               chunk_dim_z );
-
-               std::cout << filename << " does not exist."
-                  << " chunk created." << std::endl;
-               write_permissions[ind] = true;
-            }
-            else
-            {
-               std::cout << "reading " << filename << std::endl;
-               write_permissions[ind] = false;
-            }
-
-            // copy the contents of buffer into the block
-            set_chunk( buffer,
-                       i,
-                       j,
-                       0 );
+            int abs_chunk[3] = { abs_chunk_x + i,
+                                 abs_chunk_y + j,
+                                 abs_chunk_z };
+            readQueue.new_node( abs_chunk, 3 );
          }
       }
    }
