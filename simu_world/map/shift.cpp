@@ -15,7 +15,6 @@
 void Map::map_shift( float *position )
 {
 
-   // reserve space for work buffer
    Workspace l_workspace = workspace;
    int* buffer = l_workspace.reserve<int>( 1024 );
 
@@ -41,7 +40,6 @@ void Map::map_shift( float *position )
       int abs_chunk_y = map_pos_y / chunk_dim_y;
       int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-#ifdef DO_QUEUE
       for (int k = 0; k < num_chunks_z; k++)
       {
          for (int j = 0; j < num_chunks_y; j++)
@@ -81,20 +79,12 @@ void Map::map_shift( float *position )
             }
          }
       }
-#endif
 
       // Shift the blocks back modulo the chunk_dim_x
       for (int k = 0; k < dim_z; k++)
       {
          for (int j = 0; j < dim_y; j++)
          {
-            for (int i = 0; i < chunk_dim_x; i++)
-            {
-               buffer[i] = blocks[ i                 +
-                                j * dim_x         +
-                                k * dim_x * dim_y ];
-            }
-      
             for (int i = 0; i < dim_x - chunk_dim_x; i++)
             {
                blocks[ i                 +
@@ -105,13 +95,6 @@ void Map::map_shift( float *position )
                                j * dim_x         +
                                k * dim_x * dim_y +
                                chunk_dim_x         ];
-            }
-
-            for (int ind = 0, i = dim_x - chunk_dim_x; i < dim_x; i++, ind++)
-            {
-               blocks[ i                 +
-                       j * dim_x         +
-                       k * dim_x * dim_y ] = buffer[ind];
             }
          }
       }
@@ -129,7 +112,6 @@ void Map::map_shift( float *position )
       int abs_chunk_y = map_pos_y / chunk_dim_y;
       int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-#ifdef DO_QUEUE
       for (int k = 0; k < num_chunks_z; k++)
       {
          for (int j = 0; j < num_chunks_y; j++)
@@ -169,20 +151,12 @@ void Map::map_shift( float *position )
             }
          }
       }
-#endif
 
       // Shift the blocks forward modulo the chunk_dim_x
       for (int k = 0; k < dim_z; k++)
       {
          for (int j = 0; j < dim_y; j++)
          {
-            for (int ind = 0, i = dim_x - chunk_dim_x; i < dim_x; i++, ind++)
-            {
-               buffer[ind] = blocks[ i                 +
-                                  j * dim_x         +
-                                  k * dim_x * dim_y ];
-            }
-      
             for (int i = dim_x - 1; i >= chunk_dim_x; i--)
             {
                blocks[ i                 +
@@ -193,13 +167,6 @@ void Map::map_shift( float *position )
                                j * dim_x         +
                                k * dim_x * dim_y -
                                chunk_dim_x        ];
-            }
-
-            for (int i = 0; i < chunk_dim_x; i++)
-            {
-               blocks[ i                 +
-                       j * dim_x         +
-                       k * dim_x * dim_y ] = buffer[i];
             }
          }
       }
@@ -219,7 +186,6 @@ void Map::map_shift( float *position )
       int abs_chunk_y = map_pos_y / chunk_dim_y;
       int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-#ifdef DO_QUEUE
       for (int k = 0; k < num_chunks_z; k++)
       {
          for (int i = 0; i < num_chunks_x; i++)
@@ -263,19 +229,9 @@ void Map::map_shift( float *position )
             }
          }
       }
-#endif
 
       for (int k = 0; k < dim_z; k++)
       {
-         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
-         {
-            for (int i = 0; i < dim_x; i++, ind++)
-            {
-               buffer[ind] = blocks[ ind +
-                                  k * dim_x * dim_y ];
-            }
-         }
-
          for (int j = 0; j < dim_y - chunk_dim_y; j++)
          {
             for (int i = 0; i < dim_x; i++)
@@ -289,18 +245,6 @@ void Map::map_shift( float *position )
                           chunk_dim_y * dim_x ];
             }
          }
-
-         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
-         {
-            for (int i = 0; i < dim_x; i++, ind++)
-            {
-               blocks[ i                 +
-                       j * dim_x         +
-                       k * dim_x * dim_y +
-                       (dim_y - chunk_dim_y) * dim_x ] = buffer[ind];
-            }
-         }
-
       }
 
       // move the blocks, as a whole, appropriately
@@ -316,7 +260,6 @@ void Map::map_shift( float *position )
       int abs_chunk_y = map_pos_y / chunk_dim_y;
       int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-#ifdef DO_QUEUE
       for (int k = 0; k < num_chunks_z; k++)
       {
          for (int i = 0; i < num_chunks_x; i++)
@@ -361,21 +304,9 @@ void Map::map_shift( float *position )
             }
          }
       }
-#endif
 
       for (int k = 0; k < dim_z; k++)
       {
-         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
-         {
-            for (int i = 0; i < dim_x; i++, ind++)
-            {
-               buffer[ind] = blocks[ i                 +
-                                  j * dim_x         +
-                                  k * dim_x * dim_y +
-                                  (dim_y - chunk_dim_y) * dim_x ];
-            }
-         }
-
          for (int j = dim_y - 1; j >= chunk_dim_y; j--)
          {
             for (int i = 0; i < dim_x; i++)
@@ -388,16 +319,6 @@ void Map::map_shift( float *position )
                           j * dim_x         +
                           k * dim_x * dim_y -
                           chunk_dim_y * dim_x ];
-            }
-         }
-
-         for (int ind = 0, j = 0; j < chunk_dim_y; j++)
-         {
-            for (int i = 0; i < dim_x; i++, ind++)
-            {
-               blocks[ i                 +
-                       j * dim_x         +
-                       k * dim_x * dim_y ] = buffer[ind];
             }
          }
       }
@@ -416,7 +337,6 @@ void Map::map_shift( float *position )
       int abs_chunk_y = map_pos_y / chunk_dim_y;
       int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-#ifdef DO_QUEUE
       for (int i = 0; i < num_chunks_x; i++)
       {
          for (int j = 0; j < num_chunks_y; j++)
@@ -461,17 +381,8 @@ void Map::map_shift( float *position )
             }
          }
       }
-#endif
 
       int dim_xy = dim_x * dim_y;
-
-      for (int k = 0, ind = 0; k < chunk_dim_z; k++)
-      {
-         for ( int ij = 0; ij < dim_xy; ij++, ind++)
-         {
-            buffer[ind] = blocks[ind];
-         }
-      }
 
       for (int k = 0; k < dim_z - chunk_dim_z; k++)
       {
@@ -479,15 +390,6 @@ void Map::map_shift( float *position )
          {
             blocks[ k * dim_xy + ij ] =
                blocks[ (k + chunk_dim_z) * dim_xy + ij ];
-         }
-      }
-
-      for (int k = dim_z - chunk_dim_z, ind = 0; k < dim_z; k++)
-      {
-         for ( int ij = 0; ij < dim_xy; ij++, ind++)
-         {
-            blocks[ k * dim_xy + ij ] =
-               buffer[ind];
          }
       }
 
@@ -503,7 +405,6 @@ void Map::map_shift( float *position )
       int abs_chunk_y = map_pos_y / chunk_dim_y;
       int abs_chunk_z = map_pos_z / chunk_dim_z;
 
-#ifdef DO_QUEUE
       for (int i = 0; i < num_chunks_x; i++)
       {
          for (int j = 0; j < num_chunks_y; j++)
@@ -549,16 +450,8 @@ void Map::map_shift( float *position )
             }
          }
       }
-#endif
-      int dim_xy = dim_x * dim_y;
 
-      for (int k = dim_z - chunk_dim_z, ind = 0; k < dim_z; k++)
-      {
-         for (int ij = 0; ij < dim_xy; ij++, ind++)
-         {
-            buffer[ind] = blocks[ k * dim_xy + ij ];
-         }
-      }
+      int dim_xy = dim_x * dim_y;
 
       for (int k = dim_z - 1; k >= chunk_dim_z; k--)
       {
@@ -566,14 +459,6 @@ void Map::map_shift( float *position )
          {
             blocks[ k * dim_xy + ij ] =
                blocks[ (k - chunk_dim_z) * dim_xy + ij ];
-         }
-      }
-
-      for (int k = 0, ind = 0; k < chunk_dim_z; k++)
-      {
-         for (int ij = 0; ij < dim_xy; ij++, ind++)
-         {
-            blocks[ k * dim_xy + ij ] = buffer[ind];
          }
       }
 

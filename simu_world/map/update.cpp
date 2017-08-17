@@ -32,20 +32,9 @@ void Map::update( void )
       int abs_chunk_y = chunk->read( 1 );
       int abs_chunk_z = chunk->read( 2 );
 
-      std::cout << "absolute chunk = "
-         << abs_chunk_x << ", "
-         << abs_chunk_y << ", "
-         << abs_chunk_z;
-
       int rel_chunk_x = abs_chunk_x - map_pos_x / chunk_dim_x;
       int rel_chunk_y = abs_chunk_y - map_pos_y / chunk_dim_y;
       int rel_chunk_z = abs_chunk_z - map_pos_z / chunk_dim_z;
-
-      std::cout << ". relative chunk = "
-         << rel_chunk_x << ", "
-         << rel_chunk_y << ", "
-         << rel_chunk_z
-         << std::endl;
 
       std::string filename = create_filename( abs_chunk_x,
             abs_chunk_y,
