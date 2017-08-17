@@ -12,17 +12,11 @@
 void Map::update( void )
 {
 
-   /*
-    ** note to self: this may be disabled during
-    ** development to mitigate excessive writes to the SSD
-    */
-
    // write all queued chunks to disk
    queue->write_all();
 
    // for each queued chunk to read, read in chunk data
-   // if chunk file doesn't exist, create the chunk
-   // this logic currently exists in shift.cpp.
+   // if chunk file doesn't exist, create the chunk.
    for ( QNode_vector<int>* chunk = readQueue.pop();
          chunk != NULL;
          chunk = readQueue.pop() )

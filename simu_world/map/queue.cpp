@@ -210,6 +210,21 @@ void Queue::fill_buffer( const std::string& file,
 
 }
 
+void Queue::write_one( void )
+{
+   if (count > 0)
+   {
+      std::cout << "writing chunk " << count << std::endl;
+      first->write();
+
+      QNode* qnode = first;
+      if (first != last) first = first->next;
+      delete qnode;
+
+      count--;
+   }
+}
+
 void Queue::write_all( void )
 {
    while ( count > 0 )

@@ -54,6 +54,7 @@ class Queue
                         int   data_id,
                         int   data_size );
 
+      void write_one( void );
       void write_all( void );
 
       void add_read( const std::string& file, int data_size );
