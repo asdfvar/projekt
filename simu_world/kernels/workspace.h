@@ -13,6 +13,9 @@ class Workspace
 
       ~Workspace( void ) { /* NULL */ }
 
+      /*
+      ** function name: reserve from: Workspace
+      */
       template<class Type>
          Type* reserve( size_t size )
          {
@@ -21,6 +24,9 @@ class Workspace
             return (Type*)buf_ptr_start;
          }
 
+      /*
+      ** function name: finalize from: Workspace
+      */
       void finalize( void )
       {
          std::cout << "finalize workspace buffer" << std::endl;

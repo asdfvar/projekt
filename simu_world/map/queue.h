@@ -17,10 +17,8 @@ class QNode
       int abs_pos_y;
       int abs_pos_z;
 
-//
       void write( void );
 
-#ifdef BLOCKS
       QNode( const std::string& file,
              int*  data,
              int   data_id,
@@ -32,7 +30,6 @@ class QNode
       int*        data;
       int         data_size;
       int         data_id;
-#endif
 
 };
 
@@ -78,5 +75,77 @@ class Queue
 std::string create_filename( int   chunk_x,
                              int   chunk_y,
                              int   chunk_z );
+
+template<class Type>
+class QNode_vector
+{
+   public:
+      QNode_vector( Type* src, int num_elements )
+      {
+         if (num_elements > 10)
+         {
+            std::cout << __FILE__ << ":" << __LINE__ <<
+               ":too many elements" << std::endl;
+            return;
+         }
+
+         for (int ind = 0; ind < num_elements; ind++)
+         {
+            data[ind] = src[ind];
+         }
+      }
+
+      QNode_vector* next;
+
+   private:
+      Type data[10];
+      int  N;
+};
+
+template<class Type>
+class ReadQueue
+{
+   public:
+      ReadQueue( void )
+      {
+         count = 0;
+      }
+      ~ReadQueue( void ) { }
+
+         void new_node( Type* src, int N )
+         {
+            if (count == 0)
+            {
+               first = new QNode_vector<Type>( src, N );
+               last = first;
+               first->next = last;
+            }
+            else
+            {
+               QNode_vector<Type>* node = last;
+               last = new QNode_vector<Type>( src, N );
+               node->next = last;
+            }
+            count++;
+         }
+
+      QNode_vector<Type>* pop( void )
+      {
+         QNode_vector<Type>* node = NULL;
+
+         if (count > 0)
+         {
+            node = first;
+            first = first->next;
+            count--;
+         }
+         return node;
+      }
+
+   private:
+      unsigned int count;
+      QNode_vector<Type>* first;
+      QNode_vector<Type>* last;
+};
 
 #endif
