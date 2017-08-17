@@ -44,6 +44,7 @@ class Map
    private:
 
       Workspace workspace;
+      ReadQueue<int> readQueue;
 
       void shift( int x, int y, int z);
 

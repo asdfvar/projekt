@@ -95,6 +95,11 @@ class QNode_vector
          }
       }
 
+      Type read( int element )
+      {
+         return data[element];
+      }
+
       QNode_vector* next;
 
    private:
@@ -112,22 +117,22 @@ class ReadQueue
       }
       ~ReadQueue( void ) { }
 
-         void new_node( Type* src, int N )
+      void new_node( Type* src, int N )
+      {
+         if (count == 0)
          {
-            if (count == 0)
-            {
-               first = new QNode_vector<Type>( src, N );
-               last = first;
-               first->next = last;
-            }
-            else
-            {
-               QNode_vector<Type>* node = last;
-               last = new QNode_vector<Type>( src, N );
-               node->next = last;
-            }
-            count++;
+            first = new QNode_vector<Type>( src, N );
+            last = first;
+            first->next = last;
          }
+         else
+         {
+            QNode_vector<Type>* node = last;
+            last = new QNode_vector<Type>( src, N );
+            node->next = last;
+         }
+         count++;
+      }
 
       QNode_vector<Type>* pop( void )
       {

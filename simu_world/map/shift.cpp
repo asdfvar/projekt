@@ -594,6 +594,14 @@ void Map::map_shift( float *position )
       {
          for (int j = 0; j < num_chunks_y; j++)
          {
+// TODO: this for all directions
+            int abs_chunk[3] = { abs_chunk_x + num_chunks_x - 1,
+                                 abs_chunk_y + j,
+                                 abs_chunk_z + k };
+            readQueue.new_node( abs_chunk, 3 );
+
+// in place of this:
+#if 0
             std::string filename = create_filename( abs_chunk_x + num_chunks_x - 1,
                                                     abs_chunk_y + j,
                                                     abs_chunk_z + k );
@@ -634,6 +642,8 @@ void Map::map_shift( float *position )
                        num_chunks_x - 1,
                        j,
                        k );
+#endif
+// end todo
          }
       }
    }
