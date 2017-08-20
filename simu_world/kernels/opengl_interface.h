@@ -14,16 +14,23 @@ namespace ogl
    void set_cursor_arrow( void );
 
    void draw_polygon( float *vertices_x,
-                      float *vertices_y,
-                      float *distances,
-                      float *color,
-                      float  brightness,
-                      int    num_vertices);
+         float *vertices_y,
+         float *distances,
+         float *color,
+         float  brightness,
+         int    num_vertices);
+
+   void draw_quads (
+         float *vertices_x,
+         float *vertices_y,
+         float *distances,
+         float *color,
+         float  brightness );
 
    void draw_2d_polygon( float *vertices_x,
-                         float *vertices_y,
-                         float *color,
-                         int    num_vertices);
+         float *vertices_y,
+         float *color,
+         int    num_vertices);
 
    void vertex( float x, float y, float z );
    void color( float x, float y, float z );

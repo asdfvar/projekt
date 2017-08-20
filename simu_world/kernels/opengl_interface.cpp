@@ -85,6 +85,28 @@ void ogl::draw_polygon( float *vertices_x,
 
 }
 
+/* function name: draw_quads */
+void ogl::draw_quads (
+      float *vertices_x,
+      float *vertices_y,
+      float *distances,
+      float *color,
+      float  brightness )
+{
+
+   const int num_vertices = 4;
+
+   glBegin(GL_QUADS);
+     glNormal3f(0.0f, 0.0f, -brightness);
+     glColor3f( color[0], color[1], color[2]);
+     for (int vertex = 0; vertex < num_vertices; vertex++)
+     {
+        glVertex3f(vertices_x[vertex], vertices_y[vertex], distances[vertex] / max_view_distance);
+     }
+   glEnd();
+
+}
+
 void ogl::draw_2d_polygon( float *vertices_x,
                            float *vertices_y,
                            float *color,

@@ -8,13 +8,24 @@
 #define DRAW_TOP    0x10
 #define DRAW_BOTTOM 0x20
 
-void draw_block( float  block_position[3],
-                 float *user_position,
-                 float *user_direction,
-                 float  window_distance,
-                 float  window_width,
-                 int    side,
-                 float *rot,
-                 float *color );
+void draw_block_1 (
+      float  block_position[3],
+      float *user_position,
+      float *user_direction,
+      float  window_distance,
+      float  window_width,
+      int    side,
+      float *rot,
+      float *color );
+
+void draw_block_2 (
+      float  block_position[3],
+      float *user_position,
+      float *user_direction,
+      float  window_distance,
+      float  window_width,
+      int    side,
+      float *rot,
+      float *color );
 
 #endif

@@ -7,16 +7,17 @@
 #define ENABLE_RENDERING
 
 /*
-** function name: draw_block
+** function name: draw_block_1
 */
-void draw_block( float  block_position[3],
-                 float *user_position,
-                 float *user_direction,
-                 float  window_distance,
-                 float  window_width,
-                 int    sides,
-                 float *rot,
-                 float *color )
+void draw_block_1 (
+      float  block_position[3],
+      float *user_position,
+      float *user_direction,
+      float  window_distance,
+      float  window_width,
+      int    sides,
+      float *rot,
+      float *color )
 {
 
    if (sides == 0) return;
@@ -479,14 +480,28 @@ void draw_block( float  block_position[3],
          distance[3] = output_point_distance[5];
    
 #ifdef ENABLE_RENDERING
-         ogl::draw_polygon( vertices_x,
-                            vertices_y,
-                            distance,
-                            color,
-                            brightness,
-                            4 );
+         ogl::draw_quads (
+               vertices_x,
+               vertices_y,
+               distance,
+               color,
+               brightness );
 #endif
       }
    }
+}
 
+/*
+** function name: draw_block_2
+*/
+void draw_block_2 (
+      float  block_position[3],
+      float *user_position,
+      float *user_direction,
+      float  window_distance,
+      float  window_width,
+      int    sides,
+      float *rot,
+      float *color )
+{
 }
