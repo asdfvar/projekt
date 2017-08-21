@@ -1,9 +1,5 @@
 #include "opengl_interface.h"
 
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-
 #include <iostream>
 
 static float max_view_distance = 100.0f;

@@ -6,9 +6,9 @@ LIBS    = -lmap -lsimu
 
 DEBUG ?= TRUE
 ifeq ($(DEBUG), TRUE)
-   DEFINES = -DDEBUG
+   DEFINES = -DDEBUG -DGL_GLEXT_PROTOTYPES
 else
-   DEFINES =
+   DEFINES = -DGL_GLEXT_PROTOTYPES
 endif
 
 OBJ = main.o             \

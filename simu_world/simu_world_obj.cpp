@@ -309,7 +309,8 @@ void Simu_world_obj::display( void )
    user.get_position(  user_position  );
    user.get_direction( user_direction );
 
-   map->render_chunk( user_position,
+   map->render_chunk(
+         user_position,
          user_direction,
          window_distance,
          window_width );
@@ -322,6 +323,118 @@ void Simu_world_obj::display( void )
       g_text.display_contents( -1.0f, 1.0f, 1.0f);
    }
 #endif
+
+   // start test
+#if 0
+#if 1
+   GLuint id;
+
+   float vertices[6] = {0.0f, 0.5f, 0.5f, -0.2f, -0.5f, -0.5f};
+
+   struct MyVertex
+   {
+      float x, y, z;    // Vertex
+      float nx, ny, nz; // Normal
+      float s0, t0;     // Texcoord0
+   };
+
+   MyVertex pvertex[3];
+   //VERTEX 0
+   pvertex[0].x = 0.0;
+   pvertex[0].y = 0.0;
+   pvertex[0].z = 0.1;
+   pvertex[0].nx = 0.0;
+   pvertex[0].ny = 0.0;
+   pvertex[0].nz = 1.0;
+   pvertex[0].s0 = 0.0;
+   pvertex[0].t0 = 0.0;
+   //VERTEX 1
+   pvertex[1].x = 1.0;
+   pvertex[1].y = 0.0;
+   pvertex[1].z = 0.1;
+   pvertex[1].nx = 0.0;
+   pvertex[1].ny = 0.0;
+   pvertex[1].nz = 1.0;
+   pvertex[1].s0 = 1.0;
+   pvertex[1].t0 = 0.0;
+   //VERTEX 2
+   static float offset = 0.0;
+   offset += 0.001f;
+   if (offset > 1.0f) offset = 0.0f;
+   pvertex[2].x = 0.0 + offset;
+   pvertex[2].y = 1.0;
+   pvertex[2].z = 0.1;
+   pvertex[2].nx = 0.0;
+   pvertex[2].ny = 0.0;
+   pvertex[2].nz = 1.0;
+   pvertex[2].s0 = 0.0;
+   pvertex[2].t0 = 1.0;
+
+   glGenBuffers( 1, &id );
+   glBindBuffer( GL_ARRAY_BUFFER, id );
+   glBufferData( GL_ARRAY_BUFFER, sizeof(pvertex), &pvertex[0].x, GL_STREAM_DRAW );
+
+   //Define this somewhere in your header file
+
+   glBindBuffer(GL_ARRAY_BUFFER, id);
+   glVertexPointer(3, GL_FLOAT, sizeof(MyVertex), NULL);   //The starting point of the VBO, for the vertices
+   glEnableClientState(GL_VERTEX_ARRAY);
+
+#if 0
+   glEnableClientState(GL_NORMAL_ARRAY);
+   glNormalPointer(GL_FLOAT, sizeof(MyVertex), &pvertex[0].nx);   //The starting point of normals, 12 bytes away
+   glClientActiveTextureARB(GL_TEXTURE0);
+   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+   glTexCoordPointer(2, GL_FLOAT, sizeof(MyVertex), &pvertex[0].t0);   //The starting point of texcoords, 24 bytes away
+
+   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, id);
+#endif
+
+   //To render, we can either use glDrawElements or glDrawRangeElements
+   //The is the number of indices. 3 indices needed to make a single triangle
+   //  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, &pvertex[0].x);   //The starting point of the IBO
+   glDrawArrays(GL_TRIANGLES, 0, sizeof(pvertex) / sizeof(float) / 8);
+   //0 and 3 are the first and last vertices
+   //glDrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));   //The starting point of the IBO
+   //glDrawRangeElements may or may not give a performance advantage over glDrawElements
+
+   //glDeleteBuffersARB( 1, &id );
+   glFlush();
+#else
+   //Initialise VBO - do only once, at start of program
+   //Create a variable to hold the VBO identifier
+   GLuint triangleVBO;
+
+   //Vertices of a triangle (counter-clockwise winding) 
+   float data[] = {0.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0};
+
+   //Create a new VBO and use the variable id to store the VBO id
+   glGenBuffers(1, &triangleVBO);
+
+   //Make the new VBO active
+   glBindBuffer(GL_ARRAY_BUFFER, triangleVBO);
+
+   //Upload vertex data to the video device
+   glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STREAM_DRAW);
+
+   //Make the new VBO active. Repeat here incase changed since initialisation
+   glBindBuffer(GL_ARRAY_BUFFER, triangleVBO);
+
+   //Draw Triangle from VBO - do each time window, view point or data changes
+   //Establish its 3 coordinates per vertex with zero stride in this array; necessary here
+   glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+   //Establish array contains vertices (not normals, colours, texture coords etc)
+   glEnableClientState(GL_VERTEX_ARRAY);
+
+   //Actually draw the triangle, giving the number of vertices provided
+   glDrawArrays(GL_TRIANGLES, 0, sizeof(data) / sizeof(float) / 3);
+
+   //Force display to be drawn now
+   //    glFlush();
+#endif
+#endif
+   // end test
 
    // swap this buffer for the old one
    ogl::swap_buffers();

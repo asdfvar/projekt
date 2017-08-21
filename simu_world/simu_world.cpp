@@ -1,6 +1,4 @@
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
+#include "opengl_interface.h"
 #include <pthread.h>
 #include "simu_world.h"
 #include "simu_world_obj.h"
