@@ -82,24 +82,37 @@ void Map::map_shift( float *position )
       }
 
       // Shift the blocks back modulo the chunk_dim_x
-      for (int k = 0; k < dim_z; k++)
+      for (int chunk_z = 0; chunk_z < num_chunks_z; chunk_z++)
       {
-         for (int j = 0; j < dim_y; j++)
+         for (int chunk_y = 0; chunk_y < num_chunks_y; chunk_y++)
          {
-            for (int i = 0; i < dim_x - chunk_dim_x; i++)
+            for (int chunk_x = 0; chunk_x < num_chunks_x - 1; chunk_x++)
             {
-               blocks[ i                 +
-                       j * dim_x         +
-                       k * dim_x * dim_y   ] =
+               get_chunk(
+                     buffer,
+                     chunk_x + 1,
+                     chunk_y,
+                     chunk_z,
+                     0 );
 
-                       blocks[ i                 +
-                               j * dim_x         +
-                               k * dim_x * dim_y +
-                               chunk_dim_x         ];
+               set_chunk(
+                     buffer,
+                     chunk_x,
+                     chunk_y,
+                     chunk_z );
             }
+
+            int chunk_dim_xyz = chunk_dim_x * chunk_dim_y * chunk_dim_z;
+            for (int ind = 0; ind < chunk_dim_xyz; ind++) buffer[ind] = 0.0f;
+
+            set_chunk(
+                  buffer,
+                  num_chunks_x - 1,
+                  chunk_y,
+                  chunk_z );
          }
       }
-
+           
       // move the blocks, as a whole, appropriately
       map_pos_x += (float)chunk_dim_x;
    }
@@ -154,21 +167,34 @@ void Map::map_shift( float *position )
       }
 
       // Shift the blocks forward modulo the chunk_dim_x
-      for (int k = 0; k < dim_z; k++)
+      for (int chunk_z = 0; chunk_z < num_chunks_z; chunk_z++)
       {
-         for (int j = 0; j < dim_y; j++)
+         for (int chunk_y = 0; chunk_y < num_chunks_y; chunk_y++)
          {
-            for (int i = dim_x - 1; i >= chunk_dim_x; i--)
+            for (int chunk_x = num_chunks_x - 1; chunk_x > 0; chunk_x--)
             {
-               blocks[ i                 +
-                       j * dim_x         +
-                       k * dim_x * dim_y ] =
+               get_chunk(
+                     buffer,
+                     chunk_x - 1,
+                     chunk_y,
+                     chunk_z,
+                     0 );
 
-                       blocks[ i                 +
-                               j * dim_x         +
-                               k * dim_x * dim_y -
-                               chunk_dim_x        ];
+               set_chunk(
+                     buffer,
+                     chunk_x,
+                     chunk_y,
+                     chunk_z );
             }
+
+            int chunk_dim_xyz = chunk_dim_x * chunk_dim_y * chunk_dim_z;
+            for (int ind = 0; ind < chunk_dim_xyz; ind++) buffer[ind] = 0.0f;
+
+            set_chunk(
+                  buffer,
+                  0,
+                  chunk_y,
+                  chunk_z );
          }
       }
 
