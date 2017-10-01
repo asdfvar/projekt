@@ -50,19 +50,20 @@ void Map::map_shift( float *position )
 
             if (write_permissions[ind] == true)
             {
-               get_chunk(
+               get_chunk (
                      buffer,
                      0,
                      j,
                      k,
                      0 );
 
-               std::string filename = create_filename(
-                     abs_chunk_x + 0,
-                     abs_chunk_y + j,
-                     abs_chunk_z + k );
+               std::string filename =
+                  create_filename (
+                        abs_chunk_x + 0,
+                        abs_chunk_y + j,
+                        abs_chunk_z + k );
 
-               queue->fill_buffer(
+               queue->fill_buffer (
                      filename,
                      buffer,
                      0,
