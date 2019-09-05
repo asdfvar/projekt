@@ -40,7 +40,7 @@ int main ()
             cost,
             dim,
             dst,       // source (cost = 0) will be the destination point
-            nullptr,       // destination point will be the starting point
+            src,       // destination point will be the starting point
             buffer);
 
       float cost_function_time = endTime (start_time);

@@ -62,9 +62,11 @@ void cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3
       for (int k = sub_k - 1; k <= sub_k + 1; k++)
       {
          if (k < 0 || k >= K) continue;
+
          for (int j = sub_j - 1; j <= sub_j + 1; j++)
          {
             if (j < 0 || j >= J) continue;
+
             for (int i = sub_i - 1; i <= sub_i + 1; i++)
             {
                if (i < 0 || i >= I) continue;
@@ -72,15 +74,15 @@ void cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3
                int local_index = ijk_to_ind (i, j, k, I, J, K);
 
                if (nodes[local_index] < 0.0f) {
-                  cost[local_index] = -1;
+                  cost[local_index] = -1.0f;
                   continue;
                }
 
                float local_cost = cost[last_index];
 
-               int i_dist = (i - sub_i) * (i - sub_i);
-               int j_dist = (j - sub_j) * (j - sub_j);
-               int k_dist = (k - sub_k) * (k - sub_k);
+               int i_dist = (i > sub_i) || (sub_i > i) ? 1 : 0;
+               int j_dist = (j > sub_j) || (sub_j > j) ? 1 : 0;
+               int k_dist = (k > sub_k) || (sub_k > k) ? 1 : 0;
 
                /*
                ** sqrtf((float)((k - sub_k) * (k - sub_k) +
@@ -89,12 +91,9 @@ void cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3
                */
                local_cost +=
                   i_dist && j_dist && k_dist ? 1.732050807569f :
-                  j_dist && k_dist ? 1.414213562373f :
-                  i_dist && j_dist ? 1.414213562373f :
-                  i_dist && k_dist ? 1.414213562373f :
-                  i_dist    ? 1.0f :
-                  j_dist    ? 1.0f :
-                  k_dist    ? 1.0f : 0.0f;
+                  j_dist && k_dist || i_dist && j_dist || i_dist && k_dist ? 1.414213562373f :
+                  i_dist || j_dist || k_dist ? 1.0f :
+                  0.0f;
 
                local_cost += nodes[local_index];
 
@@ -103,7 +102,9 @@ void cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3
                   cost[local_index] = local_cost;
                   path_cost_ind[path_cost_ind_size++] = local_index;
 
+#ifdef USE_DST
                   if (dst != nullptr && i == dst[0] && j == dst[1] && k == dst[2]) return;
+#endif
                }
             }
          }
