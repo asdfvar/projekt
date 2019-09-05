@@ -78,10 +78,23 @@ void cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3
 
                float local_cost = cost[last_index];
 
+               int i_dist = (i - sub_i) * (i - sub_i);
+               int j_dist = (j - sub_j) * (j - sub_j);
+               int k_dist = (k - sub_k) * (k - sub_k);
+
+               /*
+               ** sqrtf((float)((k - sub_k) * (k - sub_k) +
+               **       (j - sub_j) * (j - sub_j) +
+               **       (i - sub_i) * (i - sub_i)));
+               */
                local_cost +=
-                  sqrtf((float)((k - sub_k) * (k - sub_k) +
-                        (j - sub_j) * (j - sub_j) +
-                        (i - sub_i) * (i - sub_i)));
+                  i_dist && j_dist && k_dist ? 1.732050807569f :
+                  j_dist && k_dist ? 1.414213562373f :
+                  i_dist && j_dist ? 1.414213562373f :
+                  i_dist && k_dist ? 1.414213562373f :
+                  i_dist    ? 1.0f :
+                  j_dist    ? 1.0f :
+                  k_dist    ? 1.0f : 0.0f;
 
                local_cost += nodes[local_index];
 

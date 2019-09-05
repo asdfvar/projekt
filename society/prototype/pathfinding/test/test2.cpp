@@ -18,7 +18,7 @@ int main ()
    int   *path   = new int  [Imax * Jmax * Kmax];
    float *buffer = new float[Imax * Jmax * Kmax];
 
-   for (int length = 1; length <= 20; length++) {
+   for (int length = 18; length <= 18; length++) {
 
       I = J = K = length;
 
@@ -83,6 +83,7 @@ int main ()
 
    std::cout << std::endl;
 
+#if 0
    for (float density = 0.0f; density < 0.90f; density += 0.1f) {
 
       I = J = K = 20;
@@ -152,6 +153,7 @@ int main ()
 #endif
 
    }
+#endif
 
    delete[] nodes;
    delete[] cost;
