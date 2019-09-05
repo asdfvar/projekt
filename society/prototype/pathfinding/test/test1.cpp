@@ -65,7 +65,7 @@ int main ()
          cost,
          dim,
          dst,       // source (cost = 0) will be the destination point
-         nullptr,       // destination point will be the starting point
+         src,       // destination point will be the starting point
          buffer);
 
    for (int k = 0, ind = 0; k < DIM_Z; k++)

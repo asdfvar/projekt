@@ -35,7 +35,7 @@ int main ()
 
       long start_time = startTime ();
       // start from the destination point and branch outward
-      cost_function (
+      int itt = cost_function (
             nodes,
             cost,
             dim,
@@ -45,6 +45,7 @@ int main ()
 
       float cost_function_time = endTime (start_time);
       std::cout << "cost function time: " << cost_function_time << std::endl;
+      std::cout << "with " << itt << " itterations" << std::endl;
 
       start_time = startTime ();
       int path_size = pathfinding (
