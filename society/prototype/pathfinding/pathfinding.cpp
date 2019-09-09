@@ -2,8 +2,6 @@
 #include <cmath>
 #include <cfloat>
 
-#define USE_DST
-
 // #define USE_GENERAL
 #define USE_EUCLIDEAN
 
@@ -31,9 +29,19 @@ static inline int ind_to_k (int ind, int I, int J, int K)
    return k;
 }
 
-int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3], float *buffer)
+static inline int ind_to_axis (int index, int *dim, int size, int select_axis_ind)
+{
+   int denomitator = 1;
+   for (int ind = 0; ind < select_axis_ind; ind++) denomitator *= dim[ind];
+   
+   return (index / denomitator) % dim[select_axis_ind];
+}
+
+bool cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3], float *buffer)
 {
    int dim_prod = dim[0] * dim[1] * dim[2];
+int hist[40*40*40];
+for (int ind = 0; ind < dim_prod; ind++) hist[ind] = 0;
 
    int I = dim[0];
    int J = dim[1];
@@ -43,8 +51,6 @@ int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3]
 
    // list of indices of path cost to compute the path cost
    int *path_cost_ind = (int*)(buffer);
-
-   // -1 = infinite cost
 
    int index;
 
@@ -62,23 +68,24 @@ int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3]
    {
 
 #ifdef USE_GENERAL
-      // Generalized for any discrete metric space
+      // Generalized for any discrete space
       int best_index = path_cost_ind[--path_cost_ind_size];
 #elif defined(USE_EUCLIDEAN)
-      // Specific to Euclidean space
+      // Specific to Euclidean metric space. Find the index that is the closest
+      // in distance to the objective
       int best_cost_index = 0;
       int best_index = path_cost_ind[best_cost_index];
 
-      float min_dist = FLT_MAX;
+      int min_dist = INT32_MAX;
       for (int ind = 0; ind < path_cost_ind_size; ind++) {
          int i = ind_to_i (path_cost_ind[ind], I, J, K);
          int j = ind_to_j (path_cost_ind[ind], I, J, K);
          int k = ind_to_k (path_cost_ind[ind], I, J, K);
 
-         // Determine the distance to the objective
-         float dist = sqrtf((float)((k - dst[2]) * (k - dst[2]) +
+         // Determine the square of the distance to the objective
+         int dist = ((k - dst[2]) * (k - dst[2]) +
                 (j - dst[1]) * (j - dst[1]) +
-                (i - dst[0]) * (i - dst[0])));
+                (i - dst[0]) * (i - dst[0]));
 
          if (dist < min_dist) {
             best_index = path_cost_ind[ind];
@@ -86,6 +93,7 @@ int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3]
             min_dist = dist;
          }
       }
+
       for (int sub_ind = best_cost_index; sub_ind < path_cost_ind_size - 1; sub_ind++) {
          path_cost_ind[sub_ind] = path_cost_ind[sub_ind + 1];
       }
@@ -117,15 +125,15 @@ int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3]
 
                float local_cost = cost[best_index];
 
-               int i_dist = (i > sub_i) || (sub_i > i) ? 1 : 0;
-               int j_dist = (j > sub_j) || (sub_j > j) ? 1 : 0;
-               int k_dist = (k > sub_k) || (sub_k > k) ? 1 : 0;
-
                /*
                ** sqrtf((float)((k - sub_k) * (k - sub_k) +
                **       (j - sub_j) * (j - sub_j) +
                **       (i - sub_i) * (i - sub_i)));
                */
+               int i_dist = (i > sub_i) || (sub_i > i) ? 1 : 0;
+               int j_dist = (j > sub_j) || (sub_j > j) ? 1 : 0;
+               int k_dist = (k > sub_k) || (sub_k > k) ? 1 : 0;
+
                local_cost +=
                   i_dist && j_dist && k_dist ? 1.732050807569f :
                   j_dist && k_dist || i_dist && j_dist || i_dist && k_dist ? 1.414213562373f :
@@ -141,11 +149,10 @@ int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3]
                   cost[local_index] = local_cost;
                   path_cost_ind[path_cost_ind_size++] = local_index;
 
-#ifdef USE_DST
                   // Finish if the destination has been found
-                  if (dst != nullptr && i == dst[0] && j == dst[1] && k == dst[2])
-                     return itteration;
-#endif
+                  if (dst != nullptr && i == dst[0] && j == dst[1] && k == dst[2]) {
+                     return true;
+                  }
                }
 
             }
@@ -153,7 +160,7 @@ int cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3]
       }
    }
 
-   return itteration;
+   return false;
 }
 
 int pathfinding (float *cost, int dim[3], int src[3], int dst[3], int *path)
