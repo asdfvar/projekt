@@ -37,11 +37,15 @@ static inline int ind_to_axis (int index, int *dim, int size, int select_axis_in
    return (index / denomitator) % dim[select_axis_ind];
 }
 
-bool cost_function (float *nodes, float *cost, int dim[3], int src[3], int dst[3], float *buffer)
+bool cost_function (
+      float *nodes,
+      float *cost,
+      int    dim[3],
+      int    start[3],
+      int    end[3],
+      float *buffer)
 {
    int dim_prod = dim[0] * dim[1] * dim[2];
-int hist[40*40*40];
-for (int ind = 0; ind < dim_prod; ind++) hist[ind] = 0;
 
    int I = dim[0];
    int J = dim[1];
@@ -54,14 +58,12 @@ for (int ind = 0; ind < dim_prod; ind++) hist[ind] = 0;
 
    int index;
 
-   index = ijk_to_ind (src[0], src[1], src[2], dim[0], dim[1], dim[2]);
+   index = ijk_to_ind (start[0], start[1], start[2], dim[0], dim[1], dim[2]);
 
    cost[index] = 0.0f;
 
    path_cost_ind[0] = index;
    int path_cost_ind_size = 1;
-
-   int itteration = 0;
 
    // loop; for each path cost index
    while (path_cost_ind_size > 0)
@@ -83,9 +85,9 @@ for (int ind = 0; ind < dim_prod; ind++) hist[ind] = 0;
          int k = ind_to_k (path_cost_ind[ind], I, J, K);
 
          // Determine the square of the distance to the objective
-         int dist = ((k - dst[2]) * (k - dst[2]) +
-                (j - dst[1]) * (j - dst[1]) +
-                (i - dst[0]) * (i - dst[0]));
+         int dist = ((k - end[2]) * (k - end[2]) +
+                (j - end[1]) * (j - end[1]) +
+                (i - end[0]) * (i - end[0]));
 
          if (dist < min_dist) {
             best_index = path_cost_ind[ind];
@@ -142,15 +144,13 @@ for (int ind = 0; ind < dim_prod; ind++) hist[ind] = 0;
 
                local_cost += nodes[local_index];
 
-               itteration++;
-
                if (local_cost < cost[local_index])
                {
                   cost[local_index] = local_cost;
                   path_cost_ind[path_cost_ind_size++] = local_index;
 
                   // Finish if the destination has been found
-                  if (dst != nullptr && i == dst[0] && j == dst[1] && k == dst[2]) {
+                  if (end != nullptr && i == end[0] && j == end[1] && k == end[2]) {
                      return true;
                   }
                }
