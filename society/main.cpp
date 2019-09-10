@@ -1,20 +1,19 @@
-#include "opengl_interface.h"
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
 
-#include "society.h"
+#include "facade.h"
 
 /* Define the interface with openGL */
-Society society ();
+Facade facade;
 
 /***********************
  ** Display to screen **
  ***********************/
 void display(void)
 {
-  society.display ();
+  facade.display ();
 }
 
 /*********************
@@ -22,7 +21,7 @@ void display(void)
  *********************/
 void idle(void)
 {
-   society.idle ();
+   facade.idle ();
 }
 
 /*****************
@@ -41,7 +40,7 @@ void mouse( int button,
             int x,
             int y)
 {
-   society.mouse (button, state, x, y);
+   facade.mouse (button, state, x, y);
 }
 
 /**************************
@@ -49,7 +48,7 @@ void mouse( int button,
  **************************/
 void mouseMotion(int x, int y)
 {
-   society.mouseMotion (x, y);
+   facade.mouseMotion (x, y);
 }
 
 
@@ -65,7 +64,7 @@ void mouseMotion(int x, int y)
 */
 void mousePassive(int x, int y)
 {
-   society.mousePassive (x, y);
+   facade.mousePassive (x, y);
 }
 
 /*****************
@@ -73,7 +72,7 @@ void mousePassive(int x, int y)
  *****************/
 void keyboardUp(unsigned char key, int x, int y)
 {
-   society.keyboardUp (key);
+   facade.keyboardUp (key);
 }
 
 /*******************
@@ -83,13 +82,13 @@ void keyboardDown(unsigned char key, int x, int y)
 {
    if (key == 'q') exit (1);
 
-   society.keyboardDown (key);
+   facade.keyboardDown (key);
 }
 
 // Special key values
 void specialFunc(int key, int x, int y)
 {
-   society.specialFunc (key, x, y);
+   facade.specialFunc (key, x, y);
 }
 
 
@@ -106,34 +105,34 @@ int main (int argc, char** argv)
    glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
    glutInitWindowSize (windowsizex, windowsizey);
    glutInitWindowPosition (50, 50);
-   glutCreateWindow ("simu");
+   glutCreateWindow ("whee");
 
    float light_ambient[]  = { 0.2, 0.2, 0.2, 1.0 };
    float light_diffuse[]  = { 0.8, 0.8, 0.8, 1.0 };
    float light_specular[] = { 0.8, 0.8, 0.8, 1.0 };
    float light_position[] = { 0.0, 0.0, 1.0, 0.0 };
 
-   glLightfv( GL_LIGHT0, GL_AMBIENT, light_ambient   );
-   glLightfv( GL_LIGHT0, GL_DIFFUSE, light_diffuse   );
-   glLightfv( GL_LIGHT0, GL_SPECULAR, light_specular );
-   glLightfv( GL_LIGHT0, GL_POSITION, light_position );
+   glLightfv (GL_LIGHT0, GL_AMBIENT, light_ambient  );
+   glLightfv (GL_LIGHT0, GL_DIFFUSE, light_diffuse  );
+   glLightfv (GL_LIGHT0, GL_SPECULAR, light_specular);
+   glLightfv (GL_LIGHT0, GL_POSITION, light_position);
 
-   glEnable( GL_LIGHT0         );
-   glEnable( GL_LESS           );
-   glEnable( GL_DEPTH_TEST     );
-   glEnable( GL_LIGHTING       );
-   glEnable( GL_COLOR_MATERIAL );
+   glEnable (GL_LIGHT0        );
+   glEnable (GL_LESS          );
+   glEnable (GL_DEPTH_TEST    );
+   glEnable (GL_LIGHTING      );
+   glEnable (GL_COLOR_MATERIAL);
 
-   glDepthFunc( GL_LESS );
+   glDepthFunc (GL_LESS);
 
-   glutDisplayFunc (       display      );
-   glutMouseFunc (         mouse        );
-   glutMotionFunc (        mouseMotion  );
-   glutPassiveMotionFunc ( mousePassive );
-   glutKeyboardUpFunc (    keyboardUp   );
-   glutKeyboardFunc (      keyboardDown );
-   glutSpecialFunc (       specialFunc  );
-   glutIdleFunc (          idle         );
+   glutDisplayFunc       (display     );
+   glutMouseFunc         (mouse       );
+   glutMotionFunc        (mouseMotion );
+   glutPassiveMotionFunc (mousePassive);
+   glutKeyboardUpFunc    (keyboardUp  );
+   glutKeyboardFunc      (keyboardDown);
+   glutSpecialFunc       (specialFunc );
+   glutIdleFunc          (idle        );
 
    glutMainLoop();
 
