@@ -2,7 +2,7 @@ CC = g++
 
 OPTS = -O3
 
-INC = -I../
+INC = -I../../
 
 OBJS = test1.o       \
        test2.o       \
@@ -41,7 +41,7 @@ test3.o: test3.cpp
 test_2D.o: test_2D.cpp
 	$(CC) $(OPTS) $(INC) -c $^
 
-pathfinding.o: ../pathfinding.cpp
+pathfinding.o: ../../pathfinding.cpp
 	$(CC) $(OPTS) $(INC) -c $^
 
 timer.o: timer.cpp
