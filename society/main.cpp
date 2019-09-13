@@ -35,7 +35,7 @@ void idle(void)
 **      GLUT_UP
 **      GLUT_DOWN
 */
-void mouse( int button,
+void mouse (int button,
             int state,
             int x,
             int y)
@@ -62,7 +62,7 @@ void mouseMotion(int x, int y)
 ** GLUT_WINDOW_WIDTH    Width in pixels of the current window
 ** GLUT_WINDOW_HEIGHT   Height in pixels of the current window
 */
-void mousePassive(int x, int y)
+void mousePassive (int x, int y)
 {
    facade.mousePassive (x, y);
 }
@@ -70,19 +70,19 @@ void mousePassive(int x, int y)
 /*****************
  ** Keyboard up **
  *****************/
-void keyboardUp(unsigned char key, int x, int y)
+void keyboardUp (unsigned char key, int x, int y)
 {
-   facade.keyboardUp (key);
+   facade.keyboardUp (key, x, y);
 }
 
 /*******************
  ** Keyboard down **
  *******************/
-void keyboardDown(unsigned char key, int x, int y)
+void keyboardDown (unsigned char key, int x, int y)
 {
    if (key == 'q') exit (1);
 
-   facade.keyboardDown (key);
+   facade.keyboardDown (key, x, y);
 }
 
 // Special key values

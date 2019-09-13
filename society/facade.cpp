@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include "facade.h"
+#include "control.h"
 
 /*
 ** function name: Facade from: Facade
@@ -17,8 +18,12 @@ Facade::Facade (void)
 ** function name: keyboardDown from: Facade
 ** glutGetModifiers() is true if the shift key is depressed
 */
-void Facade::keyboardDown (const char key)
+void Facade::keyboardDown (const char key, int x, int y)
 {
+std::cout << "key down = " << key << " @ (" << x << ", " << y << ")" << std::endl;
+
+   Keyboard_down control (key, x, y);
+   Control_queue.push (control);
 }
 
 /*
@@ -31,12 +36,13 @@ void Facade::specialFunc (int key, int x, int y)
 /*
 ** function name: keyboardUp from: Facade
 */
-void Facade::keyboardUp (const char key)
+void Facade::keyboardUp (const char key, int x, int y)
 {
 }
 
 void Facade::mouse ( int button, int state, int x, int y)
 {
+std::cout << "mouse click button " << button << " state " << state << " @ (" << x << ", " << y << ")" << std::endl;
 }
 
 /*
@@ -48,10 +54,12 @@ void Facade::mouse ( int button, int state, int x, int y)
 */
 void Facade::mousePassive (int x, int y)
 {
+std::cout << "mouse passive " << " @ (" << x << ", " << y << ")" << std::endl;
 }
 
 void Facade::mouseMotion (int x, int y)
 {
+std::cout << "mouse motion " << " @ (" << x << ", " << y << ")" << std::endl;
 }
 
 /*
