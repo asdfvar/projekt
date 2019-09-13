@@ -35,12 +35,13 @@ void idle(void)
 **      GLUT_UP
 **      GLUT_DOWN
 */
-void mouse (int button,
-            int state,
-            int x,
-            int y)
+void mouseClick (
+      int button,
+      int state,
+      int x,
+      int y)
 {
-   facade.mouse (button, state, x, y);
+   facade.mouseClick (button, state, x, y);
 }
 
 /**************************
@@ -126,7 +127,7 @@ int main (int argc, char** argv)
    glDepthFunc (GL_LESS);
 
    glutDisplayFunc       (display     );
-   glutMouseFunc         (mouse       );
+   glutMouseFunc         (mouseClick  );
    glutMotionFunc        (mouseMotion );
    glutPassiveMotionFunc (mousePassive);
    glutKeyboardUpFunc    (keyboardUp  );
