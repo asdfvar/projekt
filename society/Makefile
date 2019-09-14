@@ -1,8 +1,8 @@
 CC       = g++
 FLAGS    = -O3 -Wall
-LIBS     = -lm -lGL -lGLU -lglut -lsociety
-LIBPATHS = -L./kernel/
-INC      = -I./kernel/
+LIBS     = -lm -lGL -lGLU -lglut -lsociety -lgraphics
+LIBPATHS = -L./kernel/ -L./graphics/
+INC      = -I./kernel/ -I./graphics/
 OBJDIR   = objdir
 
 OBJS = $(OBJDIR)/main.o   \
@@ -14,14 +14,16 @@ EXE = whee
 .NOTPARALLEL: all
 
 all: directories $(OBJS)
-	cd kernel && $(MAKE)
+	cd kernel   && $(MAKE)
+	cd graphics && $(MAKE)
 	$(CC) $(OBJS) $(FLAGS) $(LIBPATHS) $(LIBS) -o $(EXE)
 
 directories:
 	mkdir -p $(OBJDIR)
 
 clean:
-	make -C kernel clean
+	make -C kernel   clean
+	make -C graphics clean
 	rm $(OBJS) $(EXE)
 
 $(OBJDIR)/%.o: %.cpp

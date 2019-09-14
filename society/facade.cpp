@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "facade.h"
 #include "control.h"
+#include "graphics.h"
 
 /*
 ** function name: Facade from: Facade
@@ -88,8 +89,6 @@ void Facade::idle (void)
                    (start.tv_sec * 1000000 + start.tv_usec)) / 1000000.0;
    } while (time_taken < time_step);
 
-   std::cout << "time taken = " << time_taken << std::endl;
-
    society.update (0.01f);
    gettimeofday (&start, NULL);
 
@@ -103,6 +102,12 @@ void Facade::display (void)
 {
    // clear this openGL buffer
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+   int dim_x, dim_y, dim_z;
+   const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
+
+   int map_dims[3] = {dim_x, dim_y, dim_z};
+   draw_map (map, map_dims, 20);
 
    // swap this buffer for the old one
    glutSwapBuffers();
