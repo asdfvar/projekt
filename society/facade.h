@@ -2,8 +2,10 @@
 #define FACADE_H
 
 #include "control.h"
+#include "society.h"
 #include <queue>
 #include <mutex>
+#include <sys/time.h>
 
 class Facade {
    public:
@@ -20,10 +22,10 @@ class Facade {
       void display      (void);
 
    private:
-      std::queue<Control*> Control_queue;
-      std::mutex control_lock;
+      Control *control;
+      Society society;
 
-      Control *current_control;
+      struct timeval start, end;
 };
 
 #endif

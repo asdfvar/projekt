@@ -108,6 +108,8 @@ int main (int argc, char** argv)
    glutInitWindowPosition (50, 50);
    glutCreateWindow ("whee");
 
+   glutSetKeyRepeat (GLUT_KEY_REPEAT_OFF);
+
    float light_ambient[]  = { 0.2, 0.2, 0.2, 1.0 };
    float light_diffuse[]  = { 0.8, 0.8, 0.8, 1.0 };
    float light_specular[] = { 0.8, 0.8, 0.8, 1.0 };

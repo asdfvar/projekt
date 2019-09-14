@@ -1,6 +1,7 @@
 #ifndef SOCIETY_H
 #define SOCIETY_H
 
+#include <queue>
 #include "control.h"
 
 class Society
@@ -9,10 +10,12 @@ class Society
       Society (void);
       ~Society (void);
 
-      void controls (struct Keyboard keyboard, struct Mouse mouse);
+      void input (Control *control);
+      void update (float time_step);
 
    private:
       float *map;
+      std::queue<Control*> control_queue;
 };
 
 #endif

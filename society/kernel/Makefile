@@ -9,7 +9,7 @@ OBJS = $(OBJDIR)/society.o     \
 LIBNAME = libsociety.a
 
 all: directories $(OBJS)
-	ar rcs $(LIBNAME)
+	ar rcs $(LIBNAME) $(OBJS)
 
 directories:
 	@mkdir -p $(OBJDIR)

@@ -4,6 +4,8 @@
 #include <GL/glext.h>
 #include <iostream>
 #include <sstream>
+#include <chrono>
+#include <unistd.h>
 #include "facade.h"
 #include "control.h"
 
@@ -12,6 +14,16 @@
 */
 Facade::Facade (void)
 {
+   gettimeofday (&start, NULL);
+}
+
+/*
+** function name: keyboardUp from: Facade
+*/
+void Facade::keyboardUp (const char key, int x, int y)
+{
+   control = new KeyboardUp (key, x, y);
+   society.input (control);
 }
 
 /*
@@ -20,15 +32,8 @@ Facade::Facade (void)
 */
 void Facade::keyboardDown (const char key, int x, int y)
 {
-std::cout << "key down = " << key << " @ (" << x << ", " << y << ")" << std::endl;
-
-   KeyboardDown *control = new KeyboardDown (key, x, y);
-
-   control_lock.lock();
-   Control_queue.push (control);
-   control_lock.unlock();
-
-   current_control = control;
+   control = new KeyboardDown (key, x, y);
+   society.input (control);
 }
 
 /*
@@ -36,39 +41,14 @@ std::cout << "key down = " << key << " @ (" << x << ", " << y << ")" << std::end
 */
 void Facade::specialFunc (int key, int x, int y)
 {
-   KeyboardSpecial *control = new KeyboardSpecial (key, x, y);
-   
-   control_lock.lock ();
-   Control_queue.push (control);
-   control_lock.unlock();
-
-   current_control = control;
-}
-
-/*
-** function name: keyboardUp from: Facade
-*/
-void Facade::keyboardUp (const char key, int x, int y)
-{
-   KeyboardUp *control = new KeyboardUp (key, x, y);
-   
-   control_lock.lock ();
-   Control_queue.push (control);
-   control_lock.unlock();
-
-   current_control = control;
+   control = new KeyboardSpecial (key, x, y);
+   society.input (control);
 }
 
 void Facade::mouseClick (int button, int state, int x, int y)
 {
-std::cout << "mouse click button " << button << " state " << state << " @ (" << x << ", " << y << ")" << std::endl;
-   MouseClick *control = new MouseClick (button, state, x, y);
-   
-   control_lock.lock ();
-   Control_queue.push (control);
-   control_lock.unlock();
-
-   current_control = control;
+   control = new MouseClick (button, state, x, y);
+   society.input (control);
 }
 
 /*
@@ -80,26 +60,10 @@ std::cout << "mouse click button " << button << " state " << state << " @ (" << 
 */
 void Facade::mousePassive (int x, int y)
 {
-std::cout << "mouse passive " << " @ (" << x << ", " << y << ")" << std::endl;
-   MousePassive *control = new MousePassive (x, y);
-   
-   control_lock.lock ();
-   Control_queue.push (control);
-   control_lock.unlock();
-
-   current_control = control;
 }
 
 void Facade::mouseMotion (int x, int y)
 {
-std::cout << "mouse motion " << " @ (" << x << ", " << y << ")" << std::endl;
-   MouseMotion *control = new MouseMotion (x, y);
-   
-   control_lock.lock ();
-   Control_queue.push (control);
-   control_lock.unlock();
-
-   current_control = control;
 }
 
 /*
@@ -114,24 +78,20 @@ Facade::~Facade (void)
 */
 void Facade::idle (void)
 {
+   double time_step = 0.01;
 
-   control_lock.lock ();
-   if (Control_queue.empty() == false) {
-      Control_queue.pop ();
-   }
-   control_lock.unlock();
+   double time_taken;
 
-   Control *control = current_control;
+   do {
+      gettimeofday (&end, NULL);
+      time_taken = (end.tv_sec * 1000000 + end.tv_usec -
+                   (start.tv_sec * 1000000 + start.tv_usec)) / 1000000.0;
+   } while (time_taken < time_step);
 
-   MousePassive *mp = dynamic_cast<MousePassive*>(control);
-   if (mp != 0) {
-      std::cout << "wqerasdfasdfasdfasdf!" << std::endl;
-   }
+   std::cout << "time taken = " << time_taken << std::endl;
 
-   KeyboardDown *kd = dynamic_cast<KeyboardDown*>(control);
-   if (kd != 0) {
-      std::cout << "DOWN!" << std::endl;
-   }
+   society.update (0.01f);
+   gettimeofday (&start, NULL);
 
    glutPostRedisplay ();
 }
