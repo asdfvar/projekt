@@ -4,6 +4,7 @@ OBJDIR = objdir
 
 OBJS = $(OBJDIR)/society.o     \
        $(OBJDIR)/pathfinding.o \
+       $(OBJDIR)/unit.o        \
 #
 
 LIBNAME = libsociety.a

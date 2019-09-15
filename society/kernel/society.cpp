@@ -17,6 +17,8 @@ Society::Society (void)
       if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
       else map[ind] = -1.0f;
    }
+
+   units.push_back (Unit (0.5f, 0.5f, 20.5f));
 }
 
 Society::~Society (void)
@@ -62,4 +64,14 @@ const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out
    *dim_y_out = dim_y;
    *dim_z_out = dim_z;
    return static_cast<const float*>(map);
+}
+
+int Society::get_unit_locations (float *x, float *y, float *z)
+{
+   int ind = 0;
+   for (std::vector<Unit>::iterator it = units.begin(); it != units.end(); it++, ind++) {
+      x[ind] = it->get_location_x();
+      y[ind] = it->get_location_y();
+      z[ind] = it->get_location_z();
+   }
 }
