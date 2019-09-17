@@ -53,6 +53,3 @@ void draw_units (float *x, float *y, float *z, int num_units, int map_layer)
       }
    }
 }
-
-// TODO:
-//void draw_units (
