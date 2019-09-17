@@ -26,6 +26,10 @@ class Facade {
       Society society;
 
       struct timeval start, end;
+
+      float *unit_positions_x;
+      float *unit_positions_y;
+      float *unit_positions_z;
 };
 
 #endif

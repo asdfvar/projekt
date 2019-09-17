@@ -1,4 +1,6 @@
 #include "graphics.h"
+#include <iostream>
+#include <cmath>
 
 void draw_map (const float *map, int map_dims[3], int map_layer)
 {
@@ -31,6 +33,22 @@ void draw_map (const float *map, int map_dims[3], int map_layer)
          glVertex2f (vertex_x + block_width, vertex_y               );
          glVertex2f (vertex_x + block_width, vertex_y + block_height);
          glVertex2f (vertex_x,               vertex_y + block_height);
+         glEnd ();
+      }
+   }
+}
+
+void draw_units (float *x, float *y, float *z, int num_units, int map_layer)
+{
+   for (int ind = 0; ind < num_units; ind++)
+   {
+      if (floorf (z[ind]) == map_layer) {
+         glBegin (GL_POLYGON);
+         glColor3f (0.0f, 1.0f, 0.0f);
+         glVertex2f (x[ind] - 0.01f, y[ind] - 0.01f);
+         glVertex2f (x[ind] - 0.01f, y[ind] + 0.01f);
+         glVertex2f (x[ind] + 0.01f, y[ind] + 0.01f);
+         glVertex2f (x[ind] + 0.01f, y[ind] - 0.01f);
          glEnd ();
       }
    }

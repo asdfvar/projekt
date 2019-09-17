@@ -4,16 +4,21 @@
 class Unit {
 
    public:
-      Unit (float location_x, float location_y, float location_z);
+      Unit (float position_x, float position_y, float position_z);
 
-      float get_location_x (void) { return location_x; };
-      float get_location_y (void) { return location_y; };
-      float get_location_z (void) { return location_z; };
+      float get_position_x (void) { return position_x; };
+      float get_position_y (void) { return position_y; };
+      float get_position_z (void) { return position_z; };
+
+      void move (float time_step);
 
    private:
-      float location_x;
-      float location_y;
-      float location_z;
+      float position_x;
+      float position_y;
+      float position_z;
+
+      float speed;
+      float direction;
 
 };
 

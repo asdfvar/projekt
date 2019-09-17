@@ -16,6 +16,10 @@
 Facade::Facade (void)
 {
    gettimeofday (&start, NULL);
+
+   unit_positions_x = new float[100];
+   unit_positions_y = new float[100];
+   unit_positions_z = new float[100];
 }
 
 /*
@@ -72,13 +76,15 @@ void Facade::mouseMotion (int x, int y)
 */
 Facade::~Facade (void)
 {
+   delete[] unit_positions_x;
+   delete[] unit_positions_y;
+   delete[] unit_positions_z;
 }
 
 /*
 ** function name: idle from: Facade
 */
-void Facade::idle (void)
-{
+void Facade::idle (void) {
    double time_step = 0.01;
 
    double time_taken;
@@ -103,11 +109,20 @@ void Facade::display (void)
    // clear this openGL buffer
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+   int map_layer = 20;
+
+   int num_units = society.get_unit_positions (
+         unit_positions_x,
+         unit_positions_y,
+         unit_positions_z);
+
+   draw_units (unit_positions_x, unit_positions_y, unit_positions_z, num_units, map_layer);
+
    int dim_x, dim_y, dim_z;
    const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
 
    int map_dims[3] = {dim_x, dim_y, dim_z};
-   draw_map (map, map_dims, 20);
+   draw_map (map, map_dims, map_layer);
 
    // swap this buffer for the old one
    glutSwapBuffers();

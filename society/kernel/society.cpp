@@ -18,7 +18,7 @@ Society::Society (void)
       else map[ind] = -1.0f;
    }
 
-   units.push_back (Unit (0.5f, 0.5f, 20.5f));
+   units.push_back (Unit (0.0f, 0.0f, 20.5f));
 }
 
 Society::~Society (void)
@@ -56,6 +56,8 @@ void Society::update (float time_step)
       control_queue.pop();
    }
 
+   units[0].move (time_step);
+
 }
 
 const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out)
@@ -66,12 +68,14 @@ const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out
    return static_cast<const float*>(map);
 }
 
-int Society::get_unit_locations (float *x, float *y, float *z)
+int Society::get_unit_positions (float *x, float *y, float *z)
 {
    int ind = 0;
    for (std::vector<Unit>::iterator it = units.begin(); it != units.end(); it++, ind++) {
-      x[ind] = it->get_location_x();
-      y[ind] = it->get_location_y();
-      z[ind] = it->get_location_z();
+      x[ind] = it->get_position_x();
+      y[ind] = it->get_position_y();
+      z[ind] = it->get_position_z();
    }
+
+   return ind;
 }

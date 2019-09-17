@@ -8,4 +8,6 @@
 
 void draw_map (const float *map, int map_dims[3], int map_layer);
 
+void draw_units (float *x, float *y, float *z, int num_units, int map_layer);
+
 #endif

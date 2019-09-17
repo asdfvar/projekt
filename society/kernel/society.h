@@ -16,7 +16,7 @@ class Society
       void update (float time_step);
 
       const float *access_map (int *dim_x, int *dim_y, int *dim_z);
-      int get_unit_locations (float *x, float *y, float *z);
+      int get_unit_positions (float *x, float *y, float *z);
 
    private:
       float *map;
