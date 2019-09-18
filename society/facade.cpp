@@ -111,18 +111,27 @@ void Facade::display (void)
 
    int map_layer = 20;
 
+   int dim_x, dim_y, dim_z;
+   const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
+   int map_dims[3] = { dim_x, dim_y, dim_z };
+
    int num_units = society.get_unit_positions (
          unit_positions_x,
          unit_positions_y,
          unit_positions_z);
 
-   draw_units (unit_positions_x, unit_positions_y, unit_positions_z, num_units, map_layer);
+   draw_units (
+         unit_positions_x,
+         unit_positions_y,
+         unit_positions_z,
+         map_dims,
+         num_units,
+         map_layer);
 
-   int dim_x, dim_y, dim_z;
-   const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
-
-   int map_dims[3] = {dim_x, dim_y, dim_z};
-   draw_map (map, map_dims, map_layer);
+   draw_map (
+         map,
+         map_dims,
+         map_layer);
 
    // swap this buffer for the old one
    glutSwapBuffers();
