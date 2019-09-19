@@ -23,6 +23,10 @@ class Society
       int dim_x;
       int dim_y;
       int dim_z;
+      int destination[3];
+
+      float *cost;
+      float *buffer;
 
       std::queue<Control*> control_queue;
       std::vector<Unit> units;

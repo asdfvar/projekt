@@ -55,12 +55,22 @@ void draw_units (float *x, float *y, float *z, int map_dims[3], int num_units, i
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
 
+   float window_start_row = -0.8f;
+   float window_end_row   =  0.8f;
+   float window_start_col = -0.8f;
+   float window_end_col   =  0.8f;
+
    for (int ind = 0; ind < num_units; ind++)
    {
       if (floorf (z[ind]) == map_layer) {
 
-         float x_pos = x[ind] * block_width;
-         float y_pos = y[ind] * block_height;
+      float x_pos = x[ind] / ((float)col_max) *
+                    (window_end_col - window_start_col) +
+                    window_start_col;
+
+      float y_pos = y[ind] / ((float)row_max) *
+                    (window_end_row - window_start_row) +
+                    window_start_row;
 
          glBegin (GL_POLYGON);
          glColor3f (0.0f, 1.0f, 0.0f);
