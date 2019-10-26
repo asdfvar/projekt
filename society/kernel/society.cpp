@@ -31,6 +31,7 @@ Society::Society (void)
          {
             if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
             else map[ind] = -1.0f;
+map[ind] = 1.0f;
          }
       }
    }
@@ -58,14 +59,13 @@ void Society::update (float time_step)
 {
    static int start[3] = { 0, 0, 20 };
    static int end[3] = { start[0], start[1], start[2] };
+   static float startf[3] = { 0.0f, 0.0f, 20.0f };
 
-   start[0] = units[0].get_position_x ();
-   start[1] = units[0].get_position_y ();
-   start[2] = units[0].get_position_z ();
+   startf[0] = units[0].get_position_x ();
+   startf[1] = units[0].get_position_y ();
+   startf[2] = units[0].get_position_z ();
 
    int dim[3] = { dim_x, dim_y, dim_z };
-
-bool test = false;
 
    if (control_queue.empty() == false)
    {
@@ -111,7 +111,7 @@ bool test = false;
             float window_y = (float)y / (float)window_height;
 
             int block_x = (int)((window_x - 0.1f) / (0.9f - 0.1f) * (float)dim_x);
-            int block_y = (int)((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y);
+            int block_y = dim_y - (int)((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y);
 
             end[0] = block_x;
             end[1] = block_y;
@@ -120,12 +120,15 @@ bool test = false;
 std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
 std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
 
-test = true;
          }
       }
 
       control_queue.pop();
    }
+
+start[0] = startf[0] + 0.5f;
+start[1] = startf[1] + 0.5f;
+start[2] = startf[2] + 0.5f;
 
    bool solution_found = cost_function (
          map,
@@ -144,18 +147,76 @@ test = true;
          end,
          path);
 
+std::cout << "path forecast: ";
+for (int k = 0; k < 4; k++) {
+   int x_block = (path[k] % dim_x);
+   int y_block = (path[k] % (dim_x * dim_y)) / dim_x;
+   std::cout << "(" << x_block << ", " << y_block << "), ";
+}
+std::cout << std::endl;
+std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
+
    int x_block = (path[0] % dim_x);
    int y_block = (path[0] % (dim_x * dim_y)) / dim_x;
 
-   float direction = atan2 ((float)(x_block - start[0]),
-                            (float)(start[1] - y_block));
-if (test) {
-std::cout << "x_block, y_block = " << x_block << ", " << y_block << std::endl;
-std::cout << "direction = " << direction << std::endl;
-}
-std::cout << "direction = " << direction << std::endl;
+   float pos_x = units[0].get_position_x();
+   float pos_y = units[0].get_position_y();
+   float pos_z = units[0].get_position_z();
 
-//   direction = 0.785398f;
+   float direction = 0.0f;
+
+   units[0].set_speed (10.0f);
+
+int condition = 0;
+
+   if (x_block > floorf(pos_x - 0.5f)) {
+      if (y_block > floorf(pos_y - 0.5f)) {
+         direction = 0.785f;
+condition = 1;
+      }
+      else if (y_block < floorf(pos_y + 0.5f)) {
+         direction = 5.498f;
+condition = 2;
+      }
+      else {
+         direction = 0.0f;
+condition = 3;
+      }
+   }
+   else if (x_block < floorf(pos_x + 0.5f)) {
+      if (y_block > floorf(pos_y - 0.5f)) {
+         direction = 2.356f;
+condition = 4;
+      }
+      else if (y_block < floorf(pos_y + 0.5f)) {
+         direction = 3.927f;
+condition = 5;
+      }
+      else {
+         direction = 3.142f;
+condition = 6;
+      }
+   }
+   else {
+      if (y_block > floorf(pos_y - 0.5f)) {
+         direction = 1.571f;
+condition = 7;
+      }
+      else if (y_block < floorf(pos_y + 0.5f)) {
+         direction = 4.712f;
+condition = 8;
+      }
+      else {
+         units[0].set_speed (0.0f);
+condition = 9;
+      }
+   }
+
+std::cout << "(" << pos_x << ", " << pos_y << ")" << " (" << x_block << ", " << y_block << ")" << std::endl;
+std::cout << "direction = " << direction << " (" << direction * 180.0f / 3.14159f << ") under condition " << condition << std::endl;
+std::cout << std::endl;
+
+//   direction = 0.785f;
 
    units[0].move (time_step, direction);
 

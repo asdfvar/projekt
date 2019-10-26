@@ -12,3 +12,8 @@ void Unit::move (float time_step, float direction)
    position_x += speed * cosf (direction) * time_step;
    position_y += speed * sinf (direction) * time_step;
 }
+
+void Unit::set_speed (float speed_in)
+{
+   speed = speed_in;
+}
