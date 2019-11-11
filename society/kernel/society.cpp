@@ -31,12 +31,15 @@ Society::Society (void)
          {
             if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
             else map[ind] = -1.0f;
-map[ind] = 1.0f;
+if (ind_y < dim_y / 2) map[ind] = 1.0f;
+if (ind_z != 20) map[ind] = -1.0f;
+if (ind_x == 19 && ind_y == 20) map[ind] = 1.0f;
+//map[ind] = 1.0f;
          }
       }
    }
 
-   units.push_back (Unit (10.5f, 10.5f, 20.5f));
+   units.push_back (Unit (10.5f, 10.5f, 20.0f));
 
    destination[0] = 0;
    destination[1] = 0;
@@ -60,6 +63,7 @@ void Society::update (float time_step)
    static int start[3] = { 0, 0, 20 };
    static int end[3] = { start[0], start[1], start[2] };
    static float startf[3] = { 0.0f, 0.0f, 20.0f };
+   static float dest[3] = { start[0], start[1], start[2] };
 
    startf[0] = units[0].get_position_x ();
    startf[1] = units[0].get_position_y ();
@@ -111,7 +115,7 @@ void Society::update (float time_step)
             float window_y = (float)y / (float)window_height;
 
             int block_x = (int)((window_x - 0.1f) / (0.9f - 0.1f) * (float)dim_x);
-            int block_y = dim_y - (int)((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y);
+            int block_y = (int)((float)dim_y - ((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y));
 
             end[0] = block_x;
             end[1] = block_y;
@@ -126,10 +130,11 @@ std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::en
       control_queue.pop();
    }
 
-start[0] = startf[0] + 0.5f;
-start[1] = startf[1] + 0.5f;
-start[2] = startf[2] + 0.5f;
+start[0] = startf[0];// + 0.5f;
+start[1] = startf[1];// + 0.5f;
+start[2] = startf[2];// + 0.5f;
 
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    bool solution_found = cost_function (
          map,
          cost,
@@ -140,24 +145,30 @@ start[2] = startf[2] + 0.5f;
 
    int *path = (int*)buffer;
 
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    int path_size = pathfinding (
          cost,
          dim,
          start,
          end,
          path);
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
 std::cout << "path forecast: ";
-for (int k = 0; k < 4; k++) {
+for (int k = 0; k < 7; k++) {
    int x_block = (path[k] % dim_x);
    int y_block = (path[k] % (dim_x * dim_y)) / dim_x;
-   std::cout << "(" << x_block << ", " << y_block << "), ";
+   int z_block = path[k] / (dim_x * dim_y);
+   std::cout << "(" << x_block << ", " << y_block << ", " << z_block << "), ";
 }
 std::cout << std::endl;
+std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
 std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
+std::cout << "speed = " << units[0].get_speed() << std::endl;
 
    int x_block = (path[0] % dim_x);
    int y_block = (path[0] % (dim_x * dim_y)) / dim_x;
+   int z_block = path[0] / (dim_x * dim_y);
 
    float pos_x = units[0].get_position_x();
    float pos_y = units[0].get_position_y();
@@ -165,54 +176,60 @@ std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::en
 
    float direction = 0.0f;
 
-   units[0].set_speed (10.0f);
+   units[0].set_speed (4.0f);
 
 int condition = 0;
 
-   if (x_block > floorf(pos_x - 0.5f)) {
-      if (y_block > floorf(pos_y - 0.5f)) {
-         direction = 0.785f;
-condition = 1;
+   if (start[0] != end[0] || start[1] != end[1] || start[2] != end[2])
+   {
+      if (x_block > floorf(pos_x)) {
+         if (y_block > floorf(pos_y)) {
+            direction = 0.785f;
+            condition = 1;
+         }
+         else if (y_block < floorf(pos_y)) {
+            direction = 5.498f;
+            condition = 2;
+         }
+         else {
+            direction = 0.0f;
+            condition = 3;
+         }
       }
-      else if (y_block < floorf(pos_y + 0.5f)) {
-         direction = 5.498f;
-condition = 2;
+      else if (x_block < floorf(pos_x)) {
+         if (y_block > floorf(pos_y)) {
+            direction = 2.356f;
+            condition = 4;
+         }
+         else if (y_block < floorf(pos_y)) {
+            direction = 3.927f;
+            condition = 5;
+         }
+         else {
+            direction = 3.142f;
+            condition = 6;
+         }
       }
       else {
-         direction = 0.0f;
-condition = 3;
-      }
-   }
-   else if (x_block < floorf(pos_x + 0.5f)) {
-      if (y_block > floorf(pos_y - 0.5f)) {
-         direction = 2.356f;
-condition = 4;
-      }
-      else if (y_block < floorf(pos_y + 0.5f)) {
-         direction = 3.927f;
-condition = 5;
-      }
-      else {
-         direction = 3.142f;
-condition = 6;
+         if (y_block > floorf(pos_y)) {
+            direction = 1.571f;
+            condition = 7;
+         }
+         else if (y_block < floorf(pos_y)) {
+            direction = 4.712f;
+            condition = 8;
+         }
+         else {
+            units[0].set_speed (0.0f);
+            condition = 9;
+         }
       }
    }
    else {
-      if (y_block > floorf(pos_y - 0.5f)) {
-         direction = 1.571f;
-condition = 7;
-      }
-      else if (y_block < floorf(pos_y + 0.5f)) {
-         direction = 4.712f;
-condition = 8;
-      }
-      else {
-         units[0].set_speed (0.0f);
-condition = 9;
-      }
+      units[0].set_speed (0.0f);
    }
 
-std::cout << "(" << pos_x << ", " << pos_y << ")" << " (" << x_block << ", " << y_block << ")" << std::endl;
+std::cout << "(" << pos_x << ", " << pos_y << ")" << " (" << x_block << ", " << y_block << ", " << z_block << ")" << std::endl;
 std::cout << "direction = " << direction << " (" << direction * 180.0f / 3.14159f << ") under condition " << condition << std::endl;
 std::cout << std::endl;
 

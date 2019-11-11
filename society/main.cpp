@@ -99,8 +99,13 @@ void specialFunc(int key, int x, int y)
 int main (int argc, char** argv)
 {
 
+#if 0
    int windowsizex = 1600;
    int windowsizey = 1000;
+#else
+   int windowsizex = 600;
+   int windowsizey = 400;
+#endif
 
    glutInit (&argc, argv);
    glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);

@@ -22,6 +22,29 @@ void draw_map (const float *map, int map_dims[3], int map_layer)
    float starting_row_loc = Y_START;
    float starting_col_loc = X_START;
 
+   // draw grid lines
+   for (int row = 0, ind = map_layer * row_max * col_max; row < row_max; row++)
+   {
+      for (int col = 0; col < col_max; col++, ind++)
+      {
+         float vertex_x = starting_col_loc + block_width  * (float)col;
+         float vertex_y = starting_row_loc + block_height * (float)row;
+
+         glBegin (GL_LINES);
+         glColor3f (0.0f, 0.0f, 1.0f);
+         glVertex2f (vertex_x,               vertex_y               );
+         glVertex2f (vertex_x + block_width, vertex_y               );
+         glVertex2f (vertex_x + block_width, vertex_y               );
+         glVertex2f (vertex_x + block_width, vertex_y + block_height);
+         glVertex2f (vertex_x + block_width, vertex_y + block_height);
+         glVertex2f (vertex_x,               vertex_y + block_height);
+         glVertex2f (vertex_x,               vertex_y + block_height);
+         glVertex2f (vertex_x,               vertex_y               );
+         glEnd();
+      }
+   }
+
+   // draw grid cells
    for (int row = 0, ind = map_layer * row_max * col_max; row < row_max; row++)
    {
       for (int col = 0; col < col_max; col++, ind++)

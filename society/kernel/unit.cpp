@@ -1,3 +1,4 @@
+#include <iostream>
 #include "unit.h"
 #include <cmath>
 
@@ -9,6 +10,9 @@ Unit::Unit (float position_x_in, float position_y_in, float position_z_in) :
 
 void Unit::move (float time_step, float direction)
 {
+static int count = 0;
+
+std::cout << count++ << ":moving at " << speed << " in direction " << direction * 180.0f / 2.13145f << std::endl;
    position_x += speed * cosf (direction) * time_step;
    position_y += speed * sinf (direction) * time_step;
 }

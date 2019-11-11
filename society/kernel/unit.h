@@ -10,6 +10,8 @@ class Unit {
       float get_position_y (void) { return position_y; };
       float get_position_z (void) { return position_z; };
 
+      float get_speed (void) { return speed; };
+
       void set_speed (float speed_in);
 
       void move (float time_step, float direction);
