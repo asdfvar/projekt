@@ -21,6 +21,8 @@ Society::Society (void)
    dim_y = 40;
    dim_z = 40;
 
+   map_layer = 20;
+
    map = new float[dim_x * dim_y * dim_z];
    cost = new float[dim_x * dim_y * dim_z];
    buffer = new float[dim_x * dim_y * dim_z];
@@ -31,19 +33,36 @@ Society::Society (void)
          {
             if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
             else map[ind] = -1.0f;
-if (ind_y < dim_y / 2) map[ind] = 1.0f;
-if (ind_z != 20) map[ind] = -1.0f;
-if (ind_x == 19 && ind_y == 20) map[ind] = 1.0f;
+//if (ind_y < dim_y / 2) map[ind] = 1.0f;
+//if (ind_z != 20) map[ind] = -1.0f;
+//if (ind_x == 19 && ind_y == 20) map[ind] = 1.0f;
 //map[ind] = 1.0f;
          }
       }
    }
 
-   units.push_back (Unit (10.5f, 10.5f, 20.5f));
+   bool found = false;
 
-   destination[0] = 0;
-   destination[1] = 0;
-   destination[2] = 20;
+   float unit_x = 0.0f;
+   float unit_y = 0.0f;
+   float unit_z = 0.0f;
+
+   for (int ind_z = 0, ind = 0; ind_z < dim_z && !found; ind_z++) {
+      for (int ind_y = 0; ind_y < dim_y && !found; ind_y++) {
+         for (int ind_x = 0; ind_x < dim_x && !found; ind_x++, ind++)
+         {
+            if (map[ind] > 0.0f && ind_z == map_layer) {
+               found = true;
+               unit_x = (float)ind_x + 0.5f;
+               unit_y = (float)ind_y + 0.5f;
+               unit_z = (float)map_layer + 0.5f;
+            }
+         }
+      }
+   }
+
+   units.push_back (Unit (unit_x, unit_y, unit_z));
+
 }
 
 Society::~Society (void)
@@ -60,9 +79,9 @@ void Society::input (Control *control)
 
 void Society::update (float time_step)
 {
-   static int start[3] = { 0, 0, 20 };
+   static int start[3] = { 0, 0, map_layer };
    static int end[3] = { start[0], start[1], start[2] };
-   static float startf[3] = { 0.0f, 0.0f, 20.0f };
+   static float startf[3] = { 0.0f, 0.0f, (float)map_layer + 0.5f };
 
    startf[0] = units[0].get_position_x ();
    startf[1] = units[0].get_position_y ();
@@ -120,10 +139,7 @@ void Society::update (float time_step)
 
             end[0] = block_x;
             end[1] = block_y;
-            end[2] = 20;
-
-std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
-std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
+            end[2] = map_layer;
 
          }
       }
@@ -152,18 +168,6 @@ start[2] = startf[2];// + 0.5f;
          end,
          path);
 
-std::cout << "path forecast: ";
-for (int k = 0; k < 7; k++) {
-   int x_block = (path[k] % dim_x);
-   int y_block = (path[k] % (dim_x * dim_y)) / dim_x;
-   int z_block = path[k] / (dim_x * dim_y);
-   std::cout << "(" << x_block << ", " << y_block << ", " << z_block << "), ";
-}
-std::cout << std::endl;
-std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
-std::cout << "end   = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
-std::cout << "speed = " << units[0].get_speed() << std::endl;
-
    int x_block = (path[0] % dim_x);
    int y_block = (path[0] % (dim_x * dim_y)) / dim_x;
    int z_block = path[0] / (dim_x * dim_y);
@@ -175,8 +179,6 @@ std::cout << "speed = " << units[0].get_speed() << std::endl;
    float direction = 0.0f;
 
    units[0].set_speed (4.0f);
-
-int condition = 0;
 
    float dist2 =
       (pos_x - dest[0]) * (pos_x - dest[0]) +
@@ -194,58 +196,40 @@ int condition = 0;
          units[0].set_speed (0.0f);
       }
    }
-std::cout << "pos_  = " << pos_x << ", " << pos_y << ", " << pos_z << std::endl;
-std::cout << "dest  = " << dest[0] << ", " << dest[1] << ", " << dest[2];
-std::cout << " dist2 = " << dist2 << std::endl;
 
       if (dest[0] > pos_x) {
          if (dest[1] > pos_y) {
             direction = 0.785f;
-            condition = 1;
          }
          else if (dest[1] < pos_y) {
             direction = 5.498f;
-            condition = 2;
          }
          else {
             direction = 0.0f;
-            condition = 3;
          }
       }
       else if (dest[0] < pos_x) {
          if (dest[1] > pos_y) {
             direction = 2.356f;
-            condition = 4;
          }
          else if (dest[1] < pos_y) {
             direction = 3.927f;
-            condition = 5;
          }
          else {
             direction = 3.142f;
-            condition = 6;
          }
       }
       else {
          if (dest[1] > pos_y) {
             direction = 1.571f;
-            condition = 7;
          }
          else if (dest[1] < pos_y) {
             direction = 4.712f;
-            condition = 8;
          }
          else {
             units[0].set_speed (0.0f);
-            condition = 9;
          }
       }
-
-std::cout << "(" << pos_x << ", " << pos_y << ")" << " (" << x_block << ", " << y_block << ", " << z_block << ")" << std::endl;
-std::cout << "direction = " << direction << " (" << direction * 180.0f / 3.14159f << ") under condition " << condition << std::endl;
-std::cout << std::endl;
-
-//   direction = 0.785f;
 
    units[0].move (time_step, direction);
 
