@@ -39,7 +39,7 @@ if (ind_x == 19 && ind_y == 20) map[ind] = 1.0f;
       }
    }
 
-   units.push_back (Unit (10.5f, 10.5f, 20.0f));
+   units.push_back (Unit (10.5f, 10.5f, 20.5f));
 
    destination[0] = 0;
    destination[1] = 0;
@@ -63,11 +63,12 @@ void Society::update (float time_step)
    static int start[3] = { 0, 0, 20 };
    static int end[3] = { start[0], start[1], start[2] };
    static float startf[3] = { 0.0f, 0.0f, 20.0f };
-   static float dest[3] = { start[0], start[1], start[2] };
 
    startf[0] = units[0].get_position_x ();
    startf[1] = units[0].get_position_y ();
    startf[2] = units[0].get_position_z ();
+
+   static float dest[3] = { startf[0], startf[1], startf[2] };
 
    int dim[3] = { dim_x, dim_y, dim_z };
 
@@ -134,7 +135,6 @@ start[0] = startf[0];// + 0.5f;
 start[1] = startf[1];// + 0.5f;
 start[2] = startf[2];// + 0.5f;
 
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    bool solution_found = cost_function (
          map,
          cost,
@@ -145,14 +145,12 @@ std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
    int *path = (int*)buffer;
 
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    int path_size = pathfinding (
          cost,
          dim,
          start,
          end,
          path);
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
 std::cout << "path forecast: ";
 for (int k = 0; k < 7; k++) {
@@ -180,14 +178,32 @@ std::cout << "speed = " << units[0].get_speed() << std::endl;
 
 int condition = 0;
 
-   if (start[0] != end[0] || start[1] != end[1] || start[2] != end[2])
-   {
-      if (x_block > floorf(pos_x)) {
-         if (y_block > floorf(pos_y)) {
+   float dist2 =
+      (pos_x - dest[0]) * (pos_x - dest[0]) +
+      (pos_y - dest[1]) * (pos_y - dest[1]) +
+      (pos_z - dest[2]) * (pos_z - dest[2]);
+
+   if ( dist2 < 0.01f) {
+      if (start[0] != end[0] || start[1] != end[1] || start[2] != end[2])
+      {
+         dest[0] = (float)x_block + 0.5f;
+         dest[1] = (float)y_block + 0.5f;
+         dest[2] = (float)z_block + 0.5f;
+      }
+      else {
+         units[0].set_speed (0.0f);
+      }
+   }
+std::cout << "pos_  = " << pos_x << ", " << pos_y << ", " << pos_z << std::endl;
+std::cout << "dest  = " << dest[0] << ", " << dest[1] << ", " << dest[2];
+std::cout << " dist2 = " << dist2 << std::endl;
+
+      if (dest[0] > pos_x) {
+         if (dest[1] > pos_y) {
             direction = 0.785f;
             condition = 1;
          }
-         else if (y_block < floorf(pos_y)) {
+         else if (dest[1] < pos_y) {
             direction = 5.498f;
             condition = 2;
          }
@@ -196,12 +212,12 @@ int condition = 0;
             condition = 3;
          }
       }
-      else if (x_block < floorf(pos_x)) {
-         if (y_block > floorf(pos_y)) {
+      else if (dest[0] < pos_x) {
+         if (dest[1] > pos_y) {
             direction = 2.356f;
             condition = 4;
          }
-         else if (y_block < floorf(pos_y)) {
+         else if (dest[1] < pos_y) {
             direction = 3.927f;
             condition = 5;
          }
@@ -211,11 +227,11 @@ int condition = 0;
          }
       }
       else {
-         if (y_block > floorf(pos_y)) {
+         if (dest[1] > pos_y) {
             direction = 1.571f;
             condition = 7;
          }
-         else if (y_block < floorf(pos_y)) {
+         else if (dest[1] < pos_y) {
             direction = 4.712f;
             condition = 8;
          }
@@ -224,10 +240,6 @@ int condition = 0;
             condition = 9;
          }
       }
-   }
-   else {
-      units[0].set_speed (0.0f);
-   }
 
 std::cout << "(" << pos_x << ", " << pos_y << ")" << " (" << x_block << ", " << y_block << ", " << z_block << ")" << std::endl;
 std::cout << "direction = " << direction << " (" << direction * 180.0f / 3.14159f << ") under condition " << condition << std::endl;
