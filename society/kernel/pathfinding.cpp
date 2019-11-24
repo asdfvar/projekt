@@ -38,12 +38,12 @@ static inline int ind_to_axis (int index, int *dim, int size, int select_axis_in
 }
 
 bool cost_function (
-      float *nodes,
-      float *cost,
-      int    dim[3],
-      int    start[3],
-      int    end[3],
-      float *buffer)
+      const float *nodes,
+      float       *cost,
+      int          dim[3],
+      int          start[3],
+      int          end[3],
+      float       *buffer)
 {
    int dim_prod = dim[0] * dim[1] * dim[2];
 
@@ -74,7 +74,7 @@ bool cost_function (
       int best_index = path_cost_ind[--path_cost_ind_size];
 #elif defined(USE_EUCLIDEAN)
       // Specific to Euclidean metric space. Find the index that is the closest
-      // in distance to the objective
+      // in distance to the objective (ignoring obstacles)
       int best_cost_index = 0;
       int best_index = path_cost_ind[best_cost_index];
 
@@ -125,6 +125,28 @@ bool cost_function (
                   continue;
                }
 
+#if 1
+               if (i == sub_i - 1 && j == sub_j - 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
+                      nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i + 1 && j == sub_j + 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
+                      nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i + 1 && j == sub_j - 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
+                      nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i - 1 && j == sub_j + 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
+                      nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+#endif
+
                float local_cost = cost[best_index];
 
                /*
@@ -163,7 +185,12 @@ bool cost_function (
    return false;
 }
 
-int pathfinding (float *cost, int dim[3], int src[3], int dst[3], int *path)
+int pathfinding (
+      float *cost,
+      int dim[3],
+      int src[3],
+      int dst[3],
+      int *path)
 {
 
    int I = dim[0];
@@ -197,6 +224,27 @@ int pathfinding (float *cost, int dim[3], int src[3], int dst[3], int *path)
             for (int i = sub_i - 1; i <= sub_i + 1; i++)
             {
                if (i < 0 || i >= I) continue;
+#if 1
+               if (i == sub_i + 1 && j == sub_j + 1) {
+                  if (cost[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
+                      cost[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i - 1 && j == sub_j - 1) {
+                  if (cost[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
+                      cost[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i + 1 && j == sub_j - 1) {
+                  if (cost[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
+                      cost[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i - 1 && j == sub_j + 1) {
+                  if (cost[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
+                      cost[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+#endif
 
                int local_index = ijk_to_ind (i, j, k, I, J, K);
 

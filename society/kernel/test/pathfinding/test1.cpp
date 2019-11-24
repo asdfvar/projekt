@@ -59,6 +59,13 @@ int main ()
    for (int ind = 1; ind < DIM_X * DIM_Y; ind++)
    nodes[3 * DIM_X * DIM_Y + ind] = -1.0f;
 
+   nodes[4 * DIM_X * DIM_Y + 3 * DIM_X + 1] = -1.0f;
+   nodes[4 * DIM_X * DIM_Y + 3 * DIM_X + 2] = -1.0f;
+   nodes[4 * DIM_X * DIM_Y + 3 * DIM_X + 3] = -1.0f;
+   nodes[4 * DIM_X * DIM_Y + 0 * DIM_X + 4] = -1.0f;
+   nodes[4 * DIM_X * DIM_Y + 1 * DIM_X + 4] = -1.0f;
+   nodes[4 * DIM_X * DIM_Y + 2 * DIM_X + 4] = -1.0f;
+
    // start from the destination point and branch outward
    cost_function (
          nodes,

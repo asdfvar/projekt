@@ -1,11 +1,13 @@
 #include "map.h"
 #include <cstdlib>
 
-MAP::MAP (int num_cells[3])
+MAP::MAP (int num_cells[3], int map_layer_in)
 {
    dim_x = num_cells[0];
    dim_y = num_cells[1];
    dim_z = num_cells[2];
+
+   map_layer = map_layer_in;
 
    map = new float[dim_x * dim_y * dim_z];
 

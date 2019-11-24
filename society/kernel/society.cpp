@@ -3,6 +3,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
+#include "map.h"
 #include "society.h"
 #include "pathfinding.h"
 #include <iostream>
@@ -17,59 +18,51 @@
 
 Society::Society (void)
 {
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    dim_x = 40;
    dim_y = 40;
    dim_z = 40;
 
    map_layer = 20;
 
-   map = new float[dim_x * dim_y * dim_z];
-   cost = new float[dim_x * dim_y * dim_z];
-   buffer = new float[dim_x * dim_y * dim_z];
+   int dim[3] = {dim_x, dim_y, dim_z};
 
-   for (int ind_z = 0, ind = 0; ind_z < dim_z; ind_z++) {
-      for (int ind_y = 0; ind_y < dim_y; ind_y++) {
-         for (int ind_x = 0; ind_x < dim_x; ind_x++, ind++)
-         {
-            if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
-            else map[ind] = -1.0f;
-//if (ind_y < dim_y / 2) map[ind] = 1.0f;
-//if (ind_z != 20) map[ind] = -1.0f;
-//if (ind_x == 19 && ind_y == 20) map[ind] = 1.0f;
-//map[ind] = 1.0f;
-         }
-      }
-   }
+   Map = new MAP (dim, map_layer);
 
    bool found = false;
 
    float unit_x = 0.0f;
    float unit_y = 0.0f;
    float unit_z = 0.0f;
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
    for (int ind_z = 0, ind = 0; ind_z < dim_z && !found; ind_z++) {
       for (int ind_y = 0; ind_y < dim_y && !found; ind_y++) {
          for (int ind_x = 0; ind_x < dim_x && !found; ind_x++, ind++)
          {
+            const float *map = Map->access_map ();
             if (map[ind] > 0.0f && ind_z == map_layer) {
                found = true;
-               unit_x = (float)ind_x + 0.5f;
-               unit_y = (float)ind_y + 0.5f;
+               unit_x = (float)ind_x     + 0.5f;
+               unit_y = (float)ind_y     + 0.5f;
                unit_z = (float)map_layer + 0.5f;
             }
          }
       }
    }
 
-   units.push_back (Unit (unit_x, unit_y, unit_z));
+   float *scratch = new float[2 * dim_x * dim_y * dim_z];
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
+   Unit *unit = new Unit (unit_x, unit_y, unit_z, Map, scratch);
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
+
+   units.push_back (unit);
 
 }
 
 Society::~Society (void)
 {
-   delete[] map;
-   delete[] cost;
-   delete[] buffer;
+   delete Map;
 }
 
 void Society::input (Control *control)
@@ -79,21 +72,8 @@ void Society::input (Control *control)
 
 void Society::update (float time_step)
 {
-   static int start[3] = { 0, 0, map_layer };
-   static int end[3] = { start[0], start[1], start[2] };
-   static float startf[3] = { 0.0f, 0.0f, (float)map_layer + 0.5f };
-
-   startf[0] = units[0].get_position_x ();
-   startf[1] = units[0].get_position_y ();
-   startf[2] = units[0].get_position_z ();
-
-   static float dest[3] = { startf[0], startf[1], startf[2] };
-
-   int dim[3] = { dim_x, dim_y, dim_z };
-
-   if (control_queue.empty() == false)
+   if (!control_queue.empty())
    {
-
       Control *control = control_queue.front();
 
       MousePassive *mp = dynamic_cast<MousePassive*>(control);
@@ -136,103 +116,21 @@ void Society::update (float time_step)
 
             int block_x = (int)((window_x - 0.1f) / (0.9f - 0.1f) * (float)dim_x);
             int block_y = (int)((float)dim_y - ((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y));
+            int destination[3];
 
-            end[0] = block_x;
-            end[1] = block_y;
-            end[2] = map_layer;
+            destination[0] = block_x;
+            destination[1] = block_y;
+            destination[2] = map_layer;
 
+            units[0]->set_destination (destination);
+            units[0]->set_speed (4.0f);
          }
       }
 
       control_queue.pop();
    }
 
-start[0] = startf[0];// + 0.5f;
-start[1] = startf[1];// + 0.5f;
-start[2] = startf[2];// + 0.5f;
-
-   bool solution_found = cost_function (
-         map,
-         cost,
-         dim,
-         end,
-         start,
-         buffer);
-
-   int *path = (int*)buffer;
-
-   int path_size = pathfinding (
-         cost,
-         dim,
-         start,
-         end,
-         path);
-
-   int x_block = (path[0] % dim_x);
-   int y_block = (path[0] % (dim_x * dim_y)) / dim_x;
-   int z_block = path[0] / (dim_x * dim_y);
-
-   float pos_x = units[0].get_position_x();
-   float pos_y = units[0].get_position_y();
-   float pos_z = units[0].get_position_z();
-
-   float direction = 0.0f;
-
-   units[0].set_speed (4.0f);
-
-   float dist2 =
-      (pos_x - dest[0]) * (pos_x - dest[0]) +
-      (pos_y - dest[1]) * (pos_y - dest[1]) +
-      (pos_z - dest[2]) * (pos_z - dest[2]);
-
-   if ( dist2 < 0.01f) {
-      if (start[0] != end[0] || start[1] != end[1] || start[2] != end[2])
-      {
-         dest[0] = (float)x_block + 0.5f;
-         dest[1] = (float)y_block + 0.5f;
-         dest[2] = (float)z_block + 0.5f;
-      }
-      else {
-         units[0].set_speed (0.0f);
-      }
-   }
-
-      if (dest[0] > pos_x) {
-         if (dest[1] > pos_y) {
-            direction = 0.785f;
-         }
-         else if (dest[1] < pos_y) {
-            direction = 5.498f;
-         }
-         else {
-            direction = 0.0f;
-         }
-      }
-      else if (dest[0] < pos_x) {
-         if (dest[1] > pos_y) {
-            direction = 2.356f;
-         }
-         else if (dest[1] < pos_y) {
-            direction = 3.927f;
-         }
-         else {
-            direction = 3.142f;
-         }
-      }
-      else {
-         if (dest[1] > pos_y) {
-            direction = 1.571f;
-         }
-         else if (dest[1] < pos_y) {
-            direction = 4.712f;
-         }
-         else {
-            units[0].set_speed (0.0f);
-         }
-      }
-
-   units[0].move (time_step, direction);
-
+   units[0]->update (time_step);
 }
 
 const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out)
@@ -240,16 +138,16 @@ const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out
    *dim_x_out = dim_x;
    *dim_y_out = dim_y;
    *dim_z_out = dim_z;
-   return static_cast<const float*>(map);
+   return static_cast<const float*>(Map->access_map ());
 }
 
 int Society::get_unit_positions (float *x, float *y, float *z)
 {
    int ind = 0;
-   for (std::vector<Unit>::iterator it = units.begin(); it != units.end(); it++, ind++) {
-      x[ind] = it->get_position_x();
-      y[ind] = it->get_position_y();
-      z[ind] = it->get_position_z();
+   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++, ind++) {
+      x[ind] = (*it)->get_position_x();
+      y[ind] = (*it)->get_position_y();
+      z[ind] = (*it)->get_position_z();
    }
 
    return ind;

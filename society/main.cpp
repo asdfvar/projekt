@@ -2,6 +2,7 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
+#include <iostream>
 
 #include "facade.h"
 
@@ -98,6 +99,7 @@ void specialFunc(int key, int x, int y)
  **********/
 int main (int argc, char** argv)
 {
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
 #if 0
    int windowsizex = 1600;

@@ -1,6 +1,7 @@
 #ifndef SOCIETY_H
 #define SOCIETY_H
 
+#include "map.h"
 #include <queue>
 #include <vector>
 #include "control.h"
@@ -9,6 +10,7 @@
 class Society
 {
    public:
+
       Society (void);
       ~Society (void);
 
@@ -19,18 +21,19 @@ class Society
       int get_unit_positions (float *x, float *y, float *z);
 
    private:
-      float *map;
-      int    dim_x;
-      int    dim_y;
-      int    dim_z;
-      int    destination[3];
-      int    map_layer;
+
+      MAP         *Map;
+      int          dim_x;
+      int          dim_y;
+      int          dim_z;
+      int          destination[3];
+      int          map_layer;
 
       float *cost;
       float *buffer;
 
       std::queue<Control*> control_queue;
-      std::vector<Unit> units;
+      std::vector<Unit*> units;
 };
 
 #endif
