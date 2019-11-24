@@ -21,17 +21,16 @@ Unit::Unit (float position_x_in, float position_y_in, float position_z_in, MAP *
    dest[0] = position_x;
    dest[1] = position_y;
    dest[2] = position_z;
+
+   update_path = true;
+
+   max_speed = 20.0f;
 }
 
 Unit::~Unit (void)
 {
    delete[] cost;
    delete[] buffer;
-}
-
-void Unit::set_speed (float speed_in)
-{
-   speed = speed_in;
 }
 
 void Unit::update (float time_step)
@@ -51,47 +50,63 @@ void Unit::update (float time_step)
 
    const float *map = Map->access_map ();
 
-   bool solution_found = cost_function (
-         map,
-         cost,
-         dim,
-         dest,
-         start,
-         buffer);
+   if (update_path) {
+      bool solution_found = cost_function (
+            map,
+            cost,
+            dim,
+            dest,
+            start,
+            buffer);
 
-   int *path = (int*)buffer;
+      int *path = (int*)buffer;
 
-   int path_size = pathfinding (
-         cost,
-         dim,
-         start,
-         dest,
-         path);
+      int path_size = pathfinding (
+            cost,
+            dim,
+            start,
+            dest,
+            path);
 
-   int x_block = (path[0] % dim[0]);
-   int y_block = (path[0] % (dim[0] * dim[1])) / dim[0];
-   int z_block = path[0] / (dim[0] * dim[1]);
+      next_cell[0] = (path[0] % dim[0]);
+      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+      next_cell[2] = path[0] / (dim[0] * dim[1]);
 
-   float dist2 =
-      (position_x - dest[0]) * (position_x - dest[0]) +
-      (position_y - dest[1]) * (position_y - dest[1]) +
-      (position_z - dest[2]) * (position_z - dest[2]);
+      update_path = false;
+      speed = max_speed;
+   }
 
    float local_dest[3];
 
+   // Condition check if the unit is in the local destination cell,
+   // set the local destination to the center of the cell
    if (start[0] == dest[0] && start[1] == dest[1] && start[2] == dest[2])
    {
-      if (dist2 < 0.01f) {
-         speed = 0.0f;
-      }
       local_dest[0] = (float)dest[0] + 0.5f;
       local_dest[1] = (float)dest[1] + 0.5f;
       local_dest[2] = (float)dest[2] + 0.5f;
    }
    else {
-      local_dest[0] = (float)x_block + 0.5f;
-      local_dest[1] = (float)y_block + 0.5f;
-      local_dest[2] = (float)z_block + 0.5f;
+      local_dest[0] = (float)next_cell[0] + 0.5f;
+      local_dest[1] = (float)next_cell[1] + 0.5f;
+      local_dest[2] = (float)next_cell[2] + 0.5f;
+   }
+
+   float dist2 =
+      (position_x - local_dest[0]) * (position_x - local_dest[0]) +
+      (position_y - local_dest[1]) * (position_y - local_dest[1]) +
+      (position_z - local_dest[2]) * (position_z - local_dest[2]);
+
+   // speed = dist / time, dist = speed * time
+   float comp_dist = speed * time_step;
+   if (dist2 <= comp_dist * comp_dist)
+   {
+      position_x = local_dest[0];
+      position_y = local_dest[1];
+      position_z = local_dest[2];
+      
+      speed = max_speed;
+      update_path = true;
    }
 
    if (local_dest[0] > position_x) {

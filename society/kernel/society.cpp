@@ -119,7 +119,6 @@ void Society::update (float time_step)
             destination[2] = map_layer;
 
             units[0]->set_destination (destination);
-            units[0]->set_speed (4.0f);
          }
       }
 

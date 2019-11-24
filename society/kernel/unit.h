@@ -16,8 +16,6 @@ class Unit {
 
       float get_speed (void) { return speed; };
 
-      void set_speed (float speed_in);
-
       void set_destination (int dest_in[3]) {
          dest[0] = dest_in[0],
          dest[1] = dest_in[1],
@@ -37,8 +35,12 @@ class Unit {
 
       int   dest[3];
 
+      float max_speed;
       float speed;
       float direction;
+
+      bool update_path;
+      int  next_cell[3];
 
 };
 
