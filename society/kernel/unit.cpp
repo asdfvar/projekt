@@ -77,8 +77,6 @@ void Unit::update (float time_step)
       (position_y - dest[1]) * (position_y - dest[1]) +
       (position_z - dest[2]) * (position_z - dest[2]);
 
-std::cout << "block = " << x_block << ", " << y_block << ", " << z_block << std::endl;
-
    float local_dest[3];
 
    if (start[0] == dest[0] && start[1] == dest[1] && start[2] == dest[2])

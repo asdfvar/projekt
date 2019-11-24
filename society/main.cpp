@@ -101,13 +101,8 @@ int main (int argc, char** argv)
 {
 std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
-#if 0
-   int windowsizex = 1600;
-   int windowsizey = 1000;
-#else
    int windowsizex = 1000;
    int windowsizey = 600;
-#endif
 
    glutInit (&argc, argv);
    glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);

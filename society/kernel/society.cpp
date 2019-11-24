@@ -18,7 +18,6 @@
 
 Society::Society (void)
 {
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    dim_x = 40;
    dim_y = 40;
    dim_z = 40;
@@ -34,7 +33,6 @@ std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    float unit_x = 0.0f;
    float unit_y = 0.0f;
    float unit_z = 0.0f;
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
    for (int ind_z = 0, ind = 0; ind_z < dim_z && !found; ind_z++) {
       for (int ind_y = 0; ind_y < dim_y && !found; ind_y++) {
@@ -52,9 +50,7 @@ std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    }
 
    float *scratch = new float[2 * dim_x * dim_y * dim_z];
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    Unit *unit = new Unit (unit_x, unit_y, unit_z, Map, scratch);
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
    units.push_back (unit);
 
