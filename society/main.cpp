@@ -105,8 +105,8 @@ std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
    int windowsizex = 1600;
    int windowsizey = 1000;
 #else
-   int windowsizex = 600;
-   int windowsizey = 400;
+   int windowsizex = 1000;
+   int windowsizey = 600;
 #endif
 
    glutInit (&argc, argv);
