@@ -8,13 +8,15 @@
 #define WIDTH   0.8f
 #define HEIGHT  0.8f
 
-void draw_map (const float *map, int map_dims[3], int map_layer)
+void draw_map (
+      float       *transform,
+      float       *translation,
+      const float *map,
+      int          map_dims[3],
+      int          map_layer)
 {
    int row_max = map_dims[1];
    int col_max = map_dims[0];
-
-   int window_width  = glutGet (GLUT_WINDOW_WIDTH);
-   int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
@@ -30,16 +32,38 @@ void draw_map (const float *map, int map_dims[3], int map_layer)
          float vertex_x = starting_col_loc + block_width  * (float)col;
          float vertex_y = starting_row_loc + block_height * (float)row;
 
+         float point0[2] = { vertex_x,               vertex_y               };
+         float point1[2] = { vertex_x + block_width, vertex_y               };
+         float point2[2] = { vertex_x + block_width, vertex_y + block_width };
+         float point3[2] = { vertex_x,               vertex_y + block_width };
+
+         float temp;
+         temp = point0[0];
+         point0[0] = point0[0] * transform[0] + point0[1] * transform[1] + translation[0];
+         point0[1] = temp      * transform[2] + point0[1] * transform[3] + translation[1];
+
+         temp = point1[0];
+         point1[0] = point1[0] * transform[0] + point1[1] * transform[1] + translation[0];
+         point1[1] = temp      * transform[2] + point1[1] * transform[3] + translation[1];
+
+         temp = point2[0];
+         point2[0] = point2[0] * transform[0] + point2[1] * transform[1] + translation[0];
+         point2[1] = temp      * transform[2] + point2[1] * transform[3] + translation[1];
+
+         temp = point3[0];
+         point3[0] = point3[0] * transform[0] + point3[1] * transform[1] + translation[0];
+         point3[1] = temp      * transform[2] + point3[1] * transform[3] + translation[1];
+
          glBegin (GL_LINES);
          glColor3f (0.0f, 0.0f, 1.0f);
-         glVertex2f (vertex_x,               vertex_y               );
-         glVertex2f (vertex_x + block_width, vertex_y               );
-         glVertex2f (vertex_x + block_width, vertex_y               );
-         glVertex2f (vertex_x + block_width, vertex_y + block_height);
-         glVertex2f (vertex_x + block_width, vertex_y + block_height);
-         glVertex2f (vertex_x,               vertex_y + block_height);
-         glVertex2f (vertex_x,               vertex_y + block_height);
-         glVertex2f (vertex_x,               vertex_y               );
+         glVertex2f (point0[0], point0[1] );
+         glVertex2f (point1[0], point1[1] );
+         glVertex2f (point1[0], point1[1] );
+         glVertex2f (point2[0], point2[1] );
+         glVertex2f (point2[0], point2[1] );
+         glVertex2f (point3[0], point3[1] );
+         glVertex2f (point3[0], point3[1] );
+         glVertex2f (point0[0], point0[1] );
          glEnd();
       }
    }
@@ -58,22 +82,50 @@ void draw_map (const float *map, int map_dims[3], int map_layer)
          } else {
             glColor3f (1.0f, 1.0f, 1.0f);
          }
-         glVertex2f (vertex_x,               vertex_y               );
-         glVertex2f (vertex_x + block_width, vertex_y               );
-         glVertex2f (vertex_x + block_width, vertex_y + block_height);
-         glVertex2f (vertex_x,               vertex_y + block_height);
+
+         float point0[2] = { vertex_x,               vertex_y               };
+         float point1[2] = { vertex_x + block_width, vertex_y               };
+         float point2[2] = { vertex_x + block_width, vertex_y + block_width };
+         float point3[2] = { vertex_x,               vertex_y + block_width };
+
+         float temp;
+         temp = point0[0];
+         point0[0] = point0[0] * transform[0] + point0[1] * transform[1] + translation[0];
+         point0[1] = temp      * transform[2] + point0[1] * transform[3] + translation[1];
+
+         temp = point1[0];
+         point1[0] = point1[0] * transform[0] + point1[1] * transform[1] + translation[0];
+         point1[1] = temp      * transform[2] + point1[1] * transform[3] + translation[1];
+
+         temp = point2[0];
+         point2[0] = point2[0] * transform[0] + point2[1] * transform[1] + translation[0];
+         point2[1] = temp      * transform[2] + point2[1] * transform[3] + translation[1];
+
+         temp = point3[0];
+         point3[0] = point3[0] * transform[0] + point3[1] * transform[1] + translation[0];
+         point3[1] = temp      * transform[2] + point3[1] * transform[3] + translation[1];
+
+         glVertex2f (point0[0], point0[1] );
+         glVertex2f (point1[0], point1[1] );
+         glVertex2f (point2[0], point2[1] );
+         glVertex2f (point3[0], point3[1] );
          glEnd ();
       }
    }
 }
 
-void draw_units (float *x, float *y, float *z, int map_dims[3], int num_units, int map_layer)
+void draw_units (
+      float *transform,
+      float *translation,
+      float *x,
+      float *y,
+      float *z,
+      int    map_dims[3],
+      int    num_units,
+      int    map_layer)
 {
    int row_max = map_dims[1];
    int col_max = map_dims[0];
-
-   int window_width  = glutGet (GLUT_WINDOW_WIDTH);
-   int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
@@ -85,22 +137,44 @@ void draw_units (float *x, float *y, float *z, int map_dims[3], int num_units, i
 
    for (int ind = 0; ind < num_units; ind++)
    {
-      if (floorf (z[ind]) == map_layer) {
+      if (floorf (z[ind]) == map_layer)
+      {
+         float x_pos = x[ind] / ((float)col_max) *
+            (window_end_col - window_start_col) +
+            window_start_col;
 
-      float x_pos = x[ind] / ((float)col_max) *
-                    (window_end_col - window_start_col) +
-                    window_start_col;
+         float y_pos = y[ind] / ((float)row_max) *
+            (window_end_row - window_start_row) +
+            window_start_row;
 
-      float y_pos = y[ind] / ((float)row_max) *
-                    (window_end_row - window_start_row) +
-                    window_start_row;
+         float point0[2] = { x_pos - 0.01f, y_pos - 0.01f };
+         float point1[2] = { x_pos - 0.01f, y_pos + 0.01f };
+         float point2[2] = { x_pos + 0.01f, y_pos + 0.01f };
+         float point3[2] = { x_pos + 0.01f, y_pos - 0.01f };
+
+         float temp;
+         temp = point0[0];
+         point0[0] = point0[0] * transform[0] + point0[1] * transform[1] + translation[0];
+         point0[1] = temp      * transform[2] + point0[1] * transform[3] + translation[1];
+
+         temp = point1[0];
+         point1[0] = point1[0] * transform[0] + point1[1] * transform[1] + translation[0];
+         point1[1] = temp      * transform[2] + point1[1] * transform[3] + translation[1];
+
+         temp = point2[0];
+         point2[0] = point2[0] * transform[0] + point2[1] * transform[1] + translation[0];
+         point2[1] = temp      * transform[2] + point2[1] * transform[3] + translation[1];
+
+         temp = point3[0];
+         point3[0] = point3[0] * transform[0] + point3[1] * transform[1] + translation[0];
+         point3[1] = temp      * transform[2] + point3[1] * transform[3] + translation[1];
 
          glBegin (GL_POLYGON);
          glColor3f (0.0f, 1.0f, 0.0f);
-         glVertex2f (x_pos - 0.01f, y_pos - 0.01f);
-         glVertex2f (x_pos - 0.01f, y_pos + 0.01f);
-         glVertex2f (x_pos + 0.01f, y_pos + 0.01f);
-         glVertex2f (x_pos + 0.01f, y_pos - 0.01f);
+         glVertex2f (point0[0], point0[1]);
+         glVertex2f (point1[0], point1[1]);
+         glVertex2f (point2[0], point2[1]);
+         glVertex2f (point3[0], point3[1]);
          glEnd ();
       }
    }

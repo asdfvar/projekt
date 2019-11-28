@@ -30,6 +30,9 @@ class Facade {
       float *unit_positions_x;
       float *unit_positions_y;
       float *unit_positions_z;
+
+      float transform[4];
+      float translation[2];
 };
 
 #endif

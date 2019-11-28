@@ -54,6 +54,11 @@ Society::Society (void)
 
    units.push_back (unit);
 
+   transform[0] = 1.0f; transform[1] = 0.0f;
+   transform[2] = 0.0f; transform[3] = 1.0f;
+
+   translation[0] = 0.0f;
+   translation[1] = 0.0f;
 }
 
 Society::~Society (void)
@@ -110,8 +115,17 @@ void Society::update (float time_step)
             float window_x = (float)x / (float)window_width;
             float window_y = (float)y / (float)window_height;
 
-            int block_x = (int)((window_x - 0.1f) / (0.9f - 0.1f) * (float)dim_x);
-            int block_y = (int)((float)dim_y - ((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y));
+            float fblock[2];
+            fblock[0] = (window_x - 0.1f) / (0.9f - 0.1f) * (float)dim_x;
+            fblock[1] = (float)dim_y - ((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y);
+
+            float temp = fblock[0];
+            fblock[0] = fblock[0] * transform[0] + fblock[1] * transform[1] + translation[0];
+            fblock[1] = temp      * transform[2] + fblock[1] * transform[3] + translation[1];
+
+            int block_x = (int)fblock[0];
+            int block_y = (int)fblock[1];
+
             int destination[3];
 
             destination[0] = block_x;

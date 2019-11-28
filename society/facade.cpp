@@ -20,6 +20,12 @@ Facade::Facade (void)
    unit_positions_x = new float[100];
    unit_positions_y = new float[100];
    unit_positions_z = new float[100];
+
+   transform[0] = 1.0f; transform[1] = 0.0f;
+   transform[2] = 0.0f; transform[3] = 1.0f;
+
+   translation[0] = 0.0f;
+   translation[1] = 0.0f;
 }
 
 /*
@@ -121,6 +127,8 @@ void Facade::display (void)
          unit_positions_z);
 
    draw_units (
+         transform,
+         translation,
          unit_positions_x,
          unit_positions_y,
          unit_positions_z,
@@ -129,6 +137,8 @@ void Facade::display (void)
          map_layer);
 
    draw_map (
+         transform,
+         translation,
          map,
          map_dims,
          map_layer);

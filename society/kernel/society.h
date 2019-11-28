@@ -22,12 +22,15 @@ class Society
 
    private:
 
-      MAP         *Map;
-      int          dim_x;
-      int          dim_y;
-      int          dim_z;
-      int          destination[3];
-      int          map_layer;
+      MAP *Map;
+      int  dim_x;
+      int  dim_y;
+      int  dim_z;
+      int  destination[3];
+      int  map_layer;
+
+      float transform[4];
+      float translation[2];
 
       float *cost;
       float *buffer;
