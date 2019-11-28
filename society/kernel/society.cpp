@@ -116,8 +116,8 @@ void Society::update (float time_step)
             float window_y = (float)y / (float)window_height;
 
             float fblock[2];
-            fblock[0] = (window_x - 0.1f) / (0.9f - 0.1f) * (float)dim_x;
-            fblock[1] = (float)dim_y - ((window_y - 0.1f) / (0.9f - 0.1f) * (float)dim_y);
+            fblock[0] = (window_x - 0.0f) / (1.0f - 0.0f) * (float)dim_x;
+            fblock[1] = (float)dim_y - ((window_y - 0.0f) / (1.0f - 0.0f) * (float)dim_y);
 
             float temp = fblock[0];
             fblock[0] = fblock[0] * transform[0] + fblock[1] * transform[1] + translation[0];

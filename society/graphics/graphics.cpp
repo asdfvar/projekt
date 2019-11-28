@@ -2,11 +2,11 @@
 #include <iostream>
 #include <cmath>
 
-#define X_START -0.8f
-#define Y_START -0.8f
+#define X_START -1.0f
+#define Y_START -1.0f
 
-#define WIDTH   0.8f
-#define HEIGHT  0.8f
+#define WIDTH   1.0f
+#define HEIGHT  1.0f
 
 void draw_map (
       float       *transform,
@@ -130,10 +130,10 @@ void draw_units (
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
 
-   float window_start_row = -0.8f;
-   float window_end_row   =  0.8f;
-   float window_start_col = -0.8f;
-   float window_end_col   =  0.8f;
+   const float window_start_row = -1.0f;
+   const float window_end_row   =  1.0f;
+   const float window_start_col = -1.0f;
+   const float window_end_col   =  1.0f;
 
    for (int ind = 0; ind < num_units; ind++)
    {
@@ -147,10 +147,10 @@ void draw_units (
             (window_end_row - window_start_row) +
             window_start_row;
 
-         float point0[2] = { x_pos - 0.01f, y_pos - 0.01f };
-         float point1[2] = { x_pos - 0.01f, y_pos + 0.01f };
-         float point2[2] = { x_pos + 0.01f, y_pos + 0.01f };
-         float point3[2] = { x_pos + 0.01f, y_pos - 0.01f };
+         float point0[2] = { x_pos - 0.015f, y_pos - 0.015f };
+         float point1[2] = { x_pos - 0.015f, y_pos + 0.015f };
+         float point2[2] = { x_pos + 0.015f, y_pos + 0.015f };
+         float point3[2] = { x_pos + 0.015f, y_pos - 0.015f };
 
          float temp;
          temp = point0[0];
