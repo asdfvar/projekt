@@ -39,6 +39,7 @@ class Facade {
       bool ctrl_down;
       bool button0_down;
       bool button1_down;
+      bool button2_down;
 
       int mouse_pos[2];
 };

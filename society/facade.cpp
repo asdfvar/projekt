@@ -32,6 +32,7 @@ Facade::Facade (void)
    ctrl_down    = false;
    button0_down = false;
    button1_down = false;
+   button2_down = false;
 
    mouse_pos[0] = 0;
    mouse_pos[1] = 0;
@@ -78,9 +79,11 @@ void Facade::mouseClick (int button, int state, int x, int y)
 
    if (button == 0 && state == 0) button0_down = true;
    if (button == 1 && state == 0) button1_down = true;
+   if (button == 2 && state == 0) button2_down = true;
 
    if (button == 0 && state == 1) button0_down = false;
    if (button == 1 && state == 1) button1_down = false;
+   if (button == 2 && state == 1) button2_down = false;
 
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
@@ -197,6 +200,9 @@ void Facade::mouseMotion (int x, int y)
       float costh = sqrtf (norm_f2   / norm2);
       float sinth = sqrtf (ortho_mag / norm2);
 
+      if (norm2 < 0.001f) costh = 1.0f;
+      if (norm2 < 0.001f) sinth = 0.0f;
+
       float cross_prod = fx * delta[1] - fy * delta[0];
       if (cross_prod < 0.0f) sinth = -sinth;
 
@@ -211,6 +217,16 @@ void Facade::mouseMotion (int x, int y)
       transform[1] = temp[1];
       transform[2] = temp[2];
       transform[3] = temp[3];
+   }
+
+   if (ctrl_down == true && button2_down == true)
+   {
+      float inv_norm_f = 1.0f / sqrtf (fx * fx + fy * fy);
+
+      if (inv_norm_f < 0.001f) inv_norm_f = 0.001f;
+
+      transform[1] += 2.0f * inv_norm_f * delta[0];
+      transform[2] += 2.0f * inv_norm_f * delta[1];
    }
 
    mouse_pos[0] = x;
