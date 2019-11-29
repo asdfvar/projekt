@@ -16,10 +16,7 @@ class Unit {
 
       float get_speed (void) { return speed; };
 
-      void set_destination (int dest_in[3]) {
-         dest[0] = dest_in[0],
-         dest[1] = dest_in[1],
-         dest[2] = dest_in[2]; };
+      void set_destination (int dest_in[3]);
 
       void update (float time_step);
 

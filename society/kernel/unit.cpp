@@ -33,6 +33,28 @@ Unit::~Unit (void)
    delete[] buffer;
 }
 
+void Unit::set_destination (int dest_in[3])
+{
+   const float *map = Map->access_map ();
+
+   int dim[3];
+
+   dim[0] = Map->map_dim (0);
+   dim[1] = Map->map_dim (1);
+   dim[2] = Map->map_dim (2);
+
+   int ind =
+      dest_in[2] * dim[0] * dim[1] +
+      dest_in[1] * dim[0] +
+      dest_in[0];
+
+   if (map[ind] < 0.0f) return;
+
+   dest[0] = dest_in[0],
+   dest[1] = dest_in[1],
+   dest[2] = dest_in[2];
+};
+
 void Unit::update (float time_step)
 {
 
