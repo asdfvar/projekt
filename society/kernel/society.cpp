@@ -112,16 +112,17 @@ void Society::update (float time_step)
 
          if (button == 0 && state == 0)
          {
-            float window_x = (float)x / (float)window_width;
-            float window_y = (float)y / (float)window_height;
+            float window[2];
+            window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
+            window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
+
+            float temp = window[0];
+            window[0] = window[0] * 1.0f / transform[0] + window[1] * transform[1] + translation[0];
+            window[1] = temp      * transform[2] + window[1] * 1.0f / transform[3] + translation[1];
 
             float fblock[2];
-            fblock[0] = (window_x - 0.0f) / (1.0f - 0.0f) * (float)dim_x;
-            fblock[1] = (float)dim_y - ((window_y - 0.0f) / (1.0f - 0.0f) * (float)dim_y);
-
-            float temp = fblock[0];
-            fblock[0] = fblock[0] * transform[0] + fblock[1] * transform[1] + translation[0];
-            fblock[1] = temp      * transform[2] + fblock[1] * transform[3] + translation[1];
+            fblock[0] = (window[0] + 1.0f) / 2.0f * (float)dim_x;
+            fblock[1] = (window[1] + 1.0f) / 2.0f * (float)dim_y;
 
             int block_x = (int)fblock[0];
             int block_y = (int)fblock[1];
