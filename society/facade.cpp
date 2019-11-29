@@ -27,6 +27,11 @@ Facade::Facade (void)
    translation[1] = 0.0f;
 
    map_layer = 20;
+
+   ctrl_down = false;
+
+   mouse_pos[0] = 0;
+   mouse_pos[1] = 0;
 }
 
 /*
@@ -49,6 +54,19 @@ void Facade::keyboardDown (const char key, int x, int y)
 */
 void Facade::specialFunc (int key, int x, int y)
 {
+   if (key == 114) {
+      ctrl_down = true;
+   }
+}
+
+/*
+** function name: specialUpFunc from: Facade
+*/
+void Facade::specialUpFunc (int key, int x, int y)
+{
+   if (key == 114) {
+      ctrl_down = false;
+   }
 }
 
 void Facade::mouseClick (int button, int state, int x, int y)
@@ -58,7 +76,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
-   if (button == 0 && state == 0)
+   if (button == 0 && state == 0 && ctrl_down == false)
    {
       float window[2];
       window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
@@ -98,6 +116,20 @@ void Facade::mouseClick (int button, int state, int x, int y)
 
       society.set_destination (destination);
    }
+
+   else if (button == 3) {
+      if (transform[0] <= 10.0f && transform[3] <= 10.0f) {
+         transform[0] *= 1.1f;
+         transform[3] *= 1.1f;
+      }
+   }
+
+   else if (button == 4) {
+      if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
+         transform[0] *= 0.9f;
+         transform[3] *= 0.9f;
+      }
+   }
 }
 
 /*
@@ -109,10 +141,28 @@ void Facade::mouseClick (int button, int state, int x, int y)
  */
 void Facade::mousePassive (int x, int y)
 {
+   mouse_pos[0] = x;
+   mouse_pos[1] = y;
 }
 
 void Facade::mouseMotion (int x, int y)
 {
+   if (ctrl_down == true)
+   {
+
+      int diff[2] = { x - mouse_pos[0], mouse_pos[1] - y };
+
+      int window_width  = glutGet (GLUT_WINDOW_WIDTH);
+      int window_height = glutGet (GLUT_WINDOW_HEIGHT);
+
+      translation[0] += 2.0f * (float)diff[0] / (float)window_width;
+      translation[1] += 2.0f * (float)diff[1] / (float)window_height;
+   }
+
+std::cout << x << std::endl;
+
+   mouse_pos[0] = x;
+   mouse_pos[1] = y;
 }
 
 /*

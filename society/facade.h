@@ -11,14 +11,15 @@ class Facade {
       Facade (void);
       ~Facade (void);
 
-      void keyboardDown (const char key, int x, int y);
-      void specialFunc  (int        key, int x, int y);
-      void keyboardUp   (const char key, int x, int y);
-      void mousePassive (int x, int y);
-      void mouseMotion  (int x, int y);
-      void mouseClick   (int button, int state, int x, int y);
-      void idle         (void);
-      void display      (void);
+      void keyboardDown  (const char key, int x, int y);
+      void specialFunc   (int        key, int x, int y);
+      void specialUpFunc (int        key, int x, int y);
+      void keyboardUp    (const char key, int x, int y);
+      void mousePassive  (int x, int y);
+      void mouseMotion   (int x, int y);
+      void mouseClick    (int button, int state, int x, int y);
+      void idle          (void);
+      void display       (void);
 
    private:
 
@@ -34,6 +35,10 @@ class Facade {
 
       float transform[4];
       float translation[2];
+
+      bool ctrl_down;
+
+      int mouse_pos[2];
 };
 
 #endif

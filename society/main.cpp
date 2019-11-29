@@ -74,6 +74,7 @@ void mousePassive (int x, int y)
  *****************/
 void keyboardUp (unsigned char key, int x, int y)
 {
+std::cout << key << std::endl;
    facade.keyboardUp (key, x, y);
 }
 
@@ -93,6 +94,11 @@ void specialFunc(int key, int x, int y)
    facade.specialFunc (key, x, y);
 }
 
+void specialUpFunc(int key, int x, int y)
+{
+std::cout << "special " << key << std::endl;
+   facade.specialUpFunc (key, x, y);
+}
 
 /**********
  ** Main **
@@ -130,14 +136,15 @@ std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
    glDepthFunc (GL_LESS);
 
-   glutDisplayFunc       (display     );
-   glutMouseFunc         (mouseClick  );
-   glutMotionFunc        (mouseMotion );
-   glutPassiveMotionFunc (mousePassive);
-   glutKeyboardUpFunc    (keyboardUp  );
-   glutKeyboardFunc      (keyboardDown);
-   glutSpecialFunc       (specialFunc );
-   glutIdleFunc          (idle        );
+   glutDisplayFunc       (display      );
+   glutMouseFunc         (mouseClick   );
+   glutMotionFunc        (mouseMotion  );
+   glutPassiveMotionFunc (mousePassive );
+   glutKeyboardUpFunc    (keyboardUp   );
+   glutKeyboardFunc      (keyboardDown );
+   glutSpecialFunc       (specialFunc  );
+   glutSpecialUpFunc     (specialUpFunc);
+   glutIdleFunc          (idle         );
 
    glutMainLoop();
 
