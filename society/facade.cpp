@@ -70,11 +70,14 @@ void Facade::mouseClick (int button, int state, int x, int y)
       const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
          -invDet * transform[2],  invDet * transform[0] };
 
+      window[0] -= translation[0];
+      window[1] -= translation[1];
+
       float temp = window[0];
       window[0] = window[0] * inv_transform[0] +
-         window[1] * inv_transform[1] + translation[0];
+         window[1] * inv_transform[1];
       window[1] = temp      * inv_transform[2] +
-         window[1] * inv_transform[3] + translation[1];
+         window[1] * inv_transform[3];
 
       int dim_x, dim_y, dim_z;
       society.access_map (&dim_x, &dim_y, &dim_z);
