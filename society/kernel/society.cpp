@@ -1,20 +1,9 @@
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-#include <GL/glext.h>
-
 #include "map.h"
 #include "society.h"
 #include "pathfinding.h"
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
-
-#define X_START -0.8f
-#define Y_START -0.8f
-
-#define WIDTH   0.8f
-#define HEIGHT  0.8f
 
 Society::Society (void)
 {
@@ -53,12 +42,6 @@ Society::Society (void)
    Unit *unit = new Unit (unit_x, unit_y, unit_z, Map, scratch);
 
    units.push_back (unit);
-
-   transform[0] = 2.0f; transform[1] = 0.0f;
-   transform[2] = 0.0f; transform[3] = 2.0f;
-
-   translation[0] = 0.0f;
-   translation[1] = 0.0f;
 }
 
 Society::~Society (void)
@@ -66,88 +49,8 @@ Society::~Society (void)
    delete Map;
 }
 
-void Society::input (Control *control)
-{
-   control_queue.push (control);
-}
-
 void Society::update (float time_step)
 {
-   if (!control_queue.empty())
-   {
-      Control *control = control_queue.front();
-
-      MousePassive *mp = dynamic_cast<MousePassive*>(control);
-      if (mp != 0) {
-         std::cout << "PASSIVE MOTION" << std::endl;
-      }
-
-      KeyboardUp *ku = dynamic_cast<KeyboardUp*>(control);
-      if (ku != 0) {
-         std::cout << "KEYBOARD UP" << std::endl;
-      }
-
-      KeyboardDown *kd = dynamic_cast<KeyboardDown*>(control);
-      if (kd != 0) {
-         std::cout << "KEYBOARD DOWN" << std::endl;
-      }
-
-      MouseClick *mc = dynamic_cast<MouseClick*>(control);
-      if (mc != 0) {
-         std::cout << "MOUSE CLICK" << std::endl;
-         
-         int button = mc->get_button ();
-         int state  = mc->get_state ();
-         int x      = mc->get_x ();
-         int y      = mc->get_y ();
-
-         int row_max = dim_y;
-         int col_max = dim_x;
-
-         int window_width  = glutGet (GLUT_WINDOW_WIDTH);
-         int window_height = glutGet (GLUT_WINDOW_HEIGHT);
-
-         float block_height = HEIGHT / static_cast<float>(row_max / 2);
-         float block_width  = WIDTH  / static_cast<float>(col_max / 2);
-
-         if (button == 0 && state == 0)
-         {
-            float window[2];
-            window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
-            window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
-
-            const float det = transform[0] * transform[3] - transform[1] * transform[2];
-            const float invDet = 1.0f / det;
-
-            const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
-                                            -invDet * transform[2],  invDet * transform[0] };
-
-            float temp = window[0];
-            window[0] = window[0] * inv_transform[0] +
-                        window[1] * inv_transform[1] + translation[0];
-            window[1] = temp      * inv_transform[2] +
-                        window[1] * inv_transform[3] + translation[1];
-
-            float fblock[2];
-            fblock[0] = (window[0] + 1.0f) / 2.0f * (float)dim_x;
-            fblock[1] = (window[1] + 1.0f) / 2.0f * (float)dim_y;
-
-            int block_x = (int)fblock[0];
-            int block_y = (int)fblock[1];
-
-            int destination[3];
-
-            destination[0] = block_x;
-            destination[1] = block_y;
-            destination[2] = map_layer;
-
-            units[0]->set_destination (destination);
-         }
-      }
-
-      control_queue.pop();
-   }
-
    units[0]->update (time_step);
 }
 

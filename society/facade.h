@@ -23,6 +23,8 @@ class Facade {
 
    private:
       Control *control;
+      std::queue<Control*> control_queue;
+
       Society society;
 
       struct timeval start, end;
@@ -30,6 +32,8 @@ class Facade {
       float *unit_positions_x;
       float *unit_positions_y;
       float *unit_positions_z;
+
+      int map_layer;
 
       float transform[4];
       float translation[2];
