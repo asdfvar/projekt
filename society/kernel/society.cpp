@@ -54,8 +54,8 @@ Society::Society (void)
 
    units.push_back (unit);
 
-   transform[0] = 1.0f; transform[1] = 0.0f;
-   transform[2] = 0.0f; transform[3] = 1.0f;
+   transform[0] = 2.0f; transform[1] = 0.0f;
+   transform[2] = 0.0f; transform[3] = 2.0f;
 
    translation[0] = 0.0f;
    translation[1] = 0.0f;
@@ -116,9 +116,17 @@ void Society::update (float time_step)
             window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
             window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
 
+            const float det = transform[0] * transform[3] - transform[1] * transform[2];
+            const float invDet = 1.0f / det;
+
+            const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
+                                            -invDet * transform[2],  invDet * transform[0] };
+
             float temp = window[0];
-            window[0] = window[0] * 1.0f / transform[0] + window[1] * transform[1] + translation[0];
-            window[1] = temp      * transform[2] + window[1] * 1.0f / transform[3] + translation[1];
+            window[0] = window[0] * inv_transform[0] +
+                        window[1] * inv_transform[1] + translation[0];
+            window[1] = temp      * inv_transform[2] +
+                        window[1] * inv_transform[3] + translation[1];
 
             float fblock[2];
             fblock[0] = (window[0] + 1.0f) / 2.0f * (float)dim_x;

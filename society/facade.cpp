@@ -21,8 +21,8 @@ Facade::Facade (void)
    unit_positions_y = new float[100];
    unit_positions_z = new float[100];
 
-   transform[0] = 1.0f; transform[1] = 0.0f;
-   transform[2] = 0.0f; transform[3] = 1.0f;
+   transform[0] = 2.0f; transform[1] = 0.0f;
+   transform[2] = 0.0f; transform[3] = 2.0f;
 
    translation[0] = 0.0f;
    translation[1] = 0.0f;
