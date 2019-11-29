@@ -5,7 +5,7 @@ class MAP
 {
    public:
 
-      MAP (int num_cells[3], int map_layer);
+      MAP (int num_cells[3]);
       ~MAP (void);
 
       const float *access_map (void) { return (const float*)map; };
@@ -25,8 +25,6 @@ class MAP
       int dim_x;
       int dim_y;
       int dim_z;
-
-      int map_layer;
 };
 
 #endif

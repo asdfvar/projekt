@@ -35,7 +35,6 @@ class Society
       int  dim_y;
       int  dim_z;
       int  destination[3];
-      int  map_layer;
 
       float *cost;
       float *buffer;

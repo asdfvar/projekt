@@ -11,17 +11,17 @@ Society::Society (void)
    dim_y = 40;
    dim_z = 40;
 
-   map_layer = 20;
-
    int dim[3] = {dim_x, dim_y, dim_z};
 
-   Map = new MAP (dim, map_layer);
+   Map = new MAP (dim);
 
    bool found = false;
 
    float unit_x = 0.0f;
    float unit_y = 0.0f;
    float unit_z = 0.0f;
+
+   int map_layer = 20;
 
    for (int ind_z = 0, ind = 0; ind_z < dim_z && !found; ind_z++) {
       for (int ind_y = 0; ind_y < dim_y && !found; ind_y++) {
