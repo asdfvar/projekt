@@ -7,7 +7,6 @@
 #include <chrono>
 #include <unistd.h>
 #include "facade.h"
-#include "control.h"
 #include "graphics.h"
 
 /*
@@ -35,8 +34,6 @@ Facade::Facade (void)
 */
 void Facade::keyboardUp (const char key, int x, int y)
 {
-   control = new KeyboardUp (key, x, y);
-   control_queue.push (control);
 }
 
 /*
@@ -45,8 +42,6 @@ void Facade::keyboardUp (const char key, int x, int y)
 */
 void Facade::keyboardDown (const char key, int x, int y)
 {
-   control = new KeyboardDown (key, x, y);
-   control_queue.push (control);
 }
 
 /*
@@ -54,23 +49,61 @@ void Facade::keyboardDown (const char key, int x, int y)
 */
 void Facade::specialFunc (int key, int x, int y)
 {
-   control = new KeyboardSpecial (key, x, y);
-   control_queue.push (control);
 }
 
 void Facade::mouseClick (int button, int state, int x, int y)
 {
-   control = new MouseClick (button, state, x, y);
-   control_queue.push (control);
+   std::cout << "MOUSE CLICK " << state << std::endl;
+
+   int window_width  = glutGet (GLUT_WINDOW_WIDTH);
+   int window_height = glutGet (GLUT_WINDOW_HEIGHT);
+
+   if (button == 0 && state == 0)
+   {
+      float window[2];
+      window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
+      window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
+
+      const float det = transform[0] * transform[3] - transform[1] * transform[2];
+      const float invDet = 1.0f / det;
+
+      const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
+         -invDet * transform[2],  invDet * transform[0] };
+
+      float temp = window[0];
+      window[0] = window[0] * inv_transform[0] +
+         window[1] * inv_transform[1] + translation[0];
+      window[1] = temp      * inv_transform[2] +
+         window[1] * inv_transform[3] + translation[1];
+
+      int dim_x, dim_y, dim_z;
+      society.access_map (&dim_x, &dim_y, &dim_z);
+
+      float fcell[2];
+      fcell[0] = (window[0] + 1.0f) / 2.0f * (float)dim_x;
+      fcell[1] = (window[1] + 1.0f) / 2.0f * (float)dim_y;
+
+      int cell[2];
+      cell[0] = (int)fcell[0];
+      cell[1] = (int)fcell[1];
+
+      int destination[3];
+
+      destination[0] = cell[0];
+      destination[1] = cell[1];
+      destination[2] = map_layer;
+
+      society.set_destination (destination);
+   }
 }
 
 /*
-** function name: mousePassive from Facade
-**
-** (0,0) is defined in the top left corner of the window
-** x is the column number of cells from left
-** y is the row number of cells from top
-*/
+ ** function name: mousePassive from Facade
+ **
+ ** (0,0) is defined in the top left corner of the window
+ ** x is the column number of cells from left
+ ** y is the row number of cells from top
+ */
 void Facade::mousePassive (int x, int y)
 {
 }
@@ -104,81 +137,9 @@ void Facade::idle (void)
                    (start.tv_sec * 1000000 + start.tv_usec)) / 1000000.0;
    } while (time_taken < time_step);
 
-   int dim_x, dim_y, dim_z;
-   society.access_map (&dim_x, &dim_y, &dim_z);
-
-   if (!control_queue.empty())
-   {
-      Control *control = control_queue.front();
-
-      MousePassive *mp = dynamic_cast<MousePassive*>(control);
-      if (mp != 0) {
-         std::cout << "PASSIVE MOTION" << std::endl;
-      }
-
-      KeyboardUp *ku = dynamic_cast<KeyboardUp*>(control);
-      if (ku != 0) {
-         std::cout << "KEYBOARD UP" << std::endl;
-      }
-
-      KeyboardDown *kd = dynamic_cast<KeyboardDown*>(control);
-      if (kd != 0) {
-         std::cout << "KEYBOARD DOWN" << std::endl;
-      }
-
-      MouseClick *mc = dynamic_cast<MouseClick*>(control);
-      if (mc != 0) {
-         std::cout << "MOUSE CLICK" << std::endl;
-         
-         int button = mc->get_button ();
-         int state  = mc->get_state ();
-         int x      = mc->get_x ();
-         int y      = mc->get_y ();
-
-         int window_width  = glutGet (GLUT_WINDOW_WIDTH);
-         int window_height = glutGet (GLUT_WINDOW_HEIGHT);
-
-         if (button == 0 && state == 0)
-         {
-            float window[2];
-            window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
-            window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
-
-            const float det = transform[0] * transform[3] - transform[1] * transform[2];
-            const float invDet = 1.0f / det;
-
-            const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
-                                            -invDet * transform[2],  invDet * transform[0] };
-
-            float temp = window[0];
-            window[0] = window[0] * inv_transform[0] +
-                        window[1] * inv_transform[1] + translation[0];
-            window[1] = temp      * inv_transform[2] +
-                        window[1] * inv_transform[3] + translation[1];
-
-            float fcell[2];
-            fcell[0] = (window[0] + 1.0f) / 2.0f * (float)dim_x;
-            fcell[1] = (window[1] + 1.0f) / 2.0f * (float)dim_y;
-
-            int cell[2];
-            cell[0] = (int)fcell[0];
-            cell[1] = (int)fcell[1];
-
-            int destination[3];
-
-            destination[0] = cell[0];
-            destination[1] = cell[1];
-            destination[2] = map_layer;
-
-            society.set_destination (destination);
-         }
-      }
-
-      control_queue.pop();
-   }
-
-
+   // Update society at this time step
    society.update (time_step);
+
    gettimeofday (&start, NULL);
 
    glutPostRedisplay ();

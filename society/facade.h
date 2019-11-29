@@ -1,7 +1,6 @@
 #ifndef FACADE_H
 #define FACADE_H
 
-#include "control.h"
 #include "society.h"
 #include <queue>
 #include <mutex>
@@ -22,8 +21,6 @@ class Facade {
       void display      (void);
 
    private:
-      Control *control;
-      std::queue<Control*> control_queue;
 
       Society society;
 

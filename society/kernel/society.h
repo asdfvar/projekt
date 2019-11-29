@@ -4,7 +4,6 @@
 #include "map.h"
 #include <queue>
 #include <vector>
-#include "control.h"
 #include "unit.h"
 
 class Society
