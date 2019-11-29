@@ -6,6 +6,7 @@
 #include <sstream>
 #include <chrono>
 #include <unistd.h>
+#include <cmath>
 #include "facade.h"
 #include "graphics.h"
 
@@ -28,7 +29,9 @@ Facade::Facade (void)
 
    map_layer = 20;
 
-   ctrl_down = false;
+   ctrl_down    = false;
+   button0_down = false;
+   button1_down = false;
 
    mouse_pos[0] = 0;
    mouse_pos[1] = 0;
@@ -71,7 +74,13 @@ void Facade::specialUpFunc (int key, int x, int y)
 
 void Facade::mouseClick (int button, int state, int x, int y)
 {
-   std::cout << "MOUSE CLICK " << state << std::endl;
+   std::cout << "MOUSE CLICK " << button << std::endl;
+
+   if (button == 0 && state == 0) button0_down = true;
+   if (button == 1 && state == 0) button1_down = true;
+
+   if (button == 0 && state == 1) button0_down = false;
+   if (button == 1 && state == 1) button1_down = false;
 
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
@@ -88,14 +97,15 @@ void Facade::mouseClick (int button, int state, int x, int y)
       const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
          -invDet * transform[2],  invDet * transform[0] };
 
-      window[0] -= translation[0];
-      window[1] -= translation[1];
-
       float temp = window[0];
-      window[0] = window[0] * inv_transform[0] +
-         window[1] * inv_transform[1];
-      window[1] = temp      * inv_transform[2] +
-         window[1] * inv_transform[3];
+
+      window[0] =
+         window[0] * inv_transform[0] +
+         window[1] * inv_transform[1] - translation[0];
+
+      window[1] =
+         temp      * inv_transform[2] +
+         window[1] * inv_transform[3] - translation[1];
 
       int dim_x, dim_y, dim_z;
       society.access_map (&dim_x, &dim_y, &dim_z);
@@ -117,16 +127,20 @@ void Facade::mouseClick (int button, int state, int x, int y)
       society.set_destination (destination);
    }
 
-   else if (button == 3) {
+   else if (button == 3 && ctrl_down == true) {
       if (transform[0] <= 10.0f && transform[3] <= 10.0f) {
          transform[0] *= 1.1f;
+         transform[1] *= 1.1f;
+         transform[2] *= 1.1f;
          transform[3] *= 1.1f;
       }
    }
 
-   else if (button == 4) {
+   else if (button == 4 && ctrl_down == true) {
       if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
          transform[0] *= 0.9f;
+         transform[1] *= 0.9f;
+         transform[2] *= 0.9f;
          transform[3] *= 0.9f;
       }
    }
@@ -147,19 +161,57 @@ void Facade::mousePassive (int x, int y)
 
 void Facade::mouseMotion (int x, int y)
 {
-   if (ctrl_down == true)
+   int diff[2] = { x - mouse_pos[0], mouse_pos[1] - y };
+
+   int window_width  = glutGet (GLUT_WINDOW_WIDTH);
+   int window_height = glutGet (GLUT_WINDOW_HEIGHT);
+
+   float delta[2];
+   delta[0] = (float)diff[0] / (float)window_width;
+   delta[1] = (float)diff[1] / (float)window_height;
+
+   float fx = (float)(x - window_width / 2) / (float)window_width;
+   float fy = (float)(window_height / 2 - y) / (float)window_height;
+
+   const float det = transform[0] * transform[3] - transform[1] * transform[2];
+   const float invDet = 1.0f / det;
+
+   const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
+      -invDet * transform[2],  invDet * transform[0] };
+
+   if (ctrl_down == true && button0_down == true)
    {
-
-      int diff[2] = { x - mouse_pos[0], mouse_pos[1] - y };
-
-      int window_width  = glutGet (GLUT_WINDOW_WIDTH);
-      int window_height = glutGet (GLUT_WINDOW_HEIGHT);
-
-      translation[0] += 2.0f * (float)diff[0] / (float)window_width;
-      translation[1] += 2.0f * (float)diff[1] / (float)window_height;
+      translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
+      translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
    }
 
-std::cout << x << std::endl;
+   if (ctrl_down == true && button1_down == true)
+   {
+      float norm_f2   = fx * fx + fy * fy;
+      float norm_d2   = delta[0] * delta[0] + delta[1] * delta[1];
+      float dot_prod  = fx * delta[0] + fy * delta[1];
+      float ortho_mag = norm_d2 - dot_prod * dot_prod / norm_f2;
+
+      float norm2 = norm_f2 + ortho_mag * ortho_mag;
+
+      float costh = sqrtf (norm_f2   / norm2);
+      float sinth = sqrtf (ortho_mag / norm2);
+
+      float cross_prod = fx * delta[1] - fy * delta[0];
+      if (cross_prod < 0.0f) sinth = -sinth;
+
+      float temp[4];
+
+      temp[0] = transform[0] * costh    + transform[1] * sinth;
+      temp[1] = transform[0] * (-sinth) + transform[1] * costh;
+      temp[2] = transform[2] * costh    + transform[3] * sinth;
+      temp[3] = transform[2] * (-sinth) + transform[3] * costh;
+
+      transform[0] = temp[0];
+      transform[1] = temp[1];
+      transform[2] = temp[2];
+      transform[3] = temp[3];
+   }
 
    mouse_pos[0] = x;
    mouse_pos[1] = y;

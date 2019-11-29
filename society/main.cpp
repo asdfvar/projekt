@@ -96,7 +96,6 @@ void specialFunc(int key, int x, int y)
 
 void specialUpFunc(int key, int x, int y)
 {
-std::cout << "special " << key << std::endl;
    facade.specialUpFunc (key, x, y);
 }
 
@@ -105,7 +104,6 @@ std::cout << "special " << key << std::endl;
  **********/
 int main (int argc, char** argv)
 {
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
 
    int windowsizex = 1000;
    int windowsizey = 600;

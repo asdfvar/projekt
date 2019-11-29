@@ -37,6 +37,8 @@ class Facade {
       float translation[2];
 
       bool ctrl_down;
+      bool button0_down;
+      bool button1_down;
 
       int mouse_pos[2];
 };
