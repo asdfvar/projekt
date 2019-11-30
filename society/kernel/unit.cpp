@@ -87,7 +87,6 @@ void Unit::update (float time_step)
 
    if (update_path)
    {
-
       int local_dest[3];
 
       // Iditify if the select destination is available. Otherwise, find one that is
@@ -181,7 +180,8 @@ void Unit::update (float time_step)
       (position_y - local_dest[1]) * (position_y - local_dest[1]) +
       (position_z - local_dest[2]) * (position_z - local_dest[2]);
 
-   // speed = dist / time, dist = speed * time
+   // set the position to the local destination if the projection would otherwise
+   // surpass it. Then signal to update the path
    float comp_dist = speed * time_step;
    if (dist2 <= comp_dist * comp_dist)
    {
