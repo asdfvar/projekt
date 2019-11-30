@@ -147,6 +147,21 @@ void Facade::mouseClick (int button, int state, int x, int y)
          transform[3] *= 0.9f;
       }
    }
+
+   else if (button == 3 && ctrl_down == false) {
+      if (map_layer > 0) map_layer--;
+   }
+
+   else if (button == 4 && ctrl_down == false) {
+
+      int dim[3];
+      society.access_map (&dim[0], &dim[1], &dim[2]);
+
+      if (map_layer < dim[2] - 1) {
+         map_layer++;
+      }
+   }
+
 }
 
 /*

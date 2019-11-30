@@ -1,13 +1,20 @@
 #ifndef UNIT_H
 #define UNIT_H
 
+#include <vector>
 #include "map.h"
 
 class Unit {
 
    public:
 
-      Unit (float position_x, float position_y, float position_z, MAP*, float *scratch);
+      Unit (float position_x,
+            float position_y,
+            float position_z,
+            MAP*,
+            std::vector<Unit*> &all_units_in,
+            float *scratch);
+
      ~Unit (void);
 
       float get_position_x (void) { return position_x; };
@@ -15,6 +22,8 @@ class Unit {
       float get_position_z (void) { return position_z; };
 
       float get_speed (void) { return speed; };
+
+      void get_destination (int *dest_out);
 
       void set_destination (int dest_in[3]);
 
@@ -39,6 +48,7 @@ class Unit {
       bool update_path;
       int  next_cell[3];
 
+      std::vector<Unit*> all_units;
 };
 
 #endif

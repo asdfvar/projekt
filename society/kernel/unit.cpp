@@ -4,14 +4,20 @@
 #include <cmath>
 #include "pathfinding.h"
 
-Unit::Unit (float position_x_in, float position_y_in, float position_z_in, MAP *Map_in,
-            float *scratch) :
+Unit::Unit (
+      float position_x_in,
+      float position_y_in,
+      float position_z_in,
+      MAP *Map_in,
+      std::vector<Unit*> &all_units_in,
+      float *scratch) :
    position_x (position_x_in), position_y (position_y_in), position_z (position_z_in)
 {
    speed     = 0.0f;
    direction = 0.0f;
 
    Map = Map_in;
+   all_units = all_units_in;
 
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
 
@@ -55,6 +61,13 @@ void Unit::set_destination (int dest_in[3])
    dest[2] = dest_in[2];
 };
 
+void Unit::get_destination (int *dest_out)
+{
+   dest_out[0] = dest[0];
+   dest_out[1] = dest[1];
+   dest_out[2] = dest[2];
+}
+
 void Unit::update (float time_step)
 {
 
@@ -72,7 +85,53 @@ void Unit::update (float time_step)
 
    const float *map = Map->access_map ();
 
-   if (update_path) {
+   if (update_path)
+   {
+
+      int local_dest[3];
+
+      // Iditify if the select destination is available. Otherwise, find one that is
+      bool conflicts = false;
+      do {
+         conflicts = false;
+
+         for (std::vector<Unit*>::iterator it = all_units.begin(); it != all_units.end(); it++)
+         {
+            if (*it == this) continue;
+
+            (*it)->get_destination (local_dest);
+
+            int map_ind =
+               dest[2] * dim[0] * dim[1] +
+               dest[1] * dim[0]          +
+               dest[0];
+
+            // If the select destination conflicts with an
+            // existing one, change the destination to a
+            // location that is available
+            if (
+                  (map[map_ind] < 0.0f ||
+                   (local_dest[0] == dest[0] &&
+                    local_dest[1] == dest[1] &&
+                    local_dest[2] == dest[2])))
+            {
+               conflicts = true;
+
+               dest[0]++;
+
+               if (dest[0] > dim[0]) {
+                  dest[0] = 0;
+                  dest[1]++;
+               }
+               if (dest[1] > dim[1]) {
+                  dest[1] = 0;
+                  dest[2]++;
+               }
+            }
+         }
+      } while (conflicts);
+
+      // Find the path to the destination
       bool solution_found = cost_function (
             map,
             cost,
