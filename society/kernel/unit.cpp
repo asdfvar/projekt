@@ -88,9 +88,9 @@ void Unit::update (float time_step)
    if (update_path)
    {
       int local_dest[3];
+      bool conflicts;
 
-      // Iditify if the select destination is available. Otherwise, find one that is
-      bool conflicts = false;
+      // Identify if the select destination is available. Otherwise, find one that is
       do {
          conflicts = false;
 
@@ -107,7 +107,12 @@ void Unit::update (float time_step)
 
             // If the select destination conflicts with an
             // existing one, change the destination to a
-            // location that is available
+            // location that is available.
+
+            // The destination has a conflict if it's an invalid
+            // cell or there is already another unit that has claimed
+            // that cell as its destination.
+
             if (
                   (map[map_ind] < 0.0f ||
                    (local_dest[0] == dest[0] &&
@@ -115,6 +120,13 @@ void Unit::update (float time_step)
                     local_dest[2] == dest[2])))
             {
                conflicts = true;
+
+               // TODO: replace with the following set of rules:
+               // for each cell around the perimeter of the objective, test
+               // the number of steps needed to get to that cell.
+               // The destination with the least number of steps to get
+               // to it is chosen. If there are no cells available,
+               // repeat the process one cell farther out from the desired destination.
 
                dest[0]++;
 
