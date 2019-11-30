@@ -119,13 +119,16 @@ void Unit::update (float time_step)
 
                dest[0]++;
 
-               if (dest[0] > dim[0]) {
+               if (dest[0] >= dim[0]) {
                   dest[0] = 0;
                   dest[1]++;
                }
-               if (dest[1] > dim[1]) {
+               if (dest[1] >= dim[1]) {
                   dest[1] = 0;
                   dest[2]++;
+               }
+               if (dest[2] >= dim[2]) {
+                  dest[0] = dest[1] = dest[2] = 0;
                }
             }
          }
