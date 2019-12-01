@@ -88,62 +88,105 @@ void Unit::update (float time_step)
    if (update_path)
    {
       int local_dest[3];
-      bool conflicts;
+      bool conflicts = true;
+
+      int min_dist = dim[0] * dim[1] + dim[2] + 1;
+
+      int final_dest[3];
 
       // Identify if the select destination is available. Otherwise, find one that is
-      do {
-         conflicts = false;
+      for (int radius = 0; conflicts; radius++)
+      {
+         int cell[3];
+         for (cell[2] = dest[2] - radius; cell[2] <= dest[2] + radius; cell[2]++) {
 
-         for (std::vector<Unit*>::iterator it = all_units.begin(); it != all_units.end(); it++)
-         {
-            if (*it == this) continue;
+            if (cell[2] < 0) continue;
+            for (cell[1] = dest[1] - radius; cell[1] <= dest[1] + radius; cell[1]++) {
 
-            (*it)->get_destination (local_dest);
+               if (cell[1] < 0) continue;
+               for (cell[0] = dest[0] - radius; cell[0] <= dest[0] + radius; cell[0]++) {
 
-            int map_ind =
-               dest[2] * dim[0] * dim[1] +
-               dest[1] * dim[0]          +
-               dest[0];
+               if (cell[0] < 0) continue;
 
-            // If the select destination conflicts with an
-            // existing one, change the destination to a
-            // location that is available.
+                  int map_ind =
+                     cell[2] * dim[0] * dim[1] +
+                     cell[1] * dim[0]          +
+                     cell[0];
 
-            // The destination has a conflict if it's an invalid
-            // cell or there is already another unit that has claimed
-            // that cell as its destination.
+                  if (
+                        (map[map_ind] < 0.0f ||
+                         (cell[0] == dest[0] &&
+                          cell[1] == dest[1] &&
+                          cell[2] == dest[2])))
+                  {
+                     continue;
+                  }
+if (radius < 2) std::cout << "cell = " << cell[0] << ", " << cell[1] << ", " << cell[2] << " radius = " << radius << std::endl;
 
-            if (
-                  (map[map_ind] < 0.0f ||
-                   (local_dest[0] == dest[0] &&
-                    local_dest[1] == dest[1] &&
-                    local_dest[2] == dest[2])))
-            {
-               conflicts = true;
+std::cout << "size = " << all_units.size() << std::endl;
+                  // test if the select cell is already set as a destination
+                  for (std::vector<Unit*>::iterator it = all_units.begin();
+                        it != all_units.end();
+                        it++)
+                  {
+std::cout << __FILE__ << __LINE__ << std::endl;
+                     if (*it == this) continue;
 
-               // TODO: replace with the following set of rules:
-               // for each cell around the perimeter of the objective, test
-               // the number of steps needed to get to that cell.
-               // The destination with the least number of steps to get
-               // to it is chosen. If there are no cells available,
-               // repeat the process one cell farther out from the desired destination.
+                     (*it)->get_destination (local_dest);
 
-               dest[0]++;
+                     if (
+                           (local_dest[0] != cell[0] ||
+                            local_dest[1] != cell[1] ||
+                            local_dest[2] != cell[2]))
+                     {
+                        conflicts = false;
 
-               if (dest[0] >= dim[0]) {
-                  dest[0] = 0;
-                  dest[1]++;
-               }
-               if (dest[1] >= dim[1]) {
-                  dest[1] = 0;
-                  dest[2]++;
-               }
-               if (dest[2] >= dim[2]) {
-                  dest[0] = dest[1] = dest[2] = 0;
+                        bool solution_found = cost_function (
+                              map,
+                              cost,
+                              dim,
+                              dest,
+                              cell,
+                              buffer);
+
+                        int *path = (int*)buffer;
+
+                        int path_size = pathfinding (
+                              cost,
+                              dim,
+                              cell,
+                              dest,
+                              path);
+
+                        if (path_size < min_dist) {
+
+                           final_dest[0] = cell[0];
+                           final_dest[1] = cell[1];
+                           final_dest[2] = cell[2];
+
+                           min_dist = path_size;
+                        }
+                     }
+                  }
+
                }
             }
          }
-      } while (conflicts);
+      }
+std::cout << __FILE__ << __LINE__ << std::endl;
+
+      dest[0] = final_dest[0];
+      dest[1] = final_dest[1];
+      dest[2] = final_dest[2];
+
+      // If the select destination conflicts with an
+      // existing one, change the destination to a
+      // location that is available.
+
+      // The destination has a conflict if it's an invalid
+      // cell or there is already another unit that has claimed
+      // that cell as its destination.
+
 
       // Find the path to the destination
       bool solution_found = cost_function (
