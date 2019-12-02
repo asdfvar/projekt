@@ -9,7 +9,6 @@ Unit::Unit (
       float position_y_in,
       float position_z_in,
       MAP *Map_in,
-      std::vector<Unit*> &all_units_in,
       float *scratch) :
    position_x (position_x_in), position_y (position_y_in), position_z (position_z_in)
 {
@@ -17,7 +16,6 @@ Unit::Unit (
    direction = 0.0f;
 
    Map = Map_in;
-   all_units = all_units_in;
 
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
 
@@ -68,7 +66,9 @@ void Unit::get_destination (int *dest_out)
    dest_out[2] = dest[2];
 }
 
-void Unit::update (float time_step)
+void Unit::update (
+      std::vector<Unit*> &all_units,
+      float time_step)
 {
 
    int start[3];
@@ -106,74 +106,66 @@ void Unit::update (float time_step)
                if (cell[1] < 0) continue;
                for (cell[0] = dest[0] - radius; cell[0] <= dest[0] + radius; cell[0]++) {
 
-               if (cell[0] < 0) continue;
+                  if (cell[0] < 0) continue;
 
                   int map_ind =
                      cell[2] * dim[0] * dim[1] +
                      cell[1] * dim[0]          +
                      cell[0];
 
-                  if (
-                        (map[map_ind] < 0.0f ||
-                         (cell[0] == dest[0] &&
-                          cell[1] == dest[1] &&
-                          cell[2] == dest[2])))
+                  if (map[map_ind] < 0.0f) continue;
+
+                  conflicts = false;
+
+                  // test if the select cell is already set as a destination for another unit
+                  for (std::vector<Unit*>::iterator other_unit = all_units.begin();
+                        other_unit != all_units.end();
+                        other_unit++)
                   {
-                     continue;
-                  }
-if (radius < 2) std::cout << "cell = " << cell[0] << ", " << cell[1] << ", " << cell[2] << " radius = " << radius << std::endl;
+                     if (*other_unit == this) continue;
 
-std::cout << "size = " << all_units.size() << std::endl;
-                  // test if the select cell is already set as a destination
-                  for (std::vector<Unit*>::iterator it = all_units.begin();
-                        it != all_units.end();
-                        it++)
-                  {
-std::cout << __FILE__ << __LINE__ << std::endl;
-                     if (*it == this) continue;
+                     int other_unit_dest[3];
+                     (*other_unit)->get_destination (other_unit_dest);
 
-                     (*it)->get_destination (local_dest);
-
-                     if (
-                           (local_dest[0] != cell[0] ||
-                            local_dest[1] != cell[1] ||
-                            local_dest[2] != cell[2]))
-                     {
-                        conflicts = false;
-
-                        bool solution_found = cost_function (
-                              map,
-                              cost,
-                              dim,
-                              dest,
-                              cell,
-                              buffer);
-
-                        int *path = (int*)buffer;
-
-                        int path_size = pathfinding (
-                              cost,
-                              dim,
-                              cell,
-                              dest,
-                              path);
-
-                        if (path_size < min_dist) {
-
-                           final_dest[0] = cell[0];
-                           final_dest[1] = cell[1];
-                           final_dest[2] = cell[2];
-
-                           min_dist = path_size;
-                        }
+                     if ( (other_unit_dest[0] == cell[0] &&
+                              other_unit_dest[1] == cell[1] &&
+                              other_unit_dest[2] == cell[2])) {
+                        conflicts = true;
+                        break;
                      }
                   }
 
+                  if (conflicts) continue;
+
+                  bool solution_found = cost_function (
+                        map,
+                        cost,
+                        dim,
+                        dest,
+                        cell,
+                        buffer);
+
+                  int *path = (int*)buffer;
+
+                  int path_size = pathfinding (
+                        cost,
+                        dim,
+                        cell,
+                        dest,
+                        path);
+
+                  if (path_size < min_dist) {
+
+                     final_dest[0] = cell[0];
+                     final_dest[1] = cell[1];
+                     final_dest[2] = cell[2];
+
+                     min_dist = path_size;
+                  }
                }
             }
          }
       }
-std::cout << __FILE__ << __LINE__ << std::endl;
 
       dest[0] = final_dest[0];
       dest[1] = final_dest[1];

@@ -12,7 +12,6 @@ class Unit {
             float position_y,
             float position_z,
             MAP*,
-            std::vector<Unit*> &all_units_in,
             float *scratch);
 
      ~Unit (void);
@@ -27,7 +26,9 @@ class Unit {
 
       void set_destination (int dest_in[3]);
 
-      void update (float time_step);
+      void update (
+            std::vector<Unit*> &all_units,
+            float time_step);
 
    private:
 
@@ -47,8 +48,6 @@ class Unit {
 
       bool update_path;
       int  next_cell[3];
-
-      std::vector<Unit*> all_units;
 };
 
 #endif

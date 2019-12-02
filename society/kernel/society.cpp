@@ -15,9 +15,7 @@ Society::Society (void)
 
    Map = new MAP (dim);
 
-   float unit_x = 0.0f;
-   float unit_y = 0.0f;
-   float unit_z = 0.0f;
+   float dest[3];
 
    int map_layer = 20;
 
@@ -32,12 +30,12 @@ Society::Society (void)
             const float *map = Map->access_map ();
             if (map[ind] > 0.0f && ind_z == map_layer && unit_count < num_units) {
                unit_count++;
-               unit_x = (float)ind_x     + 0.5f;
-               unit_y = (float)ind_y     + 0.5f;
-               unit_z = (float)map_layer + 0.5f;
+               dest[0] = (float)ind_x     + 0.5f;
+               dest[1] = (float)ind_y     + 0.5f;
+               dest[2] = (float)map_layer + 0.5f;
 
                float *scratch = new float[2 * dim_x * dim_y * dim_z];
-               units.push_back (new Unit (unit_x, unit_y, unit_z, Map, units, scratch));
+               units.push_back (new Unit (dest[0], dest[1], dest[2], Map, scratch));
             }
          }
       }
@@ -68,7 +66,7 @@ void Society::set_destination (int destination[3])
 void Society::update (float time_step)
 {
    for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++) {
-      (*it)->update (time_step);
+      (*it)->update (units, time_step);
    }
 }
 
