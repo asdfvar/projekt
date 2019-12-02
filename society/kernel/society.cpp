@@ -19,7 +19,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 4;
+   int num_units = 16;
 
    int unit_count = 0;
 
@@ -34,8 +34,7 @@ Society::Society (void)
                dest[1] = (float)ind_y     + 0.5f;
                dest[2] = (float)map_layer + 0.5f;
 
-               float *scratch = new float[2 * dim_x * dim_y * dim_z];
-               units.push_back (new Unit (dest[0], dest[1], dest[2], Map, scratch));
+               units.push_back (new Unit (dest[0], dest[1], dest[2], Map));
             }
          }
       }

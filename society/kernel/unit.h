@@ -11,8 +11,7 @@ class Unit {
       Unit (float position_x,
             float position_y,
             float position_z,
-            MAP*,
-            float *scratch);
+            MAP*);
 
      ~Unit (void);
 
@@ -35,6 +34,7 @@ class Unit {
       MAP   *Map;
       float *cost;
       float *buffer;
+      int *scratch;
 
       float position_x;
       float position_y;

@@ -8,8 +8,7 @@ Unit::Unit (
       float position_x_in,
       float position_y_in,
       float position_z_in,
-      MAP *Map_in,
-      float *scratch) :
+      MAP *Map_in) :
    position_x (position_x_in), position_y (position_y_in), position_z (position_z_in)
 {
    speed     = 0.0f;
@@ -19,8 +18,9 @@ Unit::Unit (
 
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
 
-   cost   = new float [map_dims[0] * map_dims[1] * map_dims[2]];
-   buffer = new float [map_dims[0] * map_dims[1] * map_dims[2]];
+   cost    = new float [map_dims[0] * map_dims[1] * map_dims[2]];
+   buffer  = new float [map_dims[0] * map_dims[1] * map_dims[2]];
+   scratch = new int [map_dims[0] * map_dims[1] * map_dims[2]];
 
    dest[0] = position_x;
    dest[1] = position_y;
@@ -35,6 +35,7 @@ Unit::~Unit (void)
 {
    delete[] cost;
    delete[] buffer;
+   delete[] scratch;
 }
 
 void Unit::set_destination (int dest_in[3])
@@ -85,6 +86,30 @@ void Unit::update (
 
    const float *map = Map->access_map ();
 
+   int num_units = all_units.size();
+
+   int *other_unit_dest[3];
+   other_unit_dest[0] = scratch + 0 * (num_units - 1);
+   other_unit_dest[1] = scratch + 1 * (num_units - 1);
+   other_unit_dest[2] = scratch + 2 * (num_units - 1);
+
+   int unit_it = 0;
+   for (std::vector<Unit*>::iterator other_unit = all_units.begin();
+         other_unit != all_units.end();
+         other_unit++)
+   {
+      if (*other_unit == this) continue;
+
+      int local_location[3];
+      (*other_unit)->get_destination (local_location);
+
+      other_unit_dest[0][unit_it] = local_location[0];
+      other_unit_dest[1][unit_it] = local_location[1];
+      other_unit_dest[2][unit_it] = local_location[2];
+
+      unit_it++;
+   }
+
    if (update_path)
    {
       int local_dest[3];
@@ -118,18 +143,12 @@ void Unit::update (
                   conflicts = false;
 
                   // test if the select cell is already set as a destination for another unit
-                  for (std::vector<Unit*>::iterator other_unit = all_units.begin();
-                        other_unit != all_units.end();
-                        other_unit++)
+                  for (unit_it = 0; unit_it < num_units - 1; unit_it++)
                   {
-                     if (*other_unit == this) continue;
-
-                     int other_unit_dest[3];
-                     (*other_unit)->get_destination (other_unit_dest);
-
-                     if ( (other_unit_dest[0] == cell[0] &&
-                              other_unit_dest[1] == cell[1] &&
-                              other_unit_dest[2] == cell[2])) {
+                     if ( (other_unit_dest[0][unit_it] == cell[0] &&
+                              other_unit_dest[1][unit_it] == cell[1] &&
+                              other_unit_dest[2][unit_it] == cell[2]))
+                     {
                         conflicts = true;
                         break;
                      }
