@@ -23,4 +23,9 @@ void draw_units (
       int    num_units,
       int    map_layer);
 
+void draw_selection_box (
+      float *selection_box,
+      float *transform,
+      float *translation);
+
 #endif

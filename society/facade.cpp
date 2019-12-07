@@ -36,6 +36,8 @@ Facade::Facade (void)
 
    mouse_pos[0] = 0;
    mouse_pos[1] = 0;
+
+   selection_active = false;
 }
 
 /*
@@ -175,21 +177,30 @@ void Facade::mousePassive (int x, int y)
 {
    mouse_pos[0] = x;
    mouse_pos[1] = y;
+
+   selection_active = false;
 }
 
+/*
+**   ********
+**   |  ||  |
+**   |0 1 2 |
+**   |      |
+**   +------+
+*/
 void Facade::mouseMotion (int x, int y)
 {
-   int diff[2] = { x - mouse_pos[0], mouse_pos[1] - y };
-
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
+
+   float fx = (float)(2 * x - window_width) / (float)window_width;
+   float fy = (float)(window_height - 2 * y) / (float)window_height;
+
+   int diff[2] = { x - mouse_pos[0], mouse_pos[1] - y };
 
    float delta[2];
    delta[0] = (float)diff[0] / (float)window_width;
    delta[1] = (float)diff[1] / (float)window_height;
-
-   float fx = (float)(x - window_width / 2) / (float)window_width;
-   float fy = (float)(window_height / 2 - y) / (float)window_height;
 
    const float det = transform[0] * transform[3] - transform[1] * transform[2];
    const float invDet = 1.0f / det;
@@ -197,12 +208,28 @@ void Facade::mouseMotion (int x, int y)
    const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
       -invDet * transform[2],  invDet * transform[0] };
 
+   // Activate and define the selection box
+   if (ctrl_down == false && button2_down == true)
+   {
+      if (selection_active == false) {
+         selection_box[0] = fx * inv_transform[0] + fy * inv_transform[1];
+         selection_box[1] = fx * inv_transform[2] + fy * inv_transform[3];
+      }
+
+      selection_box[2] = fx * inv_transform[0] + fy * inv_transform[1];
+      selection_box[3] = fx * inv_transform[2] + fy * inv_transform[3];
+
+      selection_active = true;
+   }
+
+   // Adjust the translation of the world
    if (ctrl_down == true && button0_down == true)
    {
       translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
       translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
    }
 
+   // Adjust the rotation of the world
    if (ctrl_down == true && button1_down == true)
    {
       float norm_f2   = fx * fx + fy * fy;
@@ -297,6 +324,14 @@ void Facade::display (void)
          unit_positions_x,
          unit_positions_y,
          unit_positions_z);
+
+   if (selection_active == true)
+   {
+      draw_selection_box (
+            selection_box,
+            transform,
+            translation);
+   }
 
    draw_units (
          transform,

@@ -227,3 +227,55 @@ void draw_units (
       }
    }
 }
+
+void draw_selection_box (
+      float *selection_box,
+      float *transform,
+      float *translation)
+{
+   float point0[2] = { selection_box[0], selection_box[1] };
+   float point1[2] = { selection_box[2], selection_box[1] };
+   float point2[2] = { selection_box[2], selection_box[3] };
+   float point3[2] = { selection_box[0], selection_box[3] };
+
+   point0[0] += translation[0];
+   point0[1] += translation[1];
+
+   float temp;
+   temp = point0[0];
+   point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
+   point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+
+   point1[0] += translation[0];
+   point1[1] += translation[1];
+
+   temp = point1[0];
+   point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
+   point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+
+   point2[0] += translation[0];
+   point2[1] += translation[1];
+
+   temp = point2[0];
+   point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
+   point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+
+   point3[0] += translation[0];
+   point3[1] += translation[1];
+
+   temp = point3[0];
+   point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
+   point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+
+   glBegin (GL_LINES);
+   glColor3f (1.0f, 0.0f, 0.0f);
+   glVertex2f (point0[0], point0[1] );
+   glVertex2f (point1[0], point1[1] );
+   glVertex2f (point1[0], point1[1] );
+   glVertex2f (point2[0], point2[1] );
+   glVertex2f (point2[0], point2[1] );
+   glVertex2f (point3[0], point3[1] );
+   glVertex2f (point3[0], point3[1] );
+   glVertex2f (point0[0], point0[1] );
+   glEnd ();
+}
