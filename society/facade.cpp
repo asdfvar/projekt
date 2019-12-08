@@ -55,6 +55,10 @@ void Facade::keyboardUp (const char key, int x, int y)
 */
 void Facade::keyboardDown (const char key, int x, int y)
 {
+   // Escape key
+   if (key == 27) {
+      society.unselect_all ();
+   }
 }
 
 /*
@@ -62,9 +66,11 @@ void Facade::keyboardDown (const char key, int x, int y)
 */
 void Facade::specialFunc (int key, int x, int y)
 {
+   // Control key
    if (key == 114) {
       control_down = true;
    }
+   // Shift key
    else if (key == 112) {
       shift_down = true;
    }
@@ -75,9 +81,11 @@ void Facade::specialFunc (int key, int x, int y)
 */
 void Facade::specialUpFunc (int key, int x, int y)
 {
+   // Control key
    if (key == 114) {
       control_down = false;
    }
+   // Shift key
    else if (key == 112) {
       shift_down = false;
    }

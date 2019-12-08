@@ -74,7 +74,6 @@ void mousePassive (int x, int y)
  *****************/
 void keyboardUp (unsigned char key, int x, int y)
 {
-std::cout << key << std::endl;
    facade.keyboardUp (key, x, y);
 }
 

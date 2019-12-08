@@ -132,3 +132,9 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
       }
    }
 }
+
+void Society::unselect_all (void)
+{
+   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++)
+      (*it)->unselect();
+}
