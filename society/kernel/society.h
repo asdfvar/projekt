@@ -21,6 +21,8 @@ class Society
 
       void select_units (float *selection_box, int map_layer, bool control_down);
 
+      void select_all (void);
+
       void unselect_all (void);
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);

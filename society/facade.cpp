@@ -59,6 +59,11 @@ void Facade::keyboardDown (const char key, int x, int y)
    if (key == 27) {
       society.unselect_all ();
    }
+
+   // Control-'a'
+   else if (key == 1) {
+      society.select_all ();
+   }
 }
 
 /*
