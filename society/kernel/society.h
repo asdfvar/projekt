@@ -19,7 +19,9 @@ class Society
 
       const float *access_map (int *dim_x, int *dim_y, int *dim_z);
 
-      int get_unit_positions (float *x, float *y, float *z);
+      void select_units (float *selection_box, int map_layer, bool control_down);
+
+      int get_unit_info (float *x, float *y, float *z, bool *selections);
 
    private:
 

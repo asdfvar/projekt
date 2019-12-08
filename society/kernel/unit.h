@@ -25,6 +25,11 @@ class Unit {
 
       void set_destination (int dest_in[3]);
 
+      void unselect (void) { selected = false; };
+      void select (void)   { selected = true;  };
+
+      bool get_selected (void) { return selected; };
+
       void update (
             std::vector<Unit*> &all_units,
             float time_step);
@@ -48,6 +53,7 @@ class Unit {
 
       bool update_path;
       int  next_cell[3];
+      bool selected;
 };
 
 #endif

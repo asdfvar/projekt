@@ -27,6 +27,7 @@ Unit::Unit (
    dest[2] = position_z;
 
    update_path = true;
+   selected    = false;
 
    max_speed = 40.0f;
 }
@@ -40,6 +41,8 @@ Unit::~Unit (void)
 
 void Unit::set_destination (int dest_in[3])
 {
+   if (selected == false) return;
+
    const float *map = Map->access_map ();
 
    int dim[3];

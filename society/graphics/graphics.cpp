@@ -156,6 +156,7 @@ void draw_units (
       float *x,
       float *y,
       float *z,
+      bool  *selected,
       int    map_dims[3],
       int    num_units,
       int    map_layer)
@@ -224,8 +225,58 @@ void draw_units (
          glVertex2f (point2[0], point2[1]);
          glVertex2f (point3[0], point3[1]);
          glEnd ();
+
+         if (selected[ind])
+         {
+            float point0[2] = { x_pos - 0.018f, y_pos - 0.018f };
+            float point1[2] = { x_pos - 0.018f, y_pos + 0.018f };
+            float point2[2] = { x_pos + 0.018f, y_pos + 0.018f };
+            float point3[2] = { x_pos + 0.018f, y_pos - 0.018f };
+
+            point0[0] += translation[0];
+            point0[1] += translation[1];
+
+            float temp;
+            temp = point0[0];
+            point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
+            point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+
+            point1[0] += translation[0];
+            point1[1] += translation[1];
+
+            temp = point1[0];
+            point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
+            point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+
+            point2[0] += translation[0];
+            point2[1] += translation[1];
+
+            temp = point2[0];
+            point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
+            point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+
+            point3[0] += translation[0];
+            point3[1] += translation[1];
+
+            temp = point3[0];
+            point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
+            point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+
+            glBegin (GL_LINES);
+            glColor3f (1.0f, 0.0f, 0.0f);
+            glVertex2f (point0[0], point0[1] );
+            glVertex2f (point1[0], point1[1] );
+            glVertex2f (point1[0], point1[1] );
+            glVertex2f (point2[0], point2[1] );
+            glVertex2f (point2[0], point2[1] );
+            glVertex2f (point3[0], point3[1] );
+            glVertex2f (point3[0], point3[1] );
+            glVertex2f (point0[0], point0[1] );
+            glEnd ();
+         }
       }
    }
+std::cout << std::endl;
 }
 
 void draw_selection_box (

@@ -30,13 +30,15 @@ class Facade {
       float *unit_positions_x;
       float *unit_positions_y;
       float *unit_positions_z;
+      bool  *unit_selections;
 
       int map_layer;
 
       float transform[4];
       float translation[2];
 
-      bool ctrl_down;
+      bool control_down;
+      bool shift_down;
       bool button0_down;
       bool button1_down;
       bool button2_down;

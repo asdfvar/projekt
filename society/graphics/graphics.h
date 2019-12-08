@@ -19,6 +19,7 @@ void draw_units (
       float *x,
       float *y,
       float *z,
+      bool  *selected,
       int    map_dims[3],
       int    num_units,
       int    map_layer);

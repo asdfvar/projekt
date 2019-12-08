@@ -20,6 +20,7 @@ Facade::Facade (void)
    unit_positions_x = new float[100];
    unit_positions_y = new float[100];
    unit_positions_z = new float[100];
+   unit_selections  = new bool[100];
 
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
@@ -29,7 +30,8 @@ Facade::Facade (void)
 
    map_layer = 20;
 
-   ctrl_down    = false;
+   control_down = false;
+   shift_down   = false;
    button0_down = false;
    button1_down = false;
    button2_down = false;
@@ -61,7 +63,10 @@ void Facade::keyboardDown (const char key, int x, int y)
 void Facade::specialFunc (int key, int x, int y)
 {
    if (key == 114) {
-      ctrl_down = true;
+      control_down = true;
+   }
+   else if (key == 112) {
+      shift_down = true;
    }
 }
 
@@ -71,7 +76,10 @@ void Facade::specialFunc (int key, int x, int y)
 void Facade::specialUpFunc (int key, int x, int y)
 {
    if (key == 114) {
-      ctrl_down = false;
+      control_down = false;
+   }
+   else if (key == 112) {
+      shift_down = false;
    }
 }
 
@@ -90,7 +98,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
-   if (button == 0 && state == 0 && ctrl_down == false)
+   if (button == 0 && state == 0 && shift_down == false)
    {
       float window[2];
       window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
@@ -132,7 +140,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
       society.set_destination (destination);
    }
 
-   else if (button == 3 && ctrl_down == true) {
+   else if (button == 3 && shift_down == true) {
       if (transform[0] <= 10.0f && transform[3] <= 10.0f) {
          transform[0] *= 1.1f;
          transform[1] *= 1.1f;
@@ -141,7 +149,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
       }
    }
 
-   else if (button == 4 && ctrl_down == true) {
+   else if (button == 4 && shift_down == true) {
       if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
          transform[0] *= 0.9f;
          transform[1] *= 0.9f;
@@ -150,11 +158,11 @@ void Facade::mouseClick (int button, int state, int x, int y)
       }
    }
 
-   else if (button == 3 && ctrl_down == false) {
+   else if (button == 3 && shift_down == false) {
       if (map_layer > 0) map_layer--;
    }
 
-   else if (button == 4 && ctrl_down == false) {
+   else if (button == 4 && shift_down == false) {
 
       int dim[3];
       society.access_map (&dim[0], &dim[1], &dim[2]);
@@ -209,7 +217,7 @@ void Facade::mouseMotion (int x, int y)
       -invDet * transform[2],  invDet * transform[0] };
 
    // Activate and define the selection box
-   if (ctrl_down == false && button2_down == true)
+   if (shift_down == false && button2_down == true)
    {
       if (selection_active == false) {
          selection_box[0] = fx * inv_transform[0] + fy * inv_transform[1];
@@ -220,17 +228,19 @@ void Facade::mouseMotion (int x, int y)
       selection_box[3] = fx * inv_transform[2] + fy * inv_transform[3];
 
       selection_active = true;
+
+      society.select_units (selection_box, map_layer, control_down);
    }
 
    // Adjust the translation of the world
-   if (ctrl_down == true && button0_down == true)
+   if (shift_down == true && button0_down == true)
    {
       translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
       translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
    }
 
    // Adjust the rotation of the world
-   if (ctrl_down == true && button1_down == true)
+   if (shift_down == true && button1_down == true)
    {
       float norm_f2   = fx * fx + fy * fy;
       float norm_d2   = delta[0] * delta[0] + delta[1] * delta[1];
@@ -261,7 +271,7 @@ void Facade::mouseMotion (int x, int y)
       transform[3] = temp[3];
    }
 
-   if (ctrl_down == true && button2_down == true)
+   if (shift_down == true && button2_down == true)
    {
       float inv_norm_f = 1.0f / sqrtf (fx * fx + fy * fy);
 
@@ -283,6 +293,7 @@ Facade::~Facade (void)
    delete[] unit_positions_x;
    delete[] unit_positions_y;
    delete[] unit_positions_z;
+   delete[] unit_selections;
 }
 
 /*
@@ -320,10 +331,11 @@ void Facade::display (void)
    const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
    int map_dims[3] = { dim_x, dim_y, dim_z };
 
-   int num_units = society.get_unit_positions (
+   int num_units = society.get_unit_info (
          unit_positions_x,
          unit_positions_y,
-         unit_positions_z);
+         unit_positions_z,
+         unit_selections);
 
    if (selection_active == true)
    {
@@ -339,6 +351,7 @@ void Facade::display (void)
          unit_positions_x,
          unit_positions_y,
          unit_positions_z,
+         unit_selections,
          map_dims,
          num_units,
          map_layer);
