@@ -1,3 +1,4 @@
+#include "pathfinding.h"
 #include <iostream>
 #include <cmath>
 #include <cfloat>
@@ -37,7 +38,7 @@ static inline int ind_to_axis (int index, int *dim, int size, int select_axis_in
    return (index / denomitator) % dim[select_axis_ind];
 }
 
-static int cost_function_one_step (
+int cost_function_one_step (
       const float *nodes,
       float       *cost,
       int          dim[3],
@@ -50,16 +51,24 @@ static int cost_function_one_step (
    int K = dim[2];
 
 #ifdef USE_GENERAL
-   // Generalized for any discrete space
+
+   // Generalized for any discrete space.
+   // This approach simply selects the next available cell.
+
    int best_index = path_cost_ind[--path_cost_ind_size];
+
 #elif defined(USE_EUCLIDEAN)
-   // Specific to the Euclidean metric space. Find the index that is the closest
-   // in distance to the objective (ignoring obstacles)
+
+   // Specific to the Euclidean metric space. Find the next valid index
+   // that is the closest in distance to the objective (ignoring obstacles).
+   // This approach biases its selection to the next available cell that is
+   // closest to the objective in the standard metric space
    int best_cost_index = 0;
-   int best_index = path_cost_ind[best_cost_index];
+   int best_index = path_cost_ind[0];
 
    int min_dist = INT32_MAX;
-   for (int ind = 0; ind < path_cost_ind_size; ind++) {
+   for (int ind = 0; ind < path_cost_ind_size; ind++)
+   {
       int i = ind_to_i (path_cost_ind[ind], I, J, K);
       int j = ind_to_j (path_cost_ind[ind], I, J, K);
       int k = ind_to_k (path_cost_ind[ind], I, J, K);
@@ -69,7 +78,8 @@ static int cost_function_one_step (
             (j - end[1]) * (j - end[1]) +
             (i - end[0]) * (i - end[0]));
 
-      if (dist < min_dist) {
+      if (dist < min_dist)
+      {
          best_index = path_cost_ind[ind];
          best_cost_index = ind;
          min_dist = dist;
@@ -189,10 +199,13 @@ bool cost_function (
 
    cost[index] = 0.0f;
 
+   // Set the "start" index as the starting index
    path_cost_ind[0] = index;
    int path_cost_ind_size = 1;
 
-   // loop; for each path cost index
+   // Build the cost function for all valid spaces available to it
+   // or until the end cell has been reached (implicitly determined
+   // by the subsequent function call via the "path_cost_ind_size")
    while (path_cost_ind_size > 0)
    {
       path_cost_ind_size = cost_function_one_step (
