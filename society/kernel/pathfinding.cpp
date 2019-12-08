@@ -63,6 +63,7 @@ int cost_function_one_step (
    // that is the closest in distance to the objective (ignoring obstacles).
    // This approach biases its selection to the next available cell that is
    // closest to the objective in the standard metric space
+
    int best_cost_index = 0;
    int best_index = path_cost_ind[0];
 
@@ -78,6 +79,7 @@ int cost_function_one_step (
             (j - end[1]) * (j - end[1]) +
             (i - end[0]) * (i - end[0]));
 
+      // Update the best index if it is found
       if (dist < min_dist)
       {
          best_index = path_cost_ind[ind];
@@ -86,6 +88,7 @@ int cost_function_one_step (
       }
    }
 
+   // Remove the best-cost index from the list
    for (int sub_ind = best_cost_index; sub_ind < path_cost_ind_size - 1; sub_ind++) {
       path_cost_ind[sub_ind] = path_cost_ind[sub_ind + 1];
    }
