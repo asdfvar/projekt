@@ -276,7 +276,6 @@ void draw_units (
          }
       }
    }
-std::cout << std::endl;
 }
 
 void draw_selection_box (

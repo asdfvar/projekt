@@ -216,27 +216,30 @@ void Facade::mouseMotion (int x, int y)
    const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
       -invDet * transform[2],  invDet * transform[0] };
 
-   // Activate and define the selection box
-   if (shift_down == false && button2_down == true)
-   {
-      if (selection_active == false) {
-         selection_box[0] = fx * inv_transform[0] + fy * inv_transform[1];
-         selection_box[1] = fx * inv_transform[2] + fy * inv_transform[3];
-      }
-
-      selection_box[2] = fx * inv_transform[0] + fy * inv_transform[1];
-      selection_box[3] = fx * inv_transform[2] + fy * inv_transform[3];
-
-      selection_active = true;
-
-      society.select_units (selection_box, map_layer, control_down);
-   }
-
    // Adjust the translation of the world
    if (shift_down == true && button0_down == true)
    {
       translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
       translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
+   }
+
+   // Activate and define the selection box
+   if (shift_down == false && button2_down == true)
+   {
+      float fxt = fx - translation[0];
+      float fyt = fy - translation[1];
+
+      if (selection_active == false) {
+         selection_box[0] = fxt * inv_transform[0] + fyt * inv_transform[1];
+         selection_box[1] = fxt * inv_transform[2] + fyt * inv_transform[3];
+      }
+
+      selection_box[2] = fxt * inv_transform[0] + fyt * inv_transform[1];
+      selection_box[3] = fxt * inv_transform[2] + fyt * inv_transform[3];
+
+      selection_active = true;
+
+      society.select_units (selection_box, map_layer, control_down);
    }
 
    // Adjust the rotation of the world
