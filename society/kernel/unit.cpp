@@ -91,30 +91,34 @@ void Unit::update (
 
    int num_units = all_units.size();
 
-   int *other_unit_dest[3];
-   other_unit_dest[0] = scratch + 0 * (num_units - 1);
-   other_unit_dest[1] = scratch + 1 * (num_units - 1);
-   other_unit_dest[2] = scratch + 2 * (num_units - 1);
-
-   int unit_it = 0;
-   for (std::vector<Unit*>::iterator other_unit = all_units.begin();
-         other_unit != all_units.end();
-         other_unit++)
-   {
-      if (*other_unit == this) continue;
-
-      int local_location[3];
-      (*other_unit)->get_destination (local_location);
-
-      other_unit_dest[0][unit_it] = local_location[0];
-      other_unit_dest[1][unit_it] = local_location[1];
-      other_unit_dest[2][unit_it] = local_location[2];
-
-      unit_it++;
-   }
-
    if (update_path)
    {
+      // Create the list of destinations determined by other units
+      int *other_unit_dest[3];
+      other_unit_dest[0] = scratch + 0 * (num_units - 1);
+      other_unit_dest[1] = scratch + 1 * (num_units - 1);
+      other_unit_dest[2] = scratch + 2 * (num_units - 1);
+
+      int unit_it = 0;
+      for (std::vector<Unit*>::iterator other_unit = all_units.begin();
+            other_unit != all_units.end();
+            other_unit++)
+      {
+         if (*other_unit == this) continue;
+
+         int local_location[3];
+         (*other_unit)->get_destination (local_location);
+
+         other_unit_dest[0][unit_it] = local_location[0];
+         other_unit_dest[1][unit_it] = local_location[1];
+         other_unit_dest[2][unit_it] = local_location[2];
+
+         unit_it++;
+      }
+
+      // TODO: gradually update the cost function until a destination is found
+      // TODO: maybe do this in society rather than unit
+
       int local_dest[3];
       bool conflicts = true;
 

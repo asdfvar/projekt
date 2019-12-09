@@ -95,6 +95,8 @@ int cost_function_one_step (
    path_cost_ind_size--;
 #endif
 
+   // For each neighboring cell, update the cost function and append to the list
+   // of available cell Indices for the path cost index list
    int sub_i = ind_to_i (best_index, I, J, K);
    int sub_j = ind_to_j (best_index, I, J, K);
    int sub_k = ind_to_k (best_index, I, J, K);
