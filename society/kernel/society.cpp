@@ -192,12 +192,9 @@ void Society::update (float time_step)
 
       (*unit)->set_destination (dest);
 
-      this_unit_num++;
-   }
-
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
-   {
       (*unit)->update (units, time_step);
+
+      this_unit_num++;
    }
 }
 
