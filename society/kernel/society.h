@@ -37,6 +37,8 @@ class Society
       float *cost;
       float *buffer;
 
+      int *scratch;
+
       std::vector<Unit*> units;
 };
 

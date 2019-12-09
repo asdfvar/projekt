@@ -40,11 +40,17 @@ Society::Society (void)
       }
    }
 
+   scratch = new int[4096];
+   cost    = new float[dim_x * dim_y * dim_z];
+   buffer  = new float[dim_x * dim_y * dim_z];
 }
 
 Society::~Society (void)
 {
-   delete Map;
+   delete   Map;
+   delete[] scratch;
+   delete[] cost;
+   delete[] buffer;
 }
 
 void Society::set_destination (int destination[3])
@@ -57,15 +63,141 @@ void Society::set_destination (int destination[3])
    dim[1] = Map->map_dim (1);
    dim[2] = Map->map_dim (2);
 
-   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++) {
-      (*it)->set_destination (destination);
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++) {
+      (*unit)->set_destination (destination);
    }
 }
 
 void Society::update (float time_step)
 {
-   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++) {
-      (*it)->update (units, time_step);
+   int num_units = units.size();
+
+   // Create the list of destinations determined by other units
+   int *unit_dests[3];
+   unit_dests[0] = scratch + 0 * num_units;
+   unit_dests[1] = scratch + 1 * num_units;
+   unit_dests[2] = scratch + 2 * num_units;
+
+   int this_unit_num = 0;
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   {
+
+      int unit_num = 0;
+      for (std::vector<Unit*>::iterator l_unit = units.begin();
+            l_unit != units.end();
+            l_unit++)
+      {
+         int local_location[3];
+         (*l_unit)->get_destination (local_location);
+
+         unit_dests[0][unit_num] = local_location[0];
+         unit_dests[1][unit_num] = local_location[1];
+         unit_dests[2][unit_num] = local_location[2];
+
+         unit_num++;
+      }
+
+      // TODO: gradually update the cost function until a destination is found
+
+      int local_dest[3];
+      bool conflicts = true;
+
+      int dim[3];
+
+      dim[0] = Map->map_dim (0);
+      dim[1] = Map->map_dim (1);
+      dim[2] = Map->map_dim (2);
+
+      int min_dist = dim[0] * dim[1] + dim[2] + 1;
+
+      const float *map = Map->access_map ();
+
+      int final_dest[3];
+
+      int dest[3];
+      (*unit)->get_destination (dest);
+
+      // Identify if the select destination is available. Otherwise, find one that is
+      for (int radius = 0; conflicts; radius++)
+      {
+         int cell[3];
+         for (cell[2] = dest[2] - radius; cell[2] <= dest[2] + radius; cell[2]++) {
+
+            if (cell[2] < 0) continue;
+            for (cell[1] = dest[1] - radius; cell[1] <= dest[1] + radius; cell[1]++) {
+
+               if (cell[1] < 0) continue;
+               for (cell[0] = dest[0] - radius; cell[0] <= dest[0] + radius; cell[0]++) {
+
+                  if (cell[0] < 0) continue;
+
+                  int map_ind =
+                     cell[2] * dim[0] * dim[1] +
+                     cell[1] * dim[0]          +
+                     cell[0];
+
+                  if (map[map_ind] < 0.0f) continue;
+
+                  conflicts = false;
+
+                  // test if the select cell is already set as a destination for another unit
+                  for (unit_num = 0; unit_num < num_units; unit_num++)
+                  {
+                     if (unit_num == this_unit_num) continue;
+
+                     if ( (unit_dests[0][unit_num] == cell[0] &&
+                              unit_dests[1][unit_num] == cell[1] &&
+                              unit_dests[2][unit_num] == cell[2]))
+                     {
+                        conflicts = true;
+                        break;
+                     }
+                  }
+
+                  if (conflicts) continue;
+
+                  bool solution_found = cost_function (
+                        map,
+                        cost,
+                        dim,
+                        dest,
+                        cell,
+                        buffer);
+
+                  int *path = (int*)buffer;
+
+                  int path_size = pathfinding (
+                        cost,
+                        dim,
+                        cell,
+                        dest,
+                        path);
+
+                  if (path_size < min_dist) {
+
+                     final_dest[0] = cell[0];
+                     final_dest[1] = cell[1];
+                     final_dest[2] = cell[2];
+
+                     min_dist = path_size;
+                  }
+               }
+            }
+         }
+      }
+
+      dest[0] = final_dest[0];
+      dest[1] = final_dest[1];
+      dest[2] = final_dest[2];
+
+      (*unit)->set_destination (dest);
+
+      this_unit_num++;
+   }
+
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   {
+      (*unit)->update (units, time_step);
    }
 }
 
@@ -80,11 +212,11 @@ const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out
 int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
 {
    int ind = 0;
-   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++, ind++) {
-      x[ind] = (*it)->get_position_x();
-      y[ind] = (*it)->get_position_y();
-      z[ind] = (*it)->get_position_z();
-      selected[ind] = (*it)->get_selected();
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++, ind++) {
+      x[ind] = (*unit)->get_position_x();
+      y[ind] = (*unit)->get_position_y();
+      z[ind] = (*unit)->get_position_z();
+      selected[ind] = (*unit)->get_selected();
    }
 
    return ind;
@@ -93,17 +225,17 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
 {
    if (control_down == false)
    {
-      for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++)
+      for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
       {
-         (*it)->unselect();
+         (*unit)->unselect();
       }
    }
 
-   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++)
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
-      float x = (*it)->get_position_x();
-      float y = (*it)->get_position_y();
-      float z = (*it)->get_position_z();
+      float x = (*unit)->get_position_x();
+      float y = (*unit)->get_position_y();
+      float z = (*unit)->get_position_z();
 
       if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
 
@@ -128,19 +260,19 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
       if (x >= min_x && x <= max_x &&
           y >= min_y && y <= max_y)
       {
-         (*it)->select();
+         (*unit)->select();
       }
    }
 }
 
 void Society::select_all (void)
 {
-   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++)
-      (*it)->select();
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+      (*unit)->select();
 }
 
 void Society::unselect_all (void)
 {
-   for (std::vector<Unit*>::iterator it = units.begin(); it != units.end(); it++)
-      (*it)->unselect();
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+      (*unit)->unselect();
 }
