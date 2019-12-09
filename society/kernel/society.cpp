@@ -68,6 +68,7 @@ void Society::set_destination (int destination[3])
    }
 }
 
+// TODO: check timing. What is causing the slow down?
 void Society::update (float time_step)
 {
    int num_units = units.size();
@@ -77,6 +78,8 @@ void Society::update (float time_step)
    unit_dests[0] = scratch + 0 * num_units;
    unit_dests[1] = scratch + 1 * num_units;
    unit_dests[2] = scratch + 2 * num_units;
+
+   // TODO: modify the path-finding algorithms with the appropriate functionality so that the destination can be set uniquely for each unit
 
    int this_unit_num = 0;
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
@@ -96,8 +99,6 @@ void Society::update (float time_step)
 
          unit_num++;
       }
-
-      // TODO: gradually update the cost function until a destination is found
 
       int local_dest[3];
       bool conflicts = true;
@@ -124,12 +125,21 @@ void Society::update (float time_step)
          for (cell[2] = dest[2] - radius; cell[2] <= dest[2] + radius; cell[2]++) {
 
             if (cell[2] < 0) continue;
+
             for (cell[1] = dest[1] - radius; cell[1] <= dest[1] + radius; cell[1]++) {
 
                if (cell[1] < 0) continue;
+
                for (cell[0] = dest[0] - radius; cell[0] <= dest[0] + radius; cell[0]++) {
 
                   if (cell[0] < 0) continue;
+
+                  if (cell[0] > dest[0] - radius && cell[0] < dest[0] + radius &&
+                        cell[1] > dest[1] - radius && cell[1] < dest[1] + radius &&
+                        cell[2] > dest[2] - radius && cell[2] < dest[2] + radius)
+                  {
+                     continue;
+                  }
 
                   int map_ind =
                      cell[2] * dim[0] * dim[1] +

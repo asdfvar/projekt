@@ -74,7 +74,6 @@ void Unit::update (
       std::vector<Unit*> &all_units,
       float time_step)
 {
-
    int start[3];
 
    start[0] = (int)position_x;
