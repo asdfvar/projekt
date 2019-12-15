@@ -90,7 +90,9 @@ void Unit::update (
 
    if (update_path)
    {
-      // Find the path to the destination
+      // Find the path to the destination.
+      // The cost function is produced with the destination
+      // as the start index for the purpose of descending to the destination
       bool solution_found = cost_function (
             map,
             cost,

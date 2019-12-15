@@ -17,6 +17,15 @@ bool cost_function (
       int          dst[3],
       float       *buffer);
 
+bool cost_function2 (
+      const float *nodes,
+      float       *cost,
+      int         *cost_indices,
+      int          dim[3],
+      int          start[3],
+      int          num_cells,
+      float       *buffer);
+
 int pathfinding (
       float *cost,
       int    dim[3],

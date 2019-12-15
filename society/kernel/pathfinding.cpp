@@ -179,6 +179,7 @@ int cost_function_one_step (
    return path_cost_ind_size;
 }
 
+// Produce the cost function until the destination is met
 bool cost_function (
       const float *nodes,
       float       *cost,
@@ -187,11 +188,11 @@ bool cost_function (
       int          end[3],
       float       *buffer)
 {
-   int dim_prod = dim[0] * dim[1] * dim[2];
+   const int dim_prod = dim[0] * dim[1] * dim[2];
 
-   int I = dim[0];
-   int J = dim[1];
-   int K = dim[2];
+   const int I = dim[0];
+   const int J = dim[1];
+   const int K = dim[2];
 
    for (int ind = 0; ind < dim_prod; ind++) cost[ind] = FLT_MAX;
 
@@ -233,11 +234,11 @@ int pathfinding (
       int *path)
 {
 
-   int I = dim[0];
-   int J = dim[1];
-   int K = dim[2];
+   const int I = dim[0];
+   const int J = dim[1];
+   const int K = dim[2];
 
-   int dim_prod = I * J * K;
+   const int dim_prod = I * J * K;
 
    int current_step = ijk_to_ind (src[0], src[1], src[2], I, J, K);
 
@@ -302,4 +303,135 @@ int pathfinding (
    }
 
    return path_size;
+}
+
+// Produce the cost function for the number of cells requested
+bool cost_function2 (
+      const float *nodes,
+      float       *cost,
+      int         *cost_indices,
+      int          dim[3],
+      int          start[3],
+      int          num_cells,
+      float       *buffer)
+{
+   const int dim_prod = dim[0] * dim[1] * dim[2];
+
+   const int I = dim[0];
+   const int J = dim[1];
+   const int K = dim[2];
+
+   for (int ind = 0; ind < dim_prod; ind++) cost[ind] = FLT_MAX;
+
+   // list of indices of path cost to compute the path cost
+   int *path_cost_ind = (int*)(buffer);
+
+   // Initialize the cost to zero at the starting index
+   int index;
+   index = ijk_to_ind (start[0], start[1], start[2], dim[0], dim[1], dim[2]);
+   cost[index] = 0.0f;
+
+   // Set the "start" index as the starting index.
+   // The path-cost index list contains all cells on the perimeter of the
+   // cost function that potentially have new cells adjacent to it
+   path_cost_ind[0] = index;
+   int path_cost_ind_size = 1;
+
+   cost_indices[0] = index;
+
+   int filled_cells = 1;
+
+   // Build the cost function
+   while (filled_cells < num_cells && path_cost_ind_size > 0)
+   {
+      // Generalized for any discrete space.
+      // This approach simply selects the next available cell.
+      int best_index = path_cost_ind[--path_cost_ind_size];
+
+      // For each neighboring cell, update the cost function and append to the list
+      // of available cell Indices for the path cost index list
+      int sub_i = ind_to_i (best_index, I, J, K);
+      int sub_j = ind_to_j (best_index, I, J, K);
+      int sub_k = ind_to_k (best_index, I, J, K);
+
+      for (int k = sub_k - 1; k <= sub_k + 1; k++)
+      {
+         if (filled_cells >= num_cells) break;
+         if (k < 0 || k >= K) continue;
+
+         for (int j = sub_j - 1; j <= sub_j + 1; j++)
+         {
+            if (filled_cells >= num_cells) break;
+            if (j < 0 || j >= J) continue;
+
+            for (int i = sub_i - 1; i <= sub_i + 1; i++)
+            {
+               if (filled_cells >= num_cells) break;
+               if (i < 0 || i >= I) continue;
+
+               int local_index = ijk_to_ind (i, j, k, I, J, K);
+
+               if (nodes[local_index] < 0.0f) {
+                  cost[local_index] = -1.0f;
+                  continue;
+               }
+
+               // Logic to ignore diagonals if corresponding adjacent
+               // cells are blocked
+               if (i == sub_i - 1 && j == sub_j - 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
+                        nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i + 1 && j == sub_j + 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
+                        nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i + 1 && j == sub_j - 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
+                        nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               if (i == sub_i - 1 && j == sub_j + 1) {
+                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
+                        nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               }
+
+               // The cost for the new cell is determined as follows:
+               // cost_{new\_cell} = cost_{old_cell} + distance + node_{new\_cell}
+               float local_cost = cost[best_index];
+
+               /*
+                ** sqrtf((float)((k - sub_k) * (k - sub_k) +
+                **       (j - sub_j) * (j - sub_j) +
+                **       (i - sub_i) * (i - sub_i)));
+                */
+               int i_dist = (i > sub_i) || (sub_i > i) ? 1 : 0;
+               int j_dist = (j > sub_j) || (sub_j > j) ? 1 : 0;
+               int k_dist = (k > sub_k) || (sub_k > k) ? 1 : 0;
+
+               local_cost +=
+                  i_dist && j_dist && k_dist ? 1.732050807569f :
+                  j_dist && k_dist || i_dist && j_dist || i_dist && k_dist ? 1.414213562373f :
+                  i_dist || j_dist || k_dist ? 1.0f :
+                  0.0f;
+
+               local_cost += nodes[local_index];
+
+               if (local_cost < cost[local_index])
+               {
+                  if (cost[local_index] == FLT_MAX) cost_indices[filled_cells++] = local_index;
+
+                  cost[local_index] = local_cost;
+                  path_cost_ind[path_cost_ind_size++] = local_index;
+               }
+            }
+         }
+      }
+   }
+
+   std::cout << "path_cost_ind_size = " << path_cost_ind_size << std::endl;
+
+   return true;
 }

@@ -166,6 +166,8 @@ void Society::update (float time_step)
 
                   if (conflicts) continue;
 
+                  // the cost function is produced with the destination
+                  // as the start index for the purpose of descending to the destination
                   bool solution_found = cost_function (
                         map,
                         cost,
