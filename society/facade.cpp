@@ -327,10 +327,10 @@ void Facade::idle (void)
                    (start.tv_sec * 1000000 + start.tv_usec)) / 1000000.0;
    } while (time_taken < time_step);
 
+   gettimeofday (&start, NULL);
+
    // Update society at this time step
    society.update (time_step);
-
-   gettimeofday (&start, NULL);
 
    glutPostRedisplay ();
 }

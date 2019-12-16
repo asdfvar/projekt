@@ -1,6 +1,7 @@
 #include <iostream>
 #include "map.h"
 #include "unit.h"
+#include "timer.h"
 #include <cmath>
 #include "pathfinding.h"
 
@@ -11,7 +12,6 @@ Unit::Unit (
       MAP *Map_in) :
    position_x (position_x_in), position_y (position_y_in), position_z (position_z_in)
 {
-   speed     = 0.0f;
    direction = 0.0f;
 
    Map = Map_in;
@@ -30,6 +30,7 @@ Unit::Unit (
    selected    = false;
 
    max_speed = 40.0f;
+   speed     = max_speed;
 }
 
 Unit::~Unit (void)
@@ -61,6 +62,8 @@ void Unit::set_destination (int dest_in[3])
    dest[0] = dest_in[0],
    dest[1] = dest_in[1],
    dest[2] = dest_in[2];
+
+   update_path = true;
 };
 
 void Unit::get_destination (int *dest_out)
@@ -74,6 +77,8 @@ void Unit::update (
       std::vector<Unit*> &all_units,
       float time_step)
 {
+   long start0 = startTime ();
+
    int start[3];
 
    start[0] = (int)position_x;
@@ -117,6 +122,8 @@ void Unit::update (
       update_path = false;
       speed = max_speed;
    }
+   float elapsed0 = endTime (start0);
+   long start1 = startTime ();
 
    float local_dest[3];
 
@@ -139,6 +146,9 @@ void Unit::update (
       (position_y - local_dest[1]) * (position_y - local_dest[1]) +
       (position_z - local_dest[2]) * (position_z - local_dest[2]);
 
+   float elapsed1 = endTime (start1);
+   long start2 = startTime ();
+
    // set the position to the local destination if the projection would otherwise
    // surpass it. Then signal to update the path
    float comp_dist = speed * time_step;
@@ -147,9 +157,12 @@ void Unit::update (
       position_x = local_dest[0];
       position_y = local_dest[1];
       position_z = local_dest[2];
-      
-      speed = max_speed;
-      update_path = true;
+
+      if (start[0] != dest[0] || start[1] != dest[1] || start[2] != dest[2])
+      {
+         speed = max_speed;
+         update_path = true;
+      }
       return;
    }
 
@@ -274,6 +287,7 @@ void Unit::update (
          speed = 0.0f;
       }
    }
+   float elapsed2 = endTime (start2);
 
    // TODO: position_z update
 }

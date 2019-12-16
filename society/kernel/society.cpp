@@ -1,6 +1,7 @@
 #include "map.h"
 #include "society.h"
 #include "pathfinding.h"
+#include "timer.h"
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
@@ -100,13 +101,16 @@ void Society::set_destination (int destination[3])
    }
 }
 
-// TODO: check timing. What is causing the slow down?
 void Society::update (float time_step)
 {
+   long start = startTime ();
+
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
       (*unit)->update (units, time_step);
    }
+
+   float elapsed = endTime (start);
 }
 
 const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out)
