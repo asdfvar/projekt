@@ -413,7 +413,5 @@ bool cost_function2 (
       }
    }
 
-   std::cout << "path_cost_ind_size = " << path_cost_ind_size << std::endl;
-
    return true;
 }

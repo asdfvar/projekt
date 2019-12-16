@@ -67,18 +67,27 @@ void Society::set_destination (int destination[3])
 
    int *cost_indices = scratch;
 
+   int num_selected = 0;
+
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   {
+      if ((*unit)->is_selected()) num_selected++;
+   }
+
    cost_function2 (
          map,
          cost,
          cost_indices,
          dim,
          destination,
-         units.size(),
+         num_selected,
          buffer);
 
    int ind = 0;
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
+      if ((*unit)->is_selected() == false) continue;
+
       int dest_ind = cost_indices[ind++];
 
       int dest[3];
@@ -115,7 +124,7 @@ int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
       x[ind] = (*unit)->get_position_x();
       y[ind] = (*unit)->get_position_y();
       z[ind] = (*unit)->get_position_z();
-      selected[ind] = (*unit)->get_selected();
+      selected[ind] = (*unit)->is_selected();
    }
 
    return ind;

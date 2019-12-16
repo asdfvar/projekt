@@ -28,7 +28,7 @@ class Unit {
       void unselect (void) { selected = false; };
       void select (void)   { selected = true;  };
 
-      bool get_selected (void) { return selected; };
+      bool is_selected (void) { return selected; };
 
       void update (
             std::vector<Unit*> &all_units,
