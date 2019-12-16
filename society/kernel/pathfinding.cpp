@@ -12,24 +12,6 @@ static inline int ijk_to_ind (int i, int j, int k, int I, int J, int K)
    return ind;
 }
 
-static inline int ind_to_i (int ind, int I, int J, int K)
-{
-   int i = ind % I;
-   return i;
-}
-
-static inline int ind_to_j (int ind, int I, int J, int K)
-{
-   int j = (ind / I) % J;
-   return j;
-}
-
-static inline int ind_to_k (int ind, int I, int J, int K)
-{
-   int k = ind / (I * J);
-   return k;
-}
-
 static inline int ind_to_axis (int index, int *dim, int size, int select_axis_ind)
 {
    int denomitator = 1;

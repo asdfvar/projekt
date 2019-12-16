@@ -1,6 +1,25 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 
+inline int ind_to_i (int ind, int I, int J, int K)
+{
+   int i = ind % I;
+   return i;
+}
+
+inline int ind_to_j (int ind, int I, int J, int K)
+{
+   int j = (ind / I) % J;
+   return j;
+}
+
+inline int ind_to_k (int ind, int I, int J, int K)
+{
+   int k = ind / (I * J);
+   return k;
+}
+
+
 int cost_function_one_step (
       const float *nodes,
       float       *cost,
