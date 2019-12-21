@@ -326,9 +326,30 @@ bool cost_function2 (
    // Build the cost function
    while (filled_cells < num_cells && path_cost_ind_size > 0)
    {
-      // Generalized for any discrete space.
-      // This approach simply selects the next available cell.
-      int best_index = path_cost_ind[--path_cost_ind_size];
+      // pick the path-cost index closest to start
+      int min_dist = 999999;
+      int select_ind = 0;
+      for (int ind = 0; ind < path_cost_ind_size; ind++)
+      {
+         int i = ind_to_i (path_cost_ind[ind], I, J, K);
+         int j = ind_to_j (path_cost_ind[ind], I, J, K);
+         int k = ind_to_k (path_cost_ind[ind], I, J, K);
+
+         int dist =
+            (i - start[0]) * (i - start[0]) +
+            (j - start[1]) * (j - start[1]) +
+            (k - start[2]) * (k - start[2]);
+
+         if (dist < min_dist) {
+            min_dist = dist;
+            select_ind = ind;
+         }
+      }
+
+      // pop off this index from the list
+      int best_index = path_cost_ind[select_ind];
+      path_cost_ind_size--;
+      for (int ind = select_ind; ind < path_cost_ind_size; ind++) path_cost_ind[ind] = path_cost_ind[ind + 1];
 
       // For each neighboring cell, update the cost function and append to the list
       // of available cell Indices for the path cost index list
