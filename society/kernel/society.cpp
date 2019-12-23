@@ -68,12 +68,7 @@ void Society::set_destination (int destination[3])
 
    int *cost_indices = scratch;
 
-   int num_selected = 0;
-
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
-   {
-      if ((*unit)->is_selected()) num_selected++;
-   }
+   int num_units = units.size();
 
    cost_function2 (
          map,
@@ -81,13 +76,31 @@ void Society::set_destination (int destination[3])
          cost_indices,
          dim,
          destination,
-         num_selected,
+         num_units,
          buffer);
+
+   int *unit_dest_x = (int*)buffer;
+   int *unit_dest_y = unit_dest_x + num_units;
+   int *unit_dest_z = unit_dest_y + num_units;
 
    int ind = 0;
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
-      if ((*unit)->is_selected() == false) continue;
+      int unit_dest[3];
+
+      (*unit)->get_destination (unit_dest);
+
+      unit_dest_x[ind] = unit_dest[0];
+      unit_dest_y[ind] = unit_dest[1];
+      unit_dest_z[ind] = unit_dest[2];
+
+      ind++;
+   }
+
+   ind = 0;
+   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   {
+      if (!(*unit)->is_selected()) continue;
 
       int dest_ind = cost_indices[ind++];
 
@@ -96,6 +109,22 @@ void Society::set_destination (int destination[3])
       dest[0] = ind_to_i (dest_ind, dim[0], dim[1], dim[2]);
       dest[1] = ind_to_j (dest_ind, dim[0], dim[1], dim[2]);
       dest[2] = ind_to_k (dest_ind, dim[0], dim[1], dim[2]);
+
+      bool found = true;
+      for (int unit_ind = 0; unit_ind < num_units; unit_ind++)
+      {
+         if (
+               dest[0] == unit_dest_x[unit_ind] &&
+               dest[1] == unit_dest_y[unit_ind] &&
+               dest[2] == unit_dest_z[unit_ind]
+            )
+         {
+            found = false;
+            break;
+         }
+      }
+
+      if (found == false) continue;
 
       (*unit)->set_destination (dest);
    }

@@ -98,8 +98,6 @@ void Facade::specialUpFunc (int key, int x, int y)
 
 void Facade::mouseClick (int button, int state, int x, int y)
 {
-   std::cout << "MOUSE CLICK " << button << std::endl;
-
    if (button == 0 && state == 0) button0_down = true;
    if (button == 1 && state == 0) button1_down = true;
    if (button == 2 && state == 0) button2_down = true;
