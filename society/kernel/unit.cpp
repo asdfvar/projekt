@@ -101,7 +101,6 @@ void Unit::update (
 
    if (update_path)
    {
-std::cout << "update path" << std::endl;
       // Find the path to the destination.
       // The cost function is produced with the destination
       // as the start index for the purpose of descending to the destination
@@ -148,7 +147,7 @@ std::cout << "update path" << std::endl;
 
    // Condition check if the unit is in the local destination cell,
    // set the local destination to the center of the cell
-   if (start[0] == dest[0] && start[1] == dest[1] && start[2] == dest[2])
+   if (path_size == 0)
    {
       local_dest[0] = (float)dest[0] + 0.5f;
       local_dest[1] = (float)dest[1] + 0.5f;
@@ -184,13 +183,20 @@ std::cout << "update path" << std::endl;
       for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
 
       if (path_size > 0) path_size--;
-//      else update_path = true;
 
-      return;
+      // adjust time step to the remaining time
+      time_step -= sqrtf (dist2) / speed;
+
+      if (path_size <= 0) return;
+
+      local_dest[0] = (float)next_cell[0] + 0.5f;
+      local_dest[1] = (float)next_cell[1] + 0.5f;
+      local_dest[2] = (float)next_cell[2] + 0.5f;
    }
 
    float step[3];
 
+   // determine the position based on speed and direction
    if (local_dest[0] > position_x) {
       if (local_dest[1] > position_y) {
          float costh = 0.7071068f;
