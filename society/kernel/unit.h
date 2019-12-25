@@ -49,7 +49,6 @@ class Unit {
       float speed;
       float direction;
 
-      bool update_path;
       int  next_cell[3];
       bool selected;
 

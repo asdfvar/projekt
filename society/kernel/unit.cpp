@@ -30,7 +30,6 @@ Unit::Unit (
    dest[1] = position[1];
    dest[2] = position[2];
 
-   update_path = false;
    selected    = false;
 
    path_size = 0;
@@ -66,11 +65,48 @@ void Unit::set_destination (int dest_in[3])
 
    if (map[ind] < 0.0f) return;
 
+   int start[3];
+
+   start[0] = (int)position[0];
+   start[1] = (int)position[1];
+   start[2] = (int)position[2];
+
+   // Find the path to the destination.
+   // The cost function is produced with the destination
+   // as the start index for the purpose of descending to the destination
+   bool solution_found = cost_function (
+         map,
+         cost,
+         dim,
+         dest_in,
+         start,
+         buffer);
+
+   // Set the destination to the current location if a solution is not found
+   if (!solution_found)
+   {
+      return;
+   }
+
    dest[0] = dest_in[0],
    dest[1] = dest_in[1],
    dest[2] = dest_in[2];
 
-   update_path = true;
+   path_size = pathfinding (
+         cost,
+         dim,
+         start,
+         dest,
+         path);
+
+   next_cell[0] = (path[0] % dim[0]);
+   next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+   next_cell[2] = path[0] / (dim[0] * dim[1]);
+
+   for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
+   if (path_size > 0) path_size--;
+
+   speed = max_speed;
 };
 
 void Unit::get_destination (int *dest_out)
@@ -86,60 +122,11 @@ void Unit::update (
 {
    long start0 = startTime ();
 
-   int start[3];
-
-   start[0] = (int)position[0];
-   start[1] = (int)position[1];
-   start[2] = (int)position[2];
-
    int dim[3];
 
    dim[0] = Map->map_dim (0);
    dim[1] = Map->map_dim (1);
    dim[2] = Map->map_dim (2);
-
-   const float *map = Map->access_map ();
-
-   if (update_path)
-   {
-      // Find the path to the destination.
-      // The cost function is produced with the destination
-      // as the start index for the purpose of descending to the destination
-      bool solution_found = cost_function (
-            map,
-            cost,
-            dim,
-            dest,
-            start,
-            buffer);
-
-      // Set the destination to the current location if a solution is not found
-      if (!solution_found)
-      {
-         dest[0] = start[0];
-         dest[1] = start[1];
-         dest[2] = start[2];
-         update_path = false;
-         return;
-      }
-
-      path_size = pathfinding (
-            cost,
-            dim,
-            start,
-            dest,
-            path);
-
-      next_cell[0] = (path[0] % dim[0]);
-      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-      next_cell[2] = path[0] / (dim[0] * dim[1]);
-
-      for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
-      if (path_size > 0) path_size--;
-
-      update_path = false;
-      speed = max_speed;
-   }
 
    float elapsed0 = endTime (start0);
    long start1 = startTime ();
