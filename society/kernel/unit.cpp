@@ -50,7 +50,7 @@ void Unit::set_destination (int dest_in[3])
 {
    if (selected == false) return;
 
-   const float *map = Map->access_map ();
+   const float *map = Map->access_ground ();
 
    int dim[3];
 

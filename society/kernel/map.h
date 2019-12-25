@@ -10,21 +10,18 @@ class MAP
 
       const float *access_map (void) { return (const float*)map; };
 
-      int map_dim (int dimension)
-      {
-        if (dimension == 0) return dim_x;
-        if (dimension == 1) return dim_y;
-        if (dimension == 2) return dim_z;
-        else return 0;
-      }
+      const float *access_ground (void) { return (const float*)ground; };
+
+      int map_dim (int dim) { return size[dim]; };
 
    private:
 
       float *map;
+      float *ground;
 
-      int dim_x;
-      int dim_y;
-      int dim_z;
+      int size[3];
+
+      void set_ground (void);
 };
 
 #endif
