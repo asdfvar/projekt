@@ -37,6 +37,8 @@ class Unit {
    private:
 
       MAP   *Map;
+      int   *path;
+
       float *cost;
       float *buffer;
       int *scratch;
@@ -54,6 +56,8 @@ class Unit {
       bool update_path;
       int  next_cell[3];
       bool selected;
+
+      int path_size;
 };
 
 #endif

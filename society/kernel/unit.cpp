@@ -21,6 +21,7 @@ Unit::Unit (
    cost    = new float [map_dims[0] * map_dims[1] * map_dims[2]];
    buffer  = new float [map_dims[0] * map_dims[1] * map_dims[2]];
    scratch = new int [map_dims[0] * map_dims[1] * map_dims[2]];
+   path    = new int [map_dims[0] * map_dims[1] * map_dims[2]];
 
    dest[0] = position_x;
    dest[1] = position_y;
@@ -28,6 +29,8 @@ Unit::Unit (
 
    update_path = false;
    selected    = false;
+
+   path_size = 0;
 
    max_speed = 40.0f;
    speed     = max_speed;
@@ -38,6 +41,7 @@ Unit::~Unit (void)
    delete[] cost;
    delete[] buffer;
    delete[] scratch;
+   delete[] path;
 }
 
 void Unit::set_destination (int dest_in[3])
@@ -85,6 +89,8 @@ void Unit::update (
    start[1] = (int)position_y;
    start[2] = (int)position_z;
 
+//std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
+
    int dim[3];
 
    dim[0] = Map->map_dim (0);
@@ -95,6 +101,7 @@ void Unit::update (
 
    if (update_path)
    {
+std::cout << "update path" << std::endl;
       // Find the path to the destination.
       // The cost function is produced with the destination
       // as the start index for the purpose of descending to the destination
@@ -116,9 +123,7 @@ void Unit::update (
          return;
       }
 
-      int *path = (int*)buffer;
-
-      int path_size = pathfinding (
+      path_size = pathfinding (
             cost,
             dim,
             start,
@@ -129,9 +134,13 @@ void Unit::update (
       next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
       next_cell[2] = path[0] / (dim[0] * dim[1]);
 
+      for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
+      if (path_size > 0) path_size--;
+
       update_path = false;
       speed = max_speed;
    }
+
    float elapsed0 = endTime (start0);
    long start1 = startTime ();
 
@@ -160,7 +169,7 @@ void Unit::update (
    long start2 = startTime ();
 
    // set the position to the local destination if the projection would otherwise
-   // surpass it. Then signal to update the path
+   // surpass it
    float comp_dist = speed * time_step;
    if (dist2 <= comp_dist * comp_dist)
    {
@@ -168,11 +177,15 @@ void Unit::update (
       position_y = local_dest[1];
       position_z = local_dest[2];
 
-      if (start[0] != dest[0] || start[1] != dest[1] || start[2] != dest[2])
-      {
-         speed = max_speed;
-         update_path = true;
-      }
+      next_cell[0] = (path[0] % dim[0]);
+      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+      next_cell[2] = path[0] / (dim[0] * dim[1]);
+
+      for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
+
+      if (path_size > 0) path_size--;
+//      else update_path = true;
+
       return;
    }
 
