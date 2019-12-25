@@ -23,8 +23,8 @@ Unit::Unit (
 
    cost    = new float [map_dims[0] * map_dims[1] * map_dims[2]];
    buffer  = new float [map_dims[0] * map_dims[1] * map_dims[2]];
-   scratch = new int [map_dims[0] * map_dims[1] * map_dims[2]];
-   path    = new int [map_dims[0] * map_dims[1] * map_dims[2]];
+   scratch = new int   [map_dims[0] * map_dims[1] * map_dims[2]];
+   path    = new int   [map_dims[0] * map_dims[1] * map_dims[2]];
 
    dest[0] = position[0];
    dest[1] = position[1];
@@ -91,8 +91,6 @@ void Unit::update (
    start[0] = (int)position[0];
    start[1] = (int)position[1];
    start[2] = (int)position[2];
-
-//std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
 
    int dim[3];
 
