@@ -103,7 +103,6 @@ void specialUpFunc(int key, int x, int y)
  **********/
 int main (int argc, char** argv)
 {
-
    int windowsizex = 1000;
    int windowsizey = 600;
 
@@ -145,4 +144,5 @@ int main (int argc, char** argv)
 
    glutMainLoop();
 
+   return 0;
 }

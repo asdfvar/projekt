@@ -136,7 +136,7 @@ void Society::update (float time_step)
 
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
-      (*unit)->update (units, time_step);
+      (*unit)->update (time_step);
    }
 
    float elapsed = endTime (start);

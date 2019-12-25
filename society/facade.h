@@ -43,6 +43,9 @@ class Facade {
       bool button1_down;
       bool button2_down;
 
+      int mouse_wheel_backward_count;
+      int mouse_wheel_forward_count;
+
       int mouse_pos[2];
 
       float selection_box[4];

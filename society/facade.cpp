@@ -36,6 +36,9 @@ Facade::Facade (void)
    button1_down = false;
    button2_down = false;
 
+   mouse_wheel_backward_count = 0;
+   mouse_wheel_forward_count = 0;
+
    mouse_pos[0] = 0;
    mouse_pos[1] = 0;
 
@@ -106,6 +109,8 @@ void Facade::mouseClick (int button, int state, int x, int y)
    if (button == 1 && state == 1) button1_down = false;
    if (button == 2 && state == 1) button2_down = false;
 
+   if (button == 3) mouse_wheel_forward_count++;
+   if (button == 4) mouse_wheel_backward_count++;
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
@@ -151,29 +156,35 @@ void Facade::mouseClick (int button, int state, int x, int y)
       society.set_destination (destination);
    }
 
-   else if (button == 3 && shift_down == true) {
+   else if (mouse_wheel_forward_count >= 2 && shift_down == true) {
       if (transform[0] <= 10.0f && transform[3] <= 10.0f) {
          transform[0] *= 1.1f;
          transform[1] *= 1.1f;
          transform[2] *= 1.1f;
          transform[3] *= 1.1f;
       }
+
+      mouse_wheel_forward_count = 0;
    }
 
-   else if (button == 4 && shift_down == true) {
+   else if (mouse_wheel_backward_count >= 2 && shift_down == true) {
       if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
          transform[0] *= 0.9f;
          transform[1] *= 0.9f;
          transform[2] *= 0.9f;
          transform[3] *= 0.9f;
       }
+
+      mouse_wheel_backward_count = 0;
    }
 
-   else if (button == 3 && shift_down == false) {
+   else if (mouse_wheel_forward_count >= 2 && shift_down == false) {
       if (map_layer > 0) map_layer--;
+
+      mouse_wheel_forward_count = 0;
    }
 
-   else if (button == 4 && shift_down == false) {
+   else if (mouse_wheel_backward_count >= 2 && shift_down == false) {
 
       int dim[3];
       society.access_map (&dim[0], &dim[1], &dim[2]);
@@ -181,8 +192,8 @@ void Facade::mouseClick (int button, int state, int x, int y)
       if (map_layer < dim[2] - 1) {
          map_layer++;
       }
+      mouse_wheel_backward_count = 0;
    }
-
 }
 
 /*

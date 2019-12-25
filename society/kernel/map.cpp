@@ -15,6 +15,8 @@ MAP::MAP (int num_cells[3])
          for (int ind_x = 0; ind_x < dim_x; ind_x++, ind++)
          {
             if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
+            else if (ind_z == 22) map[ind] = 1.0f;
+            else if (ind_x == 0 && ind_y == 0) map[ind] = 1.0f;
             else map[ind] = -1.0f;
          }
       }

@@ -110,9 +110,7 @@ void Unit::get_destination (int *dest_out)
    dest_out[2] = dest[2];
 }
 
-void Unit::update (
-      std::vector<Unit*> &all_units,
-      float time_step)
+void Unit::update (float time_step)
 {
    long start0 = startTime ();
 
@@ -180,7 +178,7 @@ void Unit::update (
 
    float diff_pos[3];
 
-   // update the position
+   // Update the position
 
    diff_pos[0] = local_dest[0] - position[0];
    diff_pos[1] = local_dest[1] - position[1];
@@ -193,7 +191,7 @@ void Unit::update (
 
    theta = atan2f (diff_pos[2], sqrtf (diff_pos[0] * diff_pos[0] + diff_pos[1] * diff_pos[1]));
 
-   position[2] += speed * sinf (theta);
+   position[2] += speed * sinf (theta) * time_step;
 
    float elapsed2 = endTime (start2);
 }

@@ -28,9 +28,7 @@ class Unit {
 
       bool is_selected (void) { return selected; };
 
-      void update (
-            std::vector<Unit*> &all_units,
-            float time_step);
+      void update (float time_step);
 
    private:
 
