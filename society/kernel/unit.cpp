@@ -26,7 +26,7 @@ Unit::Unit (
    dest[1] = position_y;
    dest[2] = position_z;
 
-   update_path = true;
+   update_path = false;
    selected    = false;
 
    max_speed = 40.0f;
@@ -105,6 +105,16 @@ void Unit::update (
             dest,
             start,
             buffer);
+
+      // Set the destination to the current location if a solution is not found
+      if (!solution_found)
+      {
+         dest[0] = start[0];
+         dest[1] = start[1];
+         dest[2] = start[2];
+         update_path = false;
+         return;
+      }
 
       int *path = (int*)buffer;
 

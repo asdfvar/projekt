@@ -74,6 +74,7 @@ int cost_function_one_step (
    for (int sub_ind = best_cost_index; sub_ind < path_cost_ind_size - 1; sub_ind++) {
       path_cost_ind[sub_ind] = path_cost_ind[sub_ind + 1];
    }
+
    path_cost_ind_size--;
 #endif
 
@@ -149,8 +150,10 @@ int cost_function_one_step (
                path_cost_ind[path_cost_ind_size++] = local_index;
 
                // Finish if the destination has been found
-               if (end != nullptr && i == end[0] && j == end[1] && k == end[2]) {
-                  return 0;
+               if (end != nullptr && i == end[0] && j == end[1] && k == end[2])
+               {
+                  // Condition if the objective has been found
+                  return -1;
                }
             }
 
@@ -204,6 +207,9 @@ bool cost_function (
             path_cost_ind,
             path_cost_ind_size);
    }
+
+   // Condition if the objective has been found
+   if (path_cost_ind_size == -1) return true;
 
    return false;
 }
