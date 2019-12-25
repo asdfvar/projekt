@@ -184,127 +184,22 @@ void Unit::update (
 
    float step[3];
 
-   // determine the position based on speed and direction
-   if (local_dest[0] > position[0]) {
-      if (local_dest[1] > position[1]) {
-         float costh = 0.7071068f;
-         float sinth = 0.7071068f;
-         step[0] = speed * costh * time_step;
-         step[1] = speed * sinth * time_step;
+   float diff_pos[3];
 
-         if (step[0] > local_dest[0] - position[0]) {
-            position[0] = local_dest[0];
-         } else {
-            position[0] += step[0];
-         }
+   // update the position
 
-         if (step[1] > local_dest[1] - position[1]) {
-            position[1] = local_dest[1];
-         } else {
-            position[1] += step[1];
-         }
-      }
-      else if (local_dest[1] < position[1]) {
-         float costh =  0.7071068f;
-         float sinth = -0.7071068f;
-         step[0] = speed * costh * time_step;
-         step[1] = speed * sinth * time_step;
+   diff_pos[0] = local_dest[0] - position[0];
+   diff_pos[1] = local_dest[1] - position[1];
+   diff_pos[2] = local_dest[2] - position[2];
 
-         if (step[0] > local_dest[0] - position[0]) {
-            position[0] = local_dest[0];
-         } else {
-            position[0] += step[0];
-         }
+   float theta = atan2f (diff_pos[1], diff_pos[0]);
 
-         if (step[1] < local_dest[1] - position[1]) {
-            position[1] = local_dest[1];
-         } else {
-            position[1] += step[1];
-         }
-      }
-      else {
-         step[0] = speed * time_step;
+   position[0] += speed * cosf (theta) * time_step;
+   position[1] += speed * sinf (theta) * time_step;
 
-         if (step[0] > local_dest[0] - position[0]) {
-            position[0] = local_dest[0];
-         } else {
-            position[0] += step[0];
-         }
+   theta = atan2f (diff_pos[2], sqrtf (diff_pos[0] * diff_pos[0] + diff_pos[1] * diff_pos[1]));
 
-      }
-   }
-   else if (local_dest[0] < position[0]) {
-      if (local_dest[1] > position[1]) {
-         float costh = -0.7071068f;
-         float sinth =  0.7071068f;
-         step[0] = speed * costh * time_step;
-         step[1] = speed * sinth * time_step;
+   position[2] += speed * sinf (theta);
 
-         if (step[0] < local_dest[0] - position[0]) {
-            position[0] = local_dest[0];
-         } else {
-            position[0] += step[0];
-         }
-
-         if (step[1] > local_dest[1] - position[1]) {
-            position[1] = local_dest[1];
-         } else {
-            position[1] += step[1];
-         }
-      }
-      else if (local_dest[1] < position[1]) {
-         float costh = -0.7071068f;
-         float sinth = -0.7071068f;
-         step[0] = speed * costh * time_step;
-         step[1] = speed * sinth * time_step;
-
-         if (step[0] < local_dest[0] - position[0]) {
-            position[0] = local_dest[0];
-         } else {
-            position[0] += step[0];
-         }
-
-         if (step[1] < local_dest[1] - position[1]) {
-            position[1] = local_dest[1];
-         } else {
-            position[1] += step[1];
-         }
-      }
-      else {
-         step[0] = -speed * time_step;
-
-         if (step[0] < local_dest[0] - position[0]) {
-            position[0] = local_dest[0];
-         } else {
-            position[0] += step[0];
-         }
-
-      }
-   }
-   else {
-      if (local_dest[1] > position[1]) {
-         step[1] = speed * time_step;
-
-         if (step[1] > local_dest[1] - position[1]) {
-            position[1] = local_dest[1];
-         } else {
-            position[1] += step[1];
-         }
-      }
-      else if (local_dest[1] < position[1]) {
-         step[1] = -speed * time_step;
-
-         if (step[1] < local_dest[1] - position[1]) {
-            position[1] = local_dest[1];
-         } else {
-            position[1] += step[1];
-         }
-      }
-      else {
-         speed = 0.0f;
-      }
-   }
    float elapsed2 = endTime (start2);
-
-   // TODO: position[2] update
 }
