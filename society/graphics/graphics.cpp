@@ -8,16 +8,19 @@
 #define WIDTH   1.0f
 #define HEIGHT  1.0f
 
-static void transformation (float point[2], float transform[4], float translation[2])
+static inline void transformation (float point[2], float transform[4], float translation[2])
 {
    point[0] += translation[0];
    point[1] += translation[1];
 
-   float temp;
-   temp = point[0];
+   float part1a = point[0] * transform[0];
+   float part1b = point[1] * transform[1];
 
-   point[0] = point[0] * transform[0] + point[1] * transform[1];
-   point[1] = temp     * transform[2] + point[1] * transform[3];
+   float part2a = point[0] * transform[2];
+   float part2b = point[1] * transform[3];
+
+   point[0] = part1a + part1b;
+   point[1] = part2a + part2b;
 }
 
 void draw_map (
@@ -35,13 +38,6 @@ void draw_map (
 
    float starting_row_loc = Y_START;
    float starting_col_loc = X_START;
-
-   const float det = transform[0] * transform[3] - transform[1] * transform[2];
-   const float invDet = 1.0f / det;
-
-   const float inv_transform[4] =
-   { invDet * transform[3], -invDet * transform[1],
-      -invDet * transform[2],  invDet * transform[0] };
 
    // draw grid lines
    for (int row = 0, ind = map_layer * row_max * col_max; row < row_max; row++)
