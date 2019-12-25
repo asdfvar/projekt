@@ -15,9 +15,7 @@ class Unit {
 
      ~Unit (void);
 
-      float get_position_x (void) { return position_x; };
-      float get_position_y (void) { return position_y; };
-      float get_position_z (void) { return position_z; };
+      float get_position (int ind) { return position[ind]; };
 
       float get_speed (void) { return speed; };
 
@@ -43,9 +41,7 @@ class Unit {
       float *buffer;
       int *scratch;
 
-      float position_x;
-      float position_y;
-      float position_z;
+      float position[3];
 
       int   dest[3];
 

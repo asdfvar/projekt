@@ -154,9 +154,9 @@ int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
 {
    int ind = 0;
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++, ind++) {
-      x[ind] = (*unit)->get_position_x();
-      y[ind] = (*unit)->get_position_y();
-      z[ind] = (*unit)->get_position_z();
+      x[ind] = (*unit)->get_position (0);
+      y[ind] = (*unit)->get_position (1);
+      z[ind] = (*unit)->get_position (2);
       selected[ind] = (*unit)->is_selected();
    }
 
@@ -174,9 +174,9 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
 
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
-      float x = (*unit)->get_position_x();
-      float y = (*unit)->get_position_y();
-      float z = (*unit)->get_position_z();
+      float x = (*unit)->get_position (0);
+      float y = (*unit)->get_position (1);
+      float z = (*unit)->get_position (2);
 
       if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
 

@@ -9,10 +9,13 @@ Unit::Unit (
       float position_x_in,
       float position_y_in,
       float position_z_in,
-      MAP *Map_in) :
-   position_x (position_x_in), position_y (position_y_in), position_z (position_z_in)
+      MAP *Map_in)
 {
    direction = 0.0f;
+
+   position[0] = position_x_in;
+   position[1] = position_y_in;
+   position[2] = position_z_in;
 
    Map = Map_in;
 
@@ -23,9 +26,9 @@ Unit::Unit (
    scratch = new int [map_dims[0] * map_dims[1] * map_dims[2]];
    path    = new int [map_dims[0] * map_dims[1] * map_dims[2]];
 
-   dest[0] = position_x;
-   dest[1] = position_y;
-   dest[2] = position_z;
+   dest[0] = position[0];
+   dest[1] = position[1];
+   dest[2] = position[2];
 
    update_path = false;
    selected    = false;
@@ -85,9 +88,9 @@ void Unit::update (
 
    int start[3];
 
-   start[0] = (int)position_x;
-   start[1] = (int)position_y;
-   start[2] = (int)position_z;
+   start[0] = (int)position[0];
+   start[1] = (int)position[1];
+   start[2] = (int)position[2];
 
 //std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
 
@@ -160,9 +163,9 @@ void Unit::update (
    }
 
    float dist2 =
-      (position_x - local_dest[0]) * (position_x - local_dest[0]) +
-      (position_y - local_dest[1]) * (position_y - local_dest[1]) +
-      (position_z - local_dest[2]) * (position_z - local_dest[2]);
+      (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
+      (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
+      (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
 
    float elapsed1 = endTime (start1);
    long start2 = startTime ();
@@ -172,9 +175,9 @@ void Unit::update (
    float comp_dist = speed * time_step;
    if (dist2 <= comp_dist * comp_dist)
    {
-      position_x = local_dest[0];
-      position_y = local_dest[1];
-      position_z = local_dest[2];
+      position[0] = local_dest[0];
+      position[1] = local_dest[1];
+      position[2] = local_dest[2];
 
       next_cell[0] = (path[0] % dim[0]);
       next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
@@ -197,119 +200,119 @@ void Unit::update (
    float step[3];
 
    // determine the position based on speed and direction
-   if (local_dest[0] > position_x) {
-      if (local_dest[1] > position_y) {
+   if (local_dest[0] > position[0]) {
+      if (local_dest[1] > position[1]) {
          float costh = 0.7071068f;
          float sinth = 0.7071068f;
          step[0] = speed * costh * time_step;
          step[1] = speed * sinth * time_step;
 
-         if (step[0] > local_dest[0] - position_x) {
-            position_x = local_dest[0];
+         if (step[0] > local_dest[0] - position[0]) {
+            position[0] = local_dest[0];
          } else {
-            position_x += step[0];
+            position[0] += step[0];
          }
 
-         if (step[1] > local_dest[1] - position_y) {
-            position_y = local_dest[1];
+         if (step[1] > local_dest[1] - position[1]) {
+            position[1] = local_dest[1];
          } else {
-            position_y += step[1];
+            position[1] += step[1];
          }
       }
-      else if (local_dest[1] < position_y) {
+      else if (local_dest[1] < position[1]) {
          float costh =  0.7071068f;
          float sinth = -0.7071068f;
          step[0] = speed * costh * time_step;
          step[1] = speed * sinth * time_step;
 
-         if (step[0] > local_dest[0] - position_x) {
-            position_x = local_dest[0];
+         if (step[0] > local_dest[0] - position[0]) {
+            position[0] = local_dest[0];
          } else {
-            position_x += step[0];
+            position[0] += step[0];
          }
 
-         if (step[1] < local_dest[1] - position_y) {
-            position_y = local_dest[1];
+         if (step[1] < local_dest[1] - position[1]) {
+            position[1] = local_dest[1];
          } else {
-            position_y += step[1];
+            position[1] += step[1];
          }
       }
       else {
          step[0] = speed * time_step;
 
-         if (step[0] > local_dest[0] - position_x) {
-            position_x = local_dest[0];
+         if (step[0] > local_dest[0] - position[0]) {
+            position[0] = local_dest[0];
          } else {
-            position_x += step[0];
+            position[0] += step[0];
          }
 
       }
    }
-   else if (local_dest[0] < position_x) {
-      if (local_dest[1] > position_y) {
+   else if (local_dest[0] < position[0]) {
+      if (local_dest[1] > position[1]) {
          float costh = -0.7071068f;
          float sinth =  0.7071068f;
          step[0] = speed * costh * time_step;
          step[1] = speed * sinth * time_step;
 
-         if (step[0] < local_dest[0] - position_x) {
-            position_x = local_dest[0];
+         if (step[0] < local_dest[0] - position[0]) {
+            position[0] = local_dest[0];
          } else {
-            position_x += step[0];
+            position[0] += step[0];
          }
 
-         if (step[1] > local_dest[1] - position_y) {
-            position_y = local_dest[1];
+         if (step[1] > local_dest[1] - position[1]) {
+            position[1] = local_dest[1];
          } else {
-            position_y += step[1];
+            position[1] += step[1];
          }
       }
-      else if (local_dest[1] < position_y) {
+      else if (local_dest[1] < position[1]) {
          float costh = -0.7071068f;
          float sinth = -0.7071068f;
          step[0] = speed * costh * time_step;
          step[1] = speed * sinth * time_step;
 
-         if (step[0] < local_dest[0] - position_x) {
-            position_x = local_dest[0];
+         if (step[0] < local_dest[0] - position[0]) {
+            position[0] = local_dest[0];
          } else {
-            position_x += step[0];
+            position[0] += step[0];
          }
 
-         if (step[1] < local_dest[1] - position_y) {
-            position_y = local_dest[1];
+         if (step[1] < local_dest[1] - position[1]) {
+            position[1] = local_dest[1];
          } else {
-            position_y += step[1];
+            position[1] += step[1];
          }
       }
       else {
          step[0] = -speed * time_step;
 
-         if (step[0] < local_dest[0] - position_x) {
-            position_x = local_dest[0];
+         if (step[0] < local_dest[0] - position[0]) {
+            position[0] = local_dest[0];
          } else {
-            position_x += step[0];
+            position[0] += step[0];
          }
 
       }
    }
    else {
-      if (local_dest[1] > position_y) {
+      if (local_dest[1] > position[1]) {
          step[1] = speed * time_step;
 
-         if (step[1] > local_dest[1] - position_y) {
-            position_y = local_dest[1];
+         if (step[1] > local_dest[1] - position[1]) {
+            position[1] = local_dest[1];
          } else {
-            position_y += step[1];
+            position[1] += step[1];
          }
       }
-      else if (local_dest[1] < position_y) {
+      else if (local_dest[1] < position[1]) {
          step[1] = -speed * time_step;
 
-         if (step[1] < local_dest[1] - position_y) {
-            position_y = local_dest[1];
+         if (step[1] < local_dest[1] - position[1]) {
+            position[1] = local_dest[1];
          } else {
-            position_y += step[1];
+            position[1] += step[1];
          }
       }
       else {
@@ -318,5 +321,5 @@ void Unit::update (
    }
    float elapsed2 = endTime (start2);
 
-   // TODO: position_z update
+   // TODO: position[2] update
 }
