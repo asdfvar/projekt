@@ -157,7 +157,7 @@ void Unit::update (float time_step)
    // set the position to the local destination if the projection would otherwise
    // surpass it
    float comp_dist = speed * time_step;
-   if (dist2 <= comp_dist * comp_dist)
+   while (dist2 <= comp_dist * comp_dist)
    {
       position[0] = local_dest[0];
       position[1] = local_dest[1];
@@ -172,6 +172,24 @@ void Unit::update (float time_step)
 
       // Adjust time step to the remaining time
       time_step -= sqrtf (dist2) / speed;
+
+      int next_cell[3];
+
+      // Update the local destination to the next available cell
+      next_cell[0] = (path[0] % dim[0]);
+      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+      next_cell[2] = path[0] / (dim[0] * dim[1]);
+
+      local_dest[0] = (float)next_cell[0] + 0.5f;
+      local_dest[1] = (float)next_cell[1] + 0.5f;
+      local_dest[2] = (float)next_cell[2] + 0.5f;
+
+      dist2 =
+      (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
+      (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
+      (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
+
+      comp_dist = speed * time_step;
    }
 
    float step[3];
