@@ -54,29 +54,29 @@ void draw_map (
 
          float temp;
          temp = point0[0];
-         point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
-         point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+         point0[0] = point0[0] * transform[0] + point0[1] * transform[1];
+         point0[1] = temp      * transform[2] + point0[1] * transform[3];
 
          point1[0] += translation[0];
          point1[1] += translation[1];
 
          temp = point1[0];
-         point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
-         point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+         point1[0] = point1[0] * transform[0] + point1[1] * transform[1];
+         point1[1] = temp      * transform[2] + point1[1] * transform[3];
 
          point2[0] += translation[0];
          point2[1] += translation[1];
 
          temp = point2[0];
-         point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
-         point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+         point2[0] = point2[0] * transform[0] + point2[1] * transform[1];
+         point2[1] = temp      * transform[2] + point2[1] * transform[3];
 
          point3[0] += translation[0];
          point3[1] += translation[1];
 
          temp = point3[0];
-         point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
-         point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+         point3[0] = point3[0] * transform[0] + point3[1] * transform[1];
+         point3[1] = temp      * transform[2] + point3[1] * transform[3];
 
          glBegin (GL_LINES);
          glColor3f (0.0f, 0.0f, 1.0f);
@@ -117,29 +117,29 @@ void draw_map (
 
          float temp;
          temp = point0[0];
-         point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
-         point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+         point0[0] = point0[0] * transform[0] + point0[1] * transform[1];
+         point0[1] = temp      * transform[2] + point0[1] * transform[3];
 
          point1[0] += translation[0];
          point1[1] += translation[1];
 
          temp = point1[0];
-         point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
-         point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+         point1[0] = point1[0] * transform[0] + point1[1] * transform[1];
+         point1[1] = temp      * transform[2] + point1[1] * transform[3];
 
          point2[0] += translation[0];
          point2[1] += translation[1];
 
          temp = point2[0];
-         point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
-         point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+         point2[0] = point2[0] * transform[0] + point2[1] * transform[1];
+         point2[1] = temp      * transform[2] + point2[1] * transform[3];
 
          point3[0] += translation[0];
          point3[1] += translation[1];
 
          temp = point3[0];
-         point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
-         point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+         point3[0] = point3[0] * transform[0] + point3[1] * transform[1];
+         point3[1] = temp      * transform[2] + point3[1] * transform[3];
 
          glVertex2f (point0[0], point0[1] );
          glVertex2f (point1[0], point1[1] );
@@ -172,6 +172,12 @@ void draw_units (
    const float window_start_col = -1.0f;
    const float window_end_col   =  1.0f;
 
+   const float width_offset  = 0.3f * block_width;
+   const float height_offset = 0.3f * block_height;
+
+   const float selected_width_offset  = 0.35f * block_width;
+   const float selected_height_offset = 0.35f * block_height;
+
    for (int ind = 0; ind < num_units; ind++)
    {
       if (floorf (z[ind]) == map_layer)
@@ -184,39 +190,39 @@ void draw_units (
             (window_end_row - window_start_row) +
             window_start_row;
 
-         float point0[2] = { x_pos - 0.015f, y_pos - 0.015f };
-         float point1[2] = { x_pos - 0.015f, y_pos + 0.015f };
-         float point2[2] = { x_pos + 0.015f, y_pos + 0.015f };
-         float point3[2] = { x_pos + 0.015f, y_pos - 0.015f };
+         float point0[2] = { x_pos - width_offset, y_pos - height_offset };
+         float point1[2] = { x_pos - width_offset, y_pos + height_offset };
+         float point2[2] = { x_pos + width_offset, y_pos + height_offset };
+         float point3[2] = { x_pos + width_offset, y_pos - height_offset };
 
          point0[0] += translation[0];
          point0[1] += translation[1];
 
          float temp;
          temp = point0[0];
-         point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
-         point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+         point0[0] = point0[0] * transform[0] + point0[1] * transform[1];
+         point0[1] = temp      * transform[2] + point0[1] * transform[3];
 
          point1[0] += translation[0];
          point1[1] += translation[1];
 
          temp = point1[0];
-         point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
-         point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+         point1[0] = point1[0] * transform[0] + point1[1] * transform[1];
+         point1[1] = temp      * transform[2] + point1[1] * transform[3];
 
          point2[0] += translation[0];
          point2[1] += translation[1];
 
          temp = point2[0];
-         point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
-         point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+         point2[0] = point2[0] * transform[0] + point2[1] * transform[1];
+         point2[1] = temp      * transform[2] + point2[1] * transform[3];
 
          point3[0] += translation[0];
          point3[1] += translation[1];
 
          temp = point3[0];
-         point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
-         point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+         point3[0] = point3[0] * transform[0] + point3[1] * transform[1];
+         point3[1] = temp      * transform[2] + point3[1] * transform[3];
 
          glBegin (GL_POLYGON);
          glColor3f (0.0f, 1.0f, 0.0f);
@@ -228,39 +234,39 @@ void draw_units (
 
          if (selected[ind])
          {
-            float point0[2] = { x_pos - 0.018f, y_pos - 0.018f };
-            float point1[2] = { x_pos - 0.018f, y_pos + 0.018f };
-            float point2[2] = { x_pos + 0.018f, y_pos + 0.018f };
-            float point3[2] = { x_pos + 0.018f, y_pos - 0.018f };
+            float point0[2] = { x_pos - selected_width_offset, y_pos - selected_height_offset };
+            float point1[2] = { x_pos - selected_width_offset, y_pos + selected_height_offset };
+            float point2[2] = { x_pos + selected_width_offset, y_pos + selected_height_offset };
+            float point3[2] = { x_pos + selected_width_offset, y_pos - selected_height_offset };
 
             point0[0] += translation[0];
             point0[1] += translation[1];
 
             float temp;
             temp = point0[0];
-            point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
-            point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+            point0[0] = point0[0] * transform[0] + point0[1] * transform[1];
+            point0[1] = temp      * transform[2] + point0[1] * transform[3];
 
             point1[0] += translation[0];
             point1[1] += translation[1];
 
             temp = point1[0];
-            point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
-            point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+            point1[0] = point1[0] * transform[0] + point1[1] * transform[1];
+            point1[1] = temp      * transform[2] + point1[1] * transform[3];
 
             point2[0] += translation[0];
             point2[1] += translation[1];
 
             temp = point2[0];
-            point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
-            point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+            point2[0] = point2[0] * transform[0] + point2[1] * transform[1];
+            point2[1] = temp      * transform[2] + point2[1] * transform[3];
 
             point3[0] += translation[0];
             point3[1] += translation[1];
 
             temp = point3[0];
-            point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
-            point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+            point3[0] = point3[0] * transform[0] + point3[1] * transform[1];
+            point3[1] = temp      * transform[2] + point3[1] * transform[3];
 
             glBegin (GL_LINES);
             glColor3f (1.0f, 0.0f, 0.0f);
@@ -293,29 +299,29 @@ void draw_selection_box (
 
    float temp;
    temp = point0[0];
-   point0[0] = point0[0] * transform[0] + point0[1] * transform[1];// + translation[0];
-   point0[1] = temp      * transform[2] + point0[1] * transform[3];// + translation[1];
+   point0[0] = point0[0] * transform[0] + point0[1] * transform[1];
+   point0[1] = temp      * transform[2] + point0[1] * transform[3];
 
    point1[0] += translation[0];
    point1[1] += translation[1];
 
    temp = point1[0];
-   point1[0] = point1[0] * transform[0] + point1[1] * transform[1];// + translation[0];
-   point1[1] = temp      * transform[2] + point1[1] * transform[3];// + translation[1];
+   point1[0] = point1[0] * transform[0] + point1[1] * transform[1];
+   point1[1] = temp      * transform[2] + point1[1] * transform[3];
 
    point2[0] += translation[0];
    point2[1] += translation[1];
 
    temp = point2[0];
-   point2[0] = point2[0] * transform[0] + point2[1] * transform[1];// + translation[0];
-   point2[1] = temp      * transform[2] + point2[1] * transform[3];// + translation[1];
+   point2[0] = point2[0] * transform[0] + point2[1] * transform[1];
+   point2[1] = temp      * transform[2] + point2[1] * transform[3];
 
    point3[0] += translation[0];
    point3[1] += translation[1];
 
    temp = point3[0];
-   point3[0] = point3[0] * transform[0] + point3[1] * transform[1];// + translation[0];
-   point3[1] = temp      * transform[2] + point3[1] * transform[3];// + translation[1];
+   point3[0] = point3[0] * transform[0] + point3[1] * transform[1];
+   point3[1] = temp      * transform[2] + point3[1] * transform[3];
 
    glBegin (GL_LINES);
    glColor3f (1.0f, 0.0f, 0.0f);

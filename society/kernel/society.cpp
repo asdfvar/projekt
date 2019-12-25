@@ -8,8 +8,8 @@
 
 Society::Society (void)
 {
-   dim_x = 40;
-   dim_y = 40;
+   dim_x = 60;
+   dim_y = 60;
    dim_z = 40;
 
    int dim[3] = {dim_x, dim_y, dim_z};
