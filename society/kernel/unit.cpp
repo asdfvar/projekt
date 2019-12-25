@@ -99,10 +99,6 @@ void Unit::set_destination (int dest_in[3])
          dest,
          path);
 
-   next_cell[0] = (path[0] % dim[0]);
-   next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-   next_cell[2] = path[0] / (dim[0] * dim[1]);
-
    for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
    if (path_size > 0) path_size--;
 };
@@ -139,7 +135,14 @@ void Unit::update (
       local_dest[1] = (float)dest[1] + 0.5f;
       local_dest[2] = (float)dest[2] + 0.5f;
    }
-   else {
+   else
+   {
+      int next_cell[3];
+
+      next_cell[0] = (path[0] % dim[0]);
+      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+      next_cell[2] = path[0] / (dim[0] * dim[1]);
+
       local_dest[0] = (float)next_cell[0] + 0.5f;
       local_dest[1] = (float)next_cell[1] + 0.5f;
       local_dest[2] = (float)next_cell[2] + 0.5f;
@@ -162,10 +165,6 @@ void Unit::update (
       position[1] = local_dest[1];
       position[2] = local_dest[2];
 
-      next_cell[0] = (path[0] % dim[0]);
-      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-      next_cell[2] = path[0] / (dim[0] * dim[1]);
-
       // Remove the traversed path element from the list.
       // Return when the destination has been reached (which happens
       // when the path size is zero)
@@ -173,12 +172,8 @@ void Unit::update (
       if (path_size > 0) path_size--;
       if (path_size <= 0) return;
 
-      // adjust time step to the remaining time
+      // Adjust time step to the remaining time
       time_step -= sqrtf (dist2) / speed;
-
-      local_dest[0] = (float)next_cell[0] + 0.5f;
-      local_dest[1] = (float)next_cell[1] + 0.5f;
-      local_dest[2] = (float)next_cell[2] + 0.5f;
    }
 
    float step[3];
