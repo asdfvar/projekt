@@ -105,8 +105,6 @@ void Unit::set_destination (int dest_in[3])
 
    for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
    if (path_size > 0) path_size--;
-
-   speed = max_speed;
 };
 
 void Unit::get_destination (int *dest_out)
@@ -168,14 +166,15 @@ void Unit::update (
       next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
       next_cell[2] = path[0] / (dim[0] * dim[1]);
 
+      // Remove the traversed path element from the list.
+      // Return when the destination has been reached (which happens
+      // when the path size is zero)
       for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
-
       if (path_size > 0) path_size--;
+      if (path_size <= 0) return;
 
       // adjust time step to the remaining time
       time_step -= sqrtf (dist2) / speed;
-
-      if (path_size <= 0) return;
 
       local_dest[0] = (float)next_cell[0] + 0.5f;
       local_dest[1] = (float)next_cell[1] + 0.5f;
