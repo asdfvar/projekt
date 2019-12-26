@@ -17,10 +17,10 @@ Facade::Facade (void)
 {
    gettimeofday (&start, NULL);
 
-   unit_positions_x = new float[100];
-   unit_positions_y = new float[100];
-   unit_positions_z = new float[100];
-   unit_selections  = new bool[100];
+   unit_positions_x = new float[1000];
+   unit_positions_y = new float[1000];
+   unit_positions_z = new float[1000];
+   unit_selections  = new bool[1000];
 
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
