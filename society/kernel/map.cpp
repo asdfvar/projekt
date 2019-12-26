@@ -33,6 +33,8 @@ MAP::~MAP (void)
    delete[] ground;
 }
 
+// Ground map is dependent on the map. It is the same with the exception that
+// open spaces not supported by ground are set as invalid (ground)
 void MAP::set_ground (void)
 {
    for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
@@ -41,11 +43,36 @@ void MAP::set_ground (void)
          {
             // Set the ground value to the map value if there is ground below this cell
             if (ind_z == 0) ground[ind] = map[ind];
-            else if (map[ind - size[0] * size[1]] <= 0) ground[ind] = map[ind];
+            else if (map[ind - size[0] * size[1]] < 0) ground[ind] = map[ind];
 
             // Default is -1
             else ground[ind] = -1.0f;
          }
       }
    }
+}
+
+void MAP::change (int flattened_cell_index, float value)
+{
+   int flattened_index = flattened_cell_index;
+
+   local_change (flattened_index, value);
+}
+
+void MAP::change (int cell[3], float value)
+{
+   int flattened_index =
+      cell[0] + 
+      cell[1] * size[0] +
+      cell[2] * size[0] * size[1];
+
+   local_change (flattened_index, value);
+}
+
+void MAP::local_change (int flattened_cell_index, float value)
+{
+   map[flattened_cell_index] = value;
+
+   int next_z_ind = flattened_cell_index + size[0] * size[1];
+   if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
