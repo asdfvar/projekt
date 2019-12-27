@@ -2,7 +2,21 @@
 #define UNIT_H
 
 #include <vector>
+#include <thread>
 #include "map.h"
+
+typedef struct PATH_FUNC_ARGS
+{
+   const float       *map;
+   int                dim[3];
+   int                start[3];
+   int                dest_in[3];
+   int               *dest;
+   int               *path;
+   int               *path_size;
+   bool               done;
+   pthread_barrier_t *barrier;
+} PATH_FUNC_ARGS;
 
 class Unit {
 
@@ -50,6 +64,10 @@ class Unit {
       bool selected;
 
       int path_size;
+
+      PATH_FUNC_ARGS    path_func_args;
+      pthread_t         path_planner_thread;
+      pthread_barrier_t barrier;
 };
 
 #endif

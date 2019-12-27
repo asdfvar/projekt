@@ -20,7 +20,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 20;
+   int num_units = 200;
 
    int unit_count = 0;
 

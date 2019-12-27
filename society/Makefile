@@ -1,6 +1,6 @@
 CC       = g++
 FLAGS    = -O3 -Wall
-LIBS     = -lm -lGL -lGLU -lglut -lsociety -lgraphics -lm
+LIBS     = -lm -pthread -lGL -lGLU -lglut -lsociety -lgraphics
 LIBPATHS = -L./kernel/ -L./graphics/
 INC      = -I./kernel/ -I./graphics/
 OBJDIR   = objdir
