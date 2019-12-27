@@ -258,16 +258,22 @@ void Facade::mouseMotion (int x, int y)
    // Activate and define the selection box
    if (z_down == false && button2_down == true)
    {
-      float fxt = fx - translation[0];
-      float fyt = fy - translation[1];
+      float fxt = fx;
+      float fyt = fy;
 
       if (selection_active == false) {
          selection_box[0] = fxt * inv_transform[0] + fyt * inv_transform[1];
          selection_box[1] = fxt * inv_transform[2] + fyt * inv_transform[3];
+
+         selection_box[0] -= translation[0];
+         selection_box[1] -= translation[1];
       }
 
       selection_box[2] = fxt * inv_transform[0] + fyt * inv_transform[1];
       selection_box[3] = fxt * inv_transform[2] + fyt * inv_transform[3];
+
+      selection_box[2] -= translation[0];
+      selection_box[3] -= translation[1];
 
       selection_active = true;
 
