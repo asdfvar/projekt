@@ -42,6 +42,7 @@ class Facade {
       bool button0_down;
       bool button1_down;
       bool button2_down;
+      bool z_down;
 
       int mouse_wheel_backward_count;
       int mouse_wheel_forward_count;
