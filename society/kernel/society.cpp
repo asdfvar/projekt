@@ -54,6 +54,8 @@ Society::~Society (void)
    delete[] buffer;
 }
 
+// Destination is set by pooling out the available cells at and around the selected
+// destination to provide a unique cell destination for each unit
 void Society::set_destination (int destination[3])
 {
    const float *map = Map->access_map ();
@@ -70,6 +72,7 @@ void Society::set_destination (int destination[3])
 
    int num_units = units.size();
 
+   // Create the selected cost indices equal to the number of units
    cost_function2 (
          map,
          cost,

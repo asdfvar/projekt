@@ -82,11 +82,8 @@ void Unit::set_destination (int dest_in[3])
          start,
          buffer);
 
-   // Set the destination to the current location if a solution is not found
-   if (!solution_found)
-   {
-      return;
-   }
+   // Don't do anything if a solution is not found
+   if (!solution_found) return;
 
    dest[0] = dest_in[0],
    dest[1] = dest_in[1],
