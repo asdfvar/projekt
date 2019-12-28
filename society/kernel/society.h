@@ -34,6 +34,11 @@ class Society
       int  dim_y;
       int  dim_z;
 
+      float accum_time;
+      float accum_time_limit;
+      bool  rolled;
+
+
       float *cost;
       float *buffer;
 

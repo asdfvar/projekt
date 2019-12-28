@@ -12,11 +12,14 @@ typedef struct PATH_FUNC_ARGS
    int                start[3];
    int                dest_in[3];
    int               *dest;
+   int               *residency;
    int               *path;
    int               *path_size;
    bool               done;
    pthread_barrier_t *barrier;
 } PATH_FUNC_ARGS;
+
+void *path_finding_func (void *path_func_args_in);
 
 class Unit {
 
@@ -47,6 +50,7 @@ class Unit {
    private:
 
       MAP   *Map;
+
       int   *path;
 
       float *cost;
@@ -56,6 +60,7 @@ class Unit {
       float position[3];
 
       int   dest[3];
+      int   residency[3];
 
       float max_speed;
       float speed;

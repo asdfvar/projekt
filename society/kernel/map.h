@@ -9,13 +9,11 @@ class MAP
       ~MAP (void);
 
       const float *access_map (void) { return (const float*)map; };
-
       const float *access_ground (void) { return (const float*)ground; };
 
       int map_dim (int dim) { return size[dim]; };
 
       void change (int flattened_cell_index, float value);
-
       void change (int cell[3], float value);
 
    private:

@@ -7,8 +7,8 @@ MAP::MAP (int num_cells[3])
    size[1] = num_cells[1];
    size[2] = num_cells[2];
 
-   map    = new float[size[0] * size[1] * size[2]];
-   ground = new float[size[0] * size[1] * size[2]];
+   map            = new float[size[0] * size[1] * size[2]];
+   ground         = new float[size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 

@@ -3,60 +3,8 @@
 #include "unit.h"
 #include "timer.h"
 #include <cmath>
+#include <cstdlib>
 #include "pathfinding.h"
-
-void *path_finding_func (void *path_func_args_in)
-{
-   PATH_FUNC_ARGS *path_func_args = (PATH_FUNC_ARGS*)path_func_args_in;
-
-   const float *map           = path_func_args->map;
-   int   *dim                 = path_func_args->dim;
-   int   *start               = path_func_args->start;
-   int   *dest_in             = path_func_args->dest_in;
-   int   *dest                = path_func_args->dest;
-   int   *path                = path_func_args->path;
-   int   *path_size           = path_func_args->path_size;
-   bool  *done                = &path_func_args->done;
-   pthread_barrier_t *barrier = path_func_args->barrier;
-
-   float *cost   = new float[dim[0] * dim[1] * dim[2]];
-   float *buffer = new float[dim[0] * dim[1] * dim[2]];
-
-   while (!*done)
-   {
-      // Signal from the main thread to start determining a new path
-      pthread_barrier_wait (barrier);
-
-      // Test if done
-      if (*done) continue;
-
-      // Find the path to the destination.
-      // The cost function is produced with the destination
-      // as the start index for the purpose of descending to the destination
-      bool solution_found = cost_function (
-            map,
-            cost,
-            dim,
-            dest_in,
-            start,
-            buffer);
-
-      // Don't do anything if a solution is not found
-      if (!solution_found) continue;
-
-      // Compute the path based on the cost function
-      *path_size = pathfinding (
-            cost,
-            dim,
-            start,
-            dest_in,
-            path);
-
-      dest[0] = dest_in[0],
-      dest[1] = dest_in[1],
-      dest[2] = dest_in[2];
-   }
-}
 
 Unit::Unit (
       float position_x_in,
@@ -87,18 +35,23 @@ Unit::Unit (
    max_speed = 40.0f;
    speed     = max_speed;
 
+   residency[0] = 0;
+   residency[1] = 0;
+   residency[2] = 0;
+
    // Create the barrier for the path-finding
    pthread_barrier_init (&barrier, NULL, 2);
 
-   path_func_args.map       =  Map->access_ground ();
-   path_func_args.dim[0]    =  map_dims[0];
-   path_func_args.dim[1]    =  map_dims[1];
-   path_func_args.dim[2]    =  map_dims[2];
-   path_func_args.dest      =  dest;
-   path_func_args.path_size = &path_size;
-   path_func_args.path      = path;
-   path_func_args.barrier   = &barrier;
-   path_func_args.done      = false;
+   path_func_args.map            =  Map->access_ground ();
+   path_func_args.dim[0]         =  map_dims[0];
+   path_func_args.dim[1]         =  map_dims[1];
+   path_func_args.dim[2]         =  map_dims[2];
+   path_func_args.dest           =  dest;
+   path_func_args.residency      =  residency;
+   path_func_args.path_size      = &path_size;
+   path_func_args.path           =  path;
+   path_func_args.barrier        = &barrier;
+   path_func_args.done           =  false;
 
    pthread_create (
          &path_planner_thread,
@@ -166,17 +119,11 @@ void Unit::get_destination (int *dest_out)
 
 void Unit::update (float time_step)
 {
-//std::cout << "position = " << position[0] << ", " << position[1] << ", " << position[2] << std::endl;
-   long start0 = startTime ();
-
    int dim[3];
 
    dim[0] = Map->map_dim (0);
    dim[1] = Map->map_dim (1);
    dim[2] = Map->map_dim (2);
-
-   float elapsed0 = endTime (start0);
-   long start1 = startTime ();
 
    float local_dest[3];
 
@@ -205,9 +152,6 @@ void Unit::update (float time_step)
       (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
       (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
       (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
-
-   float elapsed1 = endTime (start1);
-   long start2 = startTime ();
 
    // set the position to the local destination if the projection would otherwise
    // surpass it
@@ -265,6 +209,62 @@ void Unit::update (float time_step)
    theta = atan2f (diff_pos[2], sqrtf (diff_pos[0] * diff_pos[0] + diff_pos[1] * diff_pos[1]));
 
    position[2] += speed * sinf (theta) * time_step;
+}
 
-   float elapsed2 = endTime (start2);
+void *path_finding_func (void *path_func_args_in)
+{
+   PATH_FUNC_ARGS *path_func_args = (PATH_FUNC_ARGS*)path_func_args_in;
+
+   const float *map           =  path_func_args->map;
+   int   *dim                 =  path_func_args->dim;
+   int   *start               =  path_func_args->start;
+   int   *dest_in             =  path_func_args->dest_in;
+   int   *dest                =  path_func_args->dest;
+   int   *residency           =  path_func_args->residency;
+   int   *path                =  path_func_args->path;
+   int   *path_size           =  path_func_args->path_size;
+   bool  *done                = &path_func_args->done;
+   pthread_barrier_t *barrier =  path_func_args->barrier;
+
+   float *cost   = new float[dim[0] * dim[1] * dim[2]];
+   float *buffer = new float[dim[0] * dim[1] * dim[2]];
+
+   while (!*done)
+   {
+      // Signal from the main thread to start determining a new path
+      pthread_barrier_wait (barrier);
+
+      // Test if done
+      if (*done) continue;
+
+      // Find the path to the destination.
+      // The cost function is produced with the destination
+      // as the start index for the purpose of descending to the destination
+      bool solution_found = cost_function (
+            map,
+            cost,
+            dim,
+            dest_in,
+            start,
+            buffer);
+
+      // Don't do anything if a solution is not found
+      if (!solution_found) continue;
+
+      // Compute the path based on the cost function
+      *path_size = pathfinding (
+            cost,
+            dim,
+            start,
+            dest_in,
+            path);
+
+      dest[0] = dest_in[0],
+      dest[1] = dest_in[1],
+      dest[2] = dest_in[2];
+
+      residency[0] = dest_in[0];
+      residency[1] = dest_in[1];
+      residency[2] = dest_in[2];
+   }
 }
