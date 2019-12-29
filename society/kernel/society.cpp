@@ -143,55 +143,6 @@ void Society::update (float time_step)
 
    const float *map = Map->access_map ();
 
-#ifdef LIFE
-#if 0
-   if (!rolled)
-   {
-      int roll = rand() % 100;
-
-      if      (roll > 90) accum_time_limit = 5.0f;
-      else if (roll > 80) accum_time_limit = 4.8f;
-      else if (roll > 70) accum_time_limit = 4.4f;
-      else if (roll > 60) accum_time_limit = 4.0f;
-      else if (roll > 50) accum_time_limit = 3.0f;
-      else if (roll > 30) accum_time_limit = 2.0f;
-      else                accum_time_limit = 1.0f;
-
-      rolled = true;
-   }
-
-   if (rolled && accum_time >= accum_time_limit)
-   {
-      accum_time = 0.0f;
-
-      dest[0] = rand() % 7;
-
-      // Find the path to the destination.
-      // The cost function is produced with the destination
-      // as the start index for the purpose of descending to the destination
-      bool solution_found = cost_function (
-            map,
-            cost,
-            dim,
-            dest_in,
-            start,
-            buffer);
-
-      // Create the selected cost indices equal to the number of units
-      cost_function2 (
-            map,
-            cost,
-            cost_indices,
-            dim,
-            destination,
-            num_units,
-            buffer);
-
-      rolled = false;
-   }
-#endif
-#endif
-
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
       (*unit)->update (time_step);

@@ -9,8 +9,6 @@ OBJS = $(OBJDIR)/society.o     \
        $(OBJDIR)/timer.o       \
 #
 
-DEFINES = -DLIFE
-
 LIBNAME = libsociety.a
 
 all: directories $(OBJS)
@@ -23,4 +21,4 @@ clean:
 	rm $(OBJS) $(LIBNAME)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $(DEFINES) $^ -c -o $@
+	$(CC) $^ -c -o $@
