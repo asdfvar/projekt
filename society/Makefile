@@ -14,16 +14,16 @@ EXE = whee
 .NOTPARALLEL: all
 
 all: directories $(OBJS)
-	cd kernel   && $(MAKE)
-	cd graphics && $(MAKE)
+	cd kernel   && $(MAKE) -f society.mk
+	cd graphics && $(MAKE) -f graphics.mk
 	$(CC) $(OBJS) $(FLAGS) $(LIBPATHS) $(LIBS) -o $(EXE)
 
 directories:
 	mkdir -p $(OBJDIR)
 
 clean:
-	make -C kernel   clean
-	make -C graphics clean
+	$(MAKE) -C kernel -f society.mk clean
+	$(MAKE) -C graphics -f graphics.mk clean
 	rm $(OBJS) $(EXE)
 
 $(OBJDIR)/%.o: %.cpp
