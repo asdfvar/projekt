@@ -61,14 +61,14 @@ void draw_map (
 
          glBegin (GL_LINES);
          glColor3f (0.0f, 0.0f, 1.0f);
-         glVertex2f (point0[0], point0[1] );
-         glVertex2f (point1[0], point1[1] );
-         glVertex2f (point1[0], point1[1] );
-         glVertex2f (point2[0], point2[1] );
-         glVertex2f (point2[0], point2[1] );
-         glVertex2f (point3[0], point3[1] );
-         glVertex2f (point3[0], point3[1] );
-         glVertex2f (point0[0], point0[1] );
+         glVertex2f (point0[0], point0[1]);
+         glVertex2f (point1[0], point1[1]);
+         glVertex2f (point1[0], point1[1]);
+         glVertex2f (point2[0], point2[1]);
+         glVertex2f (point2[0], point2[1]);
+         glVertex2f (point3[0], point3[1]);
+         glVertex2f (point3[0], point3[1]);
+         glVertex2f (point0[0], point0[1]);
          glEnd();
       }
    }
@@ -98,10 +98,10 @@ void draw_map (
          transformation (point2, transform, translation);
          transformation (point3, transform, translation);
 
-         glVertex2f (point0[0], point0[1] );
-         glVertex2f (point1[0], point1[1] );
-         glVertex2f (point2[0], point2[1] );
-         glVertex2f (point3[0], point3[1] );
+         glVertex2f (point0[0], point0[1]);
+         glVertex2f (point1[0], point1[1]);
+         glVertex2f (point2[0], point2[1]);
+         glVertex2f (point3[0], point3[1]);
          glEnd ();
       }
    }
@@ -180,14 +180,14 @@ void draw_units (
 
             glBegin (GL_LINES);
             glColor3f (1.0f, 0.0f, 0.0f);
-            glVertex2f (point0[0], point0[1] );
-            glVertex2f (point1[0], point1[1] );
-            glVertex2f (point1[0], point1[1] );
-            glVertex2f (point2[0], point2[1] );
-            glVertex2f (point2[0], point2[1] );
-            glVertex2f (point3[0], point3[1] );
-            glVertex2f (point3[0], point3[1] );
-            glVertex2f (point0[0], point0[1] );
+            glVertex2f (point0[0], point0[1]);
+            glVertex2f (point1[0], point1[1]);
+            glVertex2f (point1[0], point1[1]);
+            glVertex2f (point2[0], point2[1]);
+            glVertex2f (point2[0], point2[1]);
+            glVertex2f (point3[0], point3[1]);
+            glVertex2f (point3[0], point3[1]);
+            glVertex2f (point0[0], point0[1]);
             glEnd ();
          }
       }
@@ -212,14 +212,14 @@ void draw_selection_box (
    glLineWidth (0.1f);
    glBegin (GL_LINES);
    glColor3f (1.0f, 0.0f, 0.0f);
-   glVertex2f (point0[0], point0[1] );
-   glVertex2f (point1[0], point1[1] );
-   glVertex2f (point1[0], point1[1] );
-   glVertex2f (point2[0], point2[1] );
-   glVertex2f (point2[0], point2[1] );
-   glVertex2f (point3[0], point3[1] );
-   glVertex2f (point3[0], point3[1] );
-   glVertex2f (point0[0], point0[1] );
+   glVertex2f (point0[0], point0[1]);
+   glVertex2f (point1[0], point1[1]);
+   glVertex2f (point1[0], point1[1]);
+   glVertex2f (point2[0], point2[1]);
+   glVertex2f (point2[0], point2[1]);
+   glVertex2f (point3[0], point3[1]);
+   glVertex2f (point3[0], point3[1]);
+   glVertex2f (point0[0], point0[1]);
    glEnd ();
 }
 
