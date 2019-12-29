@@ -16,9 +16,9 @@ MAP::MAP (int num_cells[3])
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
-            if (rand() & 3 && ind_z == 20) map[ind] = 1.0f;
-            else if (ind_z == 22) map[ind] = 1.0f;
-            else if (ind_x == ind_z && ind_y == 0) map[ind] = 1.0f;
+            if (rand() & 3 && ind_z == 20) map[ind] = 0.0f;
+            else if (ind_z == 22) map[ind] = 0.0f;
+            else if (ind_x == ind_z && ind_y == 0) map[ind] = 0.0f;
             else map[ind] = -1.0f;
          }
       }

@@ -12,7 +12,7 @@ Society::Society (void)
    dim_y = 60;
    dim_z = 40;
 
-   int dim[3] = {dim_x, dim_y, dim_z};
+   int dim[3] = { dim_x, dim_y, dim_z };
 
    Map = new MAP (dim);
 
@@ -34,7 +34,7 @@ Society::Society (void)
       for (int ind_y = 0; ind_y < dim_y; ind_y++) {
          for (int ind_x = 0; ind_x < dim_x; ind_x++, ind++)
          {
-            if (map[ind] > 0.0f && ind_z == map_layer && unit_count < num_units) {
+            if (map[ind] >= 0.0f && ind_z == map_layer && unit_count < num_units) {
                unit_count++;
                dest[0] = (float)ind_x     + 0.5f;
                dest[1] = (float)ind_y     + 0.5f;
