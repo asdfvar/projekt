@@ -383,7 +383,7 @@ void Facade::display (void)
          unit_positions_z,
          unit_selections);
 
-   draw_info (map_layer);
+//   draw_info (map_layer);
 
    if (selection_active == true)
    {
@@ -410,6 +410,8 @@ void Facade::display (void)
          map,
          map_dims,
          map_layer);
+
+   draw_info (map_layer);
 
    // swap this buffer for the old one
    glutSwapBuffers();
