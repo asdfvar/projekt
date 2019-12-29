@@ -17,10 +17,10 @@ Facade::Facade (void)
 {
    gettimeofday (&start, NULL);
 
-   unit_positions_x = new float[1000];
-   unit_positions_y = new float[1000];
-   unit_positions_z = new float[1000];
-   unit_selections  = new bool[1000];
+   unit_positions_x = new float[10000];
+   unit_positions_y = new float[10000];
+   unit_positions_z = new float[10000];
+   unit_selections  = new bool[10000];
 
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
@@ -124,6 +124,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
+   // Set the destination for the selected units
    if (button == 0 && state == 0 && z_down == false)
    {
       float window[2];
@@ -166,8 +167,10 @@ void Facade::mouseClick (int button, int state, int x, int y)
       society.set_destination (destination);
    }
 
-   else if (mouse_wheel_forward_count >= 2 && z_down == true) {
-      if (transform[0] <= 10.0f && transform[3] <= 10.0f) {
+   else if (mouse_wheel_forward_count >= 2 && z_down == true)
+   {
+      if (transform[0] <= 10.0f && transform[3] <= 10.0f)
+      {
          transform[0] *= 1.1f;
          transform[1] *= 1.1f;
          transform[2] *= 1.1f;
@@ -188,12 +191,14 @@ void Facade::mouseClick (int button, int state, int x, int y)
       mouse_wheel_backward_count = 0;
    }
 
+   // Decrement the map layer
    else if (mouse_wheel_forward_count >= 2 && z_down == false) {
       if (map_layer > 0) map_layer--;
 
       mouse_wheel_forward_count = 0;
    }
 
+   // Increment the map layer
    else if (mouse_wheel_backward_count >= 2 && z_down == false) {
 
       int dim[3];
@@ -377,6 +382,8 @@ void Facade::display (void)
          unit_positions_y,
          unit_positions_z,
          unit_selections);
+
+   draw_info (map_layer);
 
    if (selection_active == true)
    {

@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "text.h"
 #include <iostream>
 #include <cmath>
 
@@ -40,6 +41,7 @@ void draw_map (
    float starting_col_loc = X_START;
 
    // draw grid lines
+   glLineWidth (0.1f);
    for (int row = 0, ind = map_layer * row_max * col_max; row < row_max; row++)
    {
       for (int col = 0; col < col_max; col++, ind++)
@@ -133,6 +135,7 @@ void draw_units (
    const float selected_width_offset  = 0.35f * block_width;
    const float selected_height_offset = 0.35f * block_height;
 
+   glLineWidth (0.1f);
    for (int ind = 0; ind < num_units; ind++)
    {
       if (floorf (z[ind]) == map_layer)
@@ -206,6 +209,7 @@ void draw_selection_box (
    transformation (point2, transform, translation);
    transformation (point3, transform, translation);
 
+   glLineWidth (0.1f);
    glBegin (GL_LINES);
    glColor3f (1.0f, 0.0f, 0.0f);
    glVertex2f (point0[0], point0[1] );
@@ -217,4 +221,13 @@ void draw_selection_box (
    glVertex2f (point3[0], point3[1] );
    glVertex2f (point0[0], point0[1] );
    glEnd ();
+}
+
+void draw_info (int map_layer)
+{
+   Text text;
+
+   text.populate (map_layer);
+
+   text.display_contents (-0.95f, 0.95f, 1.0f);
 }

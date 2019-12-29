@@ -169,6 +169,7 @@ int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
 
    return ind;
 }
+
 void Society::select_units (float *selection_box, int map_layer, bool control_down)
 {
    if (control_down == false)
@@ -185,6 +186,7 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
       float y = (*unit)->get_position (1);
       float z = (*unit)->get_position (2);
 
+      // Ignore units that are not at the current map layer
       if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
 
       float min_x = (selection_box[0] + 1.0f) / 2.0f * (float)dim_x;

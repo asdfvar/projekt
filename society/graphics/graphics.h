@@ -6,6 +6,8 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
+void draw_info (int map_layer);
+
 void draw_map (
       float       *tranform,
       float       *translation,
