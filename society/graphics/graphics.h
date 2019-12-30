@@ -38,42 +38,12 @@ class HUD
       HUD (void)
       {
          accumulated_time   = 0.0f;
-         display_time_limit = 1.0f;
+         display_time_limit = 2.0f;
          map_layer          = 0;
       }
 
-      void draw_info (void)
-      {
-         Text text;
-
-         text.populate (map_layer);
-
-         float first_time_component = 0.25f * display_time_limit;
-
-         float alpha = 1.0f;
-         if (accumulated_time > first_time_component)
-         {
-            alpha = 1.0f -
-               (accumulated_time   - first_time_component) /
-               (display_time_limit - first_time_component);
-         }
-
-         if (accumulated_time <= display_time_limit)
-         {
-            text.display_contents (-0.95f, 0.95f, alpha, 1.0f);
-         }
-      }
-
-      void update (float time_step, int map_layer_in)
-      {
-         if (map_layer_in != map_layer)
-         {
-            accumulated_time = 0.0f;
-            map_layer = map_layer_in;
-         }
-
-         accumulated_time += time_step;
-      }
+      void draw_info (void);
+      void update (float time_step, int map_layer_in);
 
    private:
 

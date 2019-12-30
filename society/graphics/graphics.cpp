@@ -222,3 +222,37 @@ void draw_selection_box (
    glVertex2f (point0[0], point0[1]);
    glEnd ();
 }
+
+void HUD::draw_info (void)
+{
+   float first_time_component = 0.25f * display_time_limit;
+
+   float alpha = 1.0f;
+   if (accumulated_time > first_time_component)
+   {
+      alpha = 1.0f -
+         (accumulated_time   - first_time_component) /
+         (display_time_limit - first_time_component);
+   }
+
+   if (accumulated_time <= display_time_limit)
+   {
+      Text text;
+
+      text.populate ("elevation: ");
+      text.populate (map_layer);
+
+      text.display_contents (-0.95f, 0.95f, alpha, 1.0f);
+   }
+}
+
+void HUD::update (float time_step, int map_layer_in)
+{
+   if (map_layer_in != map_layer)
+   {
+      accumulated_time = 0.0f;
+      map_layer = map_layer_in;
+   }
+
+   accumulated_time += time_step;
+}
