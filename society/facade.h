@@ -2,6 +2,7 @@
 #define FACADE_H
 
 #include "society.h"
+#include "graphics.h"
 #include <queue>
 #include <mutex>
 #include <sys/time.h>
@@ -26,6 +27,7 @@ class Facade {
       Society society;
 
       struct timeval start, end;
+      double time_step = 0.01f;
 
       float *unit_positions_x;
       float *unit_positions_y;
@@ -48,6 +50,8 @@ class Facade {
       int mouse_wheel_forward_count;
 
       int mouse_pos[2];
+
+      HUD hud;
 
       float selection_box[4];
       bool selection_active;

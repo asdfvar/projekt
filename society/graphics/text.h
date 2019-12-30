@@ -19,6 +19,7 @@ class Text
       void display_contents (
             const float x,
             const float y,
+            const float alpha,
             const float scale);
 
    private:
@@ -30,6 +31,7 @@ class Text
             std::string input,
             const float x,
             const float y,
+            const float alpha,
             const float scale);
 
 };

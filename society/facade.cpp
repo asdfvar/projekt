@@ -347,8 +347,6 @@ Facade::~Facade (void)
 */
 void Facade::idle (void)
 {
-   double time_step = 0.01;
-
    double time_taken;
 
    do {
@@ -361,6 +359,9 @@ void Facade::idle (void)
 
    // Update society at this time step
    society.update (time_step);
+
+   // Update HUD information
+   hud.update (time_step, map_layer);
 
    glutPostRedisplay ();
 }
@@ -382,8 +383,6 @@ void Facade::display (void)
          unit_positions_y,
          unit_positions_z,
          unit_selections);
-
-//   draw_info (map_layer);
 
    if (selection_active == true)
    {
@@ -411,7 +410,7 @@ void Facade::display (void)
          map_dims,
          map_layer);
 
-   draw_info (map_layer);
+   hud.draw_info ();
 
    // swap this buffer for the old one
    glutSwapBuffers();

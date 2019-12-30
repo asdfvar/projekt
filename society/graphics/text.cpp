@@ -184,14 +184,13 @@ void Text::write_to_screen (
       std::string input,
       const float x,
       const float y,
+      const float alpha,
       const float scale)
 {
    const float hor = 0.01f;
    const float ver = 0.02f;
 
    float offset = 0.0f;
-
-   float alpha = 1.0f;
 
    /*
    ** draw the background for contrasting the text
@@ -670,6 +669,7 @@ void Text::populate (double number)
 void Text::display_contents (
       const float x,
       const float y,
+      const float alpha,
       const float scale)
 {
    const float ver = 0.02f;
@@ -680,6 +680,7 @@ void Text::display_contents (
             buffer[k],
             x,
             y - (float)k * ver * 3.0f * scale,
+            alpha,
             scale);
    }
 }

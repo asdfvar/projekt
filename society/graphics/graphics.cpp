@@ -222,12 +222,3 @@ void draw_selection_box (
    glVertex2f (point0[0], point0[1]);
    glEnd ();
 }
-
-void draw_info (int map_layer)
-{
-   Text text;
-
-   text.populate (map_layer);
-
-   text.display_contents (-0.95f, 0.95f, 1.0f);
-}
