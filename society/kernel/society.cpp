@@ -91,6 +91,7 @@ void Society::set_destination (int destination[3])
    int *unit_dest_y = unit_dest_x + num_units;
    int *unit_dest_z = unit_dest_y + num_units;
 
+   // Retrieve all unit destinations into an array for later use
    int ind = 0;
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
@@ -105,6 +106,7 @@ void Society::set_destination (int destination[3])
       ind++;
    }
 
+   // Set unit destinations
    ind = 0;
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
@@ -118,6 +120,7 @@ void Society::set_destination (int destination[3])
       dest[1] = ind_to_j (dest_ind, dim[0], dim[1], dim[2]);
       dest[2] = ind_to_k (dest_ind, dim[0], dim[1], dim[2]);
 
+      // Determine if the select destination is already claimed by another unit
       bool found = true;
       for (int unit_ind = 0; unit_ind < num_units; unit_ind++)
       {
