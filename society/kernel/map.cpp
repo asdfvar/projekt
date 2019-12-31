@@ -7,8 +7,9 @@ MAP::MAP (int num_cells[3])
    size[1] = num_cells[1];
    size[2] = num_cells[2];
 
-   map            = new float[size[0] * size[1] * size[2]];
-   ground         = new float[size[0] * size[1] * size[2]];
+   map          = new float[size[0] * size[1] * size[2]];
+   ground       = new float[size[0] * size[1] * size[2]];
+   action_cells = new int  [size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 
@@ -20,6 +21,8 @@ MAP::MAP (int num_cells[3])
             else if (ind_z == 22) map[ind] = 0.0f;
             else if (ind_x == ind_z && ind_y == 0) map[ind] = 0.0f;
             else map[ind] = -1.0f;
+
+            action_cells[ind] = 0;
          }
       }
    }
@@ -31,6 +34,7 @@ MAP::~MAP (void)
 {
    delete[] map;
    delete[] ground;
+   delete[] action_cells;
 }
 
 // Ground map is dependent on the map. It is the same with the exception that

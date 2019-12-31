@@ -173,7 +173,7 @@ int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
    return ind;
 }
 
-void Society::select_units (float *selection_box, int map_layer, bool control_down)
+void Society::select_units (float selection_box[2][3], int map_layer, bool control_down)
 {
    if (control_down == false)
    {
@@ -192,8 +192,8 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
       // Ignore units that are not at the current map layer
       if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
 
-      float min_x = (selection_box[0] + 1.0f) / 2.0f * (float)dim_x;
-      float max_x = (selection_box[2] + 1.0f) / 2.0f * (float)dim_x;
+      float min_x = (selection_box[0][0] + 1.0f) / 2.0f * (float)dim_x;
+      float max_x = (selection_box[1][0] + 1.0f) / 2.0f * (float)dim_x;
 
       if (max_x < min_x) {
          float temp = min_x;
@@ -201,8 +201,8 @@ void Society::select_units (float *selection_box, int map_layer, bool control_do
          max_x = temp;
       }
 
-      float min_y = (selection_box[1] + 1.0f) / 2.0f * (float)dim_y;
-      float max_y = (selection_box[3] + 1.0f) / 2.0f * (float)dim_y;
+      float min_y = (selection_box[0][1] + 1.0f) / 2.0f * (float)dim_y;
+      float max_y = (selection_box[1][1] + 1.0f) / 2.0f * (float)dim_y;
 
       if (max_y < min_y) {
          float temp = min_y;

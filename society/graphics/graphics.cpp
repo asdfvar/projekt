@@ -195,14 +195,14 @@ void draw_units (
 }
 
 void draw_selection_box (
-      float *selection_box,
+      float selection_box[2][3],
       float *transform,
       float *translation)
 {
-   float point0[2] = { selection_box[0], selection_box[1] };
-   float point1[2] = { selection_box[2], selection_box[1] };
-   float point2[2] = { selection_box[2], selection_box[3] };
-   float point3[2] = { selection_box[0], selection_box[3] };
+   float point0[2] = { selection_box[0][0], selection_box[0][1] };
+   float point1[2] = { selection_box[1][0], selection_box[0][1] };
+   float point2[2] = { selection_box[1][0], selection_box[1][1] };
+   float point3[2] = { selection_box[0][0], selection_box[1][1] };
 
    transformation (point0, transform, translation);
    transformation (point1, transform, translation);

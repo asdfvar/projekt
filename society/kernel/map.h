@@ -1,6 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <list>
+
 class MAP
 {
    public:
@@ -20,6 +22,7 @@ class MAP
 
       float *map;
       float *ground;
+      int   *action_cells;
 
       int size[3];
 

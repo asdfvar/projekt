@@ -44,6 +44,8 @@ Facade::Facade (void)
    mouse_pos[1] = 0;
 
    selection_active = false;
+
+   mode = 0;
 }
 
 /*
@@ -74,6 +76,11 @@ void Facade::keyboardDown (const char key, int x, int y)
 
    else if (key == 'z') {
       z_down = true;
+   }
+
+   // Dig mode
+   else if (key == 'd') {
+      mode = 1;
    }
 }
 
@@ -180,7 +187,8 @@ void Facade::mouseClick (int button, int state, int x, int y)
       mouse_wheel_forward_count = 0;
    }
 
-   else if (mouse_wheel_backward_count >= 2 && z_down == true) {
+   else if (mouse_wheel_backward_count >= 2 && z_down == true)
+   {
       if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
          transform[0] *= 0.9f;
          transform[1] *= 0.9f;
@@ -192,15 +200,16 @@ void Facade::mouseClick (int button, int state, int x, int y)
    }
 
    // Decrement the map layer
-   else if (mouse_wheel_forward_count >= 2 && z_down == false) {
+   else if (mouse_wheel_forward_count >= 2 && z_down == false)
+   {
       if (map_layer > 0) map_layer--;
 
       mouse_wheel_forward_count = 0;
    }
 
    // Increment the map layer
-   else if (mouse_wheel_backward_count >= 2 && z_down == false) {
-
+   else if (mouse_wheel_backward_count >= 2 && z_down == false)
+   {
       int dim[3];
       society.access_map (&dim[0], &dim[1], &dim[2]);
 
@@ -267,22 +276,30 @@ void Facade::mouseMotion (int x, int y)
       float fyt = fy;
 
       if (selection_active == false) {
-         selection_box[0] = fxt * inv_transform[0] + fyt * inv_transform[1];
-         selection_box[1] = fxt * inv_transform[2] + fyt * inv_transform[3];
+         selection_box[0][0] = fxt * inv_transform[0] + fyt * inv_transform[1];
+         selection_box[0][1] = fxt * inv_transform[2] + fyt * inv_transform[3];
+         selection_box[0][2] = (float)map_layer + 0.5f;
 
-         selection_box[0] -= translation[0];
-         selection_box[1] -= translation[1];
+         selection_box[0][0] -= translation[0];
+         selection_box[0][1] -= translation[1];
       }
 
-      selection_box[2] = fxt * inv_transform[0] + fyt * inv_transform[1];
-      selection_box[3] = fxt * inv_transform[2] + fyt * inv_transform[3];
+      selection_box[1][0] = fxt * inv_transform[0] + fyt * inv_transform[1];
+      selection_box[1][1] = fxt * inv_transform[2] + fyt * inv_transform[3];
+      selection_box[0][2] = (float)map_layer + 0.5f;
 
-      selection_box[2] -= translation[0];
-      selection_box[3] -= translation[1];
+      selection_box[1][0] -= translation[0];
+      selection_box[1][1] -= translation[1];
 
       selection_active = true;
 
-      society.select_units (selection_box, map_layer, control_down);
+      if (mode == 1) {
+         // Dig mode
+//         society.select_cells (selection_box);
+      }
+      else {
+         society.select_units (selection_box, map_layer, control_down);
+      }
    }
 
    // Adjust the rotation of the world
@@ -317,6 +334,7 @@ void Facade::mouseMotion (int x, int y)
       transform[3] = temp[3];
    }
 
+   // Shear the world map
    if (z_down == true && button2_down == true)
    {
       float inv_norm_f = 1.0f / sqrtf (fx * fx + fy * fy);

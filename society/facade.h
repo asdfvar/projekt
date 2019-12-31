@@ -36,6 +36,8 @@ class Facade {
 
       int map_layer;
 
+      int mode;
+
       float transform[4];
       float translation[2];
 
@@ -53,7 +55,7 @@ class Facade {
 
       HUD hud;
 
-      float selection_box[4];
+      float selection_box[2][3];
       bool selection_active;
 };
 
