@@ -117,7 +117,6 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-// TODO: find out if there are duplicates when the control key is held down
             if (material[ind] > 0) general_actions[general_actions_size++] = ind;
          }
       }
@@ -132,6 +131,11 @@ void MAP::set_dig (void)
    }
 
    dig_actions_size += general_actions_size;
+   general_actions_size = 0;
+}
+
+void MAP::unselect_general_actions (void)
+{
    general_actions_size = 0;
 }
 

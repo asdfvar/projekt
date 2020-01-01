@@ -236,6 +236,8 @@ void Society::unselect_all (void)
    {
       (*unit)->unselect();
    }
+
+   Map->unselect_general_actions ();
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)

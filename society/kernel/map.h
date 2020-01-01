@@ -24,6 +24,8 @@ class MAP
       void ready_dig (int cell_selections[2][3], bool control_down);
       void set_dig (void);
 
+      void unselect_general_actions (void);
+
    private:
 
       float *map;
