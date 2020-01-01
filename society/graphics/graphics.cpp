@@ -278,23 +278,27 @@ void HUD::draw_info (void)
 {
    float first_time_component = 0.25f * display_time_limit;
 
-   float alpha = 1.0f;
+   float alpha_start = 0.8f;
+   float alpha = alpha_start;
+
    if (accumulated_time > first_time_component)
    {
       alpha = 1.0f -
          (accumulated_time   - first_time_component) /
          (display_time_limit - first_time_component);
+
+      alpha *= alpha_start;
    }
 
    // Display text with a fading decay
    if (accumulated_time <= display_time_limit)
    {
-      Text text;
+      Text elevation;
 
-      text.populate ("elevation: ");
-      text.populate (map_layer);
+      elevation.populate ("elevation: ");
+      elevation.populate (map_layer);
 
-      text.display_contents (-0.95f, 0.95f, alpha, 1.0f);
+      elevation.display_contents (-0.95f, 0.95f, alpha, 1.0f);
    }
 
    if (mode == 1)
