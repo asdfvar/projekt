@@ -173,7 +173,7 @@ int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
    return ind;
 }
 
-void Society::select_units (float selection_box[2][3], int map_layer, bool control_down)
+void Society::select_units (int cell_selections[2][3], int map_layer, bool control_down)
 {
    if (control_down == false)
    {
@@ -189,13 +189,8 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
       float y = (*unit)->get_position (1);
       float z = (*unit)->get_position (2);
 
-      // TODO: generalize this now that the selection box is 3D
-      // Ignore units that are not at the current map layer
-      if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
-
-// TODO: remove this
-      float min_x = (selection_box[0][0] + 1.0f) / 2.0f * dim_x;
-      float max_x = (selection_box[1][0] + 1.0f) / 2.0f * dim_x;
+      float min_x = cell_selections[0][0];
+      float max_x = cell_selections[1][0];
 
       if (max_x < min_x) {
          float temp = min_x;
@@ -203,8 +198,8 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
          max_x = temp;
       }
 
-      float min_y = (selection_box[0][1] + 1.0f) / 2.0f * dim_y;
-      float max_y = (selection_box[1][1] + 1.0f) / 2.0f * dim_y;
+      float min_y = cell_selections[0][1];
+      float max_y = cell_selections[1][1];
 
       if (max_y < min_y) {
          float temp = min_y;
@@ -212,8 +207,20 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
          max_y = temp;
       }
 
+      float min_z = cell_selections[0][2];
+      float max_z = cell_selections[1][2];
+
+      if (max_z < min_z) {
+         float temp = min_z;
+         min_z = max_z;
+         max_z = temp;
+      }
+
+      max_z += 1.0f;
+
       if (x >= min_x && x <= max_x &&
-          y >= min_y && y <= max_y)
+          y >= min_y && y <= max_y &&
+          z >= min_z && z < max_z)
       {
          (*unit)->select();
       }

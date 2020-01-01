@@ -25,7 +25,7 @@ class Society
 
       const float *access_map (int *dim_x, int *dim_y, int *dim_z);
 
-      void select_units (float selection_box[2][3], int map_layer, bool control_down);
+      void select_units (int cell_selections[2][3], int map_layer, bool control_down);
 
       void select_all (void);
 

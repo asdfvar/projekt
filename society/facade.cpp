@@ -320,8 +320,7 @@ void Facade::mouseMotion (int x, int y)
          society.select_cells (cell_selections);
       }
       else {
-// TODO: cell_selections here too
-         society.select_units (selection_box, map_layer, control_down);
+         society.select_units (cell_selections, map_layer, control_down);
       }
    }
 

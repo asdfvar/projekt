@@ -114,9 +114,6 @@ void MAP::set_dig (int cell_selections[2][3])
       row_max,
       cell_selections[1][2] };
 
-std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
-std::cout << "end = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
-
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) action_cells[ind] = 0;
 
    for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
