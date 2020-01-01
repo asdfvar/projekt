@@ -306,7 +306,7 @@ void HUD::draw_info (void)
       Text dig;
 
       dig.populate ("dig mode");
-      dig.display_contents (0.70f, 0.95f, 1.0f, 1.0f);
+      dig.display_contents (0.70f, 0.95f, 0.6f, 1.0f);
    }
 }
 
