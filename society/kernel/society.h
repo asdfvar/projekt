@@ -31,7 +31,7 @@ class Society
 
       void unselect_all (void);
 
-      void select_cells (int cell_selections[2][3]);
+      void select_cells (int cell_selections[2][3], bool control_down);
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);
 

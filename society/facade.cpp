@@ -316,7 +316,7 @@ void Facade::mouseMotion (int x, int y)
 
       if (mode == 1) {
          // Dig mode
-         society.select_cells (cell_selections);
+         society.select_cells (cell_selections, control_down);
       }
       else {
          society.select_units (cell_selections, map_layer, control_down);

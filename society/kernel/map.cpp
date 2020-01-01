@@ -82,9 +82,9 @@ void MAP::local_change (int flattened_cell_index, float value)
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
 
-void MAP::set_dig (int cell_selections[2][3])
+void MAP::set_dig (int cell_selections[2][3], bool control_down)
 {
-   dig_actions_size = 0;
+   if (!control_down) dig_actions_size = 0;
 
    int col_min = cell_selections[0][0];
    int row_min = cell_selections[0][1];

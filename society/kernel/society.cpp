@@ -243,9 +243,9 @@ void Society::unselect_all (void)
    }
 }
 
-void Society::select_cells (int cell_selections[2][3])
+void Society::select_cells (int cell_selections[2][3], bool control_down)
 {
-   Map->set_dig (cell_selections);
+   Map->set_dig (cell_selections, control_down);
 }
 
 const int *Society::access_dig_actions (int *size)
