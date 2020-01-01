@@ -48,16 +48,21 @@ class HUD
          accumulated_time   = 0.0f;
          display_time_limit = 2.0f;
          map_layer          = 0;
+         mode               = 0;
       }
 
       void draw_info (void);
       void update (float time_step, int map_layer_in);
+
+      void set_mode (int mode_in) { mode = mode_in; };
+      void unset_mode (void)      { mode = 0;       };
 
    private:
 
       float accumulated_time;
       float display_time_limit;
       int   map_layer;
+      int   mode;
 };
 
 #endif

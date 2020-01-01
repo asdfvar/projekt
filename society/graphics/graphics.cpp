@@ -286,6 +286,7 @@ void HUD::draw_info (void)
          (display_time_limit - first_time_component);
    }
 
+   // Display text with a fading decay
    if (accumulated_time <= display_time_limit)
    {
       Text text;
@@ -294,6 +295,14 @@ void HUD::draw_info (void)
       text.populate (map_layer);
 
       text.display_contents (-0.95f, 0.95f, alpha, 1.0f);
+   }
+
+   if (mode == 1)
+   {
+      Text dig;
+
+      dig.populate ("dig mode");
+      dig.display_contents (0.70f, 0.95f, 1.0f, 1.0f);
    }
 }
 

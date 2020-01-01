@@ -88,9 +88,9 @@ void Facade::keyboardDown (const char key, int x, int y)
    }
 
    // Dig mode
-   else if (key == 'd') {
-      mode = 1;
-   }
+   else if (key == 'd') mode = 1;
+
+   hud.set_mode (mode);
 }
 
 /*
@@ -183,6 +183,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
       society.set_destination (destination);
    }
 
+   // Zoom in
    else if (mouse_wheel_forward_count >= 2 && z_down == true)
    {
       if (transform[0] <= 10.0f && transform[3] <= 10.0f)
@@ -196,6 +197,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
       mouse_wheel_forward_count = 0;
    }
 
+   // Zoom out
    else if (mouse_wheel_backward_count >= 2 && z_down == true)
    {
       if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
