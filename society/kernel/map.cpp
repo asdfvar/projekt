@@ -121,8 +121,6 @@ void MAP::set_dig (int cell_selections[2][3], bool control_down)
          }
       }
    }
-
-std::cout << "dig_actions_size = " << dig_actions_size << std::endl;
 }
 
 const int *MAP::access_dig_actions (int *size)
