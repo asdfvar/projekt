@@ -2,6 +2,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#define MAX(A,B) ((A) > (B) ? (A) : (B))
+#define MIN(A,B) ((A) < (B) ? (A) : (B))
+
 MAP::MAP (int num_cells[3])
 {
    size[0] = num_cells[0];
@@ -86,33 +89,15 @@ void MAP::set_dig (int cell_selections[2][3], bool control_down)
 {
    if (!control_down) dig_actions_size = 0;
 
-   int col_min = cell_selections[0][0];
-   int row_min = cell_selections[0][1];
-
-   int col_max = cell_selections[1][0];
-   int row_max = cell_selections[1][1];
-
-   if (col_max < col_min) {
-      int temp = col_min;
-      col_min = col_max;
-      col_max = temp;
-   }
-
-   if (row_max < row_min) {
-      int temp = row_min;
-      row_min = row_max;
-      row_max = temp;
-   }
-
    int start[3] = {
-      col_min,
-      row_min,
-      cell_selections[0][2] };
+      MIN (cell_selections[0][0], cell_selections[1][0]),
+      MIN (cell_selections[0][1], cell_selections[1][1]),
+      MIN (cell_selections[0][2], cell_selections[1][2]) };
 
    int end[3] = {
-      col_max,
-      row_max,
-      cell_selections[1][2] };
+      MAX (cell_selections[0][0], cell_selections[1][0]),
+      MAX (cell_selections[0][1], cell_selections[1][1]),
+      MAX (cell_selections[0][2], cell_selections[1][2]) };
 
    for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
       for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
@@ -127,6 +112,8 @@ void MAP::set_dig (int cell_selections[2][3], bool control_down)
          }
       }
    }
+
+std::cout << "dig_actions_size = " << dig_actions_size << std::endl;
 }
 
 const int *MAP::access_dig_actions (int *size)
