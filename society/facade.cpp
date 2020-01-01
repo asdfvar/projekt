@@ -29,7 +29,6 @@ Facade::Facade (void)
    unit_positions_y = new float[10000];
    unit_positions_z = new float[10000];
    unit_selections  = new bool[10000];
-   action_cells     = new int[100 * 100]; // TODO
 
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
@@ -380,7 +379,6 @@ Facade::~Facade (void)
    delete[] unit_positions_y;
    delete[] unit_positions_z;
    delete[] unit_selections;
-   delete[] action_cells;
 }
 
 /*
@@ -419,9 +417,6 @@ void Facade::display (void)
    const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
    int map_dims[3] = { dim_x, dim_y, dim_z };
 
-   // Get digging action
-   int num_dig_actions = society.get_actions (1, map_layer, action_cells);
-
    int num_units = society.get_unit_info (
          unit_positions_x,
          unit_positions_y,
@@ -436,10 +431,14 @@ void Facade::display (void)
             translation);
    }
 
+   // Get digging actions
+   int num_dig_actions;
+   const int *dig_actions = society.access_dig_actions (&num_dig_actions);
+
    draw_actions (
          transform,
          translation,
-         action_cells,
+         dig_actions,
          num_dig_actions,
          map_dims,
          map_layer);

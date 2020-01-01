@@ -248,16 +248,7 @@ void Society::select_cells (int cell_selections[2][3])
    Map->set_dig (cell_selections);
 }
 
-int Society::get_actions (int action, int map_layer, int *actions)
+const int *Society::access_dig_actions (int *size)
 {
-   const int *map_actions = Map->access_actions ();
-
-   int num_actions = 0;
-   for (int ind_y = 0, ind = dim_x * dim_y * map_layer; ind_y < dim_y; ind_y++) {
-      for (int ind_x = 0; ind_x < dim_y; ind_x++, ind++) {
-         if (map_actions[ind] == action) actions[num_actions++] = ind;
-      }
-   }
-
-   return num_actions;
+   return Map->access_dig_actions (size);
 }

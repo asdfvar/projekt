@@ -35,7 +35,7 @@ class Society
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);
 
-      int get_actions (int action, int map_layer, int *actions);
+      const int *access_dig_actions (int *size);
 
    private:
 

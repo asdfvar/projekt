@@ -10,9 +10,10 @@ class MAP
       MAP (int num_cells[3]);
       ~MAP (void);
 
-      const float *access_map     (void) { return (const float*)map;          };
-      const float *access_ground  (void) { return (const float*)ground;       };
-      const int   *access_actions (void) { return (const int*  )action_cells; };
+      const float *access_map         (void) { return (const float*)map;          };
+      const float *access_ground      (void) { return (const float*)ground;       };
+
+      const int   *access_dig_actions (int *size);
 
       int map_dim (int dim) { return size[dim]; };
 
@@ -25,7 +26,7 @@ class MAP
 
       float *map;
       float *ground;
-      int   *action_cells;
+      int   *dig_actions; int dig_actions_size;
 
       int size[3];
 

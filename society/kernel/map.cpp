@@ -10,7 +10,9 @@ MAP::MAP (int num_cells[3])
 
    map          = new float[size[0] * size[1] * size[2]];
    ground       = new float[size[0] * size[1] * size[2]];
-   action_cells = new int  [size[0] * size[1] * size[2]];
+   dig_actions  = new int  [size[0] * size[1] * size[2]];
+
+   dig_actions_size = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 
@@ -22,8 +24,6 @@ MAP::MAP (int num_cells[3])
             else if (ind_z == 22) map[ind] = 0.0f;
             else if (ind_x == ind_z && ind_y == 0) map[ind] = 0.0f;
             else map[ind] = -1.0f;
-
-            action_cells[ind] = 0;
          }
       }
    }
@@ -35,7 +35,7 @@ MAP::~MAP (void)
 {
    delete[] map;
    delete[] ground;
-   delete[] action_cells;
+   delete[] dig_actions;
 }
 
 // Ground map is dependent on the map. It is the same with the exception that
@@ -82,9 +82,9 @@ void MAP::local_change (int flattened_cell_index, float value)
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
 
-// TODO: define the action cells to be directly representative to the dig action as defined withh that other "todo" item
 void MAP::set_dig (int cell_selections[2][3])
 {
+   dig_actions_size = 0;
 
    int col_min = cell_selections[0][0];
    int row_min = cell_selections[0][1];
@@ -114,8 +114,6 @@ void MAP::set_dig (int cell_selections[2][3])
       row_max,
       cell_selections[1][2] };
 
-   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) action_cells[ind] = 0;
-
    for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
       for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
          for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
@@ -125,8 +123,15 @@ void MAP::set_dig (int cell_selections[2][3])
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            action_cells[ind] = 1;
+            dig_actions[dig_actions_size++] = ind;
          }
       }
    }
 }
+
+const int *MAP::access_dig_actions (int *size)
+{
+   *size = dig_actions_size;
+   return (const int*)dig_actions;
+};
+
