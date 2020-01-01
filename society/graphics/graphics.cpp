@@ -44,6 +44,8 @@ void draw_actions (
    // Draw the action cells
    for (int ind = 0; ind < num_actions; ind++)
    {
+      if (actions[ind] / (dims[0] * dims[1]) != map_layer) continue;
+
       int cell = actions[ind] % (dims[0] * dims[1]);
 
       int col = cell % dims[0];
