@@ -150,13 +150,8 @@ void Society::update (float time_step)
    }
 }
 
-// TODO: remove the arguments and use "getters" in place
-const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out)
+const float *Society::access_map ()
 {
-   *dim_x_out = dim[0];
-   *dim_y_out = dim[1];
-   *dim_z_out = dim[2];
-
    return static_cast<const float*>(Map->access_map ());
 }
 

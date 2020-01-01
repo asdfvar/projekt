@@ -171,12 +171,13 @@ void Facade::mouseClick (int button, int state, int x, int y)
          temp      * inv_transform[2] +
          window[1] * inv_transform[3] - translation[1];
 
-      int dim_x, dim_y, dim_z;
-      society.access_map (&dim_x, &dim_y, &dim_z);
+      int size[2] = {
+         society.get_size (0),
+         society.get_size (1) };
 
       float fcell[2];
-      fcell[0] = (window[0] + 1.0f) / 2.0f * (float)dim_x;
-      fcell[1] = (window[1] + 1.0f) / 2.0f * (float)dim_y;
+      fcell[0] = (window[0] + 1.0f) / 2.0f * (float)size[0];
+      fcell[1] = (window[1] + 1.0f) / 2.0f * (float)size[1];
 
       int cell[2];
       cell[0] = (int)fcell[0];
@@ -229,12 +230,8 @@ void Facade::mouseClick (int button, int state, int x, int y)
    // Increment the map layer
    else if (mouse_wheel_backward_count >= 2 && z_down == false)
    {
-      int dim[3];
-      society.access_map (&dim[0], &dim[1], &dim[2]);
+      if (map_layer < society.get_size (2) - 1) map_layer++;
 
-      if (map_layer < dim[2] - 1) {
-         map_layer++;
-      }
       mouse_wheel_backward_count = 0;
    }
 }
@@ -310,16 +307,17 @@ void Facade::mouseMotion (int x, int y)
       selection_box[1][0] -= translation[0];
       selection_box[1][1] -= translation[1];
 
-      int dim[3];
-      society.access_map (&dim[0], &dim[1], &dim[2]);
+      int size[2] = {
+         society.get_size (0),
+         society.get_size (1) };
 
       int cell_selections[2][3];
-      cell_selections[0][0] = (int)(window_to_cell (selection_box[0][0], dim[0]) + 0.5f);
-      cell_selections[0][1] = (int)(window_to_cell (selection_box[0][1], dim[1]) + 0.5f);
+      cell_selections[0][0] = (int)(window_to_cell (selection_box[0][0], size[0]) + 0.5f);
+      cell_selections[0][1] = (int)(window_to_cell (selection_box[0][1], size[1]) + 0.5f);
       cell_selections[0][2] = (int)selection_box[0][2];
 
-      cell_selections[1][0] = (int)(window_to_cell (selection_box[1][0], dim[0]) + 0.5f);
-      cell_selections[1][1] = (int)(window_to_cell (selection_box[1][1], dim[1]) + 0.5f);
+      cell_selections[1][0] = (int)(window_to_cell (selection_box[1][0], size[0]) + 0.5f);
+      cell_selections[1][1] = (int)(window_to_cell (selection_box[1][1], size[1]) + 0.5f);
       cell_selections[1][2] = map_layer;
 
       selection_active = true;
@@ -423,9 +421,12 @@ void Facade::display (void)
    // clear this openGL buffer
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   int dim_x, dim_y, dim_z;
-   const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
-   int map_dims[3] = { dim_x, dim_y, dim_z };
+   const float *map = society.access_map ();
+
+   int map_dims[3] = {
+      society.get_size (0),
+      society.get_size (1),
+      society.get_size (2) };
 
    int num_units = society.get_unit_info (
          unit_positions_x,

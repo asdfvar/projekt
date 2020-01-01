@@ -23,7 +23,9 @@ class Society
 
       void set_destination (int dest[3]);
 
-      const float *access_map (int *dim_x, int *dim_y, int *dim_z);
+      const float *access_map ();
+
+      const int get_size (int ind) { return dim[ind]; };
 
       void select_units (int cell_selections[2][3], int map_layer, bool control_down);
 
@@ -43,9 +45,6 @@ class Society
 
       MAP *Map;
       int  dim[3];
-      int  dim_x; // TODO: change these to: dim[3]
-      int  dim_y;
-      int  dim_z;
 
       float accum_time;
       float accum_time_limit;
