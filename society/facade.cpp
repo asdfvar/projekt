@@ -305,12 +305,12 @@ void Facade::mouseMotion (int x, int y)
       society.access_map (&dim[0], &dim[1], &dim[2]);
 
       int cell_selections[2][3];
-      cell_selections[0][0] = (int)window_to_cell (selection_box[0][0], dim[0]);
-      cell_selections[0][1] = (int)window_to_cell (selection_box[0][1], dim[1]);
+      cell_selections[0][0] = (int)(window_to_cell (selection_box[0][0], dim[0]) + 0.5f);
+      cell_selections[0][1] = (int)(window_to_cell (selection_box[0][1], dim[1]) + 0.5f);
       cell_selections[0][2] = (int)selection_box[0][2];
 
-      cell_selections[1][0] = (int)window_to_cell (selection_box[1][0], dim[0]);
-      cell_selections[1][1] = (int)window_to_cell (selection_box[1][1], dim[1]);
+      cell_selections[1][0] = (int)(window_to_cell (selection_box[1][0], dim[0]) + 0.5f);
+      cell_selections[1][1] = (int)(window_to_cell (selection_box[1][1], dim[1]) + 0.5f);
       cell_selections[1][2] = map_layer;
 
       selection_active = true;
