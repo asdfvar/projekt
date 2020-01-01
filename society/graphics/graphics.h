@@ -37,6 +37,7 @@ void draw_actions (
       const int   *actions,
       int          num_actions,
       int          dims[3],
+      float       *color,
       int          map_layer);
 
 class HUD

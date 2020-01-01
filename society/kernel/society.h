@@ -35,7 +35,9 @@ class Society
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);
 
-      const int *access_dig_actions (int *size);
+      const int *access_general_actions (int *size);
+      const int *access_dig_actions     (int *size);
+      void set_dig_actions (void);
 
    private:
 

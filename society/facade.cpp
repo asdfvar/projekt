@@ -78,6 +78,14 @@ void Facade::keyboardDown (const char key, int x, int y)
       mode = 0;
    }
 
+   // Enter key
+   if (key == 13)
+   {
+      if (mode == 1) society.set_dig_actions ();
+
+      mode = 0;
+   }
+
    // Control-'a'
    else if (key == 1) {
       society.select_all ();
@@ -433,16 +441,40 @@ void Facade::display (void)
             translation);
    }
 
+   float color[3];
+
    // Get digging actions
-   int num_dig_actions;
-   const int *dig_actions = society.access_dig_actions (&num_dig_actions);
+   int general_actions_size;
+   const int *general_actions = society.access_general_actions (&general_actions_size);
+
+   color[0] = 1.0f;
+   color[1] = 0.0f;
+   color[2] = 0.0f;
+
+   draw_actions (
+         transform,
+         translation,
+         general_actions,
+         general_actions_size,
+         map_dims,
+         color,
+         map_layer);
+
+   // Get digging actions
+   int dig_actions_size;
+   const int *dig_actions = society.access_dig_actions (&dig_actions_size);
+
+   color[0] = 0.3f;
+   color[1] = 0.0f;
+   color[2] = 0.0f;
 
    draw_actions (
          transform,
          translation,
          dig_actions,
-         num_dig_actions,
+         dig_actions_size,
          map_dims,
+         color,
          map_layer);
 
    draw_units (

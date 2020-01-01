@@ -30,6 +30,7 @@ void draw_actions (
       const int   *actions,
       int          num_actions,
       int          dims[3],
+      float        color[3],
       int          map_layer)
 {
    int row_max = dims[1];
@@ -40,6 +41,8 @@ void draw_actions (
 
    const float starting_row_loc = Y_START;
    const float starting_col_loc = X_START;
+
+   glColor3f (color[0], color[1], color[2]);
 
    // Draw the action cells
    for (int ind = 0; ind < num_actions; ind++)
@@ -55,7 +58,6 @@ void draw_actions (
       float vertex_y = starting_row_loc + block_height * (float)row;
 
       glBegin (GL_POLYGON);
-      glColor3f (1.0f, 0.0f, 0.0f);
 
       float point0[2] = { vertex_x,               vertex_y               };
       float point1[2] = { vertex_x + block_width, vertex_y               };

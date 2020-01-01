@@ -15,9 +15,8 @@ MAP::MAP (int num_cells[3])
    ground       = new float[size[0] * size[1] * size[2]];
    material     = new int  [size[0] * size[1] * size[2]];
 
-   dig_actions  = new int  [size[0] * size[1] * size[2]];
-
-   dig_actions_size = 0;
+   general_actions  = new int  [size[0] * size[1] * size[2]]; general_actions_size = 0;
+   dig_actions          = new int  [size[0] * size[1] * size[2]]; dig_actions_size         = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 
@@ -47,6 +46,7 @@ MAP::~MAP (void)
    delete[] map;
    delete[] ground;
    delete[] material;
+   delete[] general_actions;
    delete[] dig_actions;
 }
 
@@ -94,9 +94,9 @@ void MAP::local_change (int flattened_cell_index, float value)
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
 
-void MAP::set_dig (int cell_selections[2][3], bool control_down)
+void MAP::ready_dig (int cell_selections[2][3], bool control_down)
 {
-   if (!control_down) dig_actions_size = 0;
+   if (!control_down) general_actions_size = 0;
 
    int start[3] = {
       MIN (cell_selections[0][0], cell_selections[1][0]),
@@ -117,15 +117,32 @@ void MAP::set_dig (int cell_selections[2][3], bool control_down)
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            if (material[ind] > 0) dig_actions[dig_actions_size++] = ind;
+// TODO: find out if there are duplicates when the control key is held down
+            if (material[ind] > 0) general_actions[general_actions_size++] = ind;
          }
       }
    }
 }
+
+void MAP::set_dig (void)
+{
+   for (int ind = 0; ind < general_actions_size; ind++)
+   {
+      dig_actions[dig_actions_size + ind] = general_actions[ind];
+   }
+
+   dig_actions_size += general_actions_size;
+   general_actions_size = 0;
+}
+
+const int *MAP::access_general_actions (int *size)
+{
+   *size = general_actions_size;
+   return (const int*)general_actions;
+};
 
 const int *MAP::access_dig_actions (int *size)
 {
    *size = dig_actions_size;
    return (const int*)dig_actions;
 };
-
