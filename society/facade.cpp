@@ -21,6 +21,7 @@ Facade::Facade (void)
    unit_positions_y = new float[10000];
    unit_positions_z = new float[10000];
    unit_selections  = new bool[10000];
+   action_cells     = new int[100 * 100]; // TODO
 
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
@@ -67,6 +68,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    // Escape key
    if (key == 27) {
       society.unselect_all ();
+      mode = 0;
    }
 
    // Control-'a'
@@ -286,7 +288,7 @@ void Facade::mouseMotion (int x, int y)
 
       selection_box[1][0] = fxt * inv_transform[0] + fyt * inv_transform[1];
       selection_box[1][1] = fxt * inv_transform[2] + fyt * inv_transform[3];
-      selection_box[0][2] = (float)map_layer + 0.5f;
+      selection_box[1][2] = (float)map_layer + 0.5f;
 
       selection_box[1][0] -= translation[0];
       selection_box[1][1] -= translation[1];
@@ -295,7 +297,7 @@ void Facade::mouseMotion (int x, int y)
 
       if (mode == 1) {
          // Dig mode
-//         society.select_cells (selection_box);
+         society.select_cells (selection_box);
       }
       else {
          society.select_units (selection_box, map_layer, control_down);
@@ -358,6 +360,7 @@ Facade::~Facade (void)
    delete[] unit_positions_y;
    delete[] unit_positions_z;
    delete[] unit_selections;
+   delete[] action_cells;
 }
 
 /*
@@ -396,6 +399,14 @@ void Facade::display (void)
    const float *map = society.access_map (&dim_x, &dim_y, &dim_z);
    int map_dims[3] = { dim_x, dim_y, dim_z };
 
+   // Get digging action
+   int num_dig_actions = society.get_actions (1, map_layer, action_cells);
+#if 1
+std::cout << "action_cells = ";
+for (int ind = 0; ind < num_dig_actions; ind++) std::cout << action_cells[ind] << ", ";
+std::cout << std::endl;
+#endif
+
    int num_units = society.get_unit_info (
          unit_positions_x,
          unit_positions_y,
@@ -409,6 +420,14 @@ void Facade::display (void)
             transform,
             translation);
    }
+
+   draw_actions (
+         transform,
+         translation,
+         action_cells,
+         num_dig_actions,
+         map_dims,
+         map_layer);
 
    draw_units (
          transform,

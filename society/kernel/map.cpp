@@ -1,5 +1,6 @@
 #include "map.h"
 #include <cstdlib>
+#include <iostream>
 
 MAP::MAP (int num_cells[3])
 {
@@ -79,4 +80,57 @@ void MAP::local_change (int flattened_cell_index, float value)
 
    int next_z_ind = flattened_cell_index + size[0] * size[1];
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
+}
+
+// TODO: define the action cells to be directly representative to the dig action as defined withh that other "todo" item
+void MAP::set_dig (float selection_box[2][3])
+{
+
+// TODO: remove this conversion logic outta society as a whole
+   float partial_col_min = (selection_box[0][0] + 1.0f) / 2.0f * (float)size[0];
+   float partial_row_min = (selection_box[0][1] + 1.0f) / 2.0f * (float)size[1];
+
+   float partial_col_max = (selection_box[1][0] + 1.0f) / 2.0f * (float)size[0];
+   float partial_row_max = (selection_box[1][1] + 1.0f) / 2.0f * (float)size[1];
+
+   if (partial_col_max < partial_col_min) {
+      float temp = partial_col_min;
+      partial_col_min = partial_col_max;
+      partial_col_max = temp;
+   }
+
+   if (partial_row_max < partial_row_min) {
+      float temp = partial_row_min;
+      partial_row_min = partial_row_max;
+      partial_row_max = temp;
+   }
+
+   int start[3] = {
+      (int)partial_col_min,
+      (int)partial_row_min,
+      (int)selection_box[0][2] };
+
+   int end[3] = {
+      (int)partial_col_max,
+      (int)partial_row_max,
+      (int)selection_box[1][2] };
+
+std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
+std::cout << "end = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;
+
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) action_cells[ind] = 0;
+
+   for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
+      for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
+         for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
+         {
+            int ind =
+               ind_x                     +
+               ind_y * size[0]           +
+               ind_z * size[0] * size[1];
+
+            action_cells[ind] = 1;
+         }
+      }
+   }
 }

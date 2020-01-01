@@ -6,6 +6,15 @@
 #include <cstdlib>
 #include <cmath>
 
+// TODO: generalize this so that it may be used in the facade and map
+// Change perspective from a point on the [-1, 1] scale to the corresponding cell
+float Society::window_to_cell (
+      float point, // point in the window
+      int dim) // number of cells that make up the map
+{
+   return (point + 1.0f) / 2.0f * (float)dim;
+}
+
 Society::Society (void)
 {
    dim_x = 60;
@@ -189,11 +198,12 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
       float y = (*unit)->get_position (1);
       float z = (*unit)->get_position (2);
 
+      // TODO: generalize this now that the selection box is 3D
       // Ignore units that are not at the current map layer
       if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
 
-      float min_x = (selection_box[0][0] + 1.0f) / 2.0f * (float)dim_x;
-      float max_x = (selection_box[1][0] + 1.0f) / 2.0f * (float)dim_x;
+      float min_x = window_to_cell (selection_box[0][0], dim_x);
+      float max_x = window_to_cell (selection_box[1][0], dim_x);
 
       if (max_x < min_x) {
          float temp = min_x;
@@ -201,8 +211,8 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
          max_x = temp;
       }
 
-      float min_y = (selection_box[0][1] + 1.0f) / 2.0f * (float)dim_y;
-      float max_y = (selection_box[1][1] + 1.0f) / 2.0f * (float)dim_y;
+      float min_y = window_to_cell (selection_box[0][1], dim_y);
+      float max_y = window_to_cell (selection_box[1][1], dim_y);
 
       if (max_y < min_y) {
          float temp = min_y;
@@ -221,11 +231,40 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
 void Society::select_all (void)
 {
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   {
       (*unit)->select();
+   }
 }
 
 void Society::unselect_all (void)
 {
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   {
       (*unit)->unselect();
+   }
+}
+
+void Society::select_cells (float selection_box[2][3])
+{
+   Map->set_dig (selection_box);
+}
+
+int Society::get_actions (int action, int map_layer, int *actions)
+{
+   const int *map_actions = Map->access_actions ();
+
+   int num_actions = 0;
+   for (int ind_y = 0, ind = dim_x * dim_y * map_layer; ind_y < dim_y; ind_y++) {
+      for (int ind_x = 0; ind_x < dim_y; ind_x++, ind++) {
+         if (map_actions[ind] == action) actions[num_actions++] = ind;
+      }
+   }
+
+#if 0
+int sum = 0;
+for (int ind = 0; ind < dim_x * dim_y * dim_z; ind++) sum += map_actions[ind];
+std::cout << "sum = " << sum << std::endl;
+#endif
+
+   return num_actions;
 }

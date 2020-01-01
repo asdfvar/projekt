@@ -31,6 +31,14 @@ void draw_selection_box (
       float *transform,
       float *translation);
 
+void draw_actions (
+      float       *transform,
+      float       *translation,
+      const int   *actions,
+      int          num_actions,
+      int          dims[3],
+      int          map_layer);
+
 class HUD
 {
    public:

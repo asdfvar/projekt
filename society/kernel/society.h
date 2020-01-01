@@ -31,12 +31,16 @@ class Society
 
       void unselect_all (void);
 
+      void select_cells (float selection_box[2][3]);
+
       int get_unit_info (float *x, float *y, float *z, bool *selections);
+
+      int get_actions (int action, int map_layer, int *actions);
 
    private:
 
       MAP *Map;
-      int  dim_x;
+      int  dim_x; // TODO: change these to: dim[3]
       int  dim_y;
       int  dim_z;
 
@@ -52,6 +56,8 @@ class Society
 
       std::vector<Unit*> units;
       std::list<Action*> actions;
+
+      float window_to_cell (float point, int dim);
 };
 
 #endif

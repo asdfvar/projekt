@@ -33,6 +33,7 @@ class Facade {
       float *unit_positions_y;
       float *unit_positions_z;
       bool  *unit_selections;
+      int   *action_cells;
 
       int map_layer;
 
