@@ -6,15 +6,6 @@
 #include <cstdlib>
 #include <cmath>
 
-// TODO: generalize this so that it may be used in the facade and map
-// Change perspective from a point on the [-1, 1] scale to the corresponding cell
-float Society::window_to_cell (
-      float point, // point in the window
-      int dim) // number of cells that make up the map
-{
-   return (point + 1.0f) / 2.0f * (float)dim;
-}
-
 Society::Society (void)
 {
    dim_x = 60;
@@ -202,8 +193,9 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
       // Ignore units that are not at the current map layer
       if (z < (float)map_layer || z > (float)(map_layer + 1)) continue;
 
-      float min_x = window_to_cell (selection_box[0][0], dim_x);
-      float max_x = window_to_cell (selection_box[1][0], dim_x);
+// TODO: remove this
+      float min_x = (selection_box[0][0] + 1.0f) / 2.0f * dim_x;
+      float max_x = (selection_box[1][0] + 1.0f) / 2.0f * dim_x;
 
       if (max_x < min_x) {
          float temp = min_x;
@@ -211,8 +203,8 @@ void Society::select_units (float selection_box[2][3], int map_layer, bool contr
          max_x = temp;
       }
 
-      float min_y = window_to_cell (selection_box[0][1], dim_y);
-      float max_y = window_to_cell (selection_box[1][1], dim_y);
+      float min_y = (selection_box[0][1] + 1.0f) / 2.0f * dim_y;
+      float max_y = (selection_box[1][1] + 1.0f) / 2.0f * dim_y;
 
       if (max_y < min_y) {
          float temp = min_y;
@@ -244,9 +236,9 @@ void Society::unselect_all (void)
    }
 }
 
-void Society::select_cells (float selection_box[2][3])
+void Society::select_cells (int cell_selections[2][3])
 {
-   Map->set_dig (selection_box);
+   Map->set_dig (cell_selections);
 }
 
 int Society::get_actions (int action, int map_layer, int *actions)
@@ -259,12 +251,6 @@ int Society::get_actions (int action, int map_layer, int *actions)
          if (map_actions[ind] == action) actions[num_actions++] = ind;
       }
    }
-
-#if 0
-int sum = 0;
-for (int ind = 0; ind < dim_x * dim_y * dim_z; ind++) sum += map_actions[ind];
-std::cout << "sum = " << sum << std::endl;
-#endif
 
    return num_actions;
 }

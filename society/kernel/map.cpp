@@ -83,37 +83,36 @@ void MAP::local_change (int flattened_cell_index, float value)
 }
 
 // TODO: define the action cells to be directly representative to the dig action as defined withh that other "todo" item
-void MAP::set_dig (float selection_box[2][3])
+void MAP::set_dig (int cell_selections[2][3])
 {
 
-// TODO: remove this conversion logic outta society as a whole
-   float partial_col_min = (selection_box[0][0] + 1.0f) / 2.0f * (float)size[0];
-   float partial_row_min = (selection_box[0][1] + 1.0f) / 2.0f * (float)size[1];
+   int col_min = cell_selections[0][0];
+   int row_min = cell_selections[0][1];
 
-   float partial_col_max = (selection_box[1][0] + 1.0f) / 2.0f * (float)size[0];
-   float partial_row_max = (selection_box[1][1] + 1.0f) / 2.0f * (float)size[1];
+   int col_max = cell_selections[1][0];
+   int row_max = cell_selections[1][1];
 
-   if (partial_col_max < partial_col_min) {
-      float temp = partial_col_min;
-      partial_col_min = partial_col_max;
-      partial_col_max = temp;
+   if (col_max < col_min) {
+      int temp = col_min;
+      col_min = col_max;
+      col_max = temp;
    }
 
-   if (partial_row_max < partial_row_min) {
-      float temp = partial_row_min;
-      partial_row_min = partial_row_max;
-      partial_row_max = temp;
+   if (row_max < row_min) {
+      int temp = row_min;
+      row_min = row_max;
+      row_max = temp;
    }
 
    int start[3] = {
-      (int)partial_col_min,
-      (int)partial_row_min,
-      (int)selection_box[0][2] };
+      col_min,
+      row_min,
+      cell_selections[0][2] };
 
    int end[3] = {
-      (int)partial_col_max,
-      (int)partial_row_max,
-      (int)selection_box[1][2] };
+      col_max,
+      row_max,
+      cell_selections[1][2] };
 
 std::cout << "start = " << start[0] << ", " << start[1] << ", " << start[2] << std::endl;
 std::cout << "end = " << end[0] << ", " << end[1] << ", " << end[2] << std::endl;

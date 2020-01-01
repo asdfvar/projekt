@@ -19,7 +19,7 @@ class MAP
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);
 
-      void set_dig (float selection_box[2][3]);
+      void set_dig (int cell_selections[2][3]);
 
    private:
 

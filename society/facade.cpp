@@ -10,6 +10,14 @@
 #include "facade.h"
 #include "graphics.h"
 
+// Change perspective from a point on the [-1, 1] scale to the corresponding cell
+static float window_to_cell (
+      float point, // point in the window
+      int dim) // number of cells that make up the map
+{
+   return (point + 1.0f) / 2.0f * (float)dim;
+}
+
 /*
 ** function name: Facade from: Facade
 */
@@ -293,13 +301,26 @@ void Facade::mouseMotion (int x, int y)
       selection_box[1][0] -= translation[0];
       selection_box[1][1] -= translation[1];
 
+      int dim[3];
+      society.access_map (&dim[0], &dim[1], &dim[2]);
+
+      int cell_selections[2][3];
+      cell_selections[0][0] = (int)window_to_cell (selection_box[0][0], dim[0]);
+      cell_selections[0][1] = (int)window_to_cell (selection_box[0][1], dim[1]);
+      cell_selections[0][2] = (int)selection_box[0][2];
+
+      cell_selections[1][0] = (int)window_to_cell (selection_box[1][0], dim[0]);
+      cell_selections[1][1] = (int)window_to_cell (selection_box[1][1], dim[1]);
+      cell_selections[1][2] = map_layer;
+
       selection_active = true;
 
       if (mode == 1) {
          // Dig mode
-         society.select_cells (selection_box);
+         society.select_cells (cell_selections);
       }
       else {
+// TODO: cell_selections here too
          society.select_units (selection_box, map_layer, control_down);
       }
    }
@@ -401,11 +422,6 @@ void Facade::display (void)
 
    // Get digging action
    int num_dig_actions = society.get_actions (1, map_layer, action_cells);
-#if 1
-std::cout << "action_cells = ";
-for (int ind = 0; ind < num_dig_actions; ind++) std::cout << action_cells[ind] << ", ";
-std::cout << std::endl;
-#endif
 
    int num_units = society.get_unit_info (
          unit_positions_x,
