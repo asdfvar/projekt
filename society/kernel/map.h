@@ -26,6 +26,8 @@ class MAP
 
       float *map;
       float *ground;
+      int   *material;
+
       int   *dig_actions; int dig_actions_size;
 
       int size[3];

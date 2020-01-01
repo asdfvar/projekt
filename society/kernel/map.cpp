@@ -13,6 +13,8 @@ MAP::MAP (int num_cells[3])
 
    map          = new float[size[0] * size[1] * size[2]];
    ground       = new float[size[0] * size[1] * size[2]];
+   material     = new int  [size[0] * size[1] * size[2]];
+
    dig_actions  = new int  [size[0] * size[1] * size[2]];
 
    dig_actions_size = 0;
@@ -23,12 +25,18 @@ MAP::MAP (int num_cells[3])
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
-            if (rand() & 3 && ind_z == 20) map[ind] = 0.0f;
-            else if (ind_z == 22) map[ind] = 0.0f;
-            else if (ind_x == ind_z && ind_y == 0) map[ind] = 0.0f;
-            else map[ind] = -1.0f;
+            if (rand() & 3 && ind_z == 20) material[ind] = 0;
+            else if (ind_z == 22) material[ind] = 0;
+            else if (ind_x == ind_z && ind_y == 0) material[ind] = 0;
+            else material[ind] = 1;
          }
       }
+   }
+
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
+   {
+      if (material[ind] > 0) map[ind] = -1.0f;
+      else map[ind] = 0.0f;
    }
 
    set_ground ();
@@ -38,6 +46,7 @@ MAP::~MAP (void)
 {
    delete[] map;
    delete[] ground;
+   delete[] material;
    delete[] dig_actions;
 }
 
@@ -108,7 +117,7 @@ void MAP::set_dig (int cell_selections[2][3], bool control_down)
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            dig_actions[dig_actions_size++] = ind;
+            if (material[ind] > 0) dig_actions[dig_actions_size++] = ind;
          }
       }
    }
