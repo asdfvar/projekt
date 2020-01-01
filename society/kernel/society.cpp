@@ -8,11 +8,9 @@
 
 Society::Society (void)
 {
-   dim_x = 60;
-   dim_y = 60;
-   dim_z = 40;
-
-   int dim[3] = { dim_x, dim_y, dim_z };
+   dim[0] = 60;
+   dim[1] = 60;
+   dim[2] = 40;
 
    Map = new MAP (dim);
 
@@ -30,9 +28,9 @@ Society::Society (void)
 
    const float *map = Map->access_ground ();
 
-   for (int ind_z = 0, ind = 0; ind_z < dim_z; ind_z++) {
-      for (int ind_y = 0; ind_y < dim_y; ind_y++) {
-         for (int ind_x = 0; ind_x < dim_x; ind_x++, ind++)
+   for (int ind_z = 0, ind = 0; ind_z < dim[2]; ind_z++) {
+      for (int ind_y = 0; ind_y < dim[1]; ind_y++) {
+         for (int ind_x = 0; ind_x < dim[0]; ind_x++, ind++)
          {
             if (map[ind] >= 0.0f && ind_z == map_layer && unit_count < num_units) {
                unit_count++;
@@ -47,8 +45,8 @@ Society::Society (void)
    }
 
    scratch = new int[4096];
-   cost    = new float[dim_x * dim_y * dim_z];
-   buffer  = new float[dim_x * dim_y * dim_z];
+   cost    = new float[dim[0] * dim[1] * dim[2]];
+   buffer  = new float[dim[0] * dim[1] * dim[2]];
 }
 
 Society::~Society (void)
@@ -152,11 +150,13 @@ void Society::update (float time_step)
    }
 }
 
+// TODO: remove the arguments and use "getters" in place
 const float *Society::access_map (int *dim_x_out, int *dim_y_out, int *dim_z_out)
 {
-   *dim_x_out = dim_x;
-   *dim_y_out = dim_y;
-   *dim_z_out = dim_z;
+   *dim_x_out = dim[0];
+   *dim_y_out = dim[1];
+   *dim_z_out = dim[2];
+
    return static_cast<const float*>(Map->access_map ());
 }
 

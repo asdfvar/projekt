@@ -40,6 +40,7 @@ class Society
    private:
 
       MAP *Map;
+      int  dim[3];
       int  dim_x; // TODO: change these to: dim[3]
       int  dim_y;
       int  dim_z;

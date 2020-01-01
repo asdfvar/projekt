@@ -24,7 +24,6 @@ static inline void transformation (float point[2], float transform[4], float tra
    point[1] = part2a + part2b;
 }
 
-// TODO: The "actions" array, here and in facade, are indexed to where the select actions are whereas the actual map class just has one huge array with a 1-to-1 mapping of where the action is. Change the map class to simply contain the actions as an array (just like it is used here)
 void draw_actions (
       float       *transform,
       float       *translation,
