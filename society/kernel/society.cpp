@@ -146,6 +146,10 @@ void Society::update (float time_step)
 
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
+
+      // Assign an action for this unit
+
+      // Update the unit's position and path planning
       (*unit)->update (time_step);
    }
 }

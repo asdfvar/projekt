@@ -117,6 +117,7 @@ void Unit::get_destination (int *dest_out)
    dest_out[2] = dest[2];
 }
 
+// Update unit position and path planning
 void Unit::update (float time_step)
 {
    int dim[3];
