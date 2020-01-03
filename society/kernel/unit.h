@@ -62,7 +62,6 @@ class Unit {
       int   dest[3];
       int   residency[3];
 
-      float max_speed;
       float speed;
       float direction;
 

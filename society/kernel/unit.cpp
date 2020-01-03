@@ -32,8 +32,7 @@ Unit::Unit (
 
    path_size = 0;
 
-   max_speed = 40.0f;
-   speed     = max_speed;
+   speed = 10.0f;
 
    residency[0] = 0;
    residency[1] = 0;
