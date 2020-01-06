@@ -24,7 +24,7 @@ static inline void transformation (float point[2], float transform[4], float tra
    point[1] = part2a + part2b;
 }
 
-void draw_actions (
+void Graphics::draw_actions (
       float       *transform,
       float       *translation,
       const int   *actions,
@@ -77,7 +77,7 @@ void draw_actions (
    }
 }
 
-void draw_map (
+void Graphics::draw_map (
       float       *transform,
       float       *translation,
       const float *map,
@@ -160,7 +160,7 @@ void draw_map (
    }
 }
 
-void draw_units (
+void Graphics::draw_units (
       float *transform,
       float *translation,
       float *x,
@@ -247,7 +247,7 @@ void draw_units (
    }
 }
 
-void draw_selection_box (
+void Graphics::draw_selection_box (
       float selection_box[2][3],
       float *transform,
       float *translation)

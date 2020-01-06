@@ -8,37 +8,44 @@
 #include <GL/glext.h>
 #include <iostream>
 
-void draw_map (
-      float       *tranform,
-      float       *translation,
-      const float *map,
-      int          map_dims[3],
-      int          map_layer);
+class Graphics
+{
+   public:
 
-void draw_units (
-      float *tranform,
-      float *translation,
-      float *x,
-      float *y,
-      float *z,
-      bool  *selected,
-      int    map_dims[3],
-      int    num_units,
-      int    map_layer);
+      Graphics (void) { };
 
-void draw_selection_box (
-      float selection_box[2][3],
-      float *transform,
-      float *translation);
+      void draw_map (
+            float       *tranform,
+            float       *translation,
+            const float *map,
+            int          map_dims[3],
+            int          map_layer);
 
-void draw_actions (
-      float       *transform,
-      float       *translation,
-      const int   *actions,
-      int          num_actions,
-      int          dims[3],
-      float       *color,
-      int          map_layer);
+      void draw_units (
+            float *tranform,
+            float *translation,
+            float *x,
+            float *y,
+            float *z,
+            bool  *selected,
+            int    map_dims[3],
+            int    num_units,
+            int    map_layer);
+
+      void draw_selection_box (
+            float selection_box[2][3],
+            float *transform,
+            float *translation);
+
+      void draw_actions (
+            float       *transform,
+            float       *translation,
+            const int   *actions,
+            int          num_actions,
+            int          dims[3],
+            float       *color,
+            int          map_layer);
+};
 
 class HUD
 {

@@ -436,7 +436,7 @@ void Facade::display (void)
 
    if (selection_active == true)
    {
-      draw_selection_box (
+      graphics.draw_selection_box (
             selection_box,
             transform,
             translation);
@@ -452,7 +452,7 @@ void Facade::display (void)
    color[1] = 0.0f;
    color[2] = 0.0f;
 
-   draw_actions (
+   graphics.draw_actions (
          transform,
          translation,
          general_actions,
@@ -469,7 +469,7 @@ void Facade::display (void)
    color[1] = 0.0f;
    color[2] = 0.0f;
 
-   draw_actions (
+   graphics.draw_actions (
          transform,
          translation,
          dig_actions,
@@ -478,7 +478,7 @@ void Facade::display (void)
          color,
          map_layer);
 
-   draw_units (
+   graphics.draw_units (
          transform,
          translation,
          unit_positions_x,
@@ -489,7 +489,7 @@ void Facade::display (void)
          num_units,
          map_layer);
 
-   draw_map (
+   graphics.draw_map (
          transform,
          translation,
          map,

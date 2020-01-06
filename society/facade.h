@@ -53,7 +53,8 @@ class Facade {
 
       int mouse_pos[2];
 
-      HUD hud;
+      HUD      hud;
+      Graphics graphics;
 
       float selection_box[2][3];
       bool selection_active;
