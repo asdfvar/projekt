@@ -6,11 +6,7 @@
 #include <vector>
 #include <list>
 #include "unit.h"
-
-class Action
-{
-   int type;
-};
+#include "actions.h"
 
 class Society
 {
@@ -56,8 +52,8 @@ class Society
 
       int *scratch;
 
-      std::vector<Unit*> units;
-      std::list<Action*> actions;
+      std::vector<Unit*>    units;
+      std::list<digAction*> digActions;
 
       float window_to_cell (float point, int dim);
 };

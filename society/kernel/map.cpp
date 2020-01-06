@@ -15,8 +15,8 @@ MAP::MAP (int num_cells[3])
    ground       = new float[size[0] * size[1] * size[2]];
    material     = new int  [size[0] * size[1] * size[2]];
 
-   general_actions  = new int  [size[0] * size[1] * size[2]]; general_actions_size = 0;
-   dig_actions          = new int  [size[0] * size[1] * size[2]]; dig_actions_size         = 0;
+   general_actions = new int  [size[0] * size[1] * size[2]]; general_actions_size = 0;
+   dig_actions     = new int  [size[0] * size[1] * size[2]]; dig_actions_size     = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 
@@ -112,12 +112,28 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
       for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
          for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
          {
-            int ind =
+            int action_index =
                ind_x                     +
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            if (material[ind] > 0) general_actions[general_actions_size++] = ind;
+            bool is_dig_action = false;
+
+            // Search the uncommitted dig actions to see if it's already selected
+            for (int action = 0; action < general_actions_size; action++)
+               is_dig_action |= general_actions[action] == action_index;
+
+            if (is_dig_action) continue;
+
+            // Search the committed dig actions to see if it's already selected
+            for (int action = 0; action < dig_actions_size; action++)
+               is_dig_action |= dig_actions[action] == action_index;
+
+            if (is_dig_action) continue;
+
+            // Assign the uncommitted dig actions
+            if (material[action_index] > 0)
+               general_actions[general_actions_size++] = action_index;
          }
       }
    }

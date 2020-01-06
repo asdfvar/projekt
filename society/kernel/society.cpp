@@ -261,5 +261,24 @@ const int *Society::access_dig_actions (int *size)
 
 void Society::set_dig_actions (void)
 {
+   int size;
+   const int *dig_actions_indices = Map->access_general_actions (&size);
+
+   for (int action = 0; action < size; action++)
+   {
+      int action_index = dig_actions_indices[action];
+
+      int location_ind[3] = {
+         action_index % dim[0],
+         (action_index / dim[0]) % (dim[0] * dim[1]),
+         action_index % (dim[0] * dim[1]) };
+
+
+      // Append to the actions list
+      digActions.push_front (new digAction (location_ind));
+   }
+
    Map->set_dig ();
+
+std::cout << "digActions size = " << digActions.size() << std::endl;
 }
