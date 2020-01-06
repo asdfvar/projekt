@@ -229,19 +229,15 @@ void Society::select_units (int cell_selections[2][3], int map_layer, bool contr
 void Society::select_all (void)
 {
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
-   {
       (*unit)->select();
-   }
 }
 
 void Society::unselect_all (void)
 {
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
-   {
       (*unit)->unselect();
-   }
 
-   Map->unselect_general_actions ();
+   Map->unselect_uncommitted_dig_actions ();
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
@@ -249,9 +245,9 @@ void Society::select_cells (int cell_selections[2][3], bool control_down)
    Map->ready_dig (cell_selections, control_down);
 }
 
-const int *Society::access_general_actions (int *size)
+const int *Society::access_uncommitted_dig_actions (int *size)
 {
-   return Map->access_general_actions (size);
+   return Map->access_uncommitted_dig_actions (size);
 }
 
 const int *Society::access_dig_actions (int *size)
@@ -262,7 +258,7 @@ const int *Society::access_dig_actions (int *size)
 void Society::set_dig_actions (void)
 {
    int size;
-   const int *dig_actions_indices = Map->access_general_actions (&size);
+   const int *dig_actions_indices = Map->access_uncommitted_dig_actions (&size);
 
    for (int action = 0; action < size; action++)
    {

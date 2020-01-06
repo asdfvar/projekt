@@ -445,8 +445,9 @@ void Facade::display (void)
    float color[3];
 
    // Get digging actions
-   int general_actions_size;
-   const int *general_actions = society.access_general_actions (&general_actions_size);
+   int uncommitted_dig_actions_size;
+   const int *uncommitted_dig_actions =
+      society.access_uncommitted_dig_actions (&uncommitted_dig_actions_size);
 
    color[0] = 1.0f;
    color[1] = 0.0f;
@@ -455,8 +456,8 @@ void Facade::display (void)
    graphics.draw_actions (
          transform,
          translation,
-         general_actions,
-         general_actions_size,
+         uncommitted_dig_actions,
+         uncommitted_dig_actions_size,
          map_dims,
          color,
          map_layer);

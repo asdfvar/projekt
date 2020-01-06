@@ -15,7 +15,7 @@ MAP::MAP (int num_cells[3])
    ground       = new float[size[0] * size[1] * size[2]];
    material     = new int  [size[0] * size[1] * size[2]];
 
-   general_actions = new int  [size[0] * size[1] * size[2]]; general_actions_size = 0;
+   uncommitted_dig_actions = new int  [size[0] * size[1] * size[2]]; uncommitted_dig_actions_size = 0;
    dig_actions     = new int  [size[0] * size[1] * size[2]]; dig_actions_size     = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
@@ -46,7 +46,7 @@ MAP::~MAP (void)
    delete[] map;
    delete[] ground;
    delete[] material;
-   delete[] general_actions;
+   delete[] uncommitted_dig_actions;
    delete[] dig_actions;
 }
 
@@ -96,7 +96,7 @@ void MAP::local_change (int flattened_cell_index, float value)
 
 void MAP::ready_dig (int cell_selections[2][3], bool control_down)
 {
-   if (!control_down) general_actions_size = 0;
+   if (!control_down) uncommitted_dig_actions_size = 0;
 
    int start[3] = {
       MIN (cell_selections[0][0], cell_selections[1][0]),
@@ -120,8 +120,8 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
             bool is_dig_action = false;
 
             // Search the uncommitted dig actions to see if it's already selected
-            for (int action = 0; action < general_actions_size; action++)
-               is_dig_action |= general_actions[action] == action_index;
+            for (int action = 0; action < uncommitted_dig_actions_size; action++)
+               is_dig_action |= uncommitted_dig_actions[action] == action_index;
 
             if (is_dig_action) continue;
 
@@ -133,7 +133,7 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
 
             // Assign the uncommitted dig actions
             if (material[action_index] > 0)
-               general_actions[general_actions_size++] = action_index;
+               uncommitted_dig_actions[uncommitted_dig_actions_size++] = action_index;
          }
       }
    }
@@ -141,24 +141,24 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
 
 void MAP::set_dig (void)
 {
-   for (int ind = 0; ind < general_actions_size; ind++)
+   for (int ind = 0; ind < uncommitted_dig_actions_size; ind++)
    {
-      dig_actions[dig_actions_size + ind] = general_actions[ind];
+      dig_actions[dig_actions_size + ind] = uncommitted_dig_actions[ind];
    }
 
-   dig_actions_size += general_actions_size;
-   general_actions_size = 0;
+   dig_actions_size += uncommitted_dig_actions_size;
+   uncommitted_dig_actions_size = 0;
 }
 
-void MAP::unselect_general_actions (void)
+void MAP::unselect_uncommitted_dig_actions (void)
 {
-   general_actions_size = 0;
+   uncommitted_dig_actions_size = 0;
 }
 
-const int *MAP::access_general_actions (int *size)
+const int *MAP::access_uncommitted_dig_actions (int *size)
 {
-   *size = general_actions_size;
-   return (const int*)general_actions;
+   *size = uncommitted_dig_actions_size;
+   return (const int*)uncommitted_dig_actions;
 };
 
 const int *MAP::access_dig_actions (int *size)
