@@ -11,12 +11,12 @@ MAP::MAP (int num_cells[3])
    size[1] = num_cells[1];
    size[2] = num_cells[2];
 
-   map          = new float[size[0] * size[1] * size[2]];
-   ground       = new float[size[0] * size[1] * size[2]];
-   material     = new int  [size[0] * size[1] * size[2]];
+   map      = new float[size[0] * size[1] * size[2]];
+   ground   = new float[size[0] * size[1] * size[2]];
+   material = new int  [size[0] * size[1] * size[2]];
 
    uncommitted_dig_actions = new int  [size[0] * size[1] * size[2]]; uncommitted_dig_actions_size = 0;
-   dig_actions     = new int  [size[0] * size[1] * size[2]]; dig_actions_size     = 0;
+   dig_actions             = new int  [size[0] * size[1] * size[2]]; dig_actions_size     = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 
@@ -91,6 +91,7 @@ void MAP::local_change (int flattened_cell_index, float value)
    map[flattened_cell_index] = value;
 
    int next_z_ind = flattened_cell_index + size[0] * size[1];
+
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
 
@@ -142,9 +143,7 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
 void MAP::set_dig (void)
 {
    for (int ind = 0; ind < uncommitted_dig_actions_size; ind++)
-   {
       dig_actions[dig_actions_size + ind] = uncommitted_dig_actions[ind];
-   }
 
    dig_actions_size += uncommitted_dig_actions_size;
    uncommitted_dig_actions_size = 0;
