@@ -52,8 +52,8 @@ class Society
 
       int *scratch;
 
-      std::vector<Unit*>    units;
-      std::list<digAction*> digActions;
+      std::vector<Unit*> units;
+      std::list<Action*> actions;
 
       float window_to_cell (float point, int dim);
 };

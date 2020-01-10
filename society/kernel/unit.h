@@ -4,6 +4,7 @@
 #include <vector>
 #include <thread>
 #include "map.h"
+#include "actions.h"
 
 typedef struct PATH_FUNC_ARGS
 {
@@ -47,6 +48,8 @@ class Unit {
 
       void update (float time_step);
 
+      void assign_action (Action *action) { actions.push_front (action); };
+
    private:
 
       MAP   *Map;
@@ -68,6 +71,8 @@ class Unit {
       bool selected;
 
       int path_size;
+
+      std::list<Action*> actions;
 
       PATH_FUNC_ARGS    path_func_args;
       pthread_t         path_planner_thread;

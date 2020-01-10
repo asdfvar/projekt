@@ -9,12 +9,13 @@ class Action
 {
    public:
 
-      Action (int location_in[3]);
+      Action (int location_in[3], int type);
 
       bool is_complete (void) { return complete; };
 
    protected:
 
+      int   type;        // type of action
       int   location[3]; // location the action takes place
       float duration;    // duration it takes to complete the action (seconds)
       float time_spent;  // total time spent working on the task
@@ -25,7 +26,7 @@ class digAction : public Action
 {
    public:
 
-      digAction (int location_in[3]);
+      digAction (int location_in[3], int type);
 };
 
 #endif

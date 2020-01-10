@@ -18,9 +18,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 200;
-
-   int unit_count = 0;
+   int num_units = 2;
 
    accum_time       = 0.0f;
    accum_time_limit = 0.0f;
@@ -28,6 +26,7 @@ Society::Society (void)
 
    const float *map = Map->access_ground ();
 
+   int unit_count = 0;
    for (int ind_z = 0, ind = 0; ind_z < dim[2]; ind_z++) {
       for (int ind_y = 0; ind_y < dim[1]; ind_y++) {
          for (int ind_x = 0; ind_x < dim[0]; ind_x++, ind++)
@@ -146,8 +145,12 @@ void Society::update (float time_step)
 
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
-
       // Assign an action for this unit
+      if (actions.size() > 0) {
+         Action *action = actions.back ();
+         (*unit)->assign_action (action);
+         actions.pop_back ();
+      }
 
       // Update the unit's position and path planning
       (*unit)->update (time_step);
@@ -271,10 +274,9 @@ void Society::set_dig_actions (void)
 
 
       // Append to the actions list
-      digActions.push_front (new digAction (location_ind));
+      int action_type = 1;
+      actions.push_front (new Action (location_ind, action_type));
    }
 
    Map->set_dig ();
-
-std::cout << "digActions size = " << digActions.size() << std::endl;
 }
