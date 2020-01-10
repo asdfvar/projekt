@@ -22,11 +22,4 @@ class Action
       bool  complete;    // flag to determine if the action is complete
 };
 
-class digAction : public Action
-{
-   public:
-
-      digAction (int location_in[3], int type);
-};
-
 #endif

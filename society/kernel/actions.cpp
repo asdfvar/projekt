@@ -12,8 +12,3 @@ Action::Action (int location_in[3], int type_in)
    time_spent = 0.0f;
    complete   = false;
 }
-
-digAction::digAction (int location_in[3], int type_in) : Action (location_in, type_in)
-{
-   duration = 4.0f;
-}
