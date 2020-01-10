@@ -21,7 +21,7 @@ class MAP
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);
 
-      void ready_dig (int cell_selections[2][3], bool control_down);
+      void ready_actions (int cell_selections[2][3], bool control_down, int action_type);
       void set_dig (void);
 
       void unselect_uncommitted_dig_actions (void);

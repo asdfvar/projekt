@@ -95,9 +95,27 @@ void MAP::local_change (int flattened_cell_index, float value)
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
 
-void MAP::ready_dig (int cell_selections[2][3], bool control_down)
+// This will prepare cells as "ready" but not committed to be promoted to an action
+void MAP::ready_actions (int cell_selections[2][3], bool control_down, int action_type)
 {
-   if (!control_down) uncommitted_dig_actions_size = 0;
+   int  uncommitted_actions_size;
+   int *uncommitted_actions;
+   int  actions_size;
+   int *actions;
+
+   // Dig action
+   if (action_type == 1)
+   {
+      if (!control_down) uncommitted_dig_actions_size = 0;
+      uncommitted_actions_size = uncommitted_dig_actions_size;
+      uncommitted_actions      = uncommitted_dig_actions;
+      actions_size             = dig_actions_size;
+      actions                  = dig_actions;
+   }
+   else
+   {
+      return;
+   }
 
    int start[3] = {
       MIN (cell_selections[0][0], cell_selections[1][0]),
@@ -118,26 +136,29 @@ void MAP::ready_dig (int cell_selections[2][3], bool control_down)
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            bool is_dig_action = false;
+            bool is_action = false;
 
-            // Search the uncommitted dig actions to see if it's already selected
-            for (int action = 0; action < uncommitted_dig_actions_size; action++)
-               is_dig_action |= uncommitted_dig_actions[action] == action_index;
+            // Search the uncommitted actions to see if it's already selected
+            for (int action = 0; action < uncommitted_actions_size; action++)
+               is_action |= uncommitted_actions[action] == action_index;
 
-            if (is_dig_action) continue;
+            if (is_action) continue;
 
-            // Search the committed dig actions to see if it's already selected
-            for (int action = 0; action < dig_actions_size; action++)
-               is_dig_action |= dig_actions[action] == action_index;
+            // Search the committed actions to see if it's already selected
+            for (int action = 0; action < actions_size; action++)
+               is_action |= actions[action] == action_index;
 
-            if (is_dig_action) continue;
+            if (is_action) continue;
 
-            // Assign the uncommitted dig actions
+            // Assign the uncommitted actions
             if (material[action_index] > 0)
-               uncommitted_dig_actions[uncommitted_dig_actions_size++] = action_index;
+               uncommitted_actions[uncommitted_actions_size++] = action_index;
          }
       }
    }
+
+   if (action_type == 1)
+      uncommitted_dig_actions_size = uncommitted_actions_size;
 }
 
 void MAP::set_dig (void)

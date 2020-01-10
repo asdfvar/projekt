@@ -245,7 +245,9 @@ void Society::unselect_all (void)
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
 {
-   Map->ready_dig (cell_selections, control_down);
+   // For now, dig action
+   int action_type = 1;
+   Map->ready_actions (cell_selections, control_down, action_type);
 }
 
 const int *Society::access_uncommitted_dig_actions (int *size)
