@@ -13,6 +13,8 @@ class Action
 
       bool is_complete (void) { return complete; };
 
+      int get_position (int ind) { return location[ind]; };
+
    protected:
 
       int   type;        // type of action

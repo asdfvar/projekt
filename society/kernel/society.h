@@ -52,6 +52,11 @@ class Society
             float        color[3],
             int          map_layer);
 
+      void draw_unit_actions (
+            float       *transform,
+            float       *translation,
+            int          map_layer);
+
    private:
 
       MAP *Map;

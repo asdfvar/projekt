@@ -431,6 +431,11 @@ void Facade::display (void)
    color[1] = 0.0f;
    color[2] = 0.0f;
 
+   society.draw_unit_actions (
+         transform,
+         translation,
+         map_layer);
+
    society.draw_uncommitted_actions (
          transform,
          translation,

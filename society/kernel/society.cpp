@@ -68,8 +68,6 @@ void Society::set_destination (int destination[3])
    dim[1] = Map->map_dim (1);
    dim[2] = Map->map_dim (2);
 
-   units.size();
-
    int *cost_indices = scratch;
 
    int num_units = units.size();
@@ -282,9 +280,8 @@ void Society::set_dig_actions (void)
 
       int location_ind[3] = {
          action_index % dim[0],
-         (action_index / dim[0]) % (dim[0] * dim[1]),
-         action_index % (dim[0] * dim[1]) };
-
+         action_index % (dim[0] * dim[1]) / dim[0],
+         action_index / (dim[0] * dim[1]) };
 
       // Append to the actions list
       int action_type = 1;
