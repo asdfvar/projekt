@@ -37,7 +37,20 @@ class Society
       const int *access_dig_actions             (int *size);
       void       set_dig_actions                (void     );
 
+      // Graphics
       void draw_units (float *transform, float *translation, int map_layer);
+
+      void draw_uncommitted_actions (
+            float       *transform,
+            float       *translation,
+            float        color[3],
+            int          map_layer);
+
+      void draw_committed_actions (
+            float       *transform,
+            float       *translation,
+            float        color[3],
+            int          map_layer);
 
    private:
 
@@ -58,6 +71,15 @@ class Society
       std::list<Action*> actions;
 
       float window_to_cell (float point, int dim);
+
+      // Graphics
+      void draw_actions_general (
+            float       *transform,
+            float       *translation,
+            const int   *actions,
+            int          num_actions,
+            float        color[3],
+            int          map_layer);
 };
 
 #endif

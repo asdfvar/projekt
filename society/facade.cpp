@@ -427,27 +427,15 @@ void Facade::display (void)
 
    float color[3];
 
-   // Get digging actions
-   int uncommitted_dig_actions_size;
-   const int *uncommitted_dig_actions =
-      society.access_uncommitted_dig_actions (&uncommitted_dig_actions_size);
-
    color[0] = 1.0f;
    color[1] = 0.0f;
    color[2] = 0.0f;
 
-   graphics.draw_actions (
+   society.draw_uncommitted_actions (
          transform,
          translation,
-         uncommitted_dig_actions,
-         uncommitted_dig_actions_size,
-         map_dims,
          color,
          map_layer);
-
-   // Get digging actions
-   int dig_actions_size;
-   const int *dig_actions = society.access_dig_actions (&dig_actions_size);
 
    color[0] = 0.3f;
    color[1] = 0.0f;
@@ -458,12 +446,9 @@ void Facade::display (void)
          translation,
          map_layer);
 
-   graphics.draw_actions (
+   society.draw_committed_actions (
          transform,
          translation,
-         dig_actions,
-         dig_actions_size,
-         map_dims,
          color,
          map_layer);
 
