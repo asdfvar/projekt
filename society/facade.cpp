@@ -25,11 +25,6 @@ Facade::Facade (void)
 {
    gettimeofday (&start, NULL);
 
-   unit_positions_x = new float[10000];
-   unit_positions_y = new float[10000];
-   unit_positions_z = new float[10000];
-   unit_selections  = new bool[10000];
-
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
 
@@ -381,13 +376,7 @@ void Facade::mouseMotion (int x, int y)
 /*
 ** destructor name: ~Facade
 */
-Facade::~Facade (void)
-{
-   delete[] unit_positions_x;
-   delete[] unit_positions_y;
-   delete[] unit_positions_z;
-   delete[] unit_selections;
-}
+Facade::~Facade (void) { }
 
 /*
 ** function name: idle from: Facade
@@ -428,12 +417,6 @@ void Facade::display (void)
       society.get_size (1),
       society.get_size (2) };
 
-   int num_units = society.get_unit_info (
-         unit_positions_x,
-         unit_positions_y,
-         unit_positions_z,
-         unit_selections);
-
    if (selection_active == true)
    {
       graphics.draw_selection_box (
@@ -470,6 +453,11 @@ void Facade::display (void)
    color[1] = 0.0f;
    color[2] = 0.0f;
 
+   society.draw_units (
+         transform,
+         translation,
+         map_layer);
+
    graphics.draw_actions (
          transform,
          translation,
@@ -477,17 +465,6 @@ void Facade::display (void)
          dig_actions_size,
          map_dims,
          color,
-         map_layer);
-
-   graphics.draw_units (
-         transform,
-         translation,
-         unit_positions_x,
-         unit_positions_y,
-         unit_positions_z,
-         unit_selections,
-         map_dims,
-         num_units,
          map_layer);
 
    graphics.draw_map (

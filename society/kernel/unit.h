@@ -50,6 +50,12 @@ class Unit {
 
       void assign_action (Action *action) { actions.push_front (action); };
 
+      Action *access_action (void) { return actions.back (); };
+
+      int num_actions (void) { return actions.size (); };
+
+      void pop_action (void) { actions.pop_back (); };
+
    private:
 
       MAP   *Map;

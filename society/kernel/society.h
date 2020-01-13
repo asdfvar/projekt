@@ -37,6 +37,8 @@ class Society
       const int *access_dig_actions             (int *size);
       void       set_dig_actions                (void     );
 
+      void draw_units (float *transform, float *translation, int map_layer);
+
    private:
 
       MAP *Map;

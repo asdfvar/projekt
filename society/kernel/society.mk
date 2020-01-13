@@ -6,6 +6,7 @@ OBJS = $(OBJDIR)/society.o     \
        $(OBJDIR)/pathfinding.o \
        $(OBJDIR)/unit.o        \
        $(OBJDIR)/map.o         \
+       $(OBJDIR)/graphics.o    \
        $(OBJDIR)/actions.o     \
        $(OBJDIR)/timer.o       \
 #

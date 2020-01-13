@@ -146,10 +146,21 @@ void Society::update (float time_step)
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
       // Assign an action for this unit
-      if (actions.size() > 0) {
+      if (actions.size() > 0)
+      {
          Action *action = actions.back ();
          (*unit)->assign_action (action);
          actions.pop_back ();
+      }
+
+      // Dismiss completed actions by this unit
+      if ((*unit)->num_actions() > 0)
+      {
+         Action *action = (*unit)->access_action ();
+         if (action->is_complete ()) {
+            (*unit)->pop_action ();
+            delete action;
+         }
       }
 
       // Update the unit's position and path planning

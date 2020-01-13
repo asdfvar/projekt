@@ -21,17 +21,6 @@ class Graphics
             int          map_dims[3],
             int          map_layer);
 
-      void draw_units (
-            float *tranform,
-            float *translation,
-            float *x,
-            float *y,
-            float *z,
-            bool  *selected,
-            int    map_dims[3],
-            int    num_units,
-            int    map_layer);
-
       void draw_selection_box (
             float selection_box[2][3],
             float *transform,
