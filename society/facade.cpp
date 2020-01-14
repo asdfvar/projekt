@@ -425,12 +425,6 @@ void Facade::display (void)
             translation);
    }
 
-   float color[3];
-
-   color[0] = 1.0f;
-   color[1] = 0.0f;
-   color[2] = 0.0f;
-
    society.draw_unit_actions (
          transform,
          translation,
@@ -439,12 +433,7 @@ void Facade::display (void)
    society.draw_uncommitted_actions (
          transform,
          translation,
-         color,
          map_layer);
-
-   color[0] = 0.3f;
-   color[1] = 0.0f;
-   color[2] = 0.0f;
 
    society.draw_units (
          transform,
@@ -454,17 +443,11 @@ void Facade::display (void)
    society.draw_committed_actions (
          transform,
          translation,
-         color,
          map_layer);
-
-   color[0] = 0.0f;
-   color[1] = 0.5f;
-   color[2] = 0.0f;
 
    society.draw_assigned_actions (
          transform,
          translation,
-         color,
          map_layer);
 
    graphics.draw_map (

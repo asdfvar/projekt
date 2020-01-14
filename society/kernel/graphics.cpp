@@ -112,7 +112,6 @@ void Society::draw_units (
 void Society::draw_uncommitted_actions (
       float       *transform,
       float       *translation,
-      float        color[3],
       int          map_layer)
 {
    int row_max = dim[1];
@@ -124,7 +123,7 @@ void Society::draw_uncommitted_actions (
    const float starting_row_loc = Y_START;
    const float starting_col_loc = X_START;
 
-   glColor3f (color[0], color[1], color[2]);
+   glColor3f (1.0f, 0.0f, 0.0f);
 
    // Draw the action cells
    for (std::list<Action*>::iterator action = uncommitted_actions.begin(); action != uncommitted_actions.end(); action++)
@@ -160,7 +159,6 @@ void Society::draw_uncommitted_actions (
 void Society::draw_assigned_actions (
       float       *transform,
       float       *translation,
-      float        color[3],
       int          map_layer)
 {
    int row_max = dim[1];
@@ -172,7 +170,7 @@ void Society::draw_assigned_actions (
    const float starting_row_loc = Y_START;
    const float starting_col_loc = X_START;
 
-   glColor3f (color[0], color[1], color[2]);
+   glColor3f (0.0f, 0.5f, 0.0f);
 
    // Draw the action cells
    for (std::list<Action*>::iterator action = assigned_actions.begin(); action != assigned_actions.end(); action++)
@@ -208,7 +206,6 @@ void Society::draw_assigned_actions (
 void Society::draw_committed_actions (
       float       *transform,
       float       *translation,
-      float        color[3],
       int          map_layer)
 {
    int row_max = dim[1];
@@ -220,7 +217,7 @@ void Society::draw_committed_actions (
    const float starting_row_loc = Y_START;
    const float starting_col_loc = X_START;
 
-   glColor3f (color[0], color[1], color[2]);
+   glColor3f (0.3f, 0.0f, 0.0f);
 
    // Draw the action cells
    for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++)

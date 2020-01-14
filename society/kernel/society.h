@@ -41,19 +41,16 @@ class Society
       void draw_uncommitted_actions (
             float       *transform,
             float       *translation,
-            float        color[3],
             int          map_layer);
 
       void draw_committed_actions (
             float       *transform,
             float       *translation,
-            float        color[3],
             int          map_layer);
 
       void draw_assigned_actions (
             float       *transform,
             float       *translation,
-            float        color[3],
             int          map_layer);
 
       void draw_unit_actions (
