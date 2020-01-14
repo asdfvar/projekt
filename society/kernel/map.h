@@ -13,18 +13,10 @@ class MAP
       const float *access_map         (void) { return (const float*)map;          };
       const float *access_ground      (void) { return (const float*)ground;       };
 
-      const int   *access_uncommitted_dig_actions (int *size);
-      const int   *access_dig_actions             (int *size);
-
       int map_dim (int dim) { return size[dim]; };
 
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);
-
-      void ready_actions (int cell_selections[2][3], bool control_down, int action_type);
-      void set_dig (void);
-
-      void unselect_uncommitted_dig_actions (void);
 
       int  get_material (int ind) { return material[ind]; };
 
@@ -33,9 +25,6 @@ class MAP
       float *map;
       float *ground;
       int   *material;
-
-      int   *uncommitted_dig_actions; int uncommitted_dig_actions_size;
-      int   *dig_actions;             int dig_actions_size;
 
       int size[3];
 

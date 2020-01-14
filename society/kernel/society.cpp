@@ -250,12 +250,16 @@ void Society::select_all (void)
 
 void Society::unselect_all (void)
 {
+   // Unselect all units
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
       (*unit)->unselect();
 
-   Map->unselect_uncommitted_dig_actions ();
-
-   // TODO: flush the uncommitted_actions list
+   // Flush the uncommitted_actions list
+   while (uncommitted_actions.size () > 0)
+   {
+      delete uncommitted_actions.back ();
+      uncommitted_actions.pop_back ();
+   }
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
@@ -323,11 +327,6 @@ void Society::select_cells (int cell_selections[2][3], bool control_down)
          }
       }
    }
-}
-
-const int *Society::access_dig_actions (int *size)
-{
-   return Map->access_dig_actions (size);
 }
 
 void Society::set_dig_actions (void)
