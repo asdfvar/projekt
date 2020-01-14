@@ -457,6 +457,16 @@ void Facade::display (void)
          color,
          map_layer);
 
+   color[0] = 0.0f;
+   color[1] = 0.5f;
+   color[2] = 0.0f;
+
+   society.draw_assigned_actions (
+         transform,
+         translation,
+         color,
+         map_layer);
+
    graphics.draw_map (
          transform,
          translation,

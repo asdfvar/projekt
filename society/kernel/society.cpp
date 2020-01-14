@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <cmath>
 
+#define MAX(A,B) ((A) > (B) ? (A) : (B))
+#define MIN(A,B) ((A) < (B) ? (A) : (B))
+
 Society::Society (void)
 {
    dim[0] = 60;
@@ -43,7 +46,7 @@ Society::Society (void)
       }
    }
 
-   scratch = new int[4096];
+   scratch = new int[dim[0] * dim[1] * dim[2]];
    cost    = new float[dim[0] * dim[1] * dim[2]];
    buffer  = new float[dim[0] * dim[1] * dim[2]];
 }
@@ -144,11 +147,12 @@ void Society::update (float time_step)
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
    {
       // Assign an action for this unit
-      if (actions.size() > 0)
+      if (committed_actions.size() > 0)
       {
-         Action *action = actions.back ();
+         Action *action = committed_actions.back ();
          (*unit)->assign_action (action);
-         actions.pop_back ();
+         assigned_actions.push_front (action);
+         committed_actions.pop_back ();
       }
 
       // Dismiss completed actions by this unit
@@ -250,18 +254,75 @@ void Society::unselect_all (void)
       (*unit)->unselect();
 
    Map->unselect_uncommitted_dig_actions ();
+
+   // TODO: flush the uncommitted_actions list
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
 {
-   // For now, dig action
-   int action_type = 1;
-   Map->ready_actions (cell_selections, control_down, action_type);
-}
+   if (!control_down)
+   {
+      while (uncommitted_actions.size () > 0)
+      {
+         delete uncommitted_actions.back ();
+         uncommitted_actions.pop_back ();
+      }
+   }
 
-const int *Society::access_uncommitted_dig_actions (int *size)
-{
-   return Map->access_uncommitted_dig_actions (size);
+   int start[3] = {
+      MIN (cell_selections[0][0], cell_selections[1][0]),
+      MIN (cell_selections[0][1], cell_selections[1][1]),
+      MIN (cell_selections[0][2], cell_selections[1][2]) };
+
+   int end[3] = {
+      MAX (cell_selections[0][0], cell_selections[1][0]),
+      MAX (cell_selections[0][1], cell_selections[1][1]),
+      MAX (cell_selections[0][2], cell_selections[1][2]) };
+
+   for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
+      for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
+         for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
+         {
+            int action_index =
+               ind_x                    +
+               ind_y * dim[0]           +
+               ind_z * dim[0] * dim[1];
+
+            bool is_action = false;
+
+            // Search the uncommitted actions to see if it's already selected
+            for (std::list<Action*>::iterator action = uncommitted_actions.begin(); action != uncommitted_actions.end(); action++)
+               is_action |= (*action)->get_flattened_index () == action_index;
+
+            if (is_action) continue;
+
+            // Search the committed actions to see if it's already selected
+            for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++)
+               is_action |= (*action)->get_flattened_index () == action_index;
+
+            if (is_action) continue;
+
+            // Search the assigned actions to see if it's already selected
+            for (std::list<Action*>::iterator action = assigned_actions.begin(); action != assigned_actions.end(); action++)
+               is_action |= (*action)->get_flattened_index () == action_index;
+
+            if (is_action) continue;
+
+            // Assign the uncommitted actions
+            if (Map->get_material (action_index) > 0)
+            {
+               int location_ind[3] = {
+                  action_index % dim[0],
+                  action_index % (dim[0] * dim[1]) / dim[0],
+                  action_index / (dim[0] * dim[1]) };
+
+               int action_type = 1;
+
+               uncommitted_actions.push_front (new Action (action_index, location_ind, action_type));
+            }
+         }
+      }
+   }
 }
 
 const int *Society::access_dig_actions (int *size)
@@ -271,22 +332,11 @@ const int *Society::access_dig_actions (int *size)
 
 void Society::set_dig_actions (void)
 {
-   int size;
-   const int *dig_actions_indices = Map->access_uncommitted_dig_actions (&size);
-
-   for (int action = 0; action < size; action++)
+   while (uncommitted_actions.size () > 0)
    {
-      int action_index = dig_actions_indices[action];
+      // Append to the committed-actions list
+      committed_actions.push_front (uncommitted_actions.back ());
 
-      int location_ind[3] = {
-         action_index % dim[0],
-         action_index % (dim[0] * dim[1]) / dim[0],
-         action_index / (dim[0] * dim[1]) };
-
-      // Append to the actions list
-      int action_type = 1;
-      actions.push_front (new Action (location_ind, action_type));
+      uncommitted_actions.pop_back ();
    }
-
-   Map->set_dig ();
 }

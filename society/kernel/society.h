@@ -33,7 +33,6 @@ class Society
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);
 
-      const int *access_uncommitted_dig_actions (int *size);
       const int *access_dig_actions             (int *size);
       void       set_dig_actions                (void     );
 
@@ -47,6 +46,12 @@ class Society
             int          map_layer);
 
       void draw_committed_actions (
+            float       *transform,
+            float       *translation,
+            float        color[3],
+            int          map_layer);
+
+      void draw_assigned_actions (
             float       *transform,
             float       *translation,
             float        color[3],
@@ -73,18 +78,11 @@ class Society
       int *scratch;
 
       std::vector<Unit*> units;
-      std::list<Action*> actions;
+      std::list<Action*> committed_actions;
+      std::list<Action*> uncommitted_actions;
+      std::list<Action*> assigned_actions;
 
       float window_to_cell (float point, int dim);
-
-      // Graphics
-      void draw_actions_general (
-            float       *transform,
-            float       *translation,
-            const int   *actions,
-            int          num_actions,
-            float        color[3],
-            int          map_layer);
 };
 
 #endif

@@ -115,43 +115,51 @@ void Society::draw_uncommitted_actions (
       float        color[3],
       int          map_layer)
 {
-   int size;
+   int row_max = dim[1];
+   int col_max = dim[0];
 
-   const int *actions = Map->access_uncommitted_dig_actions (&size);
+   float block_height = HEIGHT / static_cast<float>(row_max / 2);
+   float block_width  = WIDTH  / static_cast<float>(col_max / 2);
 
-   Society::draw_actions_general (
-         transform,
-         translation,
-         actions,
-         size,
-         color,
-         map_layer);
+   const float starting_row_loc = Y_START;
+   const float starting_col_loc = X_START;
+
+   glColor3f (color[0], color[1], color[2]);
+
+   // Draw the action cells
+   for (std::list<Action*>::iterator action = uncommitted_actions.begin(); action != uncommitted_actions.end(); action++)
+   {
+      if ((*action)->get_position (2) != map_layer) continue;
+
+      int col = (*action)->get_position (0);
+      int row = (*action)->get_position (1);
+
+      float vertex_x = starting_col_loc + block_width  * (float)col;
+      float vertex_y = starting_row_loc + block_height * (float)row;
+
+      glBegin (GL_POLYGON);
+
+      float point0[2] = { vertex_x,               vertex_y               };
+      float point1[2] = { vertex_x + block_width, vertex_y               };
+      float point2[2] = { vertex_x + block_width, vertex_y + block_width };
+      float point3[2] = { vertex_x,               vertex_y + block_width };
+
+      transformation (point0, transform, translation);
+      transformation (point1, transform, translation);
+      transformation (point2, transform, translation);
+      transformation (point3, transform, translation);
+
+      glVertex2f (point0[0], point0[1]);
+      glVertex2f (point1[0], point1[1]);
+      glVertex2f (point2[0], point2[1]);
+      glVertex2f (point3[0], point3[1]);
+      glEnd ();
+   }
 }
 
-void Society::draw_committed_actions (
+void Society::draw_assigned_actions (
       float       *transform,
       float       *translation,
-      float        color[3],
-      int          map_layer)
-{
-   int size;
-
-   const int *actions = Map->access_dig_actions (&size);
-
-   draw_actions_general (
-         transform,
-         translation,
-         actions,
-         size,
-         color,
-         map_layer);
-}
-
-void Society::draw_actions_general (
-      float       *transform,
-      float       *translation,
-      const int   *actions,
-      int          num_actions,
       float        color[3],
       int          map_layer)
 {
@@ -167,14 +175,60 @@ void Society::draw_actions_general (
    glColor3f (color[0], color[1], color[2]);
 
    // Draw the action cells
-   for (int ind = 0; ind < num_actions; ind++)
+   for (std::list<Action*>::iterator action = assigned_actions.begin(); action != assigned_actions.end(); action++)
    {
-      if (actions[ind] / (dim[0] * dim[1]) != map_layer) continue;
+      if ((*action)->get_position (2) != map_layer) continue;
 
-      int cell = actions[ind] % (dim[0] * dim[1]);
+      int col = (*action)->get_position (0);
+      int row = (*action)->get_position (1);
 
-      int col = cell % dim[0];
-      int row = cell / dim[0];
+      float vertex_x = starting_col_loc + block_width  * (float)col;
+      float vertex_y = starting_row_loc + block_height * (float)row;
+
+      glBegin (GL_POLYGON);
+
+      float point0[2] = { vertex_x,               vertex_y               };
+      float point1[2] = { vertex_x + block_width, vertex_y               };
+      float point2[2] = { vertex_x + block_width, vertex_y + block_width };
+      float point3[2] = { vertex_x,               vertex_y + block_width };
+
+      transformation (point0, transform, translation);
+      transformation (point1, transform, translation);
+      transformation (point2, transform, translation);
+      transformation (point3, transform, translation);
+
+      glVertex2f (point0[0], point0[1]);
+      glVertex2f (point1[0], point1[1]);
+      glVertex2f (point2[0], point2[1]);
+      glVertex2f (point3[0], point3[1]);
+      glEnd ();
+   }
+}
+
+void Society::draw_committed_actions (
+      float       *transform,
+      float       *translation,
+      float        color[3],
+      int          map_layer)
+{
+   int row_max = dim[1];
+   int col_max = dim[0];
+
+   float block_height = HEIGHT / static_cast<float>(row_max / 2);
+   float block_width  = WIDTH  / static_cast<float>(col_max / 2);
+
+   const float starting_row_loc = Y_START;
+   const float starting_col_loc = X_START;
+
+   glColor3f (color[0], color[1], color[2]);
+
+   // Draw the action cells
+   for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++)
+   {
+      if ((*action)->get_position (2) != map_layer) continue;
+
+      int col = (*action)->get_position (0);
+      int row = (*action)->get_position (1);
 
       float vertex_x = starting_col_loc + block_width  * (float)col;
       float vertex_y = starting_row_loc + block_height * (float)row;

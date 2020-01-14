@@ -26,6 +26,8 @@ class MAP
 
       void unselect_uncommitted_dig_actions (void);
 
+      int  get_material (int ind) { return material[ind]; };
+
    private:
 
       float *map;

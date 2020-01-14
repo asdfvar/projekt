@@ -9,19 +9,22 @@ class Action
 {
    public:
 
-      Action (int location_in[3], int type);
+      Action (int flattened_index, int location_in[3], int type);
 
       bool is_complete (void) { return complete; };
 
       int get_position (int ind) { return location[ind]; };
 
+      int get_flattened_index (void) { return flattened_index; };
+
    protected:
 
-      int   type;        // type of action
-      int   location[3]; // location the action takes place
-      float duration;    // duration it takes to complete the action (seconds)
-      float time_spent;  // total time spent working on the task
-      bool  complete;    // flag to determine if the action is complete
+      int   type;            // type of action
+      int   location[3];     // location the action takes place
+      int   flattened_index; // index (flattened location)
+      float duration;        // duration it takes to complete the action (seconds)
+      float time_spent;      // total time spent working on the task
+      bool  complete;        // flag to determine if the action is complete
 };
 
 #endif
