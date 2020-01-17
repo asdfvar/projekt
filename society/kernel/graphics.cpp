@@ -185,7 +185,7 @@ void Society::draw_assigned_actions (
    glColor3f (0.0f, 0.5f, 0.0f);
 
    // Draw the action cells
-   for (std::list<Action*>::iterator action = assigned_actions.begin(); action != assigned_actions.end(); action++)
+   for (std::list<Action*>::iterator action = actions.begin(); action != actions.end(); action++)
    {
       if ((*action)->get_position (2) != map_layer) continue;
 
