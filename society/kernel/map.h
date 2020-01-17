@@ -20,11 +20,18 @@ class MAP
 
       int  get_material (int ind) { return material[ind]; };
 
+      void       ready_actions (int cell_selections[2][3], bool control_down);
+      void       unselect_uncommitted_actions (void);
+      const int *access_uncommitted_actions (int *size);
+
    private:
 
       float *map;
       float *ground;
       int   *material;
+      int   *uncommitted_actions;
+
+      int uncommitted_actions_size;
 
       int size[3];
 

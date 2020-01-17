@@ -46,7 +46,7 @@ Society::Society (void)
       }
    }
 
-   scratch = new int[dim[0] * dim[1] * dim[2]];
+   scratch = new   int[dim[0] * dim[1] * dim[2]];
    cost    = new float[dim[0] * dim[1] * dim[2]];
    buffer  = new float[dim[0] * dim[1] * dim[2]];
 }
@@ -254,88 +254,51 @@ void Society::unselect_all (void)
    for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
       (*unit)->unselect();
 
-   // Flush the uncommitted_actions list
-   while (uncommitted_actions.size () > 0)
-   {
-      delete uncommitted_actions.back ();
-      uncommitted_actions.pop_back ();
-   }
+   // Clear out the uncommitted actions
+   Map->unselect_uncommitted_actions ();
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
 {
-   if (!control_down)
-   {
-      while (uncommitted_actions.size () > 0)
-      {
-         delete uncommitted_actions.back ();
-         uncommitted_actions.pop_back ();
-      }
-   }
-
-   int start[3] = {
-      MIN (cell_selections[0][0], cell_selections[1][0]),
-      MIN (cell_selections[0][1], cell_selections[1][1]),
-      MIN (cell_selections[0][2], cell_selections[1][2]) };
-
-   int end[3] = {
-      MAX (cell_selections[0][0], cell_selections[1][0]),
-      MAX (cell_selections[0][1], cell_selections[1][1]),
-      MAX (cell_selections[0][2], cell_selections[1][2]) };
-
-   for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
-      for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
-         for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
-         {
-            int action_index =
-               ind_x                    +
-               ind_y * dim[0]           +
-               ind_z * dim[0] * dim[1];
-
-            bool is_action = false;
-
-            // Search the uncommitted actions to see if it's already selected
-            for (std::list<Action*>::iterator action = uncommitted_actions.begin(); action != uncommitted_actions.end(); action++)
-               is_action |= (*action)->get_flattened_index () == action_index;
-
-            if (is_action) continue;
-
-            // Search the committed actions to see if it's already selected
-            for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++)
-               is_action |= (*action)->get_flattened_index () == action_index;
-
-            if (is_action) continue;
-
-            // Search the assigned actions to see if it's already selected
-            for (std::list<Action*>::iterator action = assigned_actions.begin(); action != assigned_actions.end(); action++)
-               is_action |= (*action)->get_flattened_index () == action_index;
-
-            if (is_action) continue;
-
-            // Assign the uncommitted actions
-            if (Map->get_material (action_index) > 0)
-            {
-               int location_ind[3] = {
-                  action_index % dim[0],
-                  action_index % (dim[0] * dim[1]) / dim[0],
-                  action_index / (dim[0] * dim[1]) };
-
-               int action_type = 1;
-
-               uncommitted_actions.push_front (new Action (action_index, location_ind, action_type));
-            }
-         }
-      }
-   }
+   Map->ready_actions (cell_selections, control_down);
 }
 
 void Society::set_dig_actions (void)
 {
-   while (uncommitted_actions.size () > 0)
-   {
-      // Append to the committed-actions list
-      committed_actions.push_front (uncommitted_actions.back ());
 
-      uncommitted_actions.pop_back ();
+   int num_uncommitted_actions;
+
+   const int *uncommitted_actions = scratch;
+   uncommitted_actions = Map->access_uncommitted_actions (&num_uncommitted_actions);
+
+   for (int ind = 0; ind < num_uncommitted_actions; ind++) {
+
+      bool duplicate = false;
+
+      // Pass if this is already in the uncommitted-actions list
+      for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++) {
+         int action_ind = (*action)->get_flattened_index ();
+         if (uncommitted_actions[ind] == action_ind) duplicate = true;
+      }
+
+      if (duplicate) continue;
+
+      // Pass if this is already in the assigned-actions list
+      for (std::list<Action*>::iterator action = assigned_actions.begin(); action != assigned_actions.end(); action++) {
+         int action_ind = (*action)->get_flattened_index ();
+         if (uncommitted_actions[ind] == action_ind) duplicate = true;
+      }
+
+      if (duplicate) continue;
+
+      int location[3];
+      location[2] = uncommitted_actions[ind] / (dim[0] * dim[1]);
+      location[1] = uncommitted_actions[ind] / dim[0] % dim[1];
+      location[0] = uncommitted_actions[ind] % dim[0];
+
+      int dig_action = 1;
+      committed_actions.push_front (new Action (uncommitted_actions[ind], location, dig_action));
    }
+
+   Map->unselect_uncommitted_actions ();
 }

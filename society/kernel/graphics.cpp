@@ -125,13 +125,25 @@ void Society::draw_uncommitted_actions (
 
    glColor3f (1.0f, 0.0f, 0.0f);
 
-   // Draw the action cells
-   for (std::list<Action*>::iterator action = uncommitted_actions.begin(); action != uncommitted_actions.end(); action++)
-   {
-      if ((*action)->get_position (2) != map_layer) continue;
+   int num_uncommitted_actions;
 
-      int col = (*action)->get_position (0);
-      int row = (*action)->get_position (1);
+   const int *uncommitted_action_ind =
+      Map->access_uncommitted_actions (&num_uncommitted_actions);
+
+   // Draw the action cells
+   for (int action_ind = 0; action_ind < num_uncommitted_actions; action_ind++)
+   {
+      int local_select = uncommitted_action_ind[action_ind];
+
+      int ind[3];
+      ind[2] = local_select / (dim[0] * dim[1]);
+      ind[1] = local_select / dim[0] % dim[1];
+      ind[0] = local_select % dim[0];
+
+      if (ind[2] != map_layer) continue;
+
+      int col = ind[0];
+      int row = ind[1];
 
       float vertex_x = starting_col_loc + block_width  * (float)col;
       float vertex_y = starting_row_loc + block_height * (float)row;

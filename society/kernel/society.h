@@ -75,7 +75,6 @@ class Society
 
       std::vector<Unit*> units;
       std::list<Action*> committed_actions;
-      std::list<Action*> uncommitted_actions;
       std::list<Action*> assigned_actions;
 
       float window_to_cell (float point, int dim);
