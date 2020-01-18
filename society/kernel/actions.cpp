@@ -16,15 +16,15 @@ Action::Action (int flattened_index_in, int location_in[3], int type_in)
    complete   = false;
 }
 
-
-void Container::insert (Action *action, int index)
+template <typename Type>
+void Container<Type>::insert (Type *object, int index)
 {
-   // advance to the desired action node index
+   // advance to the desired object node index
    bool stat = advance_to_index (index);
    if (!stat) return;
 
-   Node *node = new Node;
-   node->action = action;
+   Node<Type> *node = new Node<Type>;
+   node->object = object;
 
    // Attach the new node
    node->previous = current_node->previous;
@@ -37,27 +37,29 @@ void Container::insert (Action *action, int index)
    container_size++;
 }
 
-Action *Container::access (int index)
+template <typename Type>
+Type *Container<Type>::access (int index)
 {
-   // advance to the desired action node index
+   // advance to the desired object node index
    bool stat = advance_to_index (index);
    if (!stat) return nullptr;
 
-   return current_node->action;
+   return current_node->object;
 }
 
-Action *Container::pop (int index)
+template <typename Type>
+Type *Container<Type>::pop (int index)
 {
    if (container_size == 0) return nullptr;
 
-   // advance to the desired action node index
+   // advance to the desired object node index
    bool stat = advance_to_index (index);
    if (!stat) return nullptr;
 
-   Action *select_action = current_node->action;
+   Type *select_action = current_node->object;
 
    // Effectively pop the node off
-   Node *next_node = current_node->next;
+   Node<Type> *next_node = current_node->next;
    current_node = current_node->previous;
    current_node->next = next_node;
 
@@ -66,7 +68,8 @@ Action *Container::pop (int index)
    return select_action;
 }
 
-bool Container::advance_to_index (int index)
+template <typename Type>
+bool Container<Type>::advance_to_index (int index)
 {
    if (index >= container_size)
    {
@@ -77,7 +80,7 @@ bool Container::advance_to_index (int index)
       return false;
    }
 
-   // advance to the desired action node index
+   // advance to the desired object node index
    while (current_index < index)
    {
       current_node = current_node->next;
@@ -92,3 +95,8 @@ bool Container::advance_to_index (int index)
 
    return true;
 }
+
+template void Container<Action>::insert (Action *action, int index);
+template Action *Container<Action>::access (int index);
+template Action *Container<Action>::pop (int index);
+template bool Container<Action>::advance_to_index (int index);

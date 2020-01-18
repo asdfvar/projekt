@@ -27,15 +27,15 @@ class Action
       bool  complete;        // flag to determine if the action is complete
 };
 
-class Node
+template <typename Type>
+struct Node
 {
-   public:
-
-      Action *action;
-      Node   *next;
-      Node   *previous;
+   Type *object;
+   Node *next;
+   Node *previous;
 };
 
+template <typename Type>
 class Container
 {
    public:
@@ -46,19 +46,15 @@ class Container
          current_index  = 0;
       }
 
-      void insert (Action *action, int index);
-
-      Action *access (int index);
-
-      Action *pop (int index);
+      void insert (Type *object, int index);
+      Type *access (int index);
+      Type *pop (int index);
 
    private:
 
-      int container_size;
-      // first index pointer
-
-      int   current_index;
-      Node *current_node;
+      int         container_size;
+      int         current_index;
+      Node<Type> *current_node;
 
       bool advance_to_index (int index);
 };
