@@ -62,10 +62,6 @@ class Unit {
 
       int   *path;
 
-      float *cost;
-      float *buffer;
-      int *scratch;
-
       float position[3];
 
       int   dest[3];
