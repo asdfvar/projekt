@@ -74,7 +74,7 @@ class Society
 
       int *scratch;
 
-      std::vector<Unit*> units;
+      Container<Unit>   units;
       Container<Action> committed_actions;
       Container<Action> actions;
 

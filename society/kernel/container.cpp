@@ -1,11 +1,18 @@
 #include "container.h"
 #include "actions.h"
+#include "unit.h"
 #include <iostream>
 
 template <typename Type>
 void Container<Type>::push_front (Type *object)
 {
    insert (object, 0);
+}
+
+template <typename Type>
+void Container<Type>::push_back (Type *object)
+{
+   insert (object, container_size - 1);
 }
 
 template <typename Type>
@@ -127,9 +134,19 @@ bool Container<Type>::advance_to_index (int index)
 }
 
 // Define container types for the action class
-template void    Container<Action>::insert           (Action *action, int index);
-template void    Container<Action>::push_front       (Action *action           );
-template Action *Container<Action>::access           (int index                );
-template Action *Container<Action>::pop              (int index                );
-template Action *Container<Action>::pop_back         (void                     );
-template bool    Container<Action>::advance_to_index (int index                );
+template void    Container<Action>::insert           (Action*, int);
+template void    Container<Action>::push_front       (Action*     );
+template void    Container<Action>::push_back        (Action*     );
+template Action *Container<Action>::access           (int         );
+template Action *Container<Action>::pop              (int         );
+template Action *Container<Action>::pop_back         (void        );
+template bool    Container<Action>::advance_to_index (int         );
+
+// Define container types for the unit class
+template void  Container<Unit>::insert           (Unit*, int);
+template void  Container<Unit>::push_front       (Unit*     );
+template void  Container<Unit>::push_back        (Unit*     );
+template Unit *Container<Unit>::access           (int       );
+template Unit *Container<Unit>::pop              (int       );
+template Unit *Container<Unit>::pop_back         (void      );
+template bool  Container<Unit>::advance_to_index (int       );

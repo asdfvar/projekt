@@ -51,15 +51,17 @@ void Society::draw_units (
    const float selected_height_offset = 0.35f * block_height;
 
    glLineWidth (0.1f);
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
-      if (floorf ((*unit)->get_position (2)) == map_layer)
+      Unit *unit = units.access (unit_ind);
+
+      if (floorf (unit->get_position (2)) == map_layer)
       {
-         float x_pos = (*unit)->get_position (0) / ((float)col_max) *
+         float x_pos = unit->get_position (0) / ((float)col_max) *
             (window_end_col - window_start_col) +
             window_start_col;
 
-         float y_pos = (*unit)->get_position (1) / ((float)row_max) *
+         float y_pos = unit->get_position (1) / ((float)row_max) *
             (window_end_row - window_start_row) +
             window_start_row;
 
@@ -81,7 +83,7 @@ void Society::draw_units (
          glVertex2f (point3[0], point3[1]);
          glEnd ();
 
-         if ((*unit)->is_selected())
+         if (unit->is_selected())
          {
             float point0[2] = { x_pos - selected_width_offset, y_pos - selected_height_offset };
             float point1[2] = { x_pos - selected_width_offset, y_pos + selected_height_offset };
@@ -282,12 +284,13 @@ void Society::draw_unit_actions (
    glColor3f (color[0], color[1], color[2]);
 
    // Draw the action cells
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
+      Unit *unit = units.access (unit_ind);
 
-      if ((*unit)->num_actions () <= 0) continue;
+      if (unit->num_actions () <= 0) continue;
 
-      Action *action = (*unit)->access_action ();
+      Action *action = unit->access_action ();
 
       if (action->get_position (2) != map_layer) continue;
 

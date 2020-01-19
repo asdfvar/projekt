@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 2;
+   int num_units = 1;
 
    accum_time       = 0.0f;
    accum_time_limit = 0.0f;
@@ -91,11 +91,13 @@ void Society::set_destination (int destination[3])
 
    // Retrieve all unit destinations into an array for later use
    int ind = 0;
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
+      Unit *unit = units.access (unit_ind);
+
       int unit_dest[3];
 
-      (*unit)->get_destination (unit_dest);
+      unit->get_destination (unit_dest);
 
       unit_dest_x[ind] = unit_dest[0];
       unit_dest_y[ind] = unit_dest[1];
@@ -106,9 +108,11 @@ void Society::set_destination (int destination[3])
 
    // Set unit destinations
    ind = 0;
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
-      if (!(*unit)->is_selected()) continue;
+      Unit *unit = units.access (unit_ind);
+
+      if (!unit->is_selected()) continue;
 
       int dest_ind = cost_indices[ind++];
 
@@ -135,7 +139,7 @@ void Society::set_destination (int destination[3])
 
       if (found == false) continue;
 
-      (*unit)->set_destination (dest);
+      unit->set_destination (dest);
    }
 }
 
@@ -144,28 +148,30 @@ void Society::update (float time_step)
 
    const float *map = Map->access_map ();
 
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
+      Unit *unit = units.access (unit_ind);
+
       // Assign an action for this unit
       if (committed_actions.size() > 0)
       {
          Action *action = committed_actions.pop_back ();
-         (*unit)->assign_action (action);
+         unit->assign_action (action);
          actions.insert (action, 0);
       }
 
       // Dismiss completed actions by this unit
-      if ((*unit)->num_actions() > 0)
+      if (unit->num_actions() > 0)
       {
-         Action *action = (*unit)->access_action ();
+         Action *action = unit->access_action ();
          if (action->is_complete ()) {
-            (*unit)->pop_action ();
+            unit->pop_action ();
             delete action;
          }
       }
 
       // Update the unit's position and path planning
-      (*unit)->update (time_step);
+      unit->update (time_step);
    }
 }
 
@@ -177,11 +183,15 @@ const float *Society::access_map ()
 int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
 {
    int ind = 0;
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++, ind++) {
-      x[ind] = (*unit)->get_position (0);
-      y[ind] = (*unit)->get_position (1);
-      z[ind] = (*unit)->get_position (2);
-      selected[ind] = (*unit)->is_selected();
+
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++) {
+
+      Unit *unit = units.access (unit_ind);
+
+      x[ind] = unit->get_position (0);
+      y[ind] = unit->get_position (1);
+      z[ind] = unit->get_position (2);
+      selected[ind] = unit->is_selected();
    }
 
    return ind;
@@ -191,17 +201,21 @@ void Society::select_units (int cell_selections[2][3], int map_layer, bool contr
 {
    if (control_down == false)
    {
-      for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+      for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
       {
-         (*unit)->unselect();
+         Unit *unit = units.access (unit_ind);
+
+         unit->unselect();
       }
    }
 
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
-      float x = (*unit)->get_position (0);
-      float y = (*unit)->get_position (1);
-      float z = (*unit)->get_position (2);
+      Unit *unit = units.access (unit_ind);
+
+      float x = unit->get_position (0);
+      float y = unit->get_position (1);
+      float z = unit->get_position (2);
 
       float min_x = cell_selections[0][0];
       float max_x = cell_selections[1][0];
@@ -236,22 +250,28 @@ void Society::select_units (int cell_selections[2][3], int map_layer, bool contr
           y >= min_y && y <= max_y &&
           z >= min_z && z < max_z)
       {
-         (*unit)->select();
+         unit->select();
       }
    }
 }
 
 void Society::select_all (void)
 {
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
-      (*unit)->select();
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+   {
+      Unit *unit = units.access (unit_ind);
+      unit->select();
+   }
 }
 
 void Society::unselect_all (void)
 {
    // Unselect all units
-   for (std::vector<Unit*>::iterator unit = units.begin(); unit != units.end(); unit++)
-      (*unit)->unselect();
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+   {
+      Unit *unit = units.access (unit_ind);
+      unit->unselect();
+   }
 
    // Clear out the uncommitted actions
    Map->unselect_uncommitted_actions ();
@@ -267,39 +287,39 @@ void Society::set_dig_actions (void)
 
    int num_uncommitted_actions;
 
-   const int *uncommitted_actions = scratch;
-   uncommitted_actions = Map->access_uncommitted_actions (&num_uncommitted_actions);
+   const int *new_action_location_ind = scratch;
+   new_action_location_ind = Map->access_uncommitted_actions (&num_uncommitted_actions);
 
-   for (int ind = 0; ind < num_uncommitted_actions; ind++) {
-
+   for (int ind = 0; ind < num_uncommitted_actions; ind++)
+   {
       bool duplicate = false;
 
-      // Pass if this is already in the uncommitted-actions list
+      // Test if this is already in the committed-actions list
       for (int action_ind = 0; action_ind < committed_actions.size (); action_ind++) {
          Action *action = committed_actions.access (action_ind);
          int location_ind = action->get_flattened_index ();
-         if (uncommitted_actions[ind] == location_ind) duplicate = true;
+         if (new_action_location_ind[ind] == location_ind) duplicate = true;
       }
 
       if (duplicate) continue;
 
-      // Pass if this is already in the assigned-actions list
+      // Test if this is already in the assigned-actions list
       for (int assigned_action_ind = 0; assigned_action_ind < actions.size (); assigned_action_ind++)
       {
          Action *action = actions.access (assigned_action_ind);
          int location_ind = action->get_flattened_index ();
-         if (uncommitted_actions[assigned_action_ind] == location_ind) duplicate = true;
+         if (new_action_location_ind[ind] == location_ind) duplicate = true;
       }
 
       if (duplicate) continue;
 
       int location[3];
-      location[2] = uncommitted_actions[ind] / (dim[0] * dim[1]);
-      location[1] = uncommitted_actions[ind] / dim[0] % dim[1];
-      location[0] = uncommitted_actions[ind] % dim[0];
+      location[2] = new_action_location_ind[ind] / (dim[0] * dim[1]);
+      location[1] = new_action_location_ind[ind] / dim[0] % dim[1];
+      location[0] = new_action_location_ind[ind] % dim[0];
 
       int dig_action = 1;
-      committed_actions.push_front (new Action (uncommitted_actions[ind], location, dig_action));
+      committed_actions.push_front (new Action (new_action_location_ind[ind], location, dig_action));
    }
 
    Map->unselect_uncommitted_actions ();
