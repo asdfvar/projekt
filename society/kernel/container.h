@@ -16,6 +16,8 @@ class Container
       Type *access (int index);
       Type *pop (int index);
 
+      int size (void) { return container_size; };
+
    private:
 
       struct Node
@@ -28,6 +30,8 @@ class Container
       int   container_size;
       int   current_index;
       Node *current_node;
+      Node *front_node;
+      Node *back_node;
 
       bool advance_to_index (int index);
 };

@@ -7,6 +7,7 @@
 #include <list>
 #include "unit.h"
 #include "actions.h"
+#include "container.h"
 
 class Society
 {
@@ -75,7 +76,7 @@ class Society
 
       std::vector<Unit*> units;
       std::list<Action*> committed_actions;
-      std::list<Action*> actions;
+      Container<Action> actions;
 
       float window_to_cell (float point, int dim);
 };

@@ -5,12 +5,24 @@
 template <typename Type>
 void Container<Type>::insert (Type *object, int index)
 {
-   // advance to the desired object node index
-   bool stat = advance_to_index (index);
-   if (!stat) return;
-
    Node *node = new Node;
    node->object = object;
+
+   if (container_size == 0)
+   {
+      front_node   = back_node = node;
+      node->next   = node->previous = node;
+      current_node = node;
+   }
+   else
+   {
+      // advance to the desired object node index
+      bool stat = advance_to_index (index);
+      if (!stat) return;
+   }
+
+   if (current_node == front_node)
+      front_node = node;
 
    // Attach the new node
    node->previous = current_node->previous;
@@ -18,7 +30,10 @@ void Container<Type>::insert (Type *object, int index)
 
    // Configure the linkage for neighboring nodes
    current_node->previous = node;
-   node->previous->next = node;
+   node->previous->next   = node;
+
+   // The current node becomes the new node
+   current_node = node;
 
    container_size++;
 }
@@ -42,16 +57,24 @@ Type *Container<Type>::pop (int index)
    bool stat = advance_to_index (index);
    if (!stat) return nullptr;
 
-   Type *select_action = current_node->object;
+   Type *object = current_node->object;
 
-   // Effectively pop the node off
-   Node *next_node = current_node->next;
-   current_node = current_node->previous;
-   current_node->next = next_node;
+   Node *old_node     = current_node;
+   current_node       = old_node->previous;
+
+   if (back_node == old_node)
+   {
+      back_node = current_node;
+      current_node->next = back_node;
+   }
+   else
+      current_node->next = old_node->next;
 
    container_size--;
 
-   return select_action;
+   delete old_node;
+
+   return object;
 }
 
 template <typename Type>

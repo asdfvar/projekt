@@ -151,7 +151,7 @@ void Society::update (float time_step)
       {
          Action *action = committed_actions.back ();
          (*unit)->assign_action (action);
-         actions.push_front (action);
+         actions.insert (action, 0);
          committed_actions.pop_back ();
       }
 
@@ -284,9 +284,11 @@ void Society::set_dig_actions (void)
       if (duplicate) continue;
 
       // Pass if this is already in the assigned-actions list
-      for (std::list<Action*>::iterator action = actions.begin(); action != actions.end(); action++) {
-         int action_ind = (*action)->get_flattened_index ();
-         if (uncommitted_actions[ind] == action_ind) duplicate = true;
+      for (int assigned_action_ind = 0; assigned_action_ind < actions.size (); assigned_action_ind++)
+      {
+         Action *action = actions.access (assigned_action_ind);
+         int action_ind = action->get_flattened_index ();
+         if (uncommitted_actions[assigned_action_ind] == action_ind) duplicate = true;
       }
 
       if (duplicate) continue;
