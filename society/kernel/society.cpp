@@ -149,10 +149,9 @@ void Society::update (float time_step)
       // Assign an action for this unit
       if (committed_actions.size() > 0)
       {
-         Action *action = committed_actions.back ();
+         Action *action = committed_actions.pop_back ();
          (*unit)->assign_action (action);
          actions.insert (action, 0);
-         committed_actions.pop_back ();
       }
 
       // Dismiss completed actions by this unit
@@ -276,9 +275,10 @@ void Society::set_dig_actions (void)
       bool duplicate = false;
 
       // Pass if this is already in the uncommitted-actions list
-      for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++) {
-         int action_ind = (*action)->get_flattened_index ();
-         if (uncommitted_actions[ind] == action_ind) duplicate = true;
+      for (int action_ind = 0; action_ind < committed_actions.size (); action_ind++) {
+         Action *action = committed_actions.access (action_ind);
+         int location_ind = action->get_flattened_index ();
+         if (uncommitted_actions[ind] == location_ind) duplicate = true;
       }
 
       if (duplicate) continue;
@@ -287,8 +287,8 @@ void Society::set_dig_actions (void)
       for (int assigned_action_ind = 0; assigned_action_ind < actions.size (); assigned_action_ind++)
       {
          Action *action = actions.access (assigned_action_ind);
-         int action_ind = action->get_flattened_index ();
-         if (uncommitted_actions[assigned_action_ind] == action_ind) duplicate = true;
+         int location_ind = action->get_flattened_index ();
+         if (uncommitted_actions[assigned_action_ind] == location_ind) duplicate = true;
       }
 
       if (duplicate) continue;

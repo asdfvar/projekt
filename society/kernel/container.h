@@ -12,9 +12,11 @@ class Container
          current_index  = 0;
       }
 
-      void insert (Type *object, int index);
-      Type *access (int index);
-      Type *pop (int index);
+      void insert     (Type *object, int index);
+      void push_front (Type *object           );
+      Type *access    (int index              );
+      Type *pop       (int index              );
+      Type *pop_back  (void                   );
 
       int size (void) { return container_size; };
 

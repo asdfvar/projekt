@@ -3,6 +3,12 @@
 #include <iostream>
 
 template <typename Type>
+void Container<Type>::push_front (Type *object)
+{
+   insert (object, 0);
+}
+
+template <typename Type>
 void Container<Type>::insert (Type *object, int index)
 {
    Node *node = new Node;
@@ -78,6 +84,21 @@ Type *Container<Type>::pop (int index)
 }
 
 template <typename Type>
+Type *Container<Type>::pop_back (void)
+{
+   Node *desired_node = back_node;
+
+   if (current_node == back_node)
+      current_node = back_node->previous;
+
+   back_node = back_node->previous;
+
+   container_size--;
+
+   return desired_node->object;
+}
+
+template <typename Type>
 bool Container<Type>::advance_to_index (int index)
 {
    if (index >= container_size)
@@ -107,6 +128,8 @@ bool Container<Type>::advance_to_index (int index)
 
 // Define container types for the action class
 template void    Container<Action>::insert           (Action *action, int index);
+template void    Container<Action>::push_front       (Action *action           );
 template Action *Container<Action>::access           (int index                );
 template Action *Container<Action>::pop              (int index                );
+template Action *Container<Action>::pop_back         (void                     );
 template bool    Container<Action>::advance_to_index (int index                );

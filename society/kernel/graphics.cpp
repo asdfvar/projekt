@@ -233,12 +233,13 @@ void Society::draw_committed_actions (
    glColor3f (0.3f, 0.0f, 0.0f);
 
    // Draw the action cells
-   for (std::list<Action*>::iterator action = committed_actions.begin(); action != committed_actions.end(); action++)
+   for (int action_ind = 0; action_ind < committed_actions.size (); action_ind++)
    {
-      if ((*action)->get_position (2) != map_layer) continue;
+      Action *action = committed_actions.access (action_ind);
+      if (action->get_position (2) != map_layer) continue;
 
-      int col = (*action)->get_position (0);
-      int row = (*action)->get_position (1);
+      int col = action->get_position (0);
+      int row = action->get_position (1);
 
       float vertex_x = starting_col_loc + block_width  * (float)col;
       float vertex_y = starting_row_loc + block_height * (float)row;

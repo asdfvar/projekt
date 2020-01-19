@@ -75,7 +75,7 @@ class Society
       int *scratch;
 
       std::vector<Unit*> units;
-      std::list<Action*> committed_actions;
+      Container<Action> committed_actions;
       Container<Action> actions;
 
       float window_to_cell (float point, int dim);
