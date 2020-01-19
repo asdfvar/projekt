@@ -6,12 +6,18 @@
 template <typename Type>
 void Container<Type>::push_front (Type *object)
 {
+   current_node = front_node;
+   current_index = 0;
+
    insert (object, 0);
 }
 
 template <typename Type>
 void Container<Type>::push_back (Type *object)
 {
+   current_node = back_node;
+   current_index = container_size - 1;
+
    insert (object, container_size - 1);
 }
 
