@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 1;
+   int num_units = 4;
 
    accum_time       = 0.0f;
    accum_time_limit = 0.0f;
@@ -148,17 +148,24 @@ void Society::update (float time_step)
 
    const float *map = Map->access_map ();
 
+   // Assign ready actions for available units
+   for (int count = 0; count < 20; count++)
+      for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+      {
+         Unit *unit = units.access (unit_ind);
+
+         // Assign an action for this unit
+         if (committed_actions.size() > 0)
+         {
+            Action *action = committed_actions.pop_back ();
+            unit->assign_action (action);
+            actions.insert (action, 0);
+         }
+      }
+
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
-
-      // Assign an action for this unit
-      if (committed_actions.size() > 0)
-      {
-         Action *action = committed_actions.pop_back ();
-         unit->assign_action (action);
-         actions.insert (action, 0);
-      }
 
       // Dismiss completed actions by this unit
       if (unit->num_actions() > 0)
