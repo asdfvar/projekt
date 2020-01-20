@@ -19,6 +19,7 @@ class Container
       Type *access    (int index              );
       Type *pop       (int index              );
       Type *pop_back  (void                   );
+      void reset      (void                   );
 
       int size (void) { return container_size; };
 

@@ -68,27 +68,107 @@ void Facade::keyboardUp (const char key, int x, int y)
 void Facade::keyboardDown (const char key, int x, int y)
 {
    // Escape key
-   if (key == 27) {
+   if (!control_down && key == 27) {
       society.unselect_all ();
       mode = 0;
    }
 
    // Enter key
-   if (key == 13)
+   if (!control_down && key == 13)
    {
       if (mode == 1) society.set_actions (1);
 
       mode = 0;
    }
 
-   // Control-'a'
-   else if (key == 1) {
+   // Control 'a'
+   else if (control_down && key == 1) {
       society.select_all ();
    }
 
    else if (key == 'z') {
       z_down = true;
    }
+
+   // Control 1
+   else if (control_down && key == 49)
+      society.set_group (1);
+
+   // Control 2
+   else if (control_down && key == 0)
+      society.set_group (2);
+
+   // Control 3
+   else if (control_down && key == 27)
+      society.set_group (3);
+
+   // Control 4
+   else if (control_down && key == 28)
+      society.set_group (4);
+
+   // Control 5
+   else if (control_down && key == 29)
+      society.set_group (5);
+
+   // Control 6
+   else if (control_down && key == 30)
+      society.set_group (6);
+
+   // Control 7
+   else if (control_down && key == 31)
+      society.set_group (7);
+
+   // Control 8
+   else if (control_down && key == 127)
+      society.set_group (8);
+
+   // Control 9
+   else if (control_down && key == 57)
+      society.set_group (9);
+
+   // Control 0
+   else if (control_down && key == 48)
+      society.set_group (0);
+
+   // Shift 1
+   else if (shift_down && key == 33)
+      society.select_group (1);
+
+   // Shift 2
+   else if (shift_down && key == 64)
+      society.select_group (2);
+
+   // Shift 3
+   else if (shift_down && key == 35)
+      society.select_group (3);
+
+   // Shift 4
+   else if (shift_down && key == 36)
+      society.select_group (4);
+
+   // Shift 5
+   else if (shift_down && key == 37)
+      society.select_group (5);
+
+   // Shift 6
+   else if (shift_down && key == 94)
+      society.select_group (6);
+
+   // Shift 7
+   else if (shift_down && key == 38)
+      society.select_group (7);
+
+   // Shift 8
+   else if (shift_down && key == 42)
+      society.select_group (8);
+
+   // Shift 9
+   else if (shift_down && key == 40)
+      society.select_group (9);
+
+   // Shift 0
+   else if (shift_down && key == 41)
+      society.select_group (0);
 
    // Remove mode
    else if (key == 'd') mode = 1;

@@ -124,6 +124,12 @@ Type *Container<Type>::pop_back (void)
 }
 
 template <typename Type>
+void Container<Type>::reset (void)
+{
+   container_size = 0;
+}
+
+template <typename Type>
 bool Container<Type>::advance_to_index (int index)
 {
    if (index >= container_size)
@@ -159,6 +165,7 @@ template Action *Container<Action>::access           (int         );
 template Action *Container<Action>::back             (void        );
 template Action *Container<Action>::pop              (int         );
 template Action *Container<Action>::pop_back         (void        );
+template void    Container<Action>::reset            (void        );
 template bool    Container<Action>::advance_to_index (int         );
 
 // Define container types for the unit class
@@ -166,7 +173,8 @@ template void  Container<Unit>::insert           (Unit*, int);
 template void  Container<Unit>::push_front       (Unit*     );
 template void  Container<Unit>::push_back        (Unit*     );
 template Unit *Container<Unit>::access           (int       );
-template Unit *Container<Unit>::back             (void        );
+template Unit *Container<Unit>::back             (void      );
 template Unit *Container<Unit>::pop              (int       );
 template Unit *Container<Unit>::pop_back         (void      );
+template void  Container<Unit>::reset            (void      );
 template bool  Container<Unit>::advance_to_index (int       );

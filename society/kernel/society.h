@@ -30,6 +30,10 @@ class Society
 
       void unselect_all (void);
 
+      void set_group (int group_number);
+
+      void select_group (int group_number);
+
       void select_cells (int cell_selections[2][3], bool control_down);
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);
@@ -77,6 +81,8 @@ class Society
       Container<Unit>   units;
       Container<Action> committed_actions;
       Container<Action> actions;
+
+      Container<Unit>   group[10];
 
       float window_to_cell (float point, int dim);
 };

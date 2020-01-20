@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 1;
+   int num_units = 100;
 
    accum_time       = 0.0f;
    accum_time_limit = 0.0f;
@@ -277,11 +277,42 @@ void Society::unselect_all (void)
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
-      unit->unselect();
+      unit->unselect ();
    }
 
    // Clear out the uncommitted actions
    Map->unselect_uncommitted_actions ();
+}
+
+void Society::set_group (int group_number)
+{
+   // Clear contents
+   group[group_number].reset ();
+
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+   {
+      Unit *unit = units.access (unit_ind);
+
+      if (unit->is_selected ())
+         group[group_number].push_front (unit);
+   }
+}
+
+void Society::select_group (int group_number)
+{
+   // Unselect all units
+   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+   {
+      Unit *unit = units.access (unit_ind);
+      unit->unselect();
+   }
+
+   for (int unit_ind = 0; unit_ind < group[group_number].size (); unit_ind++)
+   {
+      Unit *unit = group[group_number].access (unit_ind);
+      unit->select ();
+   }
+
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
