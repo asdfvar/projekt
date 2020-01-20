@@ -76,7 +76,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    // Enter key
    if (key == 13)
    {
-      if (mode == 1) society.set_dig_actions ();
+      if (mode == 1) society.set_actions (1);
 
       mode = 0;
    }
@@ -90,7 +90,7 @@ void Facade::keyboardDown (const char key, int x, int y)
       z_down = true;
    }
 
-   // Dig mode
+   // Remove mode
    else if (key == 'd') mode = 1;
 
    hud.set_mode (mode);
@@ -317,11 +317,13 @@ void Facade::mouseMotion (int x, int y)
 
       selection_active = true;
 
-      if (mode == 1) {
-         // Dig mode
+      if (mode == 1)
+      {
+         // Remove mode
          society.select_cells (cell_selections, control_down);
       }
-      else {
+      else
+      {
          society.select_units (cell_selections, map_layer, control_down);
       }
    }

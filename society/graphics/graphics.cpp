@@ -165,10 +165,10 @@ void HUD::draw_info (void)
 
    if (mode == 1)
    {
-      Text dig;
+      Text remove;
 
-      dig.populate ("dig mode");
-      dig.display_contents (0.70f, 0.95f, 0.6f, 1.0f);
+      remove.populate ("remove mode");
+      remove.display_contents (0.60f, 0.95f, 0.7f, 1.0f);
    }
 }
 

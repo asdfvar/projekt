@@ -289,7 +289,7 @@ void Society::select_cells (int cell_selections[2][3], bool control_down)
    Map->ready_actions (cell_selections, control_down);
 }
 
-void Society::set_dig_actions (void)
+void Society::set_actions (int action_type)
 {
 
    int num_uncommitted_actions;
@@ -325,8 +325,7 @@ void Society::set_dig_actions (void)
       location[1] = new_action_location_ind[ind] / dim[0] % dim[1];
       location[0] = new_action_location_ind[ind] % dim[0];
 
-      int dig_action = 1;
-      committed_actions.push_front (new Action (new_action_location_ind[ind], location, dig_action));
+      committed_actions.push_front (new Action (new_action_location_ind[ind], location, action_type));
    }
 
    Map->unselect_uncommitted_actions ();

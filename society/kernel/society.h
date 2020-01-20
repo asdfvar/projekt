@@ -34,7 +34,7 @@ class Society
 
       int get_unit_info (float *x, float *y, float *z, bool *selections);
 
-      void set_dig_actions (void);
+      void set_actions (int action_type);
 
       // Graphics
       void draw_units (float *transform, float *translation, int map_layer);
