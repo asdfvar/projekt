@@ -15,6 +15,7 @@ class Container
       void insert     (Type *object, int index);
       void push_front (Type *object           );
       void push_back  (Type *object           );
+      Type *back      (void                   );
       Type *access    (int index              );
       Type *pop       (int index              );
       Type *pop_back  (void                   );

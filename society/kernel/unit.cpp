@@ -18,6 +18,8 @@ Unit::Unit (
    position[1] = position_y_in;
    position[2] = position_z_in;
 
+   actions_limit = 1;
+
    Map = Map_in;
 
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
@@ -209,6 +211,27 @@ void Unit::update (float time_step)
    theta = atan2f (diff_pos[2], sqrtf (diff_pos[0] * diff_pos[0] + diff_pos[1] * diff_pos[1]));
 
    position[2] += speed * sinf (theta) * time_step;
+}
+
+void Unit::assign_action (Action *action)
+{
+   if (!available_action_slots ())
+   {
+      std::cout
+         << "Not enough available action slots"
+         << " available for unit "
+         << this << std::endl;
+   }
+
+   actions.push_front (action);
+}
+
+bool Unit::available_action_slots (void)
+{
+   if (actions.size () >= actions_limit)
+      return false;
+
+   return true;
 }
 
 void *path_finding_func (void *path_func_args_in)

@@ -58,6 +58,12 @@ void Container<Type>::insert (Type *object, int index)
 }
 
 template <typename Type>
+Type *Container<Type>::back (void)
+{
+   return back_node->object;
+}
+
+template <typename Type>
 Type *Container<Type>::access (int index)
 {
    // advance to the desired object node index
@@ -102,9 +108,15 @@ Type *Container<Type>::pop_back (void)
    Node *desired_node = back_node;
 
    if (current_node == back_node)
+   {
       current_node = back_node->previous;
+      current_index--;
+      if (current_index < 0) current_index = 0;
+   }
 
    back_node = back_node->previous;
+
+   back_node->next = back_node;
 
    container_size--;
 
@@ -144,6 +156,7 @@ template void    Container<Action>::insert           (Action*, int);
 template void    Container<Action>::push_front       (Action*     );
 template void    Container<Action>::push_back        (Action*     );
 template Action *Container<Action>::access           (int         );
+template Action *Container<Action>::back             (void        );
 template Action *Container<Action>::pop              (int         );
 template Action *Container<Action>::pop_back         (void        );
 template bool    Container<Action>::advance_to_index (int         );
@@ -153,6 +166,7 @@ template void  Container<Unit>::insert           (Unit*, int);
 template void  Container<Unit>::push_front       (Unit*     );
 template void  Container<Unit>::push_back        (Unit*     );
 template Unit *Container<Unit>::access           (int       );
+template Unit *Container<Unit>::back             (void        );
 template Unit *Container<Unit>::pop              (int       );
 template Unit *Container<Unit>::pop_back         (void      );
 template bool  Container<Unit>::advance_to_index (int       );

@@ -5,6 +5,7 @@
 #include <thread>
 #include "map.h"
 #include "actions.h"
+#include "container.h"
 
 typedef struct PATH_FUNC_ARGS
 {
@@ -48,9 +49,11 @@ class Unit {
 
       void update (float time_step);
 
-      void assign_action (Action *action) { actions.push_front (action); };
+      void assign_action (Action *action);
 
       Action *access_action (void) { return actions.back (); };
+
+      bool available_action_slots (void);
 
       int num_actions (void) { return actions.size (); };
 
@@ -74,7 +77,8 @@ class Unit {
 
       int path_size;
 
-      std::list<Action*> actions;
+      int actions_limit;
+      Container<Action> actions;
 
       PATH_FUNC_ARGS    path_func_args;
       pthread_t         path_planner_thread;
