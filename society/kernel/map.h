@@ -29,9 +29,9 @@ class MAP
       float *map;
       float *ground;
       int   *material;
-      int   *uncommitted_actions;
 
-      int uncommitted_actions_size;
+      int *uncommitted_actions;
+      int  uncommitted_actions_size;
 
       int size[3];
 

@@ -1,3 +1,1 @@
-remove actions from the map when assigned to the actions list used in society
-
 set the definition of cells in the selection box as cells that are completely contained within the bounds

@@ -308,8 +308,8 @@ void Society::set_actions (int action_type)
 
    int num_uncommitted_actions;
 
-   const int *new_action_location_ind = scratch;
-   new_action_location_ind = Map->access_uncommitted_actions (&num_uncommitted_actions);
+   const int *new_action_location_ind =
+      Map->access_uncommitted_actions (&num_uncommitted_actions);
 
    for (int ind = 0; ind < num_uncommitted_actions; ind++)
    {
