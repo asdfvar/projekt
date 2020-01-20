@@ -145,7 +145,6 @@ void Society::set_destination (int destination[3])
 
 void Society::update (float time_step)
 {
-
    const float *map = Map->access_map ();
 
    // Assign ready actions for available units
