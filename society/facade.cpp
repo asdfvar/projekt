@@ -13,7 +13,7 @@
 // Change perspective from a point on the [-1, 1] scale to the corresponding cell
 static float window_to_cell (
       float point, // point in the window
-      int dim) // number of cells that make up the map
+      int   dim)   // number of cells that make up the map
 {
    return (point + 1.0f) / 2.0f * (float)dim;
 }
@@ -366,7 +366,8 @@ void Facade::mouseMotion (int x, int y)
       float fxt = fx;
       float fyt = fy;
 
-      if (selection_active == false) {
+      if (selection_active == false)
+      {
          selection_box[0][0] = fxt * inv_transform[0] + fyt * inv_transform[1];
          selection_box[0][1] = fxt * inv_transform[2] + fyt * inv_transform[3];
          selection_box[0][2] = (float)map_layer + 0.5f;
@@ -386,6 +387,7 @@ void Facade::mouseMotion (int x, int y)
          society.get_size (0),
          society.get_size (1) };
 
+      // TODO: compute the min/max at float value then determine the descrete locations (address the CR)
       int cell_selections[2][3];
       cell_selections[0][0] = (int)(window_to_cell (selection_box[0][0], size[0]) + 0.5f);
       cell_selections[0][1] = (int)(window_to_cell (selection_box[0][1], size[1]) + 0.5f);
