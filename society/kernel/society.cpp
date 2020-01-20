@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 100;
+   int num_units = 4;
 
    accum_time       = 0.0f;
    accum_time_limit = 0.0f;
@@ -185,23 +185,6 @@ void Society::update (float time_step)
 const float *Society::access_map ()
 {
    return static_cast<const float*>(Map->access_map ());
-}
-
-int Society::get_unit_info (float *x, float *y, float *z, bool *selected)
-{
-   int ind = 0;
-
-   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++) {
-
-      Unit *unit = units.access (unit_ind);
-
-      x[ind] = unit->get_position (0);
-      y[ind] = unit->get_position (1);
-      z[ind] = unit->get_position (2);
-      selected[ind] = unit->is_selected();
-   }
-
-   return ind;
 }
 
 void Society::select_units (int cell_selections[2][3], int map_layer, bool control_down)
