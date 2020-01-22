@@ -24,14 +24,22 @@ MAP::MAP (int num_cells[3])
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
+            material[ind] = 1;
             if (rand() & 3 && ind_z == 20) material[ind] = 0;
-            else if (ind_z == 22) material[ind] = 0;
-            else if (ind_x == ind_z && ind_y == 0) material[ind] = 0;
-            else material[ind] = 1;
+            if (ind_z == 22) material[ind] = 0;
+            if (ind_z == 18) material[ind] = 0;
+            if (ind_x == ind_z && ind_y == 0) material[ind] = 0;
+            if (ind_x == ind_z + 1 && ind_y == 0) material[ind] = 1;
+
+            if (ind_z == 18 &&
+                  ind_x > 10 && ind_x < 20 &&
+                  ind_y > 10 && ind_y < 20)
+               material[ind] = 1;
          }
       }
    }
 
+   // TODO: make this "set_air"
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
    {
       if (material[ind] > 0) map[ind] = -1.0f;
@@ -47,6 +55,21 @@ MAP::~MAP (void)
    delete[] ground;
    delete[] material;
    delete[] uncommitted_actions;
+}
+
+float MAP::get_ground_cell (int flattened_ind)
+{
+   return ground[flattened_ind];
+}
+
+float MAP::get_ground_cell (int ind[3])
+{
+   int flattened_ind =
+      ind[2] * size[0] * size[1] +
+      ind[1] * size[0]           +
+      ind[0];
+
+   return ground[flattened_ind];
 }
 
 // Ground map is dependent on the map. It is the same with the exception that

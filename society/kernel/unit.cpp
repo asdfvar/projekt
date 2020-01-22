@@ -221,6 +221,8 @@ void Unit::assign_action (Action *action)
          << "Not enough available action slots"
          << " available for unit "
          << this << std::endl;
+
+      return;
    }
 
    actions.push_front (action);

@@ -13,6 +13,9 @@ class MAP
       const float *access_map         (void) { return (const float*)map;          };
       const float *access_ground      (void) { return (const float*)ground;       };
 
+      float get_ground_cell (int flattened_ind);
+      float get_ground_cell (int ind[3]);
+
       int map_dim (int dim) { return size[dim]; };
 
       void change (int flattened_cell_index, float value);
