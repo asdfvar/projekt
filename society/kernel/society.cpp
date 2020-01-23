@@ -153,6 +153,11 @@ void Society::update (float time_step)
       {
          Unit *unit = units.access (unit_ind);
 
+         int unit_location[3] =
+         { (int)unit->get_position (0),
+            (int)unit->get_position (1),
+            (int)unit->get_position (2) };
+
          // Assign an action for this unit if it has an available slot
          if (unit->available_action_slots ())
          {
@@ -167,13 +172,7 @@ void Society::update (float time_step)
                   action->get_position (1),
                   action->get_position (2) };
 
-               // TODO: move this out of this loop
                // test if this cell is accessible to the unit
-               int unit_location[3] =
-               { (int)unit->get_position (0),
-                  (int)unit->get_position (1),
-                  (int)unit->get_position (2) };
-
                bool accessible =
                   cost_function (
                         map,
