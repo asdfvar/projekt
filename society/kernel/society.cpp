@@ -145,7 +145,7 @@ void Society::set_destination (int destination[3])
 
 void Society::update (float time_step)
 {
-   const float *map = Map->access_map ();
+   const float *map = Map->access_ground ();
 
    // Assign ready actions for available units
    for (int count = 0; count < 1; count++)
@@ -153,13 +153,49 @@ void Society::update (float time_step)
       {
          Unit *unit = units.access (unit_ind);
 
-         // Assign an action for this unit
-         if (committed_actions.size() > 0 && unit->available_action_slots ())
+         // Assign an action for this unit if it has an available slot
+         if (unit->available_action_slots ())
          {
-            Action *action = committed_actions.pop_back ();
+            bool assigned_action = false;
+            for (int action_ind = 0; action_ind < committed_actions.size () && !assigned_action; action_ind++)
+            {
+               Action *action = committed_actions.access (action_ind);
 
-            unit->assign_action (action);
-            actions.insert (action, 0);
+               // test if this action has a ground-accessible cell near it by first getting the action's cell location
+               int action_location_cell[3] =
+               { action->get_position (0),
+                  action->get_position (1),
+                  action->get_position (2) };
+
+               // TODO: move this out of this loop
+               // test if this cell is accessible to the unit
+               int unit_location[3] =
+               { (int)unit->get_position (0),
+                  (int)unit->get_position (1),
+                  (int)unit->get_position (2) };
+
+               bool accessible =
+                  cost_function (
+                        map,
+                        cost,
+                        dim,
+                        action_location_cell,
+                        unit_location,
+                        buffer);
+
+               if (accessible)
+               {
+                  // the action is accessible to the unit, assign it to the unit
+                  unit->assign_action (action);
+                  assigned_action = true;
+
+                  // remove this action from the list since it now belongs to the unit
+                  committed_actions.pop (action_ind);
+
+                  // as part of assigning the action to the unit, also add it to the being worked actions
+                  actions.push_front (action);
+               }
+            }
          }
       }
 

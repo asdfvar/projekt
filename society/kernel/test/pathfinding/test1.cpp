@@ -66,14 +66,18 @@ int main ()
    nodes[4 * DIM_X * DIM_Y + 1 * DIM_X + 4] = -1.0f;
    nodes[4 * DIM_X * DIM_Y + 2 * DIM_X + 4] = -1.0f;
 
+   nodes[4 * DIM_X * DIM_Y + 3 * DIM_X + 6] = -1.0f;
+
    // start from the destination point and branch outward
-   cost_function (
-         nodes,
-         cost,
-         dim,
-         dst,       // source (cost = 0) will be the destination point
-         src,       // destination point will be the starting point
-         buffer);
+
+   bool accessible =
+      cost_function (
+            nodes,
+            cost,
+            dim,
+            dst,       // source (cost = 0) will be the destination point
+            src,       // destination point will be the starting point
+            buffer);
 
    for (int k = 0, ind = 0; k < DIM_Z; k++)
    {
@@ -118,6 +122,12 @@ int main ()
       }
       std::cout << std::endl;
    }
+
+   std::cout << "location is ";
+   if (!accessible)
+      std::cout << "not ";
+
+   std::cout << "accessible" << std::endl;
 
    delete[] nodes;
    delete[] cost;

@@ -23,6 +23,9 @@ class Container
 
       int size (void) { return container_size; };
 
+      void list_contents (void);
+      void test_ends     (void);
+
    private:
 
       struct Node
