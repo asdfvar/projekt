@@ -41,15 +41,23 @@ void Container<Type>::insert (Type *object, int index)
    }
 
    if (current_node == front_node)
-      front_node = node;
+   {
+      node->next             = current_node;
+      node->previous         = node;
+      current_node->previous = node;
+      front_node             = node;
+   }
 
-   // Attach the new node
-   node->previous = current_node->previous;
-   node->next     = current_node;
+   else
+   {
+      // Attach the new node
+      node->previous = current_node->previous;
+      node->next     = current_node;
 
-   // Configure the linkage for neighboring nodes
-   current_node->previous = node;
-   node->previous->next   = node;
+      // Configure the linkage for neighboring nodes
+      current_node->previous = node;
+      node->previous->next   = node;
+   }
 
    // The current node becomes the new node
    current_node = node;
@@ -82,20 +90,33 @@ Type *Container<Type>::pop (int index)
    bool stat = advance_to_index (index);
    if (!stat) return nullptr;
 
-   Type *object = current_node->object;
+   Node *old_node = current_node;
 
-   Node *old_node     = current_node;
-   current_node       = old_node->previous;
-
-   if (back_node == old_node)
+   if (old_node == front_node)
    {
-      back_node = current_node;
-      current_node->next = back_node;
+      current_node           = old_node->next;
+      current_node->next     = old_node->next->next;
+      current_node->previous = current_node;
+      front_node             = current_node;
    }
-   else
-      current_node->next = old_node->next;
+
+   else if (old_node == back_node)
+   {
+      current_node       = old_node->previous;
+      current_node->next = current_node;
+      back_node          = current_node;
+   }
+
+   else //if (old_node != front_node && old_node != back_node)
+   {
+      current_node             = old_node->next;
+      old_node->previous->next = old_node->next;
+      old_node->next->previous = old_node->previous;
+   }
 
    container_size--;
+
+   Type *object = old_node->object;
 
    delete old_node;
 
@@ -157,6 +178,34 @@ bool Container<Type>::advance_to_index (int index)
    return true;
 }
 
+template <typename Type>
+void Container<Type>::list_contents (void)
+{
+
+   std::cout << "front    = " << front_node->object << std::endl;
+
+   std::cout << "contents = ";
+   for (int ind = 0; ind < container_size; ind++)
+   {
+      advance_to_index (ind);
+      std::cout << current_node->object << ", ";
+   }
+   std::cout << std::endl;
+
+   std::cout << "back     = " << back_node->object << std::endl;
+   std::cout << std::endl;
+}
+
+template <typename Type>
+void Container<Type>::test_ends (void)
+{
+   advance_to_index (0);
+   if (front_node != current_node) std::cout << "front node " << front_node->object << " not defined " << current_node->object << std::endl;
+
+   advance_to_index (container_size - 1);
+   if (back_node != current_node) std::cout << "back node " << back_node->object << " not defined " << current_node->object << std::endl;
+}
+
 // Define container types for the action class
 template void    Container<Action>::insert           (Action*, int);
 template void    Container<Action>::push_front       (Action*     );
@@ -167,6 +216,8 @@ template Action *Container<Action>::pop              (int         );
 template Action *Container<Action>::pop_back         (void        );
 template void    Container<Action>::reset            (void        );
 template bool    Container<Action>::advance_to_index (int         );
+template void    Container<Action>::list_contents    (void        );
+template void    Container<Action>::test_ends        (void        );
 
 // Define container types for the unit class
 template void  Container<Unit>::insert           (Unit*, int);
@@ -178,3 +229,5 @@ template Unit *Container<Unit>::pop              (int       );
 template Unit *Container<Unit>::pop_back         (void      );
 template void  Container<Unit>::reset            (void      );
 template bool  Container<Unit>::advance_to_index (int       );
+template void  Container<Unit>::list_contents    (void      );
+template void  Container<Unit>::test_ends        (void      );
