@@ -1,1 +1,7 @@
 set the definition of cells in the selection box as cells that are completely contained within the bounds
+
+do away with the "actions" in "society" so that we don't have to maintain the actions in here and in the units
+
+define total energy "Joules" required to complete the action and define a power in the units
+
+replace "actions" with "jobs"
