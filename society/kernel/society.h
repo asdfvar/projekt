@@ -75,8 +75,6 @@ class Society
       Container<Action> committed_actions;
 
       Container<Unit>   group[10];
-
-      float window_to_cell (float point, int dim);
 };
 
 #endif
