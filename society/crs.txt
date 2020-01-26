@@ -1,9 +1,11 @@
 set the definition of cells in the selection box as cells that are completely contained within the bounds
 
-do away with the "actions" in "society" so that we don't have to maintain the actions in here and in the units
-
 define total energy "Joules" required to complete the action and define a power in the units
 
 replace "actions" with "jobs"
 
 highlight the path of each unit in the graphics
+
+make subclasses of the container type specific to the units and actions to support custom functionality
+
+enforce restrictions on how many threads can be accessed simultaneously. for units, this means only setting a path if less than *N* other units are setting a path where *N* is the number of simultaneous threads supported by the hardware

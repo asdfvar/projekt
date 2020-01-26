@@ -41,6 +41,7 @@ class Society
       // Graphics
       void draw_units (float *transform, float *translation, int map_layer);
 
+      // Draw selected cells not set to be queued
       void draw_uncommitted_actions (
             float       *transform,
             float       *translation,
@@ -60,7 +61,11 @@ class Society
 
    private:
 
+      // Contains information and contents that make up the map as well as
+      // functionality for accessing specifics about the map
       MAP *Map;
+
+      // Map size
       int  size[3];
 
       // Float-type scratch space
