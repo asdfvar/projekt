@@ -51,11 +51,6 @@ class Society
             float       *translation,
             int          map_layer);
 
-      void draw_assigned_actions (
-            float       *transform,
-            float       *translation,
-            int          map_layer);
-
       void draw_unit_actions (
             float       *transform,
             float       *translation,
@@ -78,7 +73,6 @@ class Society
 
       Container<Unit>   units;
       Container<Action> committed_actions;
-      Container<Action> actions;
 
       Container<Unit>   group[10];
 

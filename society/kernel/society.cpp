@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 4;
+   int num_units = 400;
 
    accum_time       = 0.0f;
    accum_time_limit = 0.0f;
@@ -190,9 +190,6 @@ void Society::update (float time_step)
 
                   // remove this action from the list since it now belongs to the unit
                   committed_actions.pop (action_ind);
-
-                  // as part of assigning the action to the unit, also add it to the being worked actions
-                  actions.push_front (action);
                }
             }
          }
@@ -358,12 +355,16 @@ void Society::set_actions (int action_type)
 
       if (duplicate) continue;
 
-      // Test if this is already in the assigned-actions list
-      for (int assigned_action_ind = 0; assigned_action_ind < actions.size (); assigned_action_ind++)
+      // Test if this is already assigned to one of the units
+      for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
       {
-         Action *action = actions.access (assigned_action_ind);
-         int location_ind = action->get_flattened_index ();
-         if (new_action_location_ind[ind] == location_ind) duplicate = true;
+         Unit *unit = units.access (unit_ind);
+         for (int action_ind = 0; action_ind < unit->num_actions(); action_ind++)
+         {
+            Action *action = unit->access_action (action_ind);
+            int location_ind = action->get_flattened_index ();
+            if (new_action_location_ind[ind] == location_ind) duplicate = true;
+         }
       }
 
       if (duplicate) continue;

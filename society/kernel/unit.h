@@ -51,6 +51,8 @@ class Unit {
 
       void assign_action (Action *action);
 
+      Action *access_action (int ind) { return actions.access (ind); };
+
       Action *access_action (void) { return actions.back (); };
 
       bool available_action_slots (void);

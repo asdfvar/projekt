@@ -529,11 +529,6 @@ void Facade::display (void)
          translation,
          map_layer);
 
-   society.draw_assigned_actions (
-         transform,
-         translation,
-         map_layer);
-
    graphics.draw_map (
          transform,
          translation,
