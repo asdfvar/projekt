@@ -111,7 +111,7 @@ void Society::draw_units (
    }
 }
 
-void Society::draw_uncommitted_actions (
+void Society::draw_uncommitted_jobs (
       float       *transform,
       float       *translation,
       int          map_layer)
@@ -127,15 +127,15 @@ void Society::draw_uncommitted_actions (
 
    glColor3f (1.0f, 0.0f, 0.0f);
 
-   int num_uncommitted_actions;
+   int num_uncommitted_jobs;
 
-   const int *uncommitted_action_ind =
-      Map->access_uncommitted_actions (&num_uncommitted_actions);
+   const int *uncommitted_job_ind =
+      Map->access_uncommitted_jobs (&num_uncommitted_jobs);
 
-   // Draw the action cells
-   for (int action_ind = 0; action_ind < num_uncommitted_actions; action_ind++)
+   // Draw the job cells
+   for (int job_ind = 0; job_ind < num_uncommitted_jobs; job_ind++)
    {
-      int local_select = uncommitted_action_ind[action_ind];
+      int local_select = uncommitted_job_ind[job_ind];
 
       int ind[3];
       ind[2] = local_select / (size[0] * size[1]);
@@ -170,7 +170,7 @@ void Society::draw_uncommitted_actions (
    }
 }
 
-void Society::draw_queued_actions (
+void Society::draw_queued_jobs (
       float       *transform,
       float       *translation,
       int          map_layer)
@@ -186,14 +186,14 @@ void Society::draw_queued_actions (
 
    glColor3f (0.3f, 0.0f, 0.0f);
 
-   // Draw the action cells
-   for (int action_ind = 0; action_ind < queued_actions.size (); action_ind++)
+   // Draw the job cells
+   for (int job_ind = 0; job_ind < queued_jobs.size (); job_ind++)
    {
-      Action *action = queued_actions.access (action_ind);
-      if (action->get_position (2) != map_layer) continue;
+      Job *job = queued_jobs.access (job_ind);
+      if (job->get_position (2) != map_layer) continue;
 
-      int col = action->get_position (0);
-      int row = action->get_position (1);
+      int col = job->get_position (0);
+      int row = job->get_position (1);
 
       float vertex_x = starting_col_loc + block_width  * (float)col;
       float vertex_y = starting_row_loc + block_height * (float)row;
@@ -218,7 +218,7 @@ void Society::draw_queued_actions (
    }
 }
 
-void Society::draw_unit_actions (
+void Society::draw_unit_jobs (
       float       *transform,
       float       *translation,
       int          map_layer)
@@ -235,19 +235,19 @@ void Society::draw_unit_actions (
    float color[3] = { 0.0f, 1.0f, 1.0f };
    glColor3f (color[0], color[1], color[2]);
 
-   // Draw the action cells
+   // Draw the job cells
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
 
-      if (unit->num_actions () <= 0) continue;
+      if (unit->num_jobs () <= 0) continue;
 
-      Action *action = unit->access_action ();
+      Job *job = unit->access_job ();
 
-      if (action->get_position (2) != map_layer) continue;
+      if (job->get_position (2) != map_layer) continue;
 
-      int col = action->get_position (0);
-      int row = action->get_position (1);
+      int col = job->get_position (0);
+      int row = job->get_position (1);
 
       float vertex_x = starting_col_loc + block_width  * (float)col;
       float vertex_y = starting_row_loc + block_height * (float)row;

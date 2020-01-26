@@ -6,7 +6,7 @@
 #include <vector>
 #include <list>
 #include "unit.h"
-#include "actions.h"
+#include "jobs.h"
 #include "container.h"
 
 class Society
@@ -36,25 +36,25 @@ class Society
 
       void select_cells (int cell_selections[2][3], bool control_down);
 
-      void set_actions (int action_type);
+      void set_jobs (int job_type);
 
       // Graphics
       void draw_units (float *transform, float *translation, int map_layer);
 
       // Draw selected cells not set to be queued
-      void draw_uncommitted_actions (
+      void draw_uncommitted_jobs (
             float       *transform,
             float       *translation,
             int          map_layer);
 
-      // Draw actions that are queued for assignment to a unit
-      void draw_queued_actions (
+      // Draw jobs that are queued for assignment to a unit
+      void draw_queued_jobs (
             float       *transform,
             float       *translation,
             int          map_layer);
 
-      // Draw actions that are assigned to individual units
-      void draw_unit_actions (
+      // Draw jobs that are assigned to individual units
+      void draw_unit_jobs (
             float       *transform,
             float       *translation,
             int          map_layer);
@@ -77,8 +77,8 @@ class Society
       // Units
       Container<Unit>   units;
 
-      // Actions committed to the queue for assignment to a unit
-      Container<Action> queued_actions;
+      // Jobs committed to the queue for assignment to a unit
+      Container<Job> queued_jobs;
 
       // Array of containers that contain pointers to the units assigned
       // to the the specified group number

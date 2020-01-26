@@ -7,7 +7,7 @@ OBJS = $(OBJDIR)/society.o     \
        $(OBJDIR)/unit.o        \
        $(OBJDIR)/map.o         \
        $(OBJDIR)/container.o   \
-       $(OBJDIR)/actions.o     \
+       $(OBJDIR)/jobs.o        \
        $(OBJDIR)/graphics.o    \
        $(OBJDIR)/timer.o       \
 #

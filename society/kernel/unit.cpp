@@ -18,7 +18,7 @@ Unit::Unit (
    position[1] = position_y_in;
    position[2] = position_z_in;
 
-   actions_limit = 1;
+   jobs_limit = 1;
 
    Map = Map_in;
 
@@ -213,24 +213,24 @@ void Unit::update (float time_step)
    position[2] += speed * sinf (theta) * time_step;
 }
 
-void Unit::assign_action (Action *action)
+void Unit::assign_job (Job *job)
 {
-   if (!available_action_slots ())
+   if (!available_job_slots ())
    {
       std::cout
-         << "Not enough available action slots"
+         << "Not enough available job slots"
          << " available for unit "
          << this << std::endl;
 
       return;
    }
 
-   actions.push_front (action);
+   jobs.push_front (job);
 }
 
-bool Unit::available_action_slots (void)
+bool Unit::available_job_slots (void)
 {
-   if (actions.size () >= actions_limit)
+   if (jobs.size () >= jobs_limit)
       return false;
 
    return true;

@@ -15,8 +15,8 @@ MAP::MAP (int num_cells[3])
    ground   = new float[size[0] * size[1] * size[2]];
    material = new int  [size[0] * size[1] * size[2]];
 
-   uncommitted_actions      = new int[size[0] * size[1] * size[2]];
-   uncommitted_actions_size = 0;
+   uncommitted_jobs      = new int[size[0] * size[1] * size[2]];
+   uncommitted_jobs_size = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
 
@@ -54,7 +54,7 @@ MAP::~MAP (void)
    delete[] map;
    delete[] ground;
    delete[] material;
-   delete[] uncommitted_actions;
+   delete[] uncommitted_jobs;
 }
 
 float MAP::get_ground_cell (int flattened_ind)
@@ -117,10 +117,10 @@ void MAP::local_change (int flattened_cell_index, float value)
    if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
 }
 
-// This will prepare cells as "ready" but not committed to be promoted to an action
-void MAP::ready_actions (int cell_selections[2][3], bool control_down)
+// This will prepare cells as "ready" but not committed to be promoted to an job
+void MAP::ready_jobs (int cell_selections[2][3], bool control_down)
 {
-   if (!control_down) uncommitted_actions_size = 0;
+   if (!control_down) uncommitted_jobs_size = 0;
 
    int start[3] = {
       MIN (cell_selections[0][0], cell_selections[1][0]),
@@ -136,34 +136,34 @@ void MAP::ready_actions (int cell_selections[2][3], bool control_down)
       for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
          for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
          {
-            int action_index =
+            int job_index =
                ind_x                     +
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            bool is_action = false;
+            bool is_job = false;
 
-            // Search the uncommitted actions to see if it's already selected
-            for (int action = 0; action < uncommitted_actions_size; action++)
-               is_action |= uncommitted_actions[action] == action_index;
+            // Search the uncommitted jobs to see if it's already selected
+            for (int job = 0; job < uncommitted_jobs_size; job++)
+               is_job |= uncommitted_jobs[job] == job_index;
 
-            if (is_action) continue;
+            if (is_job) continue;
 
-            // Assign the uncommitted actions
-            if (material[action_index] > 0)
-               uncommitted_actions[uncommitted_actions_size++] = action_index;
+            // Assign the uncommitted jobs
+            if (material[job_index] > 0)
+               uncommitted_jobs[uncommitted_jobs_size++] = job_index;
          }
       }
    }
 }
 
-void MAP::unselect_uncommitted_actions (void)
+void MAP::unselect_uncommitted_jobs (void)
 {
-   uncommitted_actions_size = 0;
+   uncommitted_jobs_size = 0;
 }
 
-const int *MAP::access_uncommitted_actions (int *size)
+const int *MAP::access_uncommitted_jobs (int *size)
 {
-   *size = uncommitted_actions_size;
-   return (const int*)uncommitted_actions;
+   *size = uncommitted_jobs_size;
+   return (const int*)uncommitted_jobs;
 }

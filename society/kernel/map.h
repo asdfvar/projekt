@@ -23,9 +23,9 @@ class MAP
 
       int  get_material (int ind) { return material[ind]; };
 
-      void       ready_actions (int cell_selections[2][3], bool control_down);
-      void       unselect_uncommitted_actions (void);
-      const int *access_uncommitted_actions (int *size);
+      void       ready_jobs (int cell_selections[2][3], bool control_down);
+      void       unselect_uncommitted_jobs (void);
+      const int *access_uncommitted_jobs (int *size);
 
    private:
 
@@ -33,8 +33,8 @@ class MAP
       float *ground;
       int   *material;
 
-      int *uncommitted_actions;
-      int  uncommitted_actions_size;
+      int *uncommitted_jobs;
+      int  uncommitted_jobs_size;
 
       int size[3];
 

@@ -1,5 +1,5 @@
 #include "container.h"
-#include "actions.h"
+#include "jobs.h"
 #include "unit.h"
 #include <iostream>
 
@@ -206,18 +206,18 @@ void Container<Type>::test_ends (void)
    if (back_node != current_node) std::cout << "back node " << back_node->object << " not defined " << current_node->object << std::endl;
 }
 
-// Define container types for the action class
-template void    Container<Action>::insert           (Action*, int);
-template void    Container<Action>::push_front       (Action*     );
-template void    Container<Action>::push_back        (Action*     );
-template Action *Container<Action>::access           (int         );
-template Action *Container<Action>::back             (void        );
-template Action *Container<Action>::pop              (int         );
-template Action *Container<Action>::pop_back         (void        );
-template void    Container<Action>::reset            (void        );
-template bool    Container<Action>::advance_to_index (int         );
-template void    Container<Action>::list_contents    (void        );
-template void    Container<Action>::test_ends        (void        );
+// Define container types for the job class
+template void    Container<Job>::insert           (Job*, int);
+template void    Container<Job>::push_front       (Job*     );
+template void    Container<Job>::push_back        (Job*     );
+template Job    *Container<Job>::access           (int      );
+template Job    *Container<Job>::back             (void     );
+template Job    *Container<Job>::pop              (int      );
+template Job    *Container<Job>::pop_back         (void     );
+template void    Container<Job>::reset            (void     );
+template bool    Container<Job>::advance_to_index (int      );
+template void    Container<Job>::list_contents    (void     );
+template void    Container<Job>::test_ends        (void     );
 
 // Define container types for the unit class
 template void  Container<Unit>::insert           (Unit*, int);

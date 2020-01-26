@@ -147,7 +147,7 @@ void Society::update (float time_step)
    float *cost         = fbuffer;
    float *local_buffer = fbuffer + size[0] * size[1] * size[2];
 
-   // Assign ready actions for available units
+   // Assign ready jobs for available units
    for (int count = 0; count < 1; count++)
       for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
       {
@@ -158,19 +158,19 @@ void Society::update (float time_step)
             (int)unit->get_position (1),
             (int)unit->get_position (2) };
 
-         // Assign an action for this unit if it has an available slot
-         if (unit->available_action_slots ())
+         // Assign an job for this unit if it has an available slot
+         if (unit->available_job_slots ())
          {
-            bool assigned_action = false;
-            for (int action_ind = 0; action_ind < queued_actions.size () && !assigned_action; action_ind++)
+            bool assigned_job = false;
+            for (int job_ind = 0; job_ind < queued_jobs.size () && !assigned_job; job_ind++)
             {
-               Action *action = queued_actions.access (action_ind);
+               Job *job = queued_jobs.access (job_ind);
 
-               // test if this action has a ground-accessible cell near it by first getting the action's cell location
-               int action_location_cell[3] =
-               { action->get_position (0),
-                  action->get_position (1),
-                  action->get_position (2) };
+               // test if this job has a ground-accessible cell near it by first getting the job's cell location
+               int job_location_cell[3] =
+               { job->get_position (0),
+                  job->get_position (1),
+                  job->get_position (2) };
 
                // test if this cell is accessible to the unit
                bool accessible =
@@ -178,18 +178,18 @@ void Society::update (float time_step)
                         map,
                         cost,
                         size,
-                        action_location_cell,
+                        job_location_cell,
                         unit_location,
                         local_buffer);
 
                if (accessible)
                {
-                  // the action is accessible to the unit, assign it to the unit
-                  unit->assign_action (action);
-                  assigned_action = true;
+                  // the job is accessible to the unit, assign it to the unit
+                  unit->assign_job (job);
+                  assigned_job = true;
 
-                  // remove this action from the list since it now belongs to the unit
-                  queued_actions.pop (action_ind);
+                  // remove this job from the list since it now belongs to the unit
+                  queued_jobs.pop (job_ind);
                }
             }
          }
@@ -199,13 +199,13 @@ void Society::update (float time_step)
    {
       Unit *unit = units.access (unit_ind);
 
-      // Dismiss completed actions by this unit
-      if (unit->num_actions() > 0)
+      // Dismiss completed jobs by this unit
+      if (unit->num_jobs() > 0)
       {
-         Action *action = unit->access_action ();
-         if (action->is_complete ()) {
-            unit->pop_action ();
-            delete action;
+         Job *job = unit->access_job ();
+         if (job->is_complete ()) {
+            unit->pop_job ();
+            delete job;
          }
       }
 
@@ -295,8 +295,8 @@ void Society::unselect_all (void)
       unit->unselect ();
    }
 
-   // Clear out the uncommitted actions
-   Map->unselect_uncommitted_actions ();
+   // Clear out the uncommitted jobs
+   Map->unselect_uncommitted_jobs ();
 }
 
 void Society::set_group (int group_number)
@@ -331,26 +331,26 @@ void Society::select_group (int group_number)
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)
 {
-   Map->ready_actions (cell_selections, control_down);
+   Map->ready_jobs (cell_selections, control_down);
 }
 
-void Society::set_actions (int action_type)
+void Society::set_jobs (int job_type)
 {
 
-   int num_uncommitted_actions;
+   int num_uncommitted_jobs;
 
-   const int *new_action_location_ind =
-      Map->access_uncommitted_actions (&num_uncommitted_actions);
+   const int *new_job_location_ind =
+      Map->access_uncommitted_jobs (&num_uncommitted_jobs);
 
-   for (int ind = 0; ind < num_uncommitted_actions; ind++)
+   for (int ind = 0; ind < num_uncommitted_jobs; ind++)
    {
       bool duplicate = false;
 
-      // Test if this is already in the committed-actions list
-      for (int action_ind = 0; action_ind < queued_actions.size (); action_ind++) {
-         Action *action = queued_actions.access (action_ind);
-         int location_ind = action->get_flattened_index ();
-         if (new_action_location_ind[ind] == location_ind) duplicate = true;
+      // Test if this is already in the committed-jobs list
+      for (int job_ind = 0; job_ind < queued_jobs.size (); job_ind++) {
+         Job *job = queued_jobs.access (job_ind);
+         int location_ind = job->get_flattened_index ();
+         if (new_job_location_ind[ind] == location_ind) duplicate = true;
       }
 
       if (duplicate) continue;
@@ -359,23 +359,23 @@ void Society::set_actions (int action_type)
       for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
       {
          Unit *unit = units.access (unit_ind);
-         for (int action_ind = 0; action_ind < unit->num_actions(); action_ind++)
+         for (int job_ind = 0; job_ind < unit->num_jobs(); job_ind++)
          {
-            Action *action = unit->access_action (action_ind);
-            int location_ind = action->get_flattened_index ();
-            if (new_action_location_ind[ind] == location_ind) duplicate = true;
+            Job *job = unit->access_job (job_ind);
+            int location_ind = job->get_flattened_index ();
+            if (new_job_location_ind[ind] == location_ind) duplicate = true;
          }
       }
 
       if (duplicate) continue;
 
       int location[3];
-      location[2] = new_action_location_ind[ind] / (size[0] * size[1]);
-      location[1] = new_action_location_ind[ind] / size[0] % size[1];
-      location[0] = new_action_location_ind[ind] % size[0];
+      location[2] = new_job_location_ind[ind] / (size[0] * size[1]);
+      location[1] = new_job_location_ind[ind] / size[0] % size[1];
+      location[0] = new_job_location_ind[ind] % size[0];
 
-      queued_actions.push_front (new Action (new_action_location_ind[ind], location, action_type));
+      queued_jobs.push_front (new Job (new_job_location_ind[ind], location, job_type));
    }
 
-   Map->unselect_uncommitted_actions ();
+   Map->unselect_uncommitted_jobs ();
 }

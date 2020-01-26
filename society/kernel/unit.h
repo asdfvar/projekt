@@ -4,7 +4,7 @@
 #include <vector>
 #include <thread>
 #include "map.h"
-#include "actions.h"
+#include "jobs.h"
 #include "container.h"
 
 typedef struct PATH_FUNC_ARGS
@@ -49,17 +49,17 @@ class Unit {
 
       void update (float time_step);
 
-      void assign_action (Action *action);
+      void assign_job (Job *job);
 
-      Action *access_action (int ind) { return actions.access (ind); };
+      Job *access_job (int ind) { return jobs.access (ind); };
 
-      Action *access_action (void) { return actions.back (); };
+      Job *access_job (void) { return jobs.back (); };
 
-      bool available_action_slots (void);
+      bool available_job_slots (void);
 
-      int num_actions (void) { return actions.size (); };
+      int num_jobs (void) { return jobs.size (); };
 
-      void pop_action (void) { actions.pop_back (); };
+      void pop_job (void) { jobs.pop_back (); };
 
    private:
 
@@ -79,8 +79,8 @@ class Unit {
 
       int path_size;
 
-      int actions_limit;
-      Container<Action> actions;
+      int jobs_limit;
+      Container<Job> jobs;
 
       PATH_FUNC_ARGS    path_func_args;
       pthread_t         path_planner_thread;
