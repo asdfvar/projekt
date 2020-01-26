@@ -74,6 +74,12 @@ class Society
       // Integer-type scratch space
       int *ibuffer;
 
+      // Current unit index associated with assigning jobs to units
+      int current_unit_job_index;
+
+      // Current job index associated with assigning jobs to units
+      int current_job_index;
+
       // Units
       Container<Unit>   units;
 

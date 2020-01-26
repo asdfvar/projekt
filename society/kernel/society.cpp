@@ -21,7 +21,10 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 400;
+   int num_units = 100;
+
+   current_unit_job_index = 0;
+   current_job_index      = 0;
 
    const float *map = Map->access_ground ();
 
@@ -142,57 +145,59 @@ void Society::set_destination (int destination[3])
 
 void Society::update (float time_step)
 {
+   if (units.size () <= 0) return;
+
    const float *map = Map->access_ground ();
 
    float *cost         = fbuffer;
    float *local_buffer = fbuffer + size[0] * size[1] * size[2];
 
+   if (current_unit_job_index >= units.size ()) current_unit_job_index = 0;
+
    // Assign ready jobs for available units
-   for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+   Unit *unit = units.access (current_unit_job_index++);
+
+   int unit_location[3] =
+   { (int)unit->get_position (0),
+      (int)unit->get_position (1),
+      (int)unit->get_position (2) };
+
+   // Assign a job for this unit if it has an available slot
+   if (unit->available_job_slots ())
    {
-      Unit *unit = units.access (unit_ind);
-
-      int unit_location[3] =
-      { (int)unit->get_position (0),
-         (int)unit->get_position (1),
-         (int)unit->get_position (2) };
-
-      // Assign a job for this unit if it has an available slot
-      if (unit->available_job_slots ())
+      if (queued_jobs.size() > 0)
       {
-         if (queued_jobs.size() > 0)
+         if (current_job_index >= queued_jobs.size ()) current_job_index = 0;
+         Job *job = queued_jobs.access (current_job_index++);
+
+         // Test if this job has a ground-accessible cell near it by
+         // first getting the job's cell location
+         int job_location_cell[3] =
+         { job->get_position (0),
+            job->get_position (1),
+            job->get_position (2) };
+
+         // test if this cell is accessible to the unit
+         bool accessible =
+            cost_function (
+                  map,
+                  cost,
+                  size,
+                  job_location_cell,
+                  unit_location,
+                  local_buffer);
+
+         if (accessible)
          {
-            Job *job = queued_jobs.access ();
+            // the job is accessible to the unit, assign it to the unit
+            unit->assign_job (job);
 
-            // Test if this job has a ground-accessible cell near it by
-            // first getting the job's cell location
-            int job_location_cell[3] =
-            { job->get_position (0),
-               job->get_position (1),
-               job->get_position (2) };
-
-            // test if this cell is accessible to the unit
-            bool accessible =
-               cost_function (
-                     map,
-                     cost,
-                     size,
-                     job_location_cell,
-                     unit_location,
-                     local_buffer);
-
-            if (accessible)
-            {
-               // the job is accessible to the unit, assign it to the unit
-               unit->assign_job (job);
-
-               // remove this job from the list since it now belongs to the unit
-               queued_jobs.pop ();
-            }
-            else
-            {
-               queued_jobs.advance ();
-            }
+            // remove this job from the list since it now belongs to the unit
+            queued_jobs.pop ();
+         }
+         else
+         {
+            queued_jobs.advance ();
          }
       }
    }
