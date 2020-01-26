@@ -23,10 +23,6 @@ Society::Society (void)
 
    int num_units = 400;
 
-   accum_time       = 0.0f;
-   accum_time_limit = 0.0f;
-   rolled           = false;
-
    const float *map = Map->access_ground ();
 
    int unit_count = 0;

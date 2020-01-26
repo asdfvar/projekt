@@ -170,7 +170,7 @@ void Society::draw_uncommitted_actions (
    }
 }
 
-void Society::draw_committed_actions (
+void Society::draw_queued_actions (
       float       *transform,
       float       *translation,
       int          map_layer)

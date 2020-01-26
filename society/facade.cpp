@@ -524,7 +524,7 @@ void Facade::display (void)
          translation,
          map_layer);
 
-   society.draw_committed_actions (
+   society.draw_queued_actions (
          transform,
          translation,
          map_layer);

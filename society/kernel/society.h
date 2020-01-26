@@ -46,11 +46,13 @@ class Society
             float       *translation,
             int          map_layer);
 
-      void draw_committed_actions (
+      // Draw actions that are queued for assignment to a unit
+      void draw_queued_actions (
             float       *transform,
             float       *translation,
             int          map_layer);
 
+      // Draw actions that are assigned to individual units
       void draw_unit_actions (
             float       *transform,
             float       *translation,
@@ -60,10 +62,6 @@ class Society
 
       MAP *Map;
       int  size[3];
-
-      float accum_time;
-      float accum_time_limit;
-      bool  rolled;
 
       // Float-type scratch space
       float *fbuffer;
