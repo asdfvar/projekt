@@ -161,27 +161,6 @@ Type *Container<Type>::access (int index)
 }
 
 template <typename Type>
-Type *Container<Type>::access (void)
-{
-   return current_node->object;
-}
-
-template <typename Type>
-void Container<Type>::advance (void)
-{
-   if (current_node == back_node)
-   {
-      current_node = front_node;
-      current_index = 0;
-   }
-   else
-   {
-      current_node = current_node->next;
-      current_index++;
-   }
-}
-
-template <typename Type>
 bool Container<Type>::advance (int index)
 {
    if (index >= container_size)
@@ -252,13 +231,11 @@ template void  Container<Job>::insert           (Job*, int);
 template void  Container<Job>::push_front       (Job*     );
 template void  Container<Job>::push_back        (Job*     );
 template Job  *Container<Job>::access           (int      );
-template Job  *Container<Job>::access           (void     );
 template Job  *Container<Job>::back             (void     );
 template Job  *Container<Job>::pop              (int      );
 template Job  *Container<Job>::pop              (void     );
 template Job  *Container<Job>::pop_back         (void     );
 template void  Container<Job>::reset            (void     );
-template void  Container<Job>::advance          (void     );
 template bool  Container<Job>::advance          (int      );
 template void  Container<Job>::list_contents    (void     );
 template void  Container<Job>::test_ends        (void     );
@@ -268,13 +245,11 @@ template void  Container<Unit>::insert          (Unit*, int);
 template void  Container<Unit>::push_front      (Unit*     );
 template void  Container<Unit>::push_back       (Unit*     );
 template Unit *Container<Unit>::access          (int       );
-template Unit *Container<Unit>::access          (void      );
 template Unit *Container<Unit>::back            (void      );
 template Unit *Container<Unit>::pop             (int       );
 template Unit *Container<Unit>::pop             (void      );
 template Unit *Container<Unit>::pop_back        (void      );
 template void  Container<Unit>::reset           (void      );
-template void  Container<Unit>::advance         (void      );
 template bool  Container<Unit>::advance         (int       );
 template void  Container<Unit>::list_contents   (void      );
 template void  Container<Unit>::test_ends       (void      );

@@ -27,12 +27,6 @@ class Container
       // Access the specified object
       Type *access    (int index              );
 
-      // Access the current object
-      Type *access (void);
-
-      // Advance the current object pointer to the next cyclically
-      void advance (void);
-
       int size (void) { return container_size; };
 
       void list_contents (void);

@@ -195,10 +195,6 @@ void Society::update (float time_step)
             // remove this job from the list since it now belongs to the unit
             queued_jobs.pop ();
          }
-         else
-         {
-            queued_jobs.advance ();
-         }
       }
    }
 
