@@ -330,7 +330,6 @@ void Society::select_group (int group_number)
       Unit *unit = group[group_number].access (unit_ind);
       unit->select ();
    }
-
 }
 
 void Society::select_cells (int cell_selections[2][3], bool control_down)

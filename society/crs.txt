@@ -5,3 +5,5 @@ do away with the "actions" in "society" so that we don't have to maintain the ac
 define total energy "Joules" required to complete the action and define a power in the units
 
 replace "actions" with "jobs"
+
+highlight the path of each unit in the graphics
