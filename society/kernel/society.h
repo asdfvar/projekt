@@ -22,7 +22,7 @@ class Society
 
       const float *access_map ();
 
-      const int get_size (int ind) { return dim[ind]; };
+      const int get_size (int ind) { return size[ind]; };
 
       void select_units (int cell_selections[2][3], int map_layer, bool control_down);
 
@@ -59,21 +59,26 @@ class Society
    private:
 
       MAP *Map;
-      int  dim[3];
+      int  size[3];
 
       float accum_time;
       float accum_time_limit;
       bool  rolled;
 
+      // Float-type scratch space
+      float *fbuffer;
 
-      float *cost;
-      float *buffer;
+      // Integer-type scratch space
+      int *ibuffer;
 
-      int *scratch;
-
+      // Units
       Container<Unit>   units;
-      Container<Action> committed_actions;
 
+      // Actions committed to the queue for assignment to a unit
+      Container<Action> queued_actions;
+
+      // Array of containers that contain pointers to the units assigned
+      // to the the specified group number
       Container<Unit>   group[10];
 };
 

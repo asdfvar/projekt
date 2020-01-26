@@ -33,8 +33,8 @@ void Society::draw_units (
       float *translation,
       int    map_layer)
 {
-   int row_max = dim[1];
-   int col_max = dim[0];
+   int row_max = size[1];
+   int col_max = size[0];
 
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
@@ -116,8 +116,8 @@ void Society::draw_uncommitted_actions (
       float       *translation,
       int          map_layer)
 {
-   int row_max = dim[1];
-   int col_max = dim[0];
+   int row_max = size[1];
+   int col_max = size[0];
 
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
@@ -138,9 +138,9 @@ void Society::draw_uncommitted_actions (
       int local_select = uncommitted_action_ind[action_ind];
 
       int ind[3];
-      ind[2] = local_select / (dim[0] * dim[1]);
-      ind[1] = local_select / dim[0] % dim[1];
-      ind[0] = local_select % dim[0];
+      ind[2] = local_select / (size[0] * size[1]);
+      ind[1] = local_select / size[0] % size[1];
+      ind[0] = local_select % size[0];
 
       if (ind[2] != map_layer) continue;
 
@@ -175,8 +175,8 @@ void Society::draw_committed_actions (
       float       *translation,
       int          map_layer)
 {
-   int row_max = dim[1];
-   int col_max = dim[0];
+   int row_max = size[1];
+   int col_max = size[0];
 
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
@@ -187,9 +187,9 @@ void Society::draw_committed_actions (
    glColor3f (0.3f, 0.0f, 0.0f);
 
    // Draw the action cells
-   for (int action_ind = 0; action_ind < committed_actions.size (); action_ind++)
+   for (int action_ind = 0; action_ind < queued_actions.size (); action_ind++)
    {
-      Action *action = committed_actions.access (action_ind);
+      Action *action = queued_actions.access (action_ind);
       if (action->get_position (2) != map_layer) continue;
 
       int col = action->get_position (0);
@@ -223,8 +223,8 @@ void Society::draw_unit_actions (
       float       *translation,
       int          map_layer)
 {
-   int row_max = dim[1];
-   int col_max = dim[0];
+   int row_max = size[1];
+   int col_max = size[0];
 
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);

@@ -11,11 +11,11 @@
 
 Society::Society (void)
 {
-   dim[0] = 60;
-   dim[1] = 60;
-   dim[2] = 40;
+   size[0] = 60;
+   size[1] = 60;
+   size[2] = 40;
 
-   Map = new MAP (dim);
+   Map = new MAP (size);
 
    float dest[3];
 
@@ -30,9 +30,9 @@ Society::Society (void)
    const float *map = Map->access_ground ();
 
    int unit_count = 0;
-   for (int ind_z = 0, ind = 0; ind_z < dim[2]; ind_z++) {
-      for (int ind_y = 0; ind_y < dim[1]; ind_y++) {
-         for (int ind_x = 0; ind_x < dim[0]; ind_x++, ind++)
+   for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
+      for (int ind_y = 0; ind_y < size[1]; ind_y++) {
+         for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
             if (map[ind] >= 0.0f && ind_z == map_layer && unit_count < num_units) {
                unit_count++;
@@ -46,17 +46,15 @@ Society::Society (void)
       }
    }
 
-   scratch = new   int[dim[0] * dim[1] * dim[2]];
-   cost    = new float[dim[0] * dim[1] * dim[2]];
-   buffer  = new float[dim[0] * dim[1] * dim[2]];
+   ibuffer = new   int[size[0] * size[1] * size[2]];
+   fbuffer = new float[2 * size[0] * size[1] * size[2]];
 }
 
 Society::~Society (void)
 {
    delete   Map;
-   delete[] scratch;
-   delete[] cost;
-   delete[] buffer;
+   delete[] ibuffer;
+   delete[] fbuffer;
 }
 
 // Destination is set by pooling out the available cells at and around the selected
@@ -65,27 +63,30 @@ void Society::set_destination (int destination[3])
 {
    const float *map = Map->access_map ();
 
-   int dim[3];
+   int size[3];
 
-   dim[0] = Map->map_dim (0);
-   dim[1] = Map->map_dim (1);
-   dim[2] = Map->map_dim (2);
+   size[0] = Map->map_dim (0);
+   size[1] = Map->map_dim (1);
+   size[2] = Map->map_dim (2);
 
-   int *cost_indices = scratch;
+   int *cost_indices = ibuffer;
 
    int num_units = units.size();
+
+   float *cost         = fbuffer;
+   float *local_buffer = fbuffer + size[0] * size[1] * size[2];
 
    // Create the selected cost indices equal to the number of units
    cost_function2 (
          map,
          cost,
          cost_indices,
-         dim,
+         size,
          destination,
          num_units,
-         buffer);
+         local_buffer);
 
-   int *unit_dest_x = (int*)buffer;
+   int *unit_dest_x = (int*)local_buffer;
    int *unit_dest_y = unit_dest_x + num_units;
    int *unit_dest_z = unit_dest_y + num_units;
 
@@ -118,9 +119,9 @@ void Society::set_destination (int destination[3])
 
       int dest[3];
 
-      dest[0] = ind_to_i (dest_ind, dim[0], dim[1], dim[2]);
-      dest[1] = ind_to_j (dest_ind, dim[0], dim[1], dim[2]);
-      dest[2] = ind_to_k (dest_ind, dim[0], dim[1], dim[2]);
+      dest[0] = ind_to_i (dest_ind, size[0], size[1], size[2]);
+      dest[1] = ind_to_j (dest_ind, size[0], size[1], size[2]);
+      dest[2] = ind_to_k (dest_ind, size[0], size[1], size[2]);
 
       // Determine if the select destination is already claimed by another unit
       bool found = true;
@@ -147,6 +148,9 @@ void Society::update (float time_step)
 {
    const float *map = Map->access_ground ();
 
+   float *cost         = fbuffer;
+   float *local_buffer = fbuffer + size[0] * size[1] * size[2];
+
    // Assign ready actions for available units
    for (int count = 0; count < 1; count++)
       for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
@@ -162,9 +166,9 @@ void Society::update (float time_step)
          if (unit->available_action_slots ())
          {
             bool assigned_action = false;
-            for (int action_ind = 0; action_ind < committed_actions.size () && !assigned_action; action_ind++)
+            for (int action_ind = 0; action_ind < queued_actions.size () && !assigned_action; action_ind++)
             {
-               Action *action = committed_actions.access (action_ind);
+               Action *action = queued_actions.access (action_ind);
 
                // test if this action has a ground-accessible cell near it by first getting the action's cell location
                int action_location_cell[3] =
@@ -177,10 +181,10 @@ void Society::update (float time_step)
                   cost_function (
                         map,
                         cost,
-                        dim,
+                        size,
                         action_location_cell,
                         unit_location,
-                        buffer);
+                        local_buffer);
 
                if (accessible)
                {
@@ -189,7 +193,7 @@ void Society::update (float time_step)
                   assigned_action = true;
 
                   // remove this action from the list since it now belongs to the unit
-                  committed_actions.pop (action_ind);
+                  queued_actions.pop (action_ind);
                }
             }
          }
@@ -347,8 +351,8 @@ void Society::set_actions (int action_type)
       bool duplicate = false;
 
       // Test if this is already in the committed-actions list
-      for (int action_ind = 0; action_ind < committed_actions.size (); action_ind++) {
-         Action *action = committed_actions.access (action_ind);
+      for (int action_ind = 0; action_ind < queued_actions.size (); action_ind++) {
+         Action *action = queued_actions.access (action_ind);
          int location_ind = action->get_flattened_index ();
          if (new_action_location_ind[ind] == location_ind) duplicate = true;
       }
@@ -370,11 +374,11 @@ void Society::set_actions (int action_type)
       if (duplicate) continue;
 
       int location[3];
-      location[2] = new_action_location_ind[ind] / (dim[0] * dim[1]);
-      location[1] = new_action_location_ind[ind] / dim[0] % dim[1];
-      location[0] = new_action_location_ind[ind] % dim[0];
+      location[2] = new_action_location_ind[ind] / (size[0] * size[1]);
+      location[1] = new_action_location_ind[ind] / size[0] % size[1];
+      location[0] = new_action_location_ind[ind] % size[0];
 
-      committed_actions.push_front (new Action (new_action_location_ind[ind], location, action_type));
+      queued_actions.push_front (new Action (new_action_location_ind[ind], location, action_type));
    }
 
    Map->unselect_uncommitted_actions ();
