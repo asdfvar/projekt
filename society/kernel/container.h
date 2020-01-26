@@ -16,10 +16,22 @@ class Container
       void push_front (Type *object           );
       void push_back  (Type *object           );
       Type *back      (void                   );
-      Type *access    (int index              );
+
       Type *pop       (int index              );
+      Type *pop       (void                   );
       Type *pop_back  (void                   );
+
+      // Set the container size to zero. Does not remove the contents
       void reset      (void                   );
+
+      // Access the specified object
+      Type *access    (int index              );
+
+      // Access the current object
+      Type *access (void);
+
+      // Advance the current object pointer to the next cyclically
+      void advance (void);
 
       int size (void) { return container_size; };
 
@@ -41,7 +53,7 @@ class Container
       Node *front_node;
       Node *back_node;
 
-      bool advance_to_index (int index);
+      bool advance (int index);
 };
 
 #endif

@@ -157,15 +157,15 @@ void Society::update (float time_step)
          (int)unit->get_position (1),
          (int)unit->get_position (2) };
 
-      // Assign an job for this unit if it has an available slot
+      // Assign a job for this unit if it has an available slot
       if (unit->available_job_slots ())
       {
-         bool assigned_job = false;
-         for (int job_ind = 0; job_ind < queued_jobs.size () && !assigned_job; job_ind++)
+         if (queued_jobs.size() > 0)
          {
-            Job *job = queued_jobs.access (job_ind);
+            Job *job = queued_jobs.access ();
 
-            // test if this job has a ground-accessible cell near it by first getting the job's cell location
+            // Test if this job has a ground-accessible cell near it by
+            // first getting the job's cell location
             int job_location_cell[3] =
             { job->get_position (0),
                job->get_position (1),
@@ -185,10 +185,13 @@ void Society::update (float time_step)
             {
                // the job is accessible to the unit, assign it to the unit
                unit->assign_job (job);
-               assigned_job = true;
 
                // remove this job from the list since it now belongs to the unit
-               queued_jobs.pop (job_ind);
+               queued_jobs.pop ();
+            }
+            else
+            {
+               queued_jobs.advance ();
             }
          }
       }

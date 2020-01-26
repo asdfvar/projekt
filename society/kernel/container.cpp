@@ -29,14 +29,15 @@ void Container<Type>::insert (Type *object, int index)
 
    if (container_size == 0)
    {
-      front_node   = back_node = node;
-      node->next   = node->previous = node;
-      current_node = node;
+      front_node    = back_node = node;
+      node->next    = node->previous = node;
+      current_node  = node;
+      current_index = 0;
    }
    else
    {
       // advance to the desired object node index
-      bool stat = advance_to_index (index);
+      bool stat = advance (index);
       if (!stat) return;
    }
 
@@ -72,22 +73,12 @@ Type *Container<Type>::back (void)
 }
 
 template <typename Type>
-Type *Container<Type>::access (int index)
-{
-   // advance to the desired object node index
-   bool stat = advance_to_index (index);
-   if (!stat) return nullptr;
-
-   return current_node->object;
-}
-
-template <typename Type>
 Type *Container<Type>::pop (int index)
 {
    if (container_size == 0) return nullptr;
 
    // advance to the desired object node index
-   bool stat = advance_to_index (index);
+   bool stat = advance (index);
    if (!stat) return nullptr;
 
    Node *old_node = current_node;
@@ -116,10 +107,19 @@ Type *Container<Type>::pop (int index)
 
    container_size--;
 
+   if (current_index >= container_size) current_index = container_size - 1;
+
    Type *object = old_node->object;
 
    delete old_node;
 
+   return object;
+}
+
+template <typename Type>
+Type *Container<Type>::pop (void)
+{
+   Type *object = pop (current_index);
    return object;
 }
 
@@ -151,7 +151,38 @@ void Container<Type>::reset (void)
 }
 
 template <typename Type>
-bool Container<Type>::advance_to_index (int index)
+Type *Container<Type>::access (int index)
+{
+   // advance to the desired object node index
+   bool stat = advance (index);
+   if (!stat) return nullptr;
+
+   return current_node->object;
+}
+
+template <typename Type>
+Type *Container<Type>::access (void)
+{
+   return current_node->object;
+}
+
+template <typename Type>
+void Container<Type>::advance (void)
+{
+   if (current_node == back_node)
+   {
+      current_node = front_node;
+      current_index = 0;
+   }
+   else
+   {
+      current_node = current_node->next;
+      current_index++;
+   }
+}
+
+template <typename Type>
+bool Container<Type>::advance (int index)
 {
    if (index >= container_size)
    {
@@ -187,7 +218,7 @@ void Container<Type>::list_contents (void)
    std::cout << "contents = ";
    for (int ind = 0; ind < container_size; ind++)
    {
-      advance_to_index (ind);
+      advance (ind);
       std::cout << current_node->object << ", ";
    }
    std::cout << std::endl;
@@ -199,35 +230,51 @@ void Container<Type>::list_contents (void)
 template <typename Type>
 void Container<Type>::test_ends (void)
 {
-   advance_to_index (0);
-   if (front_node != current_node) std::cout << "front node " << front_node->object << " not defined " << current_node->object << std::endl;
+   advance (0);
+   if (front_node != current_node)
+   {
+      std::cout << "front node " << front_node->object
+         << " not defined " << current_node->object
+         << std::endl;
+   }
 
-   advance_to_index (container_size - 1);
-   if (back_node != current_node) std::cout << "back node " << back_node->object << " not defined " << current_node->object << std::endl;
+   advance (container_size - 1);
+   if (back_node != current_node)
+   {
+      std::cout << "back node " << back_node->object
+         << " not defined " << current_node->object
+         << std::endl;
+   }
 }
 
 // Define container types for the job class
-template void    Container<Job>::insert           (Job*, int);
-template void    Container<Job>::push_front       (Job*     );
-template void    Container<Job>::push_back        (Job*     );
-template Job    *Container<Job>::access           (int      );
-template Job    *Container<Job>::back             (void     );
-template Job    *Container<Job>::pop              (int      );
-template Job    *Container<Job>::pop_back         (void     );
-template void    Container<Job>::reset            (void     );
-template bool    Container<Job>::advance_to_index (int      );
-template void    Container<Job>::list_contents    (void     );
-template void    Container<Job>::test_ends        (void     );
+template void  Container<Job>::insert           (Job*, int);
+template void  Container<Job>::push_front       (Job*     );
+template void  Container<Job>::push_back        (Job*     );
+template Job  *Container<Job>::access           (int      );
+template Job  *Container<Job>::access           (void     );
+template Job  *Container<Job>::back             (void     );
+template Job  *Container<Job>::pop              (int      );
+template Job  *Container<Job>::pop              (void     );
+template Job  *Container<Job>::pop_back         (void     );
+template void  Container<Job>::reset            (void     );
+template void  Container<Job>::advance          (void     );
+template bool  Container<Job>::advance          (int      );
+template void  Container<Job>::list_contents    (void     );
+template void  Container<Job>::test_ends        (void     );
 
 // Define container types for the unit class
-template void  Container<Unit>::insert           (Unit*, int);
-template void  Container<Unit>::push_front       (Unit*     );
-template void  Container<Unit>::push_back        (Unit*     );
-template Unit *Container<Unit>::access           (int       );
-template Unit *Container<Unit>::back             (void      );
-template Unit *Container<Unit>::pop              (int       );
-template Unit *Container<Unit>::pop_back         (void      );
-template void  Container<Unit>::reset            (void      );
-template bool  Container<Unit>::advance_to_index (int       );
-template void  Container<Unit>::list_contents    (void      );
-template void  Container<Unit>::test_ends        (void      );
+template void  Container<Unit>::insert          (Unit*, int);
+template void  Container<Unit>::push_front      (Unit*     );
+template void  Container<Unit>::push_back       (Unit*     );
+template Unit *Container<Unit>::access          (int       );
+template Unit *Container<Unit>::access          (void      );
+template Unit *Container<Unit>::back            (void      );
+template Unit *Container<Unit>::pop             (int       );
+template Unit *Container<Unit>::pop             (void      );
+template Unit *Container<Unit>::pop_back        (void      );
+template void  Container<Unit>::reset           (void      );
+template void  Container<Unit>::advance         (void      );
+template bool  Container<Unit>::advance         (int       );
+template void  Container<Unit>::list_contents   (void      );
+template void  Container<Unit>::test_ends       (void      );
