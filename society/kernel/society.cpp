@@ -168,7 +168,7 @@ void Society::update (float time_step)
       if (queued_jobs.size() > 0)
       {
          if (current_job_index >= queued_jobs.size ()) current_job_index = 0;
-         Job *job = queued_jobs.access (current_job_index++);
+         Job *job = queued_jobs.access (current_job_index);
 
          // Test if this job has a ground-accessible cell near it by
          // first getting the job's cell location
@@ -193,8 +193,10 @@ void Society::update (float time_step)
             unit->assign_job (job);
 
             // remove this job from the list since it now belongs to the unit
-            queued_jobs.pop ();
+            queued_jobs.pop (current_job_index);
          }
+
+         current_job_index++;
       }
    }
 

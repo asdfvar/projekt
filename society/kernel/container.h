@@ -18,7 +18,6 @@ class Container
       Type *back      (void                   );
 
       Type *pop       (int index              );
-      Type *pop       (void                   );
       Type *pop_back  (void                   );
 
       // Set the container size to zero. Does not remove the contents

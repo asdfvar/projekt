@@ -117,13 +117,6 @@ Type *Container<Type>::pop (int index)
 }
 
 template <typename Type>
-Type *Container<Type>::pop (void)
-{
-   Type *object = pop (current_index);
-   return object;
-}
-
-template <typename Type>
 Type *Container<Type>::pop_back (void)
 {
    Node *desired_node = back_node;
@@ -233,7 +226,6 @@ template void  Container<Job>::push_back        (Job*     );
 template Job  *Container<Job>::access           (int      );
 template Job  *Container<Job>::back             (void     );
 template Job  *Container<Job>::pop              (int      );
-template Job  *Container<Job>::pop              (void     );
 template Job  *Container<Job>::pop_back         (void     );
 template void  Container<Job>::reset            (void     );
 template bool  Container<Job>::advance          (int      );
@@ -247,7 +239,6 @@ template void  Container<Unit>::push_back       (Unit*     );
 template Unit *Container<Unit>::access          (int       );
 template Unit *Container<Unit>::back            (void      );
 template Unit *Container<Unit>::pop             (int       );
-template Unit *Container<Unit>::pop             (void      );
 template Unit *Container<Unit>::pop_back        (void      );
 template void  Container<Unit>::reset           (void      );
 template bool  Container<Unit>::advance         (int       );

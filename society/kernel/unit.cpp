@@ -24,7 +24,7 @@ Unit::Unit (
 
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
 
-   path    = new int   [map_dims[0] * map_dims[1] * map_dims[2]];
+   path = new int[map_dims[0] * map_dims[1] * map_dims[2]];
 
    dest[0] = position[0];
    dest[1] = position[1];
