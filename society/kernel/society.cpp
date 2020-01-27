@@ -139,7 +139,15 @@ void Society::set_destination (int destination[3])
 
       if (found == false) continue;
 
-      unit->set_destination (dest);
+      int location_value = Map->get_ground_cell (dest);
+
+      if (location_value >= 0 && unit->is_selected ())
+      {
+         if (unit->num_jobs () > 0)
+            queued_jobs.push_front (unit->pop_job ());
+
+         unit->set_destination (dest);
+      }
    }
 }
 

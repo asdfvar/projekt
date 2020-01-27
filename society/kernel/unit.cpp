@@ -25,6 +25,7 @@ Unit::Unit (
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
 
    path = new int[map_dims[0] * map_dims[1] * map_dims[2]];
+   trim_path_end = false;
 
    dest[0] = position[0];
    dest[1] = position[1];
@@ -51,6 +52,7 @@ Unit::Unit (
    path_func_args.residency      =  residency;
    path_func_args.path_size      = &path_size;
    path_func_args.path           =  path;
+   path_func_args.trim_path_end  = &trim_path_end;
    path_func_args.barrier        = &barrier;
    path_func_args.done           =  false;
 
@@ -75,7 +77,6 @@ Unit::~Unit (void)
 
 void Unit::set_destination (int dest_in[3])
 {
-   if (selected == false) return;
 
    const float *map = Map->access_ground ();
 
@@ -84,13 +85,6 @@ void Unit::set_destination (int dest_in[3])
    dim[0] = Map->map_dim (0);
    dim[1] = Map->map_dim (1);
    dim[2] = Map->map_dim (2);
-
-   int ind =
-      dest_in[2] * dim[0] * dim[1] +
-      dest_in[1] * dim[0] +
-      dest_in[0];
-
-   if (map[ind] < 0.0f) return;
 
    int start[3];
 
@@ -121,6 +115,24 @@ void Unit::get_destination (int *dest_out)
 // Update unit position and path planning
 void Unit::update (float time_step)
 {
+   if (jobs.size () > 0)
+   {
+      if (active_job != jobs.back ())
+      {
+         active_job = jobs.back ();
+
+         int job_location[3] = {
+            active_job->get_position (0),
+            active_job->get_position (1),
+            active_job->get_position (2) };
+
+         trim_path_end = true;
+
+         // set destination
+         set_destination (job_location);
+      }
+   }
+
    int dim[3];
 
    dim[0] = Map->map_dim (0);
@@ -248,6 +260,7 @@ void *path_finding_func (void *path_func_args_in)
    int   *residency           =  path_func_args->residency;
    int   *path                =  path_func_args->path;
    int   *path_size           =  path_func_args->path_size;
+   bool  *trim_path_end       =  path_func_args->trim_path_end;
    bool  *done                = &path_func_args->done;
    pthread_barrier_t *barrier =  path_func_args->barrier;
 
@@ -284,9 +297,21 @@ void *path_finding_func (void *path_func_args_in)
             dest_in,
             path);
 
-      dest[0] = dest_in[0],
-      dest[1] = dest_in[1],
-      dest[2] = dest_in[2];
+      if (*trim_path_end)
+      {
+         *path_size -= 1;
+         dest[0] = path[*path_size] % dim[0];
+         dest[1] = path[*path_size] % (dim[0] * dim[1]) / dim[0];
+         dest[2] = path[*path_size] / (dim[0] * dim[1]);
+
+         *trim_path_end = false;
+      }
+      else
+      {
+         dest[0] = dest_in[0];
+         dest[1] = dest_in[1];
+         dest[2] = dest_in[2];
+      }
 
       residency[0] = dest_in[0];
       residency[1] = dest_in[1];

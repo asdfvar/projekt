@@ -17,6 +17,7 @@ typedef struct PATH_FUNC_ARGS
    int               *residency;
    int               *path;
    int               *path_size;
+   bool              *trim_path_end;
    bool               done;
    pthread_barrier_t *barrier;
 } PATH_FUNC_ARGS;
@@ -59,13 +60,16 @@ class Unit {
 
       int num_jobs (void) { return jobs.size (); };
 
-      void pop_job (void) { jobs.pop_back (); };
+      Job *pop_job (void) { return jobs.pop_back (); };
 
    private:
 
       MAP   *Map;
 
+      Job   *active_job;
+
       int   *path;
+      bool   trim_path_end;
 
       float position[3];
 
