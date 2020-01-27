@@ -77,7 +77,10 @@ class Unit {
       int   residency[3];
 
       float speed;
+
       float direction;
+
+      float power;
 
       bool selected;
 

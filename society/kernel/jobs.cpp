@@ -11,7 +11,14 @@ Job::Job (int flattened_index_in, int location_in[3], int type_in)
    location[1] = location_in[1];
    location[2] = location_in[2];
 
-   duration   = 4.0f;
-   time_spent = 0.0f;
+   energy     = 0.2f;
+   work       = 0.0f;
    complete   = false;
+}
+
+void Job::act (float Qin)
+{
+   work += Qin;
+
+   if (work >= energy) complete = true;
 }

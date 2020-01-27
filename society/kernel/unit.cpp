@@ -37,6 +37,8 @@ Unit::Unit (
 
    speed = 10.0f;
 
+   power = 0.2f;
+
    residency[0] = 0;
    residency[1] = 0;
    residency[2] = 0;
@@ -117,19 +119,40 @@ void Unit::update (float time_step)
 {
    if (jobs.size () > 0)
    {
+      int job_location[3];
+
       if (active_job != jobs.back ())
       {
          active_job = jobs.back ();
 
-         int job_location[3] = {
-            active_job->get_position (0),
-            active_job->get_position (1),
-            active_job->get_position (2) };
+         job_location[0] = active_job->get_position (0);
+         job_location[1] = active_job->get_position (1);
+         job_location[2] = active_job->get_position (2);
 
          trim_path_end = true;
 
          // set destination
          set_destination (job_location);
+      }
+
+      job_location[0] = active_job->get_position (0);
+      job_location[1] = active_job->get_position (1);
+      job_location[2] = active_job->get_position (2);
+
+      // if location is within tolerance of the job location, work on it
+      float dist2 =
+         (floorf (position[0]) - (float)job_location[0]) * (floorf (position[0]) - (float)job_location[0]) +
+         (floorf (position[1]) - (float)job_location[1]) * (floorf (position[1]) - (float)job_location[1]) +
+         (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
+
+      if (dist2 < 2.1f)
+      {
+         active_job->act (power * time_step);
+      }
+
+      if (active_job->is_complete ())
+      {
+         delete jobs.pop_back ();
       }
    }
 

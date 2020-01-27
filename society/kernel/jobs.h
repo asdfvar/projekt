@@ -17,13 +17,15 @@ class Job
 
       int get_flattened_index (void) { return flattened_index; };
 
+      void act (float power);
+
    protected:
 
       int   type;            // type of job
       int   location[3];     // location the job takes place
       int   flattened_index; // index (flattened location)
-      float duration;        // duration it takes to complete the job (seconds)
-      float time_spent;      // total time spent working on the task
+      float work;            // Work towards completing the job (Joules)
+      float energy;          // Energy needed to complete the job (Joules)
       bool  complete;        // flag to determine if the job is complete
 };
 
