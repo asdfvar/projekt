@@ -18,7 +18,7 @@ Unit::Unit (
    position[1] = position_y_in;
    position[2] = position_z_in;
 
-   jobs_limit = 1;
+   jobs_limit = 2;
 
    Map = Map_in;
 
@@ -31,7 +31,7 @@ Unit::Unit (
    dest[1] = position[1];
    dest[2] = position[2];
 
-   selected    = false;
+   selected = false;
 
    path_size = 0;
 
@@ -129,10 +129,17 @@ void Unit::update (float time_step)
          job_location[1] = active_job->get_position (1);
          job_location[2] = active_job->get_position (2);
 
+         // Set the final destination to one cell adjacent to the job location
          trim_path_end = true;
 
-         // set destination
-         set_destination (job_location);
+         // Set the job location as the destination if the job location is out of reach
+         if (abs (job_location[0] - (int)position[0]) > 1 ||
+               abs (job_location[1] - (int)position[1]) > 1 ||
+               abs (job_location[2] - (int)position[2]) > 1)
+         {
+            // set destination
+            set_destination (job_location);
+         }
       }
 
       job_location[0] = active_job->get_position (0);
@@ -146,14 +153,10 @@ void Unit::update (float time_step)
          (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
 
       if (dist2 < 2.1f)
-      {
          active_job->act (power * time_step);
-      }
 
       if (active_job->is_complete ())
-      {
          delete jobs.pop_back ();
-      }
    }
 
    int dim[3];
