@@ -1,7 +1,12 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <list>
+#include "container.h"
+
+class Cell
+{
+
+};
 
 class MAP
 {

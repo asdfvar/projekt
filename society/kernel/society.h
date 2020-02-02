@@ -81,7 +81,7 @@ class Society
       int current_job_index;
 
       // Units
-      Container<Unit>   units;
+      Container<Unit> units;
 
       // Jobs committed to the queue for assignment to a unit
       Container<Job> queued_jobs;
