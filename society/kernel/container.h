@@ -72,25 +72,48 @@ class Lattice
          for (int ind = 0; ind < dim; ind++) total_size *= size[ind];
 
          Node *node = new Node;
-         current_node = node;
-         current_node->previous = current_node;
 
-         first_node = current_node;
+         first_node = node;
+         first_node->flat_previous = first_node;
 
-         current_node->object = new Type;
+         node->object = new Type;
 
+         // String together all the nodes flattened over one dimension
          for (int ind = 1; ind < total_size; ind++)
          {
-            current_node->next = new Node;
-            Node *node = current_node;
-            current_node = current_node->next;
-            current_node->previous = node;
-            current_node->object = new Type;
+            node->flat_next = new Node;
+            Node *l_node   = node;
+            node = node->flat_next;
+            node->flat_previous = l_node;
+            node->object        = new Type;
          }
 
-         last_node = current_node;
-         last_node->next = last_node;
+         last_node            = node;
+         last_node->flat_next = last_node;
 
+         // Build the connections of the lattice to connect at adjacent cells
+         int dist = 1;
+         for (int rank = 0; rank < dim; rank++)
+         {
+            Node *node = first_node;
+            if (rank > 0) dist *= size[rank - 1];
+            while (node != last_node)
+            {
+               Node *inode = node;
+
+               for (int ind = 0; ind < dist; ind++) inode = inode->flat_next;
+
+               node->next[rank] = inode;
+
+               inode = node;
+
+               for (int ind = 0; ind < dist; ind++) inode = inode->flat_previous;
+
+               node->previous[rank] = inode;
+            }
+         }
+
+         // Set the current node
          current_node = first_node;
       }
 
@@ -102,17 +125,17 @@ class Lattice
          int total_size = 1;
          for (int ind = 0; ind < dim; ind++) total_size *= size[ind];
 
-         current_node = first_node;
+         Node *node = first_node;
 
-         while (current_node != last_node)
+         while (node != last_node)
          {
-            delete current_node->object;
-            current_node = current_node->next;
-            delete current_node->previous;
+            delete node->object;
+            node = node->flat_next;
+            delete node->flat_previous;
          }
 
-         delete current_node->object;
-         delete current_node;
+         delete node->object;
+         delete node;
       }
 
    private:
@@ -133,6 +156,12 @@ class Lattice
       Node *current_node;
       Node *first_node;
       Node *last_node;
+
+      Node *access (Node *node, int index)
+      {
+         node = first_node;
+         for (int ind = 0; ind < index; ind++) node = node->flat_next;
+      }
 };
 
 #endif
