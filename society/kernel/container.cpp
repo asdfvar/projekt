@@ -1,9 +1,10 @@
 #include "container.h"
 #include "jobs.h"
 #include "unit.h"
+#include "map.h"
 #include <iostream>
 
-template <typename Type>
+   template <typename Type>
 void Container<Type>::push_front (Type *object)
 {
    current_node = front_node;
@@ -12,7 +13,7 @@ void Container<Type>::push_front (Type *object)
    insert (object, 0);
 }
 
-template <typename Type>
+   template <typename Type>
 void Container<Type>::push_back (Type *object)
 {
    current_node = back_node;
@@ -21,7 +22,7 @@ void Container<Type>::push_back (Type *object)
    insert (object, container_size - 1);
 }
 
-template <typename Type>
+   template <typename Type>
 void Container<Type>::insert (Type *object, int index)
 {
    Node *node = new Node;
@@ -66,13 +67,13 @@ void Container<Type>::insert (Type *object, int index)
    container_size++;
 }
 
-template <typename Type>
+   template <typename Type>
 Type *Container<Type>::back (void)
 {
    return back_node->object;
 }
 
-template <typename Type>
+   template <typename Type>
 Type *Container<Type>::pop (int index)
 {
    if (container_size == 0) return nullptr;
@@ -116,7 +117,7 @@ Type *Container<Type>::pop (int index)
    return object;
 }
 
-template <typename Type>
+   template <typename Type>
 Type *Container<Type>::pop_back (void)
 {
    Node *desired_node = back_node;
@@ -137,13 +138,13 @@ Type *Container<Type>::pop_back (void)
    return desired_node->object;
 }
 
-template <typename Type>
+   template <typename Type>
 void Container<Type>::reset (void)
 {
    container_size = 0;
 }
 
-template <typename Type>
+   template <typename Type>
 Type *Container<Type>::access (int index)
 {
    // advance to the desired object node index
@@ -153,7 +154,7 @@ Type *Container<Type>::access (int index)
    return current_node->object;
 }
 
-template <typename Type>
+   template <typename Type>
 bool Container<Type>::advance (int index)
 {
    if (index >= container_size)
@@ -181,7 +182,7 @@ bool Container<Type>::advance (int index)
    return true;
 }
 
-template <typename Type>
+   template <typename Type>
 void Container<Type>::list_contents (void)
 {
 
@@ -199,7 +200,7 @@ void Container<Type>::list_contents (void)
    std::cout << std::endl;
 }
 
-template <typename Type>
+   template <typename Type>
 void Container<Type>::test_ends (void)
 {
    advance (0);
@@ -217,6 +218,74 @@ void Container<Type>::test_ends (void)
          << " not defined " << current_node->object
          << std::endl;
    }
+}
+
+   template <typename Type>
+Lattice<Type>::Lattice (int *size_in, int dim_in)
+{
+   dim = dim_in;
+
+   size          = new int[dim];
+   current_index = new int[dim];
+
+   for (int ind = 0; ind < dim; ind++) size[ind]          = size_in[ind];
+   for (int ind = 0; ind < dim; ind++) current_index[ind] = 0;
+
+   // Build the lattice
+   int total_size = 1;
+   for (int ind = 0; ind < dim; ind++) total_size *= size[ind];
+
+   Node *node = new Node;
+
+   first_node = node;
+   first_node->flat_previous = first_node;
+
+   node->object = new Type;
+
+   node->next     = new Node*[dim];
+   node->previous = new Node*[dim];
+
+   // String together all the nodes flattened over one dimension
+   for (int ind = 1; ind < total_size; ind++)
+   {
+      node->flat_next = new Node;
+      Node *l_node   = node;
+      node = node->flat_next;
+      node->flat_previous = l_node;
+      node->object        = new Type;
+
+      node->next     = new Node*[dim];
+      node->previous = new Node*[dim];
+   }
+
+   last_node            = node;
+   last_node->flat_next = last_node;
+
+   // Build the connections of the lattice to connect at adjacent cells
+   int dist = 1;
+   for (int rank = 0; rank < dim; rank++)
+   {
+      Node *node = first_node;
+      if (rank > 0) dist *= size[rank - 1];
+      while (node != last_node)
+      {
+         Node *inode = node;
+
+         for (int ind = 0; ind < dist; ind++) inode = inode->flat_next;
+
+         node->next[rank] = inode;
+
+         inode = node;
+
+         for (int ind = 0; ind < dist; ind++) inode = inode->flat_previous;
+
+         node->previous[rank] = inode;
+         node = node->flat_next;
+      }
+   }
+
+   // Set the current node
+   current_node = first_node;
 }
 
 // Define container types for the job class
@@ -244,3 +313,6 @@ template void  Container<Unit>::reset           (void      );
 template bool  Container<Unit>::advance         (int       );
 template void  Container<Unit>::list_contents   (void      );
 template void  Container<Unit>::test_ends       (void      );
+
+// Lattice for the Cell type
+template Lattice<Cell>::Lattice (int *size_in, int dim_in);

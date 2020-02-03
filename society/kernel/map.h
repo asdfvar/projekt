@@ -12,7 +12,7 @@ class MAP
 {
    public:
 
-      MAP (int num_cells[3]);
+      MAP (int size_in[3]);
       ~MAP (void);
 
       const float *access_map         (void) { return (const float*)map;          };
@@ -40,6 +40,8 @@ class MAP
 
       int *uncommitted_jobs;
       int  uncommitted_jobs_size;
+
+      Lattice<Cell> *cells;
 
       int size[3];
 

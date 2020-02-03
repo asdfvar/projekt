@@ -5,11 +5,13 @@
 #define MAX(A,B) ((A) > (B) ? (A) : (B))
 #define MIN(A,B) ((A) < (B) ? (A) : (B))
 
-MAP::MAP (int num_cells[3])
+MAP::MAP (int size_in[3])
 {
-   size[0] = num_cells[0];
-   size[1] = num_cells[1];
-   size[2] = num_cells[2];
+   size[0] = size_in[0];
+   size[1] = size_in[1];
+   size[2] = size_in[2];
+
+   cells = new Lattice<Cell> (size, 3);
 
    map      = new float[size[0] * size[1] * size[2]];
    ground   = new float[size[0] * size[1] * size[2]];
