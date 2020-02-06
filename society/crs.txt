@@ -11,3 +11,5 @@ make subclasses of the container type specific to the units and actions to suppo
 enforce restrictions on how many threads can be accessed simultaneously. for units, this means only setting a path if less than *N* other units are setting a path where *N* is the number of simultaneous threads supported by the hardware
 
 put in robustness mitigators to determine if a unit is "trapped"
+
+define grounded cell as a cell that can draw a connected path (with adjacent cells only) to the bottom
