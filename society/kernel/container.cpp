@@ -261,13 +261,15 @@ Lattice<Type>::Lattice (int *size_in, int dim_in)
    last_node            = node;
    last_node->flat_next = last_node;
 
-   // Build the connections of the lattice to connect at adjacent cells
+   // Build the connections of the lattice to connect adjacent cells
    int dist = 1;
    for (int rank = 0; rank < dim; rank++)
    {
       Node *node = first_node;
       if (rank > 0) dist *= size[rank - 1];
-      while (node != last_node)
+
+      bool done = false;
+      while (!done)
       {
          Node *inode = node;
 
@@ -280,12 +282,62 @@ Lattice<Type>::Lattice (int *size_in, int dim_in)
          for (int ind = 0; ind < dist; ind++) inode = inode->flat_previous;
 
          node->previous[rank] = inode;
+
+         if (node == last_node) done = true;
          node = node->flat_next;
       }
    }
 
    // Set the current node
    current_node = first_node;
+}
+
+   template <typename Type>
+Lattice<Type>::~Lattice (void)
+{
+   delete[] size;
+   delete[] current_index;
+
+   int total_size = 1;
+   for (int ind = 0; ind < dim; ind++) total_size *= size[ind];
+
+   Node *node = first_node;
+
+   while (node != last_node)
+   {
+      delete node->object;
+      delete node->next;
+      delete node->previous;
+      node = node->flat_next;
+      delete node->flat_previous;
+   }
+
+   delete node->object;
+   delete node;
+}
+
+   template <typename Type>
+Type *Lattice<Type>::access (int *index)
+{
+   for (int ind = 0; ind < dim; ind++)
+   {
+      if (index[ind] < 0 || index[ind] >= size[ind])
+         return nullptr;
+
+      while (current_index[ind] < index[ind])
+      {
+         current_node = current_node->next[ind];
+         current_index[ind]++;
+      }
+
+      while (current_index[ind] > index[ind])
+      {
+         current_node = current_node->previous[ind];
+         current_index[ind]--;
+      }
+   }
+
+   return current_node->object;
 }
 
 // Define container types for the job class
@@ -316,3 +368,5 @@ template void  Container<Unit>::test_ends       (void      );
 
 // Lattice for the Cell type
 template Lattice<Cell>::Lattice (int *size_in, int dim_in);
+template Lattice<Cell>::~Lattice (void);
+template Cell *Lattice<Cell>::access (int *index);

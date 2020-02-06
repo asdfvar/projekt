@@ -1,6 +1,8 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
+#include <iostream>
+
 template <typename Type>
 class Container
 {
@@ -56,28 +58,28 @@ class Lattice
 
       Lattice (int *size_in, int dim_in);
 
-      ~Lattice (void)
+      ~Lattice (void);
+
+      Type *access (int *index);
+
+      Type *next (void)
       {
-         delete[] size;
-         delete[] current_index;
-
-         int total_size = 1;
-         for (int ind = 0; ind < dim; ind++) total_size *= size[ind];
-
-         Node *node = first_node;
-
-         while (node != last_node)
+         if (current_node != last_node)
          {
-            delete node->object;
-            delete node->next;
-            delete node->previous;
-            node = node->flat_next;
-            delete node->flat_previous;
-         }
+            current_node = current_node->flat_next;
 
-         delete node->object;
-         delete node;
-      }
+            current_index[0]++;
+            for (int ind = 0; ind < dim; ind++)
+            {
+               if (current_index[ind] >= size[ind])
+               {
+                  current_index[ind] = 0;
+                  current_index[ind+1]++;
+               }
+            }
+         }
+         return current_node->object;
+      };
 
    private:
 
@@ -92,17 +94,12 @@ class Lattice
 
       int dim;
       int *size;
-      int *current_index;
 
+      int  *current_index;
       Node *current_node;
+
       Node *first_node;
       Node *last_node;
-
-      Node *access (Node *node, int index)
-      {
-         node = first_node;
-         for (int ind = 0; ind < index; ind++) node = node->flat_next;
-      }
 };
 
 #endif
