@@ -1,6 +1,9 @@
 #include "map.h"
+#include "math_utils.h"
+#include "math_utils.h"
 #include <cstdlib>
 #include <iostream>
+#include <cmath>
 
 #define MAX(A,B) ((A) > (B) ? (A) : (B))
 #define MIN(A,B) ((A) < (B) ? (A) : (B))
@@ -20,14 +23,14 @@ MAP::MAP (int size_in[3])
    uncommitted_jobs      = new int[size[0] * size[1] * size[2]];
    uncommitted_jobs_size = 0;
 
-   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 1.0f;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 0.0f;
 
    for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
             material[ind] = 1;
-            if (rand() & 3 && ind_z == 20) material[ind] = 0;
+            if (rand () & 3 && ind_z == 20) material[ind] = 0;
             if (ind_z == 22) material[ind] = 0;
             if (ind_z == 18) material[ind] = 0;
             if (ind_x == ind_z && ind_y == 0) material[ind] = 0;
@@ -168,4 +171,9 @@ const int *MAP::access_uncommitted_jobs (int *size)
 {
    *size = uncommitted_jobs_size;
    return (const int*)uncommitted_jobs;
+}
+
+void remove_cell (int index)
+{
+
 }

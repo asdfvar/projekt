@@ -9,6 +9,7 @@ OBJS = $(OBJDIR)/society.o     \
        $(OBJDIR)/container.o   \
        $(OBJDIR)/jobs.o        \
        $(OBJDIR)/graphics.o    \
+       $(OBJDIR)/math_utils.o  \
        $(OBJDIR)/timer.o       \
 #
 
