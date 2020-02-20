@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -18,6 +19,7 @@ int main (void)
    for (int ind = 0; ind < 4 * 5; ind++)
       matrix[ind] = (float)(rand () % 100) / 100.0f;
 
+#if 0
    std::cout << "matrix before RREF:" << std::endl;
    for (int row = 0, ind = 0; row < 4; row++)
    {
@@ -26,9 +28,11 @@ int main (void)
       std::cout << std::endl;
    }
    std::cout << std::endl;
+#endif
 
    rref (matrix, 4, 5);
 
+#if 0
    std::cout << "matrix after RREF:" << std::endl;
    for (int row = 0, ind = 0; row < 4; row++)
    {
@@ -37,6 +41,7 @@ int main (void)
       std::cout << std::endl;
    }
    std::cout << std::endl;
+#endif
 
    alt_perlin (
          array,
@@ -45,17 +50,22 @@ int main (void)
          num_grid_points,
          buffer);
 
-   std::cout << "array output = " << std::endl;
+#if 1
+   std::ofstream asdf;
+   asdf.open ("output", std::ios::out);
    for (int row = 0, ind = 0; row < size[1]; row++)
    {
       for (int col = 0; col < size[0]; col++, ind++)
       {
-         std::cout << std::setprecision(3) << array[ind];
-         if (col == size[0] - 1) std::cout << "; ";
-         else std::cout << ", ";
+         asdf << std::setprecision(3) << array[ind];
+         if (col == size[0] - 1) asdf << "; ";
+         else asdf << ", ";
       }
-      std::cout << std::endl;
+      asdf << std::endl;
    }
+asdf << "stuff\n";
+   asdf.close ();
+#endif
 
    delete[] array;
    delete[] buffer;

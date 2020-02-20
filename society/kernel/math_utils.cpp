@@ -1,81 +1,14 @@
 #include "math_utils.h"
+#include <fstream>
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
-
-static void rref_debug (float *matrix, int num_rows, int num_cols)
-{
-   for (int leading_element = 0; leading_element < num_rows; leading_element++)
-   {
-
-      // Swap rows if the leading element is near zero
-      for (int row = leading_element + 1; fabs (matrix[leading_element * num_cols + leading_element]) < 0.00001f && row < num_rows; row++)
-      {
-         for (int col = 0; col < num_cols; col++)
-         {
-            float temp = matrix[leading_element * num_cols + col];
-            matrix[leading_element * num_cols + col] = matrix[row * num_cols + col];
-            matrix[row * num_cols + col] = temp;
-         }
-std::cout << "derp:" << std::endl;
-for (int row = 0, ind = 0; row < 4; row++)
-{
-   for (int col = 0; col < 5; col++, ind++)
-      std::cout << matrix[ind] << ", ";
-   std::cout << std::endl;
-}
-std::cout << std::endl;
-      }
-
-      float leading_scalar = matrix[leading_element * num_cols + leading_element];
-
-      for (int row = 0; row < num_rows; row++)
-      {
-         if (row == leading_element) continue;
-
-         float row_factor = matrix[row * num_cols + leading_element];
-
-         // Multiply and add to rows
-         for (int col = 0; col < num_cols; col++)
-         {
-            matrix[row * num_cols + col] =
-               leading_scalar * matrix[row             * num_cols + col] -
-               row_factor     * matrix[leading_element * num_cols + col];
-         }
-      }
-
-std::cout << "component:" << std::endl;
-for (int row = 0, ind = 0; row < 4; row++)
-{
-   for (int col = 0; col < 5; col++, ind++)
-      std::cout << matrix[ind] << ", ";
-   std::cout << std::endl;
-}
-std::cout << std::endl;
-   }
-
-   for (int leading_element = 0; leading_element < num_rows; leading_element++)
-   {
-      float leading_scalar = matrix[leading_element * num_cols + leading_element];
-
-      // Normalize the row supporting the leading factor
-      float leading_factor_inv = 1.0f / leading_scalar;
-
-      matrix[leading_element * num_cols + leading_element] *= leading_factor_inv;
-
-      for (int col = num_rows; col < num_cols; col++)
-      {
-         matrix[leading_element * num_cols + col] *= leading_factor_inv;
-      }
-   }
-}
 
 // Reduced Row-Echelon
 void rref (float *matrix, int num_rows, int num_cols)
 {
    for (int leading_element = 0; leading_element < num_rows; leading_element++)
    {
-
       // Swap rows if the leading element is near zero
       for (int row = leading_element + 1; fabs (matrix[leading_element * num_cols + leading_element]) < 0.00001f && row < num_rows; row++)
       {
@@ -159,10 +92,12 @@ void alt_perlin (
       gradient[1][point] = ((float)(rand () % 2000) / 1000.0f - 1.0f) * scale;
    }
 
-std::cout << "all the grid points:" << std::endl;
-for (int point = 0; point < num_grid_points; point++)
-   std::cout << "(" << grid_cells[0][point] << ", " << grid_cells[1][point] << "), " << std::endl;
-std::cout << std::endl;
+#if 0
+   std::ofstream disp_grid ("grid_data", std::ios::out);
+   for (int point = 0; point < num_grid_points; point++)
+      disp_grid << "(" << grid_cells[0][point] << ", " << grid_cells[1][point] << ")" << std::endl;
+   disp_grid.close ();
+#endif
 
    // TODO: set this to the greatest distance between all grid cells
    float greatest_dist2 = 9999999.9f;
@@ -174,8 +109,6 @@ std::cout << std::endl;
          float fix = (float)ix;
          float fiy = (float)iy;
 
-bool debug = false;
-if (ind == 12 * 0 + 11) debug = true;
          // Find the grid cell closest to this cell and is <= this cell in x and y
          float grid_cell_ll[2] = { grid_cells[0][0], grid_cells[1][0] };
          float gradient_ll[2] = { gradient[0][0], gradient[1][0] };
@@ -327,35 +260,8 @@ if (ind == 12 * 0 + 11) debug = true;
             ur_0 * ur_1, ur_0, ur_1, 1.0f, dotp_ur,
             ul_0 * ul_1, ul_0, ul_1, 1.0f, dotp_ul };
 
-if (debug) std::cout << "x,y = " << fix << ", " << fiy << std::endl;
-if (debug) std::cout << "ll = " << ll_0 << ", " << ll_1 << std::endl;
-if (debug) std::cout << "lr = " << lr_0 << ", " << lr_1 << std::endl;
-if (debug) std::cout << "ur = " << ur_0 << ", " << ur_1 << std::endl;
-if (debug) std::cout << "ul = " << ul_0 << ", " << ul_1 << std::endl;
-if (debug) std::cout << std::endl;
-
-if (debug) std::cout << "matrix:" << std::endl;
-   for (int row = 0, ind = 0; row < 4; row++)
-   {
-      for (int col = 0; col < 5; col++, ind++)
-         if (debug) std::cout << matrix[ind] << ", ";
-      if (debug) std::cout << std::endl;
-   }
-   if (debug) std::cout << std::endl;
-
-if (debug) rref_debug (matrix, 4, 5);
-else
          // Reduced Row-Echelon form
          rref (matrix, 4, 5);
-
-if (debug) std::cout << "rref (matrix):" << std::endl;
-   for (int row = 0, ind = 0; row < 4; row++)
-   {
-      for (int col = 0; col < 5; col++, ind++)
-         if (debug) std::cout << matrix[ind] << ", ";
-      if (debug) std::cout << std::endl;
-   }
-   if (debug) std::cout << std::endl;
 
          float A = matrix[4];
          float B = matrix[9];
@@ -363,7 +269,6 @@ if (debug) std::cout << "rref (matrix):" << std::endl;
          float D = matrix[19];
 
          array[ind] = A * fix * fiy + B * fix + C * fiy + D;
-if (debug) std::cout << "array[" << ind << "] = " << array[ind] << std::endl;
       }
    }
 
