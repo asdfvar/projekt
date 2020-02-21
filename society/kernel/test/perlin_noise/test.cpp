@@ -10,9 +10,10 @@ int main (void)
    float *array  = new float[80000];
    float *buffer = new float[80000];
 
-   int size[2] = {20, 20};
-   float scale = 1.0f;
-   int num_grid_points = 8;
+   int    size[2] = {100, 100};
+   float  scale = 1.0f;
+   int    num_grid_points = 6;
+   float  min_grid_point_dist = 8.0f;
 
    float *matrix = array;
 
@@ -48,6 +49,7 @@ int main (void)
          size,
          scale,
          num_grid_points,
+         min_grid_point_dist,
          buffer);
 
 #if 1

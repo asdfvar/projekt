@@ -7,10 +7,14 @@
 // Reduced Row-Echelon
 void rref (float *matrix, int num_rows, int num_cols)
 {
+   const float eps = 0.000001f;
    for (int leading_element = 0; leading_element < num_rows; leading_element++)
    {
+      float leading_element_value = matrix[leading_element * num_cols + leading_element];
       // Swap rows if the leading element is near zero
-      for (int row = leading_element + 1; fabs (matrix[leading_element * num_cols + leading_element]) < 0.00001f && row < num_rows; row++)
+      for (int row = leading_element + 1;
+            fabs (leading_element_value) < eps && row < num_rows;
+            row++)
       {
          for (int col = 0; col < num_cols; col++)
          {
@@ -61,6 +65,7 @@ void alt_perlin (
       int    size[2],
       float  scale,
       int    num_grid_points,
+      float  min_grid_point_dist,
       float *buffer)
 {
    float *grid_cells[2];
@@ -82,22 +87,41 @@ void alt_perlin (
    grid_cells[1][2] = (float)(size[1] - 1) + 0.1f;
    grid_cells[1][3] = (float)(size[1] - 1) + 0.1f;
 
+#if 0
+   for (int indx = 0, ind = 0; indx <= num_grid_points[0]; indx)
+   {
+      for (int indy = 0; indy <= num_grid_points[0]; indy, ind++)
+      {
+         grid_cells[0][ind] = indx * size[0] / num_grid_points[0];
+         grid_cells[1][ind] = indy * size[1] / num_grid_points[1];
+      }
+   }
+#endif
+
    for (int point = 4; point < num_grid_points; point++)
    {
-      grid_cells[0][point] = (float)(rand () % 1000) / 1000.0f * (float)size[0];
-      grid_cells[1][point] = (float)(rand () % 1000) / 1000.0f * (float)size[1];
+      float dist2 = (float)(size[0] + size[1]);
+      const float min_grid_point_dist2 = min_grid_point_dist * min_grid_point_dist;
+
+      do {
+         grid_cells[0][point] = (float)(rand () % 1000) / 1000.0f * (float)size[0];
+         grid_cells[1][point] = (float)(rand () % 1000) / 1000.0f * (float)size[1];
+
+         // min distance between all other existing points
+         for (int l_point = 0; l_point < point; l_point++)
+         {
+            float grid_cell_dist2 =
+               (grid_cells[0][l_point] - grid_cells[0][point]) * (grid_cells[0][l_point] - grid_cells[0][point]) +
+               (grid_cells[1][l_point] - grid_cells[1][point]) * (grid_cells[1][l_point] - grid_cells[1][point]);
+
+            if (grid_cell_dist2 < dist2) dist2 = grid_cell_dist2;
+         }
+      } while (dist2 < min_grid_point_dist2);
 
       // Random gradient value in scale * ([-1, 1) x [-1, 1)) range
       gradient[0][point] = ((float)(rand () % 2000) / 1000.0f - 1.0f) * scale;
       gradient[1][point] = ((float)(rand () % 2000) / 1000.0f - 1.0f) * scale;
    }
-
-#if 0
-   std::ofstream disp_grid ("grid_data", std::ios::out);
-   for (int point = 0; point < num_grid_points; point++)
-      disp_grid << "(" << grid_cells[0][point] << ", " << grid_cells[1][point] << ")" << std::endl;
-   disp_grid.close ();
-#endif
 
    // TODO: set this to the greatest distance between all grid cells
    float greatest_dist2 = 9999999.9f;
@@ -210,20 +234,20 @@ void alt_perlin (
          }
 
          float dotp_ll =
-            fabs(fix - grid_cell_ll[0]) * gradient_ll[0] +
-            fabs(fiy - grid_cell_ll[1]) * gradient_ll[1];
+            (fix - grid_cell_ll[0]) * gradient_ll[0] +
+            (fiy - grid_cell_ll[1]) * gradient_ll[1];
 
          float dotp_lr =
-            fabs(fix - grid_cell_lr[0]) * gradient_lr[0] +
-            fabs(fiy - grid_cell_lr[1]) * gradient_lr[1];
+            (fix - grid_cell_lr[0]) * gradient_lr[0] +
+            (fiy - grid_cell_lr[1]) * gradient_lr[1];
 
          float dotp_ul =
-            fabs(fix - grid_cell_ul[0]) * gradient_ul[0] +
-            fabs(fiy - grid_cell_ul[1]) * gradient_ul[1];
+            (fix - grid_cell_ul[0]) * gradient_ul[0] +
+            (fiy - grid_cell_ul[1]) * gradient_ul[1];
 
          float dotp_ur =
-            fabs(fix - grid_cell_ur[0]) * gradient_ur[0] +
-            fabs(fiy - grid_cell_ur[1]) * gradient_ur[1];
+            (fix - grid_cell_ur[0]) * gradient_ur[0] +
+            (fiy - grid_cell_ur[1]) * gradient_ur[1];
 
          // 2D bilinear interpolation on an arbitrary grid can be
          // obtained by solving for the parameters A, B, C, D s.t.

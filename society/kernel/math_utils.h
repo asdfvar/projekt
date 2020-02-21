@@ -11,6 +11,7 @@ void alt_perlin (
       int    size[2],
       float  scale,
       int    num_grid_points,
+      float  min_grid_point_dist,
       float *buffer);
 
 #endif
