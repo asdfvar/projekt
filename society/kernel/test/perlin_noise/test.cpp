@@ -12,7 +12,7 @@ int main (void)
 
    int    size[2] = {100, 100};
    float  scale = 1.0f;
-   int    num_grid_points = 6;
+   int    num_grid_cells[2] = {6, 6};
    float  min_grid_point_dist = 8.0f;
 
    float *matrix = array;
@@ -44,11 +44,11 @@ int main (void)
    std::cout << std::endl;
 #endif
 
-   alt_perlin (
+   perlin (
          array,
          size,
          scale,
-         num_grid_points,
+         num_grid_cells,
          min_grid_point_dist,
          buffer);
 
