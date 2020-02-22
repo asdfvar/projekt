@@ -80,6 +80,7 @@ void perlin (
 {
    int *grid_cells[2];
    float *gradient[2];
+
    grid_cells[0] = (int*)buffer;
    grid_cells[1] = grid_cells[0]         + (num_grid_cells[0] + 1) * (num_grid_cells[1] + 1);
    gradient[0]   = (float*)grid_cells[1] + (num_grid_cells[0] + 1) * (num_grid_cells[1] + 1);
@@ -165,6 +166,15 @@ void perlin (
          float ul_0 = (float)grid_cell_ul[0];
          float ul_1 = (float)grid_cell_ul[1];
 
+         ll_0 -= (float)grid_cell_ll[0];
+         ll_1 -= (float)grid_cell_ll[1];
+         lr_0 -= (float)grid_cell_ll[0];
+         lr_1 -= (float)grid_cell_ll[1];
+         ur_0 -= (float)grid_cell_ll[0];
+         ur_1 -= (float)grid_cell_ll[1];
+         ul_0 -= (float)grid_cell_ll[0];
+         ul_1 -= (float)grid_cell_ll[1];
+
          float matrix[4 * 5] = {
             ll_0 * ll_1, ll_0, ll_1, 1.0f, dotp_ll,
             lr_0 * lr_1, lr_0, lr_1, 1.0f, dotp_lr,
@@ -199,7 +209,10 @@ void perlin (
          float C = matrix[14];
          float D = matrix[19];
 
-         array[ind] = A * (float)ix * (float)iy + B * (float)ix + C * (float)iy + D;
+         float fix = (float)(ix - grid_cell_ll[0]);
+         float fiy = (float)(iy - grid_cell_ll[1]);
+
+         array[ind] = A * fix * fiy + B * fix + C * fiy + D;
       }
    }
 
