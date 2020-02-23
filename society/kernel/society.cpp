@@ -208,6 +208,7 @@ void Society::update (float time_step)
       }
    }
 
+   // Update units
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
