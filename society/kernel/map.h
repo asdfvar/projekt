@@ -15,8 +15,12 @@ class MAP
       MAP (int size_in[3]);
       ~MAP (void);
 
-      const float *access_map         (void) { return (const float*)map;          };
-      const float *access_ground      (void) { return (const float*)ground;       };
+      void update (void);
+
+      const float *access_map         (void) { return (const float*)map;    };
+      const float *access_ground      (void) { return (const float*)ground; };
+
+      void set_map_layer (int map_layer_in) { map_layer = map_layer_in; };
 
       float get_ground_cell (int flattened_ind);
       float get_ground_cell (int ind[3]);
@@ -32,14 +36,20 @@ class MAP
       void       unselect_uncommitted_jobs (void);
       const int *access_uncommitted_jobs (int *size);
 
+      void draw_map (float *transform, float *translation);
+
    private:
 
       float *map;
       float *ground;
       int   *material;
 
+      int map_layer;
+
       int *uncommitted_jobs;
       int  uncommitted_jobs_size;
+
+      int *view_plain;
 
       Lattice<Cell> *cells;
 

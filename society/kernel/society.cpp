@@ -225,6 +225,8 @@ void Society::update (float time_step)
       // Update the unit's position and path planning
       unit->update (time_step);
    }
+
+   Map->update ();
 }
 
 const float *Society::access_map ()

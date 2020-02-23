@@ -16,6 +16,8 @@ class Society
       Society (void);
       ~Society (void);
 
+      void set_map_layer (int map_layer) { Map->set_map_layer (map_layer); };
+
       void update (float time_step);
 
       void set_destination (int dest[3]);
@@ -59,6 +61,8 @@ class Society
             float       *translation,
             int          map_layer);
 
+      void draw_map (float *transform, float *translation);
+
    private:
 
       // Contains information and contents that make up the map as well as
@@ -88,7 +92,7 @@ class Society
 
       // Array of containers that contain pointers to the units assigned
       // to the the specified group number
-      Container<Unit>   group[10];
+      Container<Unit> group[10];
 };
 
 #endif

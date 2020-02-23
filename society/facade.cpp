@@ -33,6 +33,8 @@ Facade::Facade (void)
 
    map_layer = 20;
 
+   society.set_map_layer (map_layer);
+
    control_down = false;
    shift_down   = false;
    button0_down = false;
@@ -309,6 +311,8 @@ void Facade::mouseClick (int button, int state, int x, int y)
 
       mouse_wheel_backward_count = 0;
    }
+
+   society.set_map_layer (map_layer);
 }
 
 /*
@@ -529,12 +533,16 @@ void Facade::display (void)
          translation,
          map_layer);
 
+#if 0
    graphics.draw_map (
          transform,
          translation,
          map,
          map_dims,
          map_layer);
+#endif
+
+   society.draw_map (transform, translation);
 
    hud.draw_info ();
 

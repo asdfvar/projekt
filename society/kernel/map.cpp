@@ -3,6 +3,7 @@
 #include "math_utils.h"
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <cmath>
 
 #define MAX(A,B) ((A) > (B) ? (A) : (B))
@@ -16,14 +17,18 @@ MAP::MAP (int size_in[3])
 
    cells = new Lattice<Cell> (size, 3);
 
-   map      = new float[size[0] * size[1] * size[2]];
-   ground   = new float[size[0] * size[1] * size[2]];
-   material = new int  [size[0] * size[1] * size[2]];
+   map_layer = 0;
+
+   map        = new float[size[0] * size[1] * size[2]];
+   ground     = new float[size[0] * size[1] * size[2]];
+   material   = new int  [size[0] * size[1] * size[2]];
+   view_plain = new int [size[0] * size[1]];
 
    uncommitted_jobs      = new int[size[0] * size[1] * size[2]];
    uncommitted_jobs_size = 0;
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 0.0f;
+   for (int ind = 0; ind < size[0] * size[1]; ind++) view_plain[ind] = 0.0f;
 
    float *perlin_array = new float[size[0] * size[1]];
    int num_grid_cells[2] = { 4, 4 };
@@ -46,7 +51,8 @@ MAP::MAP (int size_in[3])
       }
    }
 
-   // TODO: make this "set_air"
+   delete[] perlin_array;
+
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
    {
       if (material[ind] > 0) map[ind] = -1.0f;
@@ -62,6 +68,18 @@ MAP::~MAP (void)
    delete[] ground;
    delete[] material;
    delete[] uncommitted_jobs;
+   delete[] view_plain;
+}
+
+void MAP::update (void)
+{
+   for (int ind = 0; ind < size[0] * size[1]; ind++)
+   {
+      int layer_ind = size[0] * size[1] * map_layer + ind;
+      if (material[layer_ind] == 1) view_plain[ind] = 0;
+      else view_plain[ind] = 1;
+
+   }
 }
 
 float MAP::get_ground_cell (int flattened_ind)
