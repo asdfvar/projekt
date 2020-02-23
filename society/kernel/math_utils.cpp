@@ -68,18 +68,8 @@ void perlin (
       float *array,
       int    size[2],
       float  scale,
-      int    num_grid_cells[2],
-      float  min_grid_point_dist,
-      float *buffer)
+      int    num_grid_cells[2])
 {
-   int *grid_cells[2];
-   float *gradient[2];
-
-   grid_cells[0] = (int*)buffer;
-   grid_cells[1] = grid_cells[0]         + (num_grid_cells[0] + 2) * (num_grid_cells[1] + 2);
-   gradient[0]   = (float*)grid_cells[1] + (num_grid_cells[0] + 2) * (num_grid_cells[1] + 2);
-   gradient[1]   = gradient[0]           + (num_grid_cells[0] + 2) * (num_grid_cells[1] + 2);
-
    float *top_gradients[2];
    top_gradients[0]    = new float[num_grid_cells[0] + 1];
    top_gradients[1]    = new float[num_grid_cells[0] + 1];

@@ -10,8 +10,6 @@ void perlin (
       float *array, // array to receive the result
       int    size[2],
       float  scale,
-      int    num_grid_cells[2],
-      float  min_grid_point_dist,
-      float *buffer);
+      int    num_grid_cells[2]);
 
 #endif

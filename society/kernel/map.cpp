@@ -25,21 +25,23 @@ MAP::MAP (int size_in[3])
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 0.0f;
 
-   for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
-      for (int ind_y = 0; ind_y < size[1]; ind_y++) {
-         for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
-         {
-            material[ind] = 1;
-            if (rand () & 3 && ind_z == 20) material[ind] = 0;
-            if (ind_z == 22) material[ind] = 0;
-            if (ind_z == 18) material[ind] = 0;
-            if (ind_x == ind_z && ind_y == 0) material[ind] = 0;
-            if (ind_x == ind_z + 1 && ind_y == 0) material[ind] = 1;
+   float *perlin_array = new float[size[0] * size[1]];
+   int num_grid_cells[2] = { 4, 4 };
 
-            if (ind_z == 18 &&
-                  ind_x > 10 && ind_x < 20 &&
-                  ind_y > 10 && ind_y < 20)
-               material[ind] = 1;
+   for (int ind = 0; ind < size[0] * size[1]; ind++) perlin_array[ind] = (float)(size[2] / 2);
+
+   perlin (
+         perlin_array,
+         size,
+         4.0f,
+         num_grid_cells);
+
+   for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
+      for (int ind_y = 0, ind2d = 0; ind_y < size[1]; ind_y++) {
+         for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++, ind2d++)
+         {
+            if (ind_z < perlin_array[ind2d]) material[ind] = 1;
+            else material[ind] = 0;
          }
       }
    }
