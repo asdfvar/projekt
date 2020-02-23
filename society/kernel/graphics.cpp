@@ -45,9 +45,6 @@ void Society::draw_units (
    const float window_start_col = -1.0f;
    const float window_end_col   =  1.0f;
 
-   const float width_offset  = 0.3f * block_width;
-   const float height_offset = 0.3f * block_height;
-
    const float selected_width_offset  = 0.35f * block_width;
    const float selected_height_offset = 0.35f * block_height;
 
@@ -74,6 +71,12 @@ void Society::draw_units (
             float y_pos = unit->get_position (1) / ((float)row_max) *
                (window_end_row - window_start_row) +
                window_start_row;
+
+            float reduction_factor = 1.0f - (float)(map_layer - unit_pos[2]) / 8.0f;
+            if (reduction_factor < 0.05f) reduction_factor = 0.05f;
+
+            float width_offset  = 0.3f * block_width  * reduction_factor;
+            float height_offset = 0.3f * block_height * reduction_factor;
 
             float point0[2] = { x_pos - width_offset, y_pos - height_offset };
             float point1[2] = { x_pos - width_offset, y_pos + height_offset };
