@@ -36,6 +36,9 @@ class MAP
       void       unselect_uncommitted_jobs (void);
       const int *access_uncommitted_jobs (int *size);
 
+      int get_view_plain (int ind)    { return view_plain[ind]; };
+      int get_view_plain (int ind[2]);
+
       void draw (float *transform, float *translation);
 
    private:

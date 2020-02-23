@@ -207,3 +207,9 @@ void remove_cell (int index)
 {
 
 }
+
+int MAP::get_view_plain (int ind[2])
+{
+   int flat_ind = ind[1] * size[0] + ind[0];
+   return view_plain[flat_ind];
+}

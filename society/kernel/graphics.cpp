@@ -56,57 +56,67 @@ void Society::draw_units (
    {
       Unit *unit = units.access (unit_ind);
 
-      if (floorf (unit->get_position (2)) == map_layer)
+      float unit_pos[3] = {
+         unit->get_position (0),
+         unit->get_position (1),
+         unit->get_position (2) };
+
+      if (floorf (unit_pos[2]) <= map_layer)
       {
-         float x_pos = unit->get_position (0) / ((float)col_max) *
-            (window_end_col - window_start_col) +
-            window_start_col;
+         int map_2d_ind[2] = { (int)unit_pos[0], (int)unit_pos[1] };
 
-         float y_pos = unit->get_position (1) / ((float)row_max) *
-            (window_end_row - window_start_row) +
-            window_start_row;
-
-         float point0[2] = { x_pos - width_offset, y_pos - height_offset };
-         float point1[2] = { x_pos - width_offset, y_pos + height_offset };
-         float point2[2] = { x_pos + width_offset, y_pos + height_offset };
-         float point3[2] = { x_pos + width_offset, y_pos - height_offset };
-
-         transformation (point0, transform, translation);
-         transformation (point1, transform, translation);
-         transformation (point2, transform, translation);
-         transformation (point3, transform, translation);
-
-         glBegin (GL_POLYGON);
-         glColor3f (0.0f, 1.0f, 1.0f);
-         glVertex2f (point0[0], point0[1]);
-         glVertex2f (point1[0], point1[1]);
-         glVertex2f (point2[0], point2[1]);
-         glVertex2f (point3[0], point3[1]);
-         glEnd ();
-
-         if (unit->is_selected())
+         if (unit_pos[2] >= Map->get_view_plain (map_2d_ind))
          {
-            float point0[2] = { x_pos - selected_width_offset, y_pos - selected_height_offset };
-            float point1[2] = { x_pos - selected_width_offset, y_pos + selected_height_offset };
-            float point2[2] = { x_pos + selected_width_offset, y_pos + selected_height_offset };
-            float point3[2] = { x_pos + selected_width_offset, y_pos - selected_height_offset };
+            float x_pos = unit->get_position (0) / ((float)col_max) *
+               (window_end_col - window_start_col) +
+               window_start_col;
+
+            float y_pos = unit->get_position (1) / ((float)row_max) *
+               (window_end_row - window_start_row) +
+               window_start_row;
+
+            float point0[2] = { x_pos - width_offset, y_pos - height_offset };
+            float point1[2] = { x_pos - width_offset, y_pos + height_offset };
+            float point2[2] = { x_pos + width_offset, y_pos + height_offset };
+            float point3[2] = { x_pos + width_offset, y_pos - height_offset };
 
             transformation (point0, transform, translation);
             transformation (point1, transform, translation);
             transformation (point2, transform, translation);
             transformation (point3, transform, translation);
 
-            glBegin (GL_LINES);
-            glColor3f (1.0f, 0.0f, 0.0f);
+            glBegin (GL_POLYGON);
+            glColor3f (0.0f, 1.0f, 1.0f);
             glVertex2f (point0[0], point0[1]);
             glVertex2f (point1[0], point1[1]);
-            glVertex2f (point1[0], point1[1]);
-            glVertex2f (point2[0], point2[1]);
             glVertex2f (point2[0], point2[1]);
             glVertex2f (point3[0], point3[1]);
-            glVertex2f (point3[0], point3[1]);
-            glVertex2f (point0[0], point0[1]);
             glEnd ();
+
+            if (unit->is_selected())
+            {
+               float point0[2] = { x_pos - selected_width_offset, y_pos - selected_height_offset };
+               float point1[2] = { x_pos - selected_width_offset, y_pos + selected_height_offset };
+               float point2[2] = { x_pos + selected_width_offset, y_pos + selected_height_offset };
+               float point3[2] = { x_pos + selected_width_offset, y_pos - selected_height_offset };
+
+               transformation (point0, transform, translation);
+               transformation (point1, transform, translation);
+               transformation (point2, transform, translation);
+               transformation (point3, transform, translation);
+
+               glBegin (GL_LINES);
+               glColor3f (1.0f, 0.0f, 0.0f);
+               glVertex2f (point0[0], point0[1]);
+               glVertex2f (point1[0], point1[1]);
+               glVertex2f (point1[0], point1[1]);
+               glVertex2f (point2[0], point2[1]);
+               glVertex2f (point2[0], point2[1]);
+               glVertex2f (point3[0], point3[1]);
+               glVertex2f (point3[0], point3[1]);
+               glVertex2f (point0[0], point0[1]);
+               glEnd ();
+            }
          }
       }
    }
