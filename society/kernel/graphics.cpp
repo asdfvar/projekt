@@ -89,7 +89,7 @@ void Society::draw_units (
             transformation (point3, transform, translation);
 
             glBegin (GL_POLYGON);
-            glColor3f (0.0f, 1.0f, 1.0f);
+            glColor3f (1.0f, 1.0f, 0.0f);
             glVertex2f (point0[0], point0[1]);
             glVertex2f (point1[0], point1[1]);
             glVertex2f (point2[0], point2[1]);

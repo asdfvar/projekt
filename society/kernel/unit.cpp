@@ -44,6 +44,9 @@ Unit::Unit (
    residency[1] = 0;
    residency[2] = 0;
 
+   // Path to job location
+   solution_found = true;
+
    // Create the barrier for the path-finding
    pthread_barrier_init (&barrier, NULL, 2);
 
@@ -57,6 +60,7 @@ Unit::Unit (
    path_func_args.path           =  path;
    path_func_args.trim_path_end  = &trim_path_end;
    path_func_args.barrier        = &barrier;
+   path_func_args.solution_found = &solution_found;
    path_func_args.done           =  false;
 
    pthread_create (
@@ -80,7 +84,6 @@ Unit::~Unit (void)
 
 void Unit::set_destination (int dest_in[3])
 {
-
    const float *map = Map->access_ground ();
 
    int dim[3];
@@ -142,6 +145,13 @@ void Unit::update (float time_step)
             // set destination
             set_destination (job_location);
          }
+
+      }
+
+      // Return any jobs that don't have a path defined to their destination
+      if (!solution_found)
+      {
+         return_jobs.push_front (jobs.pop_back ());
       }
 
       job_location[0] = active_job->get_position (0);
@@ -302,6 +312,7 @@ void *path_finding_func (void *path_func_args_in)
    int   *path_size           =  path_func_args->path_size;
    bool  *trim_path_end       =  path_func_args->trim_path_end;
    bool  *done                = &path_func_args->done;
+   bool  *solution_found      =  path_func_args->solution_found;
    pthread_barrier_t *barrier =  path_func_args->barrier;
 
    float *cost   = new float[dim[0] * dim[1] * dim[2]];
@@ -318,7 +329,7 @@ void *path_finding_func (void *path_func_args_in)
       // Find the path to the destination.
       // The cost function is produced with the destination
       // as the start index for the purpose of descending to the destination
-      bool solution_found = cost_function (
+      *solution_found = cost_function (
             map,
             cost,
             dim,
@@ -327,7 +338,7 @@ void *path_finding_func (void *path_func_args_in)
             buffer);
 
       // Don't do anything if a solution is not found
-      if (!solution_found) continue;
+      if (!*solution_found) continue;
 
       // Compute the path based on the cost function
       *path_size = pathfinding (

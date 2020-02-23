@@ -240,6 +240,10 @@ void Society::update (float time_step)
          }
       }
 
+      // Return an undoable job from this unit
+      if (unit->return_jobs_size () > 0)
+         queued_jobs.push_front (unit->return_job ());
+
       // Update the unit's position and path planning
       unit->update (time_step);
    }
