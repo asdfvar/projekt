@@ -41,6 +41,12 @@ class Society
       void set_jobs (int job_type);
 
       // Graphics
+      void draw (
+            float *transform,
+            float *translation,
+            int    map_layer);
+
+      // Draw units
       void draw_units (float *transform, float *translation, int map_layer);
 
       // Draw selected cells not set to be queued
@@ -60,8 +66,6 @@ class Society
             float       *transform,
             float       *translation,
             int          map_layer);
-
-      void draw_map (float *transform, float *translation);
 
    private:
 

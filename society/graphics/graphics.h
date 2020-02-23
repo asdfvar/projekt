@@ -14,13 +14,6 @@ class Graphics
 
       Graphics (void) { };
 
-      void draw_map (
-            float       *tranform,
-            float       *translation,
-            const float *map,
-            int          map_dims[3],
-            int          map_layer);
-
       void draw_selection_box (
             float selection_box[2][3],
             float *transform,

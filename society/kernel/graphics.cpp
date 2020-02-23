@@ -112,12 +112,7 @@ void Society::draw_units (
    }
 }
 
-void Society::draw_map (float *transform, float *translation)
-{
-   Map->draw_map (transform, translation);
-}
-
-void MAP::draw_map (float *transform, float *translation)
+void MAP::draw (float *transform, float *translation)
 {
    int row_max = size[1];
    int col_max = size[0];
@@ -356,4 +351,32 @@ void Society::draw_unit_jobs (
       glVertex2f (point3[0], point3[1]);
       glEnd ();
    }
+}
+
+void Society::draw (
+      float *transform,
+      float *translation,
+      int    map_layer)
+{
+   draw_unit_jobs (
+         transform,
+         translation,
+         map_layer);
+
+   draw_uncommitted_jobs (
+         transform,
+         translation,
+         map_layer);
+
+   draw_units (
+         transform,
+         translation,
+         map_layer);
+
+   draw_queued_jobs (
+         transform,
+         translation,
+         map_layer);
+
+   Map->draw (transform, translation);
 }

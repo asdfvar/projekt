@@ -36,7 +36,7 @@ class MAP
       void       unselect_uncommitted_jobs (void);
       const int *access_uncommitted_jobs (int *size);
 
-      void draw_map (float *transform, float *translation);
+      void draw (float *transform, float *translation);
 
    private:
 

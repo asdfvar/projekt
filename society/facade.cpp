@@ -498,13 +498,6 @@ void Facade::display (void)
    // clear this openGL buffer
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   const float *map = society.access_map ();
-
-   int map_dims[3] = {
-      society.get_size (0),
-      society.get_size (1),
-      society.get_size (2) };
-
    if (selection_active == true)
    {
       graphics.draw_selection_box (
@@ -513,36 +506,12 @@ void Facade::display (void)
             translation);
    }
 
-   society.draw_unit_jobs (
+   society.draw (
          transform,
          translation,
          map_layer);
 
-   society.draw_uncommitted_jobs (
-         transform,
-         translation,
-         map_layer);
-
-   society.draw_units (
-         transform,
-         translation,
-         map_layer);
-
-   society.draw_queued_jobs (
-         transform,
-         translation,
-         map_layer);
-
-#if 0
-   graphics.draw_map (
-         transform,
-         translation,
-         map,
-         map_dims,
-         map_layer);
-#endif
-
-   society.draw_map (transform, translation);
+   society.draw (transform, translation, map_layer);
 
    hud.draw_info ();
 
