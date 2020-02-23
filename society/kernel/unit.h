@@ -54,13 +54,16 @@ class Unit {
 
       Job *access_job (int ind) { return jobs.access (ind); };
 
-      Job *access_job (void) { return jobs.back (); };
+      Job *access_active_job (void) { return jobs.back (); };
 
       bool available_job_slots (void);
 
       int num_jobs (void) { return jobs.size (); };
 
       Job *pop_job (void) { return jobs.pop_back (); };
+
+      bool is_forfeiting_jobs (void) { return relinquish_jobs; };
+      void ready (void) { relinquish_jobs = false; };
 
    private:
 
@@ -88,6 +91,8 @@ class Unit {
 
       int jobs_limit;
       Container<Job> jobs;
+
+      bool relinquish_jobs;
 
       PATH_FUNC_ARGS    path_func_args;
       pthread_t         path_planner_thread;

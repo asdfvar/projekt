@@ -29,6 +29,7 @@ class MAP
 
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);
+      void remove_cell (int flat_ind);
 
       int  get_material (int ind) { return material[ind]; };
 
@@ -58,6 +59,7 @@ class MAP
 
       int size[3];
 
+      void set_map (void);
       void set_ground (void);
 
       void local_change (int flattened_cell_index, float value);

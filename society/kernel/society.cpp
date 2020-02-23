@@ -213,12 +213,29 @@ void Society::update (float time_step)
    {
       Unit *unit = units.access (unit_ind);
 
-      // Dismiss completed jobs by this unit
-      if (unit->num_jobs() > 0)
+      if (unit->is_forfeiting_jobs ())
       {
-         Job *job = unit->access_job ();
-         if (job->is_complete ()) {
+         while (unit->num_jobs () > 0)
+         {
+            queued_jobs.push_front (unit->pop_job ());
+         }
+         unit->ready ();
+      }
+
+      // Dismiss completed jobs by this unit
+      if (unit->num_jobs () > 0)
+      {
+         Job *job = unit->access_active_job ();
+
+         if (job->is_complete ())
+         {
+            // Perform the complete action for the job
+            if (job->get_type () == 1) // remove cell
+               Map->remove_cell (job->get_flattened_loc_index ());
+
+            // Remove the job from the unit's list
             unit->pop_job ();
+
             delete job;
          }
       }
@@ -365,7 +382,7 @@ void Society::set_jobs (int job_type)
       // Test if this is already in the committed-jobs list
       for (int job_ind = 0; job_ind < queued_jobs.size (); job_ind++) {
          Job *job = queued_jobs.access (job_ind);
-         int location_ind = job->get_flattened_index ();
+         int location_ind = job->get_flattened_loc_index ();
          if (new_job_location_ind[ind] == location_ind) duplicate = true;
       }
 
@@ -378,7 +395,7 @@ void Society::set_jobs (int job_type)
          for (int job_ind = 0; job_ind < unit->num_jobs(); job_ind++)
          {
             Job *job = unit->access_job (job_ind);
-            int location_ind = job->get_flattened_index ();
+            int location_ind = job->get_flattened_loc_index ();
             if (new_job_location_ind[ind] == location_ind) duplicate = true;
          }
       }

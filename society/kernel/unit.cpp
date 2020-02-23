@@ -19,6 +19,7 @@ Unit::Unit (
    position[2] = position_z_in;
 
    jobs_limit = 2;
+   relinquish_jobs = false;
 
    Map = Map_in;
 
@@ -117,6 +118,7 @@ void Unit::get_destination (int *dest_out)
 // Update unit position and path planning
 void Unit::update (float time_step)
 {
+   // Update job info
    if (jobs.size () > 0)
    {
       int job_location[3];
@@ -154,10 +156,9 @@ void Unit::update (float time_step)
 
       if (dist2 < 2.1f)
          active_job->act (power * time_step);
-
-      if (active_job->is_complete ())
-         delete jobs.pop_back ();
    }
+
+   // Update position info
 
    int dim[3];
 
@@ -207,7 +208,20 @@ void Unit::update (float time_step)
       // when the path size is zero)
       for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
       if (path_size > 0) path_size--;
-      if (path_size <= 0) return;
+      if (path_size <= 0)
+      {
+         // "fall" if there is no ground space to support the unit
+         int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
+         while (Map->get_ground_cell (unit_position) < 0.0f)
+         {
+            unit_position[2] -= 1;
+            position[2] -= 1.0f;
+            dest[2] -= 1;
+            relinquish_jobs = true;
+         }
+
+         return;
+      }
 
       // Adjust time step to the remaining time
       time_step -= sqrtf (dist2) / speed;

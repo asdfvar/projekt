@@ -5,7 +5,7 @@ Job::Job (int flattened_index_in, int location_in[3], int type_in)
 {
    type = type_in;
 
-   flattened_index = flattened_index_in;
+   flattened_loc_index = flattened_index_in;
 
    location[0] = location_in[0];
    location[1] = location_in[1];

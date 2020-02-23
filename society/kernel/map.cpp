@@ -19,6 +19,7 @@ MAP::MAP (int size_in[3])
 
    map_layer = 0;
 
+   // < 0 means solid material (TODO: change this to >= 1 and associated logic)
    map        = new float[size[0] * size[1] * size[2]];
    ground     = new float[size[0] * size[1] * size[2]];
    material   = new int  [size[0] * size[1] * size[2]];
@@ -59,6 +60,8 @@ MAP::MAP (int size_in[3])
       else map[ind] = 0.0f;
    }
 
+   set_map ();
+
    set_ground ();
 }
 
@@ -88,8 +91,11 @@ void MAP::update (void)
             break;
          }
       }
-
    }
+
+   set_map ();
+
+   set_ground ();
 }
 
 float MAP::get_ground_cell (int flattened_ind)
@@ -109,18 +115,27 @@ float MAP::get_ground_cell (int ind[3])
 
 // Ground map is dependent on the map. It is the same with the exception that
 // open spaces not supported by ground are set as invalid (ground)
+void MAP::set_map (void)
+{
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
+   {
+      if (material[ind] > 0) map[ind] = -1.0f;
+      else map[ind] = 0.0f;
+   }
+}
+
 void MAP::set_ground (void)
 {
    for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
+            // Default is -1
+            ground[ind] = -1.0f;
+
             // Set the ground value to the map value if there is ground below this cell
             if (ind_z == 0) ground[ind] = map[ind];
             else if (map[ind - size[0] * size[1]] < 0) ground[ind] = map[ind];
-
-            // Default is -1
-            else ground[ind] = -1.0f;
          }
       }
    }
@@ -212,4 +227,10 @@ int MAP::get_view_plain (int ind[2])
 {
    int flat_ind = ind[1] * size[0] + ind[0];
    return view_plain[flat_ind];
+}
+
+void MAP::remove_cell (int flat_ind)
+{
+   material[flat_ind] = 0;
+update ();
 }

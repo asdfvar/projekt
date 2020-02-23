@@ -329,14 +329,14 @@ void Society::draw_unit_jobs (
    float color[3] = { 0.0f, 1.0f, 1.0f };
    glColor3f (color[0], color[1], color[2]);
 
-   // Draw the job cells
+   // Draw the active job cells
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
 
       if (unit->num_jobs () <= 0) continue;
 
-      Job *job = unit->access_job ();
+      Job *job = unit->access_active_job ();
 
       if (job->get_position (2) != map_layer) continue;
 
