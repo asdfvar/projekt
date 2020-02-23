@@ -75,9 +75,19 @@ void MAP::update (void)
 {
    for (int ind = 0; ind < size[0] * size[1]; ind++)
    {
-      int layer_ind = size[0] * size[1] * map_layer + ind;
-      if (material[layer_ind] == 1) view_plain[ind] = 0;
-      else view_plain[ind] = 1;
+      view_plain[ind] = 0;
+
+      // set the view plain to the level of where the terrain is
+      for (int k = 0; k < 20; k++)
+      {
+         int mod_map_layer = map_layer - k;
+         int layer_ind = size[0] * size[1] * mod_map_layer + ind;
+         if (material[layer_ind] == 1)
+         {
+            view_plain[ind] = k;
+            break;
+         }
+      }
 
    }
 }

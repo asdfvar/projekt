@@ -77,7 +77,7 @@ void Society::draw_units (
          transformation (point3, transform, translation);
 
          glBegin (GL_POLYGON);
-         glColor3f (0.0f, 1.0f, 0.0f);
+         glColor3f (0.0f, 1.0f, 1.0f);
          glVertex2f (point0[0], point0[1]);
          glVertex2f (point1[0], point1[1]);
          glVertex2f (point2[0], point2[1]);
@@ -171,9 +171,11 @@ void MAP::draw_map (float *transform, float *translation)
 
          glBegin (GL_POLYGON);
          if (view_plain[ind] == 0) {
-            glColor3f (0.0f, 0.0f, 0.0f);
+            glColor3f (0.2f, 0.2f, 0.2f);
          } else {
-            glColor3f (1.0f, 1.0f, 1.0f);
+            float scale = (1.0f - (float)view_plain[ind] / 8.0f);
+            if (scale < 0.0f) scale = 0.0f;
+            glColor3f (0.4f * scale, 0.7f * scale, 0.2f * scale);
          }
 
          float point0[2] = { vertex_x,               vertex_y               };
