@@ -98,6 +98,21 @@ void MAP::update (void)
    set_ground ();
 }
 
+float MAP::get_map_cell (int flattened_ind)
+{
+   return map[flattened_ind];
+}
+
+float MAP::get_map_cell (int ind[3])
+{
+   int flattened_ind =
+      ind[2] * size[0] * size[1] +
+      ind[1] * size[0]           +
+      ind[0];
+
+   return map[flattened_ind];
+}
+
 float MAP::get_ground_cell (int flattened_ind)
 {
    return ground[flattened_ind];

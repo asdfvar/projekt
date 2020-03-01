@@ -22,6 +22,8 @@ class MAP
 
       void set_map_layer (int map_layer_in) { map_layer = map_layer_in; };
 
+      float get_map_cell (int ind);
+      float get_map_cell (int ind[3]);
       float get_ground_cell (int flattened_ind);
       float get_ground_cell (int ind[3]);
 

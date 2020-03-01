@@ -306,7 +306,7 @@ void Unit::update (float time_step)
    {
       // Fall if there isn't ground space to support the unit
       int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
-      if (Map->get_ground_cell (unit_position) < 0.0f)
+      if (Map->get_ground_cell (unit_position) < 0.0f && Map->get_map_cell (unit_position) >= 0.0f)
       {
          position[2] -= 1.0f;
       }
