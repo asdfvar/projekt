@@ -61,12 +61,10 @@ class Unit {
 
       int num_jobs (void) { return jobs.size (); };
 
-      Job *pop_job (void) { return jobs.pop_back (); };
+      Job *pop_active_job (void) { active_job = 0; state = 0; return jobs.pop_back (); };
 
       int return_jobs_size (void) { return return_jobs.size (); };
       Job *return_job (void) { return return_jobs.pop_back (); };
-
-      void set_state (int state_in) { state = state_in; };
 
    private:
 

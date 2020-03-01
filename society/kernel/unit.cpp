@@ -22,6 +22,7 @@ Unit::Unit (
    position[2] = position_z_in;
 
    jobs_limit = 1;
+   active_job = 0;
 
    Map = Map_in;
 
@@ -126,43 +127,48 @@ void Unit::get_destination (int *dest_out)
 // Update unit position and path planning
 void Unit::update (float time_step)
 {
-std::cout << "state = " << state << std::setprecision (4) << " position = " << position[0] << ", " << position[1] << ", " << position[2] << " ";
+   std::cout << "state = " << state << std::setprecision (4) << " position = " << position[0] << ", " << position[1] << ", " << position[2] << "; active_job = " << active_job;
+   if (jobs.size () > 0) std::cout << ", jobs.back = " << jobs.back ();
 
    // Standby state
    if (state == 0)
    {
+      // Check if this unit is going to fall
+      int position_cell[3] = {
+         (int)position[0],
+         (int)position[1],
+         (int)position[2] };
+
+      float ground_cell_value = Map->get_ground_cell (position_cell);
+
+      if (ground_cell_value < 0.0f)
+      {
+         // Set the state to "falling"
+         state = 2;
+         return;
+      }
+
       // Check for internal queued jobs
       if (jobs.size () > 0)
       {
          int job_location[3];
 
+         const float min_job_dist = 4.1f;
+
          if (jobs.size () > 0 && active_job != jobs.back ())
          {
+            std::cout << "assigning jobs.back to the active job" << std::endl;
             active_job = jobs.back ();
 
             job_location[0] = active_job->get_position (0);
             job_location[1] = active_job->get_position (1);
             job_location[2] = active_job->get_position (2);
 
-            // Set the final destination to one cell adjacent to the job location
-            trim_path_end = true;
-
-            // Set the job location as the destination if the job location is out of reach
-            if (abs (job_location[0] - (int)position[0]) > 1 ||
-                  abs (job_location[1] - (int)position[1]) > 1 ||
-                  abs (job_location[2] - (int)position[2]) > 1)
-            {
-               // set destination (note that this runs in a seperate thread)
-               set_destination (job_location);
-            }
-
          }
 
          // Return any jobs that don't have a path defined to their destination
          if (!solution_found)
-         {
             return_jobs.push_front (jobs.pop_back ());
-         }
 
          job_location[0] = active_job->get_position (0);
          job_location[1] = active_job->get_position (1);
@@ -174,8 +180,17 @@ std::cout << "state = " << state << std::setprecision (4) << " position = " << p
             (floorf (position[1]) - (float)job_location[1]) * (floorf (position[1]) - (float)job_location[1]) +
             (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
 
-         if (dist2 < 4.1f)
+         if (dist2 <= min_job_dist)
             active_job->act (power * time_step);
+         else
+         {
+            // TODO: find a different way of handling this (something different than "trimming the end of the path")
+            // Set the final destination to one cell adjacent to the job location
+            trim_path_end = true;
+
+            // set destination (note that this runs in a separate thread)
+            set_destination (job_location);
+         }
       }
    }
 
@@ -291,14 +306,13 @@ std::cout << "state = " << state << std::setprecision (4) << " position = " << p
    {
       // Fall if there isn't ground space to support the unit
       int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
-      float step = -1.0f;
-      while (Map->get_ground_cell (unit_position) < 0.0f)
+      if (Map->get_ground_cell (unit_position) < 0.0f)
       {
-         unit_position[2] += (int)step;
-         position[2]      += step;
-         if (unit_position[2] < 0) step *= -1.0f;
-         if (unit_position[2] > Map->map_dim (2)) step *= -1.0f;
-         path_size = 0;
+         position[2] -= 1.0f;
+      }
+      else
+      {
+         state = 0;
       }
 
    }

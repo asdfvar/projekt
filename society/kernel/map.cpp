@@ -218,11 +218,6 @@ const int *MAP::access_uncommitted_jobs (int *size)
    return (const int*)uncommitted_jobs;
 }
 
-void remove_cell (int index)
-{
-
-}
-
 int MAP::get_view_plain (int ind[2])
 {
    int flat_ind = ind[1] * size[0] + ind[0];
@@ -232,5 +227,5 @@ int MAP::get_view_plain (int ind[2])
 void MAP::remove_cell (int flat_ind)
 {
    material[flat_ind] = 0;
-update ();
+   update ();
 }

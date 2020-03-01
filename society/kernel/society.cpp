@@ -143,9 +143,11 @@ void Society::set_destination (int destination[3])
 
       if (location_value >= 0 && unit->is_selected ())
       {
+         // Return the active job if any
          if (unit->num_jobs () > 0)
-            queued_jobs.push_front (unit->pop_job ());
+            queued_jobs.push_front (unit->pop_active_job ());
 
+         // Set the unit destination
          unit->set_destination (dest);
       }
    }
@@ -170,10 +172,12 @@ void Society::update (float time_step)
       (int)unit->get_position (1),
       (int)unit->get_position (2) };
 
-   // Assign a job for this unit if it has an available slot
+   // Assign a (or multiple) job(s) for this unit if it has an available slot
    for (int iteration = 0; iteration < 20; iteration++)
+   {
       if (unit->available_job_slots ())
       {
+std::cout << "; attempting to assign a job for this unit";
          if (queued_jobs.size() > 0)
          {
             if (current_job_index >= queued_jobs.size ()) current_job_index = 0;
@@ -206,14 +210,12 @@ void Society::update (float time_step)
             current_job_index++;
          }
       }
+   }
 
    // Update units
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
-
-      // Update the unit's position and path planning
-      unit->update (time_step);
 
       // Perform the completed job action by this unit and dismiss it
       if (unit->num_jobs () > 0)
@@ -222,14 +224,15 @@ void Society::update (float time_step)
 
          if (job->is_complete ())
          {
+std::cout << "; complete job";
             // Perform the complete action for the job
             if (job->get_type () == 1) // remove cell
                Map->remove_cell (job->get_flattened_loc_index ());
 
-            // Remove the job from the unit's list
-            unit->pop_job ();
+            // TODO: Add cell
 
-            unit->set_state (0);
+            // Remove the job from the unit's list
+            unit->pop_active_job ();
 
             delete job;
          }
@@ -240,9 +243,13 @@ void Society::update (float time_step)
       {
          queued_jobs.push_front (unit->return_job ());
       }
+
+      // Update the unit's position and path planning
+      unit->update (time_step);
    }
 
    Map->update ();
+std::cout << std::endl;
 }
 
 const float *Society::access_map ()
