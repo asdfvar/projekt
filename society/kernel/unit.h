@@ -66,10 +66,11 @@ class Unit {
       int return_jobs_size (void) { return return_jobs.size (); };
       Job *return_job (void) { return return_jobs.pop_back (); };
 
-      bool is_forfeiting_jobs (void) { return relinquish_jobs; };
-      void ready (void) { relinquish_jobs = false; };
+      void set_state (int state_in) { state = state_in; };
 
    private:
+
+      int state;
 
       MAP   *Map;
 
@@ -98,8 +99,6 @@ class Unit {
       Container<Job> return_jobs;
 
       bool solution_found;
-
-      bool relinquish_jobs;
 
       PATH_FUNC_ARGS    path_func_args;
       pthread_t         path_planner_thread;

@@ -13,3 +13,5 @@ enforce restrictions on how many threads can be accessed simultaneously. for uni
 put in robustness mitigators to determine if a unit is "trapped"
 
 define grounded cell as a cell that can draw a connected path (with adjacent cells only) to the bottom
+
+rename method "map_dim" to "size"

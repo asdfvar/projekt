@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "map.h"
 #include "unit.h"
 #include "timer.h"
@@ -12,14 +13,15 @@ Unit::Unit (
       float position_z_in,
       MAP *Map_in)
 {
+   state = 0;
+
    direction = 0.0f;
 
    position[0] = position_x_in;
    position[1] = position_y_in;
    position[2] = position_z_in;
 
-   jobs_limit = 2;
-   relinquish_jobs = false;
+   jobs_limit = 1;
 
    Map = Map_in;
 
@@ -109,6 +111,9 @@ void Unit::set_destination (int dest_in[3])
    // Signal to the path-finding to start determining a new path
    // to the destination
    pthread_barrier_wait (&barrier);
+   pthread_barrier_wait (&barrier); // TODO: remove this
+
+   state = 1;
 };
 
 void Unit::get_destination (int *dest_out)
@@ -121,158 +126,182 @@ void Unit::get_destination (int *dest_out)
 // Update unit position and path planning
 void Unit::update (float time_step)
 {
-   // Update job info
-   if (jobs.size () > 0)
-   {
-      int job_location[3];
+std::cout << "state = " << state << std::setprecision (4) << " position = " << position[0] << ", " << position[1] << ", " << position[2] << " ";
 
-      if (active_job != jobs.back ())
+   // Standby state
+   if (state == 0)
+   {
+      // Check for internal queued jobs
+      if (jobs.size () > 0)
       {
-         active_job = jobs.back ();
+         int job_location[3];
+
+         if (jobs.size () > 0 && active_job != jobs.back ())
+         {
+            active_job = jobs.back ();
+
+            job_location[0] = active_job->get_position (0);
+            job_location[1] = active_job->get_position (1);
+            job_location[2] = active_job->get_position (2);
+
+            // Set the final destination to one cell adjacent to the job location
+            trim_path_end = true;
+
+            // Set the job location as the destination if the job location is out of reach
+            if (abs (job_location[0] - (int)position[0]) > 1 ||
+                  abs (job_location[1] - (int)position[1]) > 1 ||
+                  abs (job_location[2] - (int)position[2]) > 1)
+            {
+               // set destination (note that this runs in a seperate thread)
+               set_destination (job_location);
+            }
+
+         }
+
+         // Return any jobs that don't have a path defined to their destination
+         if (!solution_found)
+         {
+            return_jobs.push_front (jobs.pop_back ());
+         }
 
          job_location[0] = active_job->get_position (0);
          job_location[1] = active_job->get_position (1);
          job_location[2] = active_job->get_position (2);
 
-         // Set the final destination to one cell adjacent to the job location
-         trim_path_end = true;
+         // if location is within tolerance of the job location, work on it
+         float dist2 =
+            (floorf (position[0]) - (float)job_location[0]) * (floorf (position[0]) - (float)job_location[0]) +
+            (floorf (position[1]) - (float)job_location[1]) * (floorf (position[1]) - (float)job_location[1]) +
+            (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
 
-         // Set the job location as the destination if the job location is out of reach
-         if (abs (job_location[0] - (int)position[0]) > 1 ||
-               abs (job_location[1] - (int)position[1]) > 1 ||
-               abs (job_location[2] - (int)position[2]) > 1)
-         {
-            // set destination
-            set_destination (job_location);
-         }
-
+         if (dist2 < 4.1f)
+            active_job->act (power * time_step);
       }
-
-      // Return any jobs that don't have a path defined to their destination
-      if (!solution_found)
-      {
-         return_jobs.push_front (jobs.pop_back ());
-      }
-
-      job_location[0] = active_job->get_position (0);
-      job_location[1] = active_job->get_position (1);
-      job_location[2] = active_job->get_position (2);
-
-      // if location is within tolerance of the job location, work on it
-      float dist2 =
-         (floorf (position[0]) - (float)job_location[0]) * (floorf (position[0]) - (float)job_location[0]) +
-         (floorf (position[1]) - (float)job_location[1]) * (floorf (position[1]) - (float)job_location[1]) +
-         (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
-
-      if (dist2 < 2.1f)
-         active_job->act (power * time_step);
    }
-
-   // Update position info
-
-   int dim[3];
-
-   dim[0] = Map->map_dim (0);
-   dim[1] = Map->map_dim (1);
-   dim[2] = Map->map_dim (2);
-
-   float local_dest[3];
-
-   // Condition check if the unit is in the local destination cell,
-   // set the local destination to the center of the cell
-   if (path_size == 0)
-   {
-      local_dest[0] = (float)dest[0] + 0.5f;
-      local_dest[1] = (float)dest[1] + 0.5f;
-      local_dest[2] = (float)dest[2] + 0.5f;
-   }
-   else
-   {
-      int next_cell[3];
-
-      next_cell[0] = (path[0] % dim[0]);
-      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-      next_cell[2] = path[0] / (dim[0] * dim[1]);
-
-      local_dest[0] = (float)next_cell[0] + 0.5f;
-      local_dest[1] = (float)next_cell[1] + 0.5f;
-      local_dest[2] = (float)next_cell[2] + 0.5f;
-   }
-
-   float dist2 =
-      (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
-      (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
-      (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
-
-   // set the position to the local destination if the projection would otherwise
-   // surpass it
-   float comp_dist = speed * time_step;
-   while (dist2 <= comp_dist * comp_dist)
-   {
-      position[0] = local_dest[0];
-      position[1] = local_dest[1];
-      position[2] = local_dest[2];
-
-      // Remove the traversed path element from the list.
-      // Return when the destination has been reached (which happens
-      // when the path size is zero)
-      for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
-      if (path_size > 0) path_size--;
-      if (path_size <= 0)
-      {
-         // "fall" if there is no ground space to support the unit
-         int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
-         while (Map->get_ground_cell (unit_position) < 0.0f)
-         {
-            unit_position[2] -= 1;
-            position[2] -= 1.0f;
-            dest[2] -= 1;
-            relinquish_jobs = true;
-         }
-
-         return;
-      }
-
-      // Adjust time step to the remaining time
-      time_step -= sqrtf (dist2) / speed;
-
-      int next_cell[3];
-
-      // Update the local destination to the next available cell
-      next_cell[0] = (path[0] % dim[0]);
-      next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-      next_cell[2] = path[0] / (dim[0] * dim[1]);
-
-      local_dest[0] = (float)next_cell[0] + 0.5f;
-      local_dest[1] = (float)next_cell[1] + 0.5f;
-      local_dest[2] = (float)next_cell[2] + 0.5f;
-
-      dist2 =
-      (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
-      (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
-      (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
-
-      comp_dist = speed * time_step;
-   }
-
-   float step[3];
-
-   float diff_pos[3];
 
    // Update the position
+   else if (state == 1)
+   {
+      // Update position info
 
-   diff_pos[0] = local_dest[0] - position[0];
-   diff_pos[1] = local_dest[1] - position[1];
-   diff_pos[2] = local_dest[2] - position[2];
+      int dim[3];
 
-   float theta = atan2f (diff_pos[1], diff_pos[0]);
+      dim[0] = Map->map_dim (0);
+      dim[1] = Map->map_dim (1);
+      dim[2] = Map->map_dim (2);
 
-   position[0] += speed * cosf (theta) * time_step;
-   position[1] += speed * sinf (theta) * time_step;
+      float local_dest[3];
 
-   theta = atan2f (diff_pos[2], sqrtf (diff_pos[0] * diff_pos[0] + diff_pos[1] * diff_pos[1]));
+      // Condition check if the unit is in the local destination cell,
+      // set the local destination to the center of the cell
+      if (path_size <= 0)
+      {
+         local_dest[0] = (float)dest[0] + 0.5f;
+         local_dest[1] = (float)dest[1] + 0.5f;
+         local_dest[2] = (float)dest[2] + 0.5f;
+      }
+      else
+      {
+         int next_cell[3];
 
-   position[2] += speed * sinf (theta) * time_step;
+         next_cell[0] = (path[0] % dim[0]);
+         next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+         next_cell[2] = path[0] / (dim[0] * dim[1]);
+
+         local_dest[0] = (float)next_cell[0] + 0.5f;
+         local_dest[1] = (float)next_cell[1] + 0.5f;
+         local_dest[2] = (float)next_cell[2] + 0.5f;
+      }
+
+      float dist2 =
+         (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
+         (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
+         (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
+
+      std::cout << "local_dest = " << local_dest[0] << ", " << local_dest[1] << ", " << local_dest[2] << " ";
+      std::cout << "dest = " << dest[0] << ", " << dest[1] << ", " << dest[2] << " ";
+      std::cout << "path_size = " << path_size << std::endl;
+
+      // set the position to the local destination if the projection would otherwise
+      // surpass it
+      float comp_dist = speed * time_step;
+      while (dist2 <= comp_dist * comp_dist)
+      {
+         position[0] = local_dest[0];
+         position[1] = local_dest[1];
+         position[2] = local_dest[2];
+
+         // Remove the traversed path element from the list.
+         // Return when the destination has been reached (which happens
+         // when the path size is zero)
+         for (int ind = 0; ind < path_size; ind++) path[ind] = path[ind+1];
+
+         if (path_size > 0) path_size--;
+         if (path_size <= 0)
+         {
+            state = 0;
+            return;
+         }
+
+         // Adjust time step to the remaining time
+         time_step -= sqrtf (dist2) / speed;
+
+         int next_cell[3];
+
+         // Update the local destination to the next available cell
+         next_cell[0] = (path[0] % dim[0]);
+         next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
+         next_cell[2] = path[0] / (dim[0] * dim[1]);
+
+         local_dest[0] = (float)next_cell[0] + 0.5f;
+         local_dest[1] = (float)next_cell[1] + 0.5f;
+         local_dest[2] = (float)next_cell[2] + 0.5f;
+
+         dist2 =
+            (position[0] - local_dest[0]) * (position[0] - local_dest[0]) +
+            (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
+            (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
+
+         comp_dist = speed * time_step;
+      }
+
+      float step[3];
+
+      float diff_pos[3];
+
+      // Update the position
+
+      diff_pos[0] = local_dest[0] - position[0];
+      diff_pos[1] = local_dest[1] - position[1];
+      diff_pos[2] = local_dest[2] - position[2];
+
+      std::cout << "diff_pos = " << diff_pos[0] << ", " << diff_pos[1] << ", " << diff_pos[2] << std::endl;
+      float theta = atan2f (diff_pos[1], diff_pos[0]);
+
+      position[0] += speed * cosf (theta) * time_step;
+      position[1] += speed * sinf (theta) * time_step;
+
+      theta = atan2f (diff_pos[2], sqrtf (diff_pos[0] * diff_pos[0] + diff_pos[1] * diff_pos[1]));
+
+      position[2] += speed * sinf (theta) * time_step;
+   }
+
+   // Fall
+   else if (state == 2)
+   {
+      // Fall if there isn't ground space to support the unit
+      int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
+      float step = -1.0f;
+      while (Map->get_ground_cell (unit_position) < 0.0f)
+      {
+         unit_position[2] += (int)step;
+         position[2]      += step;
+         if (unit_position[2] < 0) step *= -1.0f;
+         if (unit_position[2] > Map->map_dim (2)) step *= -1.0f;
+         path_size = 0;
+      }
+
+   }
 }
 
 void Unit::assign_job (Job *job)
@@ -367,5 +396,7 @@ void *path_finding_func (void *path_func_args_in)
       residency[0] = dest_in[0];
       residency[1] = dest_in[1];
       residency[2] = dest_in[2];
+
+      pthread_barrier_wait (barrier); // TODO: remove this
    }
 }

@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 100;
+   int num_units = 1;
 
    current_unit_job_index = 0;
    current_job_index      = 0;
@@ -171,58 +171,51 @@ void Society::update (float time_step)
       (int)unit->get_position (2) };
 
    // Assign a job for this unit if it has an available slot
-   if (unit->available_job_slots ())
-   {
-      if (queued_jobs.size() > 0)
+   for (int iteration = 0; iteration < 20; iteration++)
+      if (unit->available_job_slots ())
       {
-         if (current_job_index >= queued_jobs.size ()) current_job_index = 0;
-         Job *job = queued_jobs.access (current_job_index);
-
-         // Test if this job has a ground-accessible cell near it by
-         // first getting the job's cell location
-         int job_location_cell[3] =
-         { job->get_position (0),
-            job->get_position (1),
-            job->get_position (2) };
-
-         // test if this cell is accessible to the unit
-         bool accessible =
-            cost_function (
-                  map,
-                  cost,
-                  size,
-                  job_location_cell,
-                  unit_location,
-                  local_buffer);
-
-         if (accessible)
+         if (queued_jobs.size() > 0)
          {
-            // the job is accessible to the unit, assign it to the unit
-            unit->assign_job (job);
+            if (current_job_index >= queued_jobs.size ()) current_job_index = 0;
+            Job *job = queued_jobs.access (current_job_index);
 
-            // remove this job from the list since it now belongs to the unit
-            queued_jobs.pop (current_job_index);
+            // Test if this job has a ground-accessible cell near it by
+            // first getting the job's cell location
+            int job_location_cell[3] =
+            { job->get_position (0),
+               job->get_position (1),
+               job->get_position (2) };
+
+            // test if this cell is accessible to the unit
+            bool accessible =
+               cost_function (
+                     map,
+                     cost,
+                     size,
+                     job_location_cell,
+                     unit_location,
+                     local_buffer);
+
+            if (accessible)
+            {
+               // The job is accessible to the unit, assign it to the unit
+               // and remove this job from the list since it now belongs to the unit
+               unit->assign_job (queued_jobs.pop (current_job_index));
+            }
+
+            current_job_index++;
          }
-
-         current_job_index++;
       }
-   }
 
    // Update units
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
 
-      if (unit->is_forfeiting_jobs ())
-      {
-         while (unit->num_jobs () > 0)
-         {
-            queued_jobs.push_front (unit->pop_job ());
-         }
-         unit->ready ();
-      }
+      // Update the unit's position and path planning
+      unit->update (time_step);
 
-      // Dismiss completed jobs by this unit
+      // Perform the completed job action by this unit and dismiss it
       if (unit->num_jobs () > 0)
       {
          Job *job = unit->access_active_job ();
@@ -236,16 +229,17 @@ void Society::update (float time_step)
             // Remove the job from the unit's list
             unit->pop_job ();
 
+            unit->set_state (0);
+
             delete job;
          }
       }
 
       // Return an undoable job from this unit
       if (unit->return_jobs_size () > 0)
+      {
          queued_jobs.push_front (unit->return_job ());
-
-      // Update the unit's position and path planning
-      unit->update (time_step);
+      }
    }
 
    Map->update ();
