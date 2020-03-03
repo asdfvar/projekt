@@ -127,10 +127,7 @@ void Unit::get_destination (int *dest_out)
 // Update unit position and path planning
 void Unit::update (float time_step)
 {
-   std::cout << "state = " << state << std::setprecision (4) << " position = " << position[0] << ", " << position[1] << ", " << position[2] << "; active_job = " << active_job;
-   if (jobs.size () > 0) std::cout << ", jobs.back = " << jobs.back ();
-
-   // Standby state
+   // Static state
    if (state == 0)
    {
       // Check if this unit is going to fall
@@ -157,7 +154,6 @@ void Unit::update (float time_step)
 
          if (jobs.size () > 0 && active_job != jobs.back ())
          {
-            std::cout << "assigning jobs.back to the active job" << std::endl;
             active_job = jobs.back ();
 
             job_location[0] = active_job->get_position (0);
@@ -233,10 +229,6 @@ void Unit::update (float time_step)
          (position[1] - local_dest[1]) * (position[1] - local_dest[1]) +
          (position[2] - local_dest[2]) * (position[2] - local_dest[2]);
 
-      std::cout << "local_dest = " << local_dest[0] << ", " << local_dest[1] << ", " << local_dest[2] << " ";
-      std::cout << "dest = " << dest[0] << ", " << dest[1] << ", " << dest[2] << " ";
-      std::cout << "path_size = " << path_size << std::endl;
-
       // set the position to the local destination if the projection would otherwise
       // surpass it
       float comp_dist = speed * time_step;
@@ -290,7 +282,6 @@ void Unit::update (float time_step)
       diff_pos[1] = local_dest[1] - position[1];
       diff_pos[2] = local_dest[2] - position[2];
 
-      std::cout << "diff_pos = " << diff_pos[0] << ", " << diff_pos[1] << ", " << diff_pos[2] << std::endl;
       float theta = atan2f (diff_pos[1], diff_pos[0]);
 
       position[0] += speed * cosf (theta) * time_step;
@@ -306,7 +297,7 @@ void Unit::update (float time_step)
    {
       // Fall if there isn't ground space to support the unit
       int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
-      if (Map->get_ground_cell (unit_position) < 0.0f && Map->get_map_cell (unit_position) >= 0.0f)
+      if (Map->get_ground_cell (unit_position) < 0.0f && Map->get_air_cell (unit_position) >= 0.0f)
       {
          position[2] -= 1.0f;
       }

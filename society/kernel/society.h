@@ -22,7 +22,7 @@ class Society
 
       void set_destination (int dest[3]);
 
-      const float *access_map ();
+      const float *access_air ();
 
       const int get_size (int ind) { return size[ind]; };
 
@@ -83,7 +83,7 @@ class Society
       int *ibuffer;
 
       // Current unit index associated with assigning jobs to units
-      int current_unit_job_index;
+      int current_job_unit_index;
 
       // Current job index associated with assigning jobs to units
       int current_job_index;

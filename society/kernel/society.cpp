@@ -21,9 +21,9 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 4;
+   int num_units = 40;
 
-   current_unit_job_index = 0;
+   current_job_unit_index = 0;
    current_job_index      = 0;
 
    const float *map = Map->access_ground ();
@@ -60,7 +60,7 @@ Society::~Society (void)
 // destination to provide a unique cell destination for each unit
 void Society::set_destination (int destination[3])
 {
-   const float *map = Map->access_map ();
+   const float *ground_map = Map->access_ground ();
 
    int size[3];
 
@@ -77,7 +77,7 @@ void Society::set_destination (int destination[3])
 
    // Create the selected cost indices equal to the number of units
    cost_function2 (
-         map,
+         ground_map,
          cost,
          cost_indices,
          size,
@@ -162,31 +162,29 @@ void Society::update (float time_step)
    float *cost         = fbuffer;
    float *local_buffer = fbuffer + size[0] * size[1] * size[2];
 
-   if (current_unit_job_index >= units.size ()) current_unit_job_index = 0;
+   int iteration_max = 5 + rand () % 10;
 
-   // Assign ready jobs for available units
-   Unit *unit = units.access (current_unit_job_index++);
-
-   int unit_location[3] =
-   { (int)unit->get_position (0),
-      (int)unit->get_position (1),
-      (int)unit->get_position (2) };
-
-   // Assign a (or multiple) job(s) for this unit if it has an available slot
-   for (int iteration = 0; iteration < 20; iteration++)
+   // Assign a job for this unit if it has an available slot
+   for (int iteration = 0; iteration < iteration_max; iteration++)
    {
+      // Assign ready jobs for the current available unit
+      Unit *unit = units.access (current_job_unit_index);
+
+      int unit_location[3] = {
+         (int)unit->get_position (0),
+         (int)unit->get_position (1),
+         (int)unit->get_position (2) };
+
       if (unit->available_job_slots ())
       {
-std::cout << "; attempting to assign a job for this unit";
          if (queued_jobs.size() > 0)
          {
-            if (current_job_index >= queued_jobs.size ()) current_job_index = 0;
             Job *job = queued_jobs.access (current_job_index);
 
             // Test if this job has a ground-accessible cell near it by
             // first getting the job's cell location
-            int job_location_cell[3] =
-            { job->get_position (0),
+            int job_location_cell[3] = {
+               job->get_position (0),
                job->get_position (1),
                job->get_position (2) };
 
@@ -204,11 +202,20 @@ std::cout << "; attempting to assign a job for this unit";
             {
                // The job is accessible to the unit, assign it to the unit
                // and remove this job from the list since it now belongs to the unit
-               unit->assign_job (queued_jobs.pop (current_job_index));
+               unit->assign_job (queued_jobs.pop (current_job_index--));
+               if (current_job_index < 0) current_job_index = 0;
             }
-
-            current_job_index++;
          }
+      }
+
+      // Advance the current unit index (for assigning jobs)
+      if (++current_job_unit_index >= units.size ())
+      {
+         current_job_unit_index = 0;
+
+         // Advance the current job index
+         if (++current_job_index >= queued_jobs.size ())
+            current_job_index = 0;
       }
    }
 
@@ -224,7 +231,6 @@ std::cout << "; attempting to assign a job for this unit";
 
          if (job->is_complete ())
          {
-std::cout << "; complete job";
             // Perform the complete action for the job
             if (job->get_type () == 1) // remove cell
                Map->remove_cell (job->get_flattened_loc_index ());
@@ -249,12 +255,11 @@ std::cout << "; complete job";
    }
 
    Map->update ();
-std::cout << std::endl;
 }
 
-const float *Society::access_map ()
+const float *Society::access_air ()
 {
-   return static_cast<const float*>(Map->access_map ());
+   return static_cast<const float*>(Map->access_air ());
 }
 
 void Society::select_units (int cell_selections[2][3], int map_layer, bool control_down)

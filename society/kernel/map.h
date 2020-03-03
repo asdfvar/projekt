@@ -17,13 +17,13 @@ class MAP
 
       void update (void);
 
-      const float *access_map         (void) { return (const float*)map;    };
-      const float *access_ground      (void) { return (const float*)ground; };
+      const float *access_air    (void) { return (const float*)air;    };
+      const float *access_ground (void) { return (const float*)ground; };
 
       void set_map_layer (int map_layer_in) { map_layer = map_layer_in; };
 
-      float get_map_cell (int ind);
-      float get_map_cell (int ind[3]);
+      float get_air_cell (int ind);
+      float get_air_cell (int ind[3]);
       float get_ground_cell (int flattened_ind);
       float get_ground_cell (int ind[3]);
 
@@ -46,7 +46,7 @@ class MAP
 
    private:
 
-      float *map;
+      float *air;
       float *ground;
       int   *material;
 

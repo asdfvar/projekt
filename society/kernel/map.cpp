@@ -20,7 +20,7 @@ MAP::MAP (int size_in[3])
    map_layer = 0;
 
    // < 0 means solid material (TODO: change this to >= 1 and associated logic)
-   map        = new float[size[0] * size[1] * size[2]];
+   air        = new float[size[0] * size[1] * size[2]];
    ground     = new float[size[0] * size[1] * size[2]];
    material   = new int  [size[0] * size[1] * size[2]];
    view_plain = new int [size[0] * size[1]];
@@ -28,7 +28,7 @@ MAP::MAP (int size_in[3])
    uncommitted_jobs      = new int[size[0] * size[1] * size[2]];
    uncommitted_jobs_size = 0;
 
-   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) map[ind] = 0.0f;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind] = 0.0f;
    for (int ind = 0; ind < size[0] * size[1]; ind++) view_plain[ind] = 0.0f;
 
    float *perlin_array = new float[size[0] * size[1]];
@@ -56,8 +56,8 @@ MAP::MAP (int size_in[3])
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
    {
-      if (material[ind] > 0) map[ind] = -1.0f;
-      else map[ind] = 0.0f;
+      if (material[ind] > 0) air[ind] = -1.0f;
+      else air[ind] = 0.0f;
    }
 
    set_map ();
@@ -67,7 +67,7 @@ MAP::MAP (int size_in[3])
 
 MAP::~MAP (void)
 {
-   delete[] map;
+   delete[] air;
    delete[] ground;
    delete[] material;
    delete[] uncommitted_jobs;
@@ -98,19 +98,19 @@ void MAP::update (void)
    set_ground ();
 }
 
-float MAP::get_map_cell (int flattened_ind)
+float MAP::get_air_cell (int flattened_ind)
 {
-   return map[flattened_ind];
+   return air[flattened_ind];
 }
 
-float MAP::get_map_cell (int ind[3])
+float MAP::get_air_cell (int ind[3])
 {
    int flattened_ind =
       ind[2] * size[0] * size[1] +
       ind[1] * size[0]           +
       ind[0];
 
-   return map[flattened_ind];
+   return air[flattened_ind];
 }
 
 float MAP::get_ground_cell (int flattened_ind)
@@ -128,14 +128,14 @@ float MAP::get_ground_cell (int ind[3])
    return ground[flattened_ind];
 }
 
-// Ground map is dependent on the map. It is the same with the exception that
+// Ground map is dependent on the air map. It is the same with the exception that
 // open spaces not supported by ground are set as invalid (ground)
 void MAP::set_map (void)
 {
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
    {
-      if (material[ind] > 0) map[ind] = -1.0f;
-      else map[ind] = 0.0f;
+      if (material[ind] > 0) air[ind] = -1.0f;
+      else air[ind] = 0.0f;
    }
 }
 
@@ -149,8 +149,8 @@ void MAP::set_ground (void)
             ground[ind] = -1.0f;
 
             // Set the ground value to the map value if there is ground below this cell
-            if (ind_z == 0) ground[ind] = map[ind];
-            else if (map[ind - size[0] * size[1]] < 0) ground[ind] = map[ind];
+            if (ind_z == 0) ground[ind] = air[ind];
+            else if (air[ind - size[0] * size[1]] < 0) ground[ind] = air[ind];
          }
       }
    }
@@ -175,11 +175,11 @@ void MAP::change (int cell[3], float value)
 
 void MAP::local_change (int flattened_cell_index, float value)
 {
-   map[flattened_cell_index] = value;
+   air[flattened_cell_index] = value;
 
    int next_z_ind = flattened_cell_index + size[0] * size[1];
 
-   if (map[flattened_cell_index] < 0) ground[next_z_ind] = map[next_z_ind];
+   if (air[flattened_cell_index] < 0) ground[next_z_ind] = air[next_z_ind];
 }
 
 // This will prepare cells as "ready" but not committed to be promoted to an job
