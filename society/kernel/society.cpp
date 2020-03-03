@@ -164,7 +164,7 @@ void Society::update (float time_step)
 
    int iteration_max = 5 + rand () % 10;
 
-   // Assign a job for this unit if it has an available slot
+   // Assign jobs for units with available job slots
    for (int iteration = 0; iteration < iteration_max; iteration++)
    {
       // Assign ready jobs for the current available unit
