@@ -1,5 +1,5 @@
 CC       = g++
-FLAGS    = -O3 -Wall
+FLAGS    = -O3 -Wall -g
 LIBS     = -lm -pthread -lGL -lGLU -lglut -lsociety -lgraphics
 LIBPATHS = -L./kernel/ -L./graphics/
 INC      = -I./kernel/ -I./graphics/

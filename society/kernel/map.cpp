@@ -84,6 +84,7 @@ void MAP::update (void)
       for (int k = 0; k < 20; k++)
       {
          int mod_map_layer = map_layer - k;
+         if (mod_map_layer < 0) mod_map_layer = 0;
          int layer_ind = size[0] * size[1] * mod_map_layer + ind;
          if (material[layer_ind] == 1)
          {
