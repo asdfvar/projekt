@@ -28,7 +28,10 @@ Unit::Unit (
 
    int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
 
-   path = new int[map_dims[0] * map_dims[1] * map_dims[2]];
+   path   = new   int[map_dims[0] * map_dims[1] * map_dims[2]];
+   cost   = new float[map_dims[0] * map_dims[1] * map_dims[2]];
+   buffer = new float[map_dims[0] * map_dims[1] * map_dims[2]];
+
    trim_path_end = false;
 
    dest[0] = position[0];
@@ -51,40 +54,13 @@ Unit::Unit (
 
    // Path to job location
    solution_found = true;
-
-   // Create the barrier for the path-finding
-   pthread_barrier_init (&barrier, NULL, 2);
-
-   path_func_args.map            =  Map->access_ground ();
-   path_func_args.dim[0]         =  map_dims[0];
-   path_func_args.dim[1]         =  map_dims[1];
-   path_func_args.dim[2]         =  map_dims[2];
-   path_func_args.dest           =  dest;
-   path_func_args.residency      =  residency;
-   path_func_args.path_size      = &path_size;
-   path_func_args.path           =  path;
-   path_func_args.trim_path_end  = &trim_path_end;
-   path_func_args.barrier        = &barrier;
-   path_func_args.solution_found = &solution_found;
-   path_func_args.done           =  false;
-
-   pthread_create (
-         &path_planner_thread,
-         NULL,
-         path_finding_func,
-         (void*)&path_func_args);
 }
 
 Unit::~Unit (void)
 {
-   path_func_args.done = true;
-
-   // join the path-planning thread
-   pthread_join (path_planner_thread, NULL);
-
-   pthread_barrier_destroy (&barrier);
-
    delete[] path;
+   delete[] cost;
+   delete[] buffer;
 }
 
 void Unit::set_destination (int dest_in[3])
@@ -103,18 +79,68 @@ void Unit::set_destination (int dest_in[3])
    start[1] = (int)position[1];
    start[2] = (int)position[2];
 
-   path_func_args.start[0]   = start[0];
-   path_func_args.start[1]   = start[1];
-   path_func_args.start[2]   = start[2];
+   // start determining a new path to the destination
 
-   path_func_args.dest_in[0] = dest_in[0];
-   path_func_args.dest_in[1] = dest_in[1];
-   path_func_args.dest_in[2] = dest_in[2];
+   // Find the path to the destination.
+   // The cost function is produced with the destination
+   // as the start index for the purpose of descending to the destination
+   solution_found = cost_function (
+         map,
+         cost,
+         dim,
+         dest_in,
+         start,
+         buffer);
 
-   // Signal to the path-finding to start determining a new path
-   // to the destination
-   pthread_barrier_wait (&barrier);
-   pthread_barrier_wait (&barrier); // remove this
+   // Don't do anything if a solution is not found
+   if (!solution_found) return;
+
+   // Compute the path based on the cost function
+   path_size = pathfinding (
+         cost,
+         dim,
+         start,
+         dest_in,
+         path);
+
+   if (trim_path_end)
+   {
+      bool done = false;
+      for (path_size = 0; !done; path_size += 1)
+      {
+         int path_pos[3] = {
+            path[path_size] % dim[0],
+            path[path_size] % (dim[0] * dim[1]) / dim[0],
+            path[path_size] / (dim[0] * dim[1]) };
+
+         float dist2 =
+            (float)(dest_in[0] - path_pos[0]) *
+            (float)(dest_in[0] - path_pos[0]) +
+            (float)(dest_in[1] - path_pos[1]) *
+            (float)(dest_in[1] - path_pos[1]) +
+            (float)(dest_in[2] - path_pos[2]) *
+            (float)(dest_in[2] - path_pos[2]);
+
+         if (dist2 <= min_job_dist2) done = true;
+      }
+
+      path_size -= 1;
+      dest[0] = path[path_size] % dim[0];
+      dest[1] = path[path_size] % (dim[0] * dim[1]) / dim[0];
+      dest[2] = path[path_size] / (dim[0] * dim[1]);
+
+      trim_path_end = false;
+   }
+   else
+   {
+      dest[0] = dest_in[0];
+      dest[1] = dest_in[1];
+      dest[2] = dest_in[2];
+   }
+
+   residency[0] = dest_in[0];
+   residency[1] = dest_in[1];
+   residency[2] = dest_in[2];
 
    state = 1;
 };
@@ -345,98 +371,4 @@ bool Unit::available_job_slots (void)
       return false;
 
    return true;
-}
-
-void *path_finding_func (void *path_func_args_in)
-{
-   PATH_FUNC_ARGS *path_func_args = (PATH_FUNC_ARGS*)path_func_args_in;
-
-   const float *map           =  path_func_args->map;
-   int   *dim                 =  path_func_args->dim;
-   int   *start               =  path_func_args->start;
-   int   *dest_in             =  path_func_args->dest_in;
-   int   *dest                =  path_func_args->dest;
-   int   *residency           =  path_func_args->residency;
-   int   *path                =  path_func_args->path;
-   int   *path_size           =  path_func_args->path_size;
-   bool  *trim_path_end       =  path_func_args->trim_path_end;
-   bool  *done                = &path_func_args->done;
-   bool  *solution_found      =  path_func_args->solution_found;
-   pthread_barrier_t *barrier =  path_func_args->barrier;
-
-   float *cost   = new float[dim[0] * dim[1] * dim[2]];
-   float *buffer = new float[dim[0] * dim[1] * dim[2]];
-
-float min_job_dist2 = 3.01f; // greater than sqrt (3)
-   while (!*done)
-   {
-      // Signal from the main thread to start determining a new path
-      pthread_barrier_wait (barrier);
-
-      // Test if done
-      if (*done) continue;
-
-      // Find the path to the destination.
-      // The cost function is produced with the destination
-      // as the start index for the purpose of descending to the destination
-      *solution_found = cost_function (
-            map,
-            cost,
-            dim,
-            dest_in,
-            start,
-            buffer);
-
-      // Don't do anything if a solution is not found
-      if (!*solution_found) continue;
-
-      // Compute the path based on the cost function
-      *path_size = pathfinding (
-            cost,
-            dim,
-            start,
-            dest_in,
-            path);
-
-      if (*trim_path_end)
-      {
-         bool done = false;
-         for (*path_size = 0; !done; *path_size += 1)
-         {
-            int path_pos[3] = {
-               path[*path_size] % dim[0],
-               path[*path_size] % (dim[0] * dim[1]) / dim[0],
-               path[*path_size] / (dim[0] * dim[1]) };
-
-            float dist2 =
-               (float)(dest_in[0] - path_pos[0]) *
-               (float)(dest_in[0] - path_pos[0]) +
-               (float)(dest_in[1] - path_pos[1]) *
-               (float)(dest_in[1] - path_pos[1]) +
-               (float)(dest_in[2] - path_pos[2]) *
-               (float)(dest_in[2] - path_pos[2]);
-
-            if (dist2 <= min_job_dist2) done = true;
-         }
-
-         *path_size -= 1;
-         dest[0] = path[*path_size] % dim[0];
-         dest[1] = path[*path_size] % (dim[0] * dim[1]) / dim[0];
-         dest[2] = path[*path_size] / (dim[0] * dim[1]);
-
-         *trim_path_end = false;
-      }
-      else
-      {
-         dest[0] = dest_in[0];
-         dest[1] = dest_in[1];
-         dest[2] = dest_in[2];
-      }
-
-      residency[0] = dest_in[0];
-      residency[1] = dest_in[1];
-      residency[2] = dest_in[2];
-
-      pthread_barrier_wait (barrier); // remove this
-   }
 }

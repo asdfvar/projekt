@@ -7,24 +7,6 @@
 #include "jobs.h"
 #include "container.h"
 
-typedef struct PATH_FUNC_ARGS
-{
-   const float       *map;
-   int                dim[3];
-   int                start[3];
-   int                dest_in[3];
-   int               *dest;
-   int               *residency;
-   int               *path;
-   int               *path_size;
-   bool              *trim_path_end;
-   bool              *solution_found;
-   bool               done;
-   pthread_barrier_t *barrier;
-} PATH_FUNC_ARGS;
-
-void *path_finding_func (void *path_func_args_in);
-
 class Unit {
 
    public:
@@ -71,6 +53,8 @@ class Unit {
       int state;
 
       MAP   *Map;
+      float *cost;
+      float *buffer;
 
       Job   *active_job;
 
@@ -99,10 +83,6 @@ class Unit {
       Container<Job> return_jobs;
 
       bool solution_found;
-
-      PATH_FUNC_ARGS    path_func_args;
-      pthread_t         path_planner_thread;
-      pthread_barrier_t barrier;
 };
 
 #endif

@@ -21,7 +21,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 1;
+   int num_units = 40;
 
    current_job_unit_index = 0;
    current_job_index      = 0;
@@ -45,7 +45,7 @@ Society::Society (void)
       }
    }
 
-   ibuffer = new   int[size[0] * size[1] * size[2]];
+   ibuffer = new   int[    size[0] * size[1] * size[2]];
    fbuffer = new float[2 * size[0] * size[1] * size[2]];
 }
 
