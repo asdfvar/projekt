@@ -41,6 +41,8 @@ Unit::Unit (
 
    speed = 10.0f;
 
+   min_job_dist2 = 3.01f; // greater than sqrt (3)
+
    power = 0.2f;
 
    residency[0] = 0;
@@ -112,7 +114,7 @@ void Unit::set_destination (int dest_in[3])
    // Signal to the path-finding to start determining a new path
    // to the destination
    pthread_barrier_wait (&barrier);
-   pthread_barrier_wait (&barrier); // TODO: remove this
+   pthread_barrier_wait (&barrier); // remove this
 
    state = 1;
 };
@@ -137,20 +139,33 @@ void Unit::update (float time_step)
          (int)position[2] };
 
       float ground_cell_value = Map->get_ground_cell (position_cell);
+      float air_cell_value    = Map->get_air_cell    (position_cell);
 
-      if (ground_cell_value < 0.0f)
+      if (ground_cell_value < 0.0f && air_cell_value >= 0.0f)
       {
          // Set the state to "falling"
          state = 2;
          return;
       }
 
+      // Check if this unit is inside a block
+      if (ground_cell_value < 0.0f && air_cell_value < 0.0f)
+      {
+         // Relinquish this unit from all its jobs
+         while (jobs.size () > 0) return_jobs.push_front (jobs.pop_back ());
+
+         // Push the unit upwards until it's no longer inside a block
+         for (ground_cell_value = Map->get_ground_cell (position_cell);
+               ground_cell_value < 0.0f; position_cell[2] += 1)
+         {
+            position[2] += 1.0f;
+         }
+      }
+
       // Check for internal queued jobs
       if (jobs.size () > 0)
       {
          int job_location[3];
-
-         const float min_job_dist = 4.1f;
 
          if (jobs.size () > 0 && active_job != jobs.back ())
          {
@@ -176,7 +191,7 @@ void Unit::update (float time_step)
             (floorf (position[1]) - (float)job_location[1]) * (floorf (position[1]) - (float)job_location[1]) +
             (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
 
-         if (dist2 <= min_job_dist)
+         if (dist2 <= min_job_dist2)
             active_job->act (power * time_step);
          else
          {
@@ -203,7 +218,7 @@ void Unit::update (float time_step)
 
       float local_dest[3];
 
-      // Condition check if the unit is in the local destination cell,
+      // If the unit is in the local destination cell,
       // set the local destination to the center of the cell
       if (path_size <= 0)
       {
@@ -352,6 +367,7 @@ void *path_finding_func (void *path_func_args_in)
    float *cost   = new float[dim[0] * dim[1] * dim[2]];
    float *buffer = new float[dim[0] * dim[1] * dim[2]];
 
+float min_job_dist2 = 3.01f; // greater than sqrt (3)
    while (!*done)
    {
       // Signal from the main thread to start determining a new path
@@ -384,6 +400,25 @@ void *path_finding_func (void *path_func_args_in)
 
       if (*trim_path_end)
       {
+         bool done = false;
+         for (*path_size = 0; !done; *path_size += 1)
+         {
+            int path_pos[3] = {
+               path[*path_size] % dim[0],
+               path[*path_size] % (dim[0] * dim[1]) / dim[0],
+               path[*path_size] / (dim[0] * dim[1]) };
+
+            float dist2 =
+               (float)(dest_in[0] - path_pos[0]) *
+               (float)(dest_in[0] - path_pos[0]) +
+               (float)(dest_in[1] - path_pos[1]) *
+               (float)(dest_in[1] - path_pos[1]) +
+               (float)(dest_in[2] - path_pos[2]) *
+               (float)(dest_in[2] - path_pos[2]);
+
+            if (dist2 <= min_job_dist2) done = true;
+         }
+
          *path_size -= 1;
          dest[0] = path[*path_size] % dim[0];
          dest[1] = path[*path_size] % (dim[0] * dim[1]) / dim[0];
@@ -402,6 +437,6 @@ void *path_finding_func (void *path_func_args_in)
       residency[1] = dest_in[1];
       residency[2] = dest_in[2];
 
-      pthread_barrier_wait (barrier); // TODO: remove this
+      pthread_barrier_wait (barrier); // remove this
    }
 }

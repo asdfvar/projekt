@@ -86,6 +86,8 @@ class Unit {
 
       float direction;
 
+      float min_job_dist2;
+
       float power;
 
       bool selected;
