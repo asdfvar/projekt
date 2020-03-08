@@ -1,10 +1,11 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
+#include <cmath>
+#include <cstdlib>
 #include "map.h"
 #include "unit.h"
 #include "timer.h"
-#include <cmath>
-#include <cstdlib>
 #include "pathfinding.h"
 
 Unit::Unit (
@@ -125,11 +126,36 @@ void Unit::set_destination (int dest_in[3])
       }
 
       path_size -= 1;
+
       dest[0] = path[path_size] % dim[0];
       dest[1] = path[path_size] % (dim[0] * dim[1]) / dim[0];
       dest[2] = path[path_size] / (dim[0] * dim[1]);
 
       trim_path_end = false;
+
+      // Temporary robustness fix
+      if (path_size > 100000)
+      {
+         std::cout << "some weird shit is going on" << std::endl;
+         while (jobs.size () > 0) return_jobs.push_front (jobs.pop_back ());
+
+         std::ofstream weird_shit;
+         weird_shit.open ("weird_shit.txt", std::ios::out);
+
+         weird_shit << "start = " << "(" << start[0] << ", " << start[1] << ", " << start[2] << ")" << std::endl;
+         weird_shit << "dest_in = " << "(" << dest_in[0] << ", " << dest_in[1] << ", " << dest_in[2] << ")" << std::endl;
+         weird_shit << "path_size = " << path_size << std::endl;
+         weird_shit << "path:" << std::endl;
+
+         for (int ind = 0; ind < path_size; ind++)
+         {
+            dest[0] = path[ind] % dim[0];
+            dest[1] = path[ind] % (dim[0] * dim[1]) / dim[0];
+            dest[2] = path[ind] / (dim[0] * dim[1]);
+            weird_shit << "(" << dest[0] << ", " << dest[1] << ", " << dest[2] << "), ";
+         }
+         std::cout << std::endl;
+      }
    }
    else
    {

@@ -97,7 +97,6 @@ int cost_function_one_step (
             if (i < 0 || i >= I) continue;
 
             int local_index = ijk_to_ind (i, j, k, I, J, K);
-
             if (nodes[local_index] < 0.0f) {
                cost[local_index] = -1.0f;
                continue;
@@ -234,7 +233,7 @@ int pathfinding (
 
    bool changing = true;
 
-  int path_size = 0;
+   int path_size = 0;
 
    while (current_step != dst_index && changing)
    {
@@ -244,6 +243,7 @@ int pathfinding (
       int sub_j = ind_to_j (current_step, I, J, K);
       int sub_k = ind_to_k (current_step, I, J, K);
 
+      // Check the nearest neighbors for the next valid path
       for (int k = sub_k - 1; k <= sub_k + 1; k++)
       {
          if (k < 0 || k >= K) continue;
@@ -253,27 +253,6 @@ int pathfinding (
             for (int i = sub_i - 1; i <= sub_i + 1; i++)
             {
                if (i < 0 || i >= I) continue;
-#if 1
-               if (i == sub_i + 1 && j == sub_j + 1) {
-                  if (cost[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
-                      cost[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
-               }
-
-               if (i == sub_i - 1 && j == sub_j - 1) {
-                  if (cost[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
-                      cost[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
-               }
-
-               if (i == sub_i + 1 && j == sub_j - 1) {
-                  if (cost[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
-                      cost[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
-               }
-
-               if (i == sub_i - 1 && j == sub_j + 1) {
-                  if (cost[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
-                      cost[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
-               }
-#endif
 
                int local_index = ijk_to_ind (i, j, k, I, J, K);
 
