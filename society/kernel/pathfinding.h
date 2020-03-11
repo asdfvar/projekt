@@ -21,7 +21,8 @@ inline int ind_to_k (int ind, int I, int J, int K)
 
 
 int cost_function_one_step (
-      const float *nodes,
+      const bool  *nodes,
+      const float *weight,
       float       *cost,
       int          dim[3],
       int          end[3],
@@ -29,7 +30,8 @@ int cost_function_one_step (
       int          path_cost_ind_size);
 
 bool cost_function (
-      const float *nodes,
+      const bool  *nodes,
+      const float *weight,
       float       *cost,
       int          dim[3],
       int          src[3],
@@ -37,7 +39,8 @@ bool cost_function (
       float       *buffer);
 
 bool cost_function2 (
-      const float *nodes,
+      const bool  *nodes,
+      const float *weight,
       float       *cost,
       int         *cost_indices,
       int          dim[3],
@@ -46,10 +49,11 @@ bool cost_function2 (
       float       *buffer);
 
 int pathfinding (
-      float *cost,
-      int    dim[3],
-      int    src[3],
-      int    dst[3],
-      int   *path);
+      const bool *nodes,
+      float      *cost,
+      int         dim[3],
+      int         src[3],
+      int         dst[3],
+      int        *path);
 
 #endif

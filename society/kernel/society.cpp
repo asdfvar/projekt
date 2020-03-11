@@ -26,14 +26,15 @@ Society::Society (void)
    current_job_unit_index = 0;
    current_job_index      = 0;
 
-   const float *map = Map->access_ground ();
+   const bool *ground_map = Map->access_ground ();
 
    int unit_count = 0;
    for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
-            if (map[ind] >= 0.0f && ind_z == map_layer && unit_count < num_units) {
+            if (ground_map[ind] == true && ind_z == map_layer && unit_count < num_units)
+            {
                unit_count++;
                dest[0] = (float)ind_x     + 0.5f;
                dest[1] = (float)ind_y     + 0.5f;
@@ -47,6 +48,9 @@ Society::Society (void)
 
    ibuffer = new   int[    size[0] * size[1] * size[2]];
    fbuffer = new float[2 * size[0] * size[1] * size[2]];
+
+std::cout << "units size = " << units.size () << std::endl;
+   if (units.size () <= 0) return;
 }
 
 Society::~Society (void)
@@ -60,7 +64,8 @@ Society::~Society (void)
 // destination to provide a unique cell destination for each unit
 void Society::set_destination (int destination[3])
 {
-   const float *ground_map = Map->access_ground ();
+   const bool  *ground_map = Map->access_ground ();
+   const float *weight_map = Map->access_weight ();
 
    int size[3];
 
@@ -78,6 +83,7 @@ void Society::set_destination (int destination[3])
    // Create the selected cost indices equal to the number of units
    cost_function2 (
          ground_map,
+         weight_map,
          cost,
          cost_indices,
          size,
@@ -155,9 +161,8 @@ void Society::set_destination (int destination[3])
 
 void Society::update (float time_step)
 {
-   if (units.size () <= 0) return;
-
-   const float *map = Map->access_ground ();
+   const bool  *ground_map = Map->access_ground ();
+   const float *weight     = Map->access_weight ();
 
    float *cost         = fbuffer;
    float *local_buffer = fbuffer + size[0] * size[1] * size[2];
@@ -191,7 +196,8 @@ void Society::update (float time_step)
             // test if this cell is accessible to the unit
             bool accessible =
                cost_function (
-                     map,
+                     ground_map,
+                     weight,
                      cost,
                      size,
                      job_location_cell,
@@ -257,9 +263,9 @@ void Society::update (float time_step)
    Map->update ();
 }
 
-const float *Society::access_air ()
+const bool *Society::access_air ()
 {
-   return static_cast<const float*>(Map->access_air ());
+   return static_cast<const bool*>(Map->access_air ());
 }
 
 void Society::select_units (int cell_selections[2][3], int map_layer, bool control_down)

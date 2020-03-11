@@ -169,6 +169,12 @@ void MAP::draw (float *transform, float *translation)
       }
    }
 
+int summ = 0;
+   for (int row = 0, ind = 0; row < row_max; row++)
+      for (int col = 0; col < col_max; col++, ind++)
+         summ += view_plain[ind];
+//std::cout << "summ = " << summ << std::endl;
+
    // Draw cells
    for (int row = 0, ind = 0; row < row_max; row++)
    {

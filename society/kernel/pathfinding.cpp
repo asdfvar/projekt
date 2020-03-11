@@ -21,7 +21,8 @@ static inline int ind_to_axis (int index, int *dim, int size, int select_axis_in
 }
 
 int cost_function_one_step (
-      const float *nodes,
+      const bool  *nodes,
+      const float *weight,
       float       *cost,
       int          dim[3],
       int          end[3],
@@ -97,31 +98,31 @@ int cost_function_one_step (
             if (i < 0 || i >= I) continue;
 
             int local_index = ijk_to_ind (i, j, k, I, J, K);
-            if (nodes[local_index] < 0.0f) {
-               cost[local_index] = -1.0f;
+            if (nodes[local_index] == false) {
+               cost[local_index] = 0.0f;
                continue;
             }
 
             // Logic to ignore diagonals if corresponding adjacent
             // cells are blocked
             if (i == sub_i - 1 && j == sub_j - 1) {
-               if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
-                     nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] == false ||
+                     nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] == false) continue;
             }
 
             if (i == sub_i + 1 && j == sub_j + 1) {
-               if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
-                     nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] == false ||
+                     nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] == false) continue;
             }
 
             if (i == sub_i + 1 && j == sub_j - 1) {
-               if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
-                     nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] == false ||
+                     nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] == false) continue;
             }
 
             if (i == sub_i - 1 && j == sub_j + 1) {
-               if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
-                     nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+               if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] == false ||
+                     nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] == false) continue;
             }
 
             float local_cost = cost[best_index];
@@ -141,7 +142,7 @@ int cost_function_one_step (
                i_dist || j_dist || k_dist ? 1.0f :
                0.0f;
 
-            local_cost += nodes[local_index];
+            local_cost += weight[local_index];
 
             if (local_cost < cost[local_index])
             {
@@ -165,7 +166,8 @@ int cost_function_one_step (
 
 // Produce the cost function until the destination is met
 bool cost_function (
-      const float *nodes,
+      const bool  *nodes,
+      const float *weight,
       float       *cost,
       int          dim[3],
       int          start[3],
@@ -200,6 +202,7 @@ bool cost_function (
    {
       path_cost_ind_size = cost_function_one_step (
             nodes,
+            weight,
             cost,
             dim,
             end,
@@ -214,13 +217,13 @@ bool cost_function (
 }
 
 int pathfinding (
-      float *cost,
-      int dim[3],
-      int src[3],
-      int dst[3],
-      int *path)
+      const bool *nodes,
+      float      *cost,
+      int         dim[3],
+      int         src[3],
+      int         dst[3],
+      int         *path)
 {
-
    const int I = dim[0];
    const int J = dim[1];
    const int K = dim[2];
@@ -256,7 +259,7 @@ int pathfinding (
 
                int local_index = ijk_to_ind (i, j, k, I, J, K);
 
-               if (cost[local_index] < 0.0f) continue;
+               if (nodes[local_index] == false) continue;
 
                if (cost[local_index] < cost[current_step]) {
                   current_step = local_index;
@@ -274,7 +277,8 @@ int pathfinding (
 
 // Produce the cost function for the number of cells requested
 bool cost_function2 (
-      const float *nodes,
+      const bool  *nodes,
+      const float *weight,
       float       *cost,
       int         *cost_indices,
       int          dim[3],
@@ -359,7 +363,7 @@ bool cost_function2 (
 
                int local_index = ijk_to_ind (i, j, k, I, J, K);
 
-               if (nodes[local_index] < 0.0f) {
+               if (nodes[local_index] == false) {
                   cost[local_index] = -1.0f;
                   continue;
                }
@@ -367,23 +371,23 @@ bool cost_function2 (
                // Logic to ignore diagonals if corresponding adjacent
                // cells are blocked
                if (i == sub_i - 1 && j == sub_j - 1) {
-                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
-                        nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] == false ||
+                        nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] == false) continue;
                }
 
                if (i == sub_i + 1 && j == sub_j + 1) {
-                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
-                        nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] == false ||
+                        nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] == false) continue;
                }
 
                if (i == sub_i + 1 && j == sub_j - 1) {
-                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] < 0.0f ||
-                        nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+                  if (nodes[ijk_to_ind (sub_i, sub_j-1, sub_k, I, J, K)] == false ||
+                        nodes[ijk_to_ind (sub_i+1, sub_j, sub_k, I, J, K)] == false) continue;
                }
 
                if (i == sub_i - 1 && j == sub_j + 1) {
-                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] < 0.0f ||
-                        nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] < 0.0f) continue;
+                  if (nodes[ijk_to_ind (sub_i, sub_j+1, sub_k, I, J, K)] == false ||
+                        nodes[ijk_to_ind (sub_i-1, sub_j, sub_k, I, J, K)] == false) continue;
                }
 
                // The cost for the new cell is determined as follows:
@@ -405,7 +409,7 @@ bool cost_function2 (
                   i_dist || j_dist || k_dist ? 1.0f :
                   0.0f;
 
-               local_cost += nodes[local_index];
+               local_cost += weight[local_index];
 
                if (local_cost < cost[local_index])
                {

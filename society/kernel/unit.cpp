@@ -66,7 +66,8 @@ Unit::~Unit (void)
 
 void Unit::set_destination (int dest_in[3])
 {
-   const float *map = Map->access_ground ();
+   const bool  *ground_map = Map->access_ground ();
+   const float *weight_map = Map->access_weight ();
 
    int dim[3];
 
@@ -86,7 +87,8 @@ void Unit::set_destination (int dest_in[3])
    // The cost function is produced with the destination
    // as the start index for the purpose of descending to the destination
    solution_found = cost_function (
-         map,
+         ground_map,
+         weight_map,
          cost,
          dim,
          dest_in,
@@ -98,6 +100,7 @@ void Unit::set_destination (int dest_in[3])
 
    // Compute the path based on the cost function
    path_size = pathfinding (
+         ground_map,
          cost,
          dim,
          start,
@@ -190,10 +193,10 @@ void Unit::update (float time_step)
          (int)position[1],
          (int)position[2] };
 
-      float ground_cell_value = Map->get_ground_cell (position_cell);
-      float air_cell_value    = Map->get_air_cell    (position_cell);
+      bool ground_cell_value = Map->get_ground_cell (position_cell);
+      bool air_cell_value    = Map->get_air_cell    (position_cell);
 
-      if (ground_cell_value < 0.0f && air_cell_value >= 0.0f)
+      if (ground_cell_value == false && air_cell_value == true)
       {
          // Set the state to "falling"
          state = 2;
@@ -201,14 +204,14 @@ void Unit::update (float time_step)
       }
 
       // Check if this unit is inside a block
-      if (ground_cell_value < 0.0f && air_cell_value < 0.0f)
+      if (ground_cell_value == false && air_cell_value == false)
       {
          // Relinquish this unit from all its jobs
          while (jobs.size () > 0) return_jobs.push_front (jobs.pop_back ());
 
          // Push the unit upwards until it's no longer inside a block
          for (ground_cell_value = Map->get_ground_cell (position_cell);
-               ground_cell_value < 0.0f; position_cell[2] += 1)
+               ground_cell_value == false; position_cell[2] += 1)
          {
             position[2] += 1.0f;
          }
@@ -364,7 +367,7 @@ void Unit::update (float time_step)
    {
       // Fall if there isn't ground space to support the unit
       int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
-      if (Map->get_ground_cell (unit_position) < 0.0f && Map->get_air_cell (unit_position) >= 0.0f)
+      if (Map->get_ground_cell (unit_position) == false && Map->get_air_cell (unit_position) == true)
       {
          position[2] -= 1.0f;
       }

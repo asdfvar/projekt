@@ -22,7 +22,7 @@ class Society
 
       void set_destination (int dest[3]);
 
-      const float *access_air ();
+      const bool *access_air ();
 
       const int get_size (int ind) { return size[ind]; };
 

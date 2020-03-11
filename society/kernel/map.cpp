@@ -19,17 +19,19 @@ MAP::MAP (int size_in[3])
 
    map_layer = 0;
 
-   // < 0 means solid material (TODO: change this to >= 1 and associated logic)
-   air        = new float[size[0] * size[1] * size[2]];
-   ground     = new float[size[0] * size[1] * size[2]];
+   weight     = new float[size[0] * size[1] * size[2]];
+   air        = new bool [size[0] * size[1] * size[2]];
+   ground     = new bool [size[0] * size[1] * size[2]];
    material   = new int  [size[0] * size[1] * size[2]];
-   view_plain = new int [size[0] * size[1]];
+   view_plain = new int  [size[0] * size[1]];
 
    uncommitted_jobs      = new int[size[0] * size[1] * size[2]];
    uncommitted_jobs_size = 0;
 
-   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind] = 0.0f;
-   for (int ind = 0; ind < size[0] * size[1]; ind++) view_plain[ind] = 0.0f;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind]        = false;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) ground[ind]     = false;
+   for (int ind = 0; ind < size[0] * size[1]; ind++)           view_plain[ind] = 0;
+   for (int ind = 0; ind < size[0] * size[1]; ind++)           weight[ind]     = 0.0f;
 
    float *perlin_array = new float[size[0] * size[1]];
    int num_grid_cells[2] = { 4, 4 };
@@ -56,8 +58,8 @@ MAP::MAP (int size_in[3])
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
    {
-      if (material[ind] > 0) air[ind] = -1.0f;
-      else air[ind] = 0.0f;
+      if (material[ind] > 0) air[ind] = false;
+      else air[ind] = true;
    }
 
    set_map ();
@@ -67,6 +69,7 @@ MAP::MAP (int size_in[3])
 
 MAP::~MAP (void)
 {
+   delete[] weight;
    delete[] air;
    delete[] ground;
    delete[] material;
@@ -99,12 +102,12 @@ void MAP::update (void)
    set_ground ();
 }
 
-float MAP::get_air_cell (int flattened_ind)
+bool MAP::get_air_cell (int flattened_ind)
 {
    return air[flattened_ind];
 }
 
-float MAP::get_air_cell (int ind[3])
+bool MAP::get_air_cell (int ind[3])
 {
    int flattened_ind =
       ind[2] * size[0] * size[1] +
@@ -114,12 +117,12 @@ float MAP::get_air_cell (int ind[3])
    return air[flattened_ind];
 }
 
-float MAP::get_ground_cell (int flattened_ind)
+bool MAP::get_ground_cell (int flattened_ind)
 {
    return ground[flattened_ind];
 }
 
-float MAP::get_ground_cell (int ind[3])
+bool MAP::get_ground_cell (int ind[3])
 {
    int flattened_ind =
       ind[2] * size[0] * size[1] +
@@ -135,8 +138,8 @@ void MAP::set_map (void)
 {
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
    {
-      if (material[ind] > 0) air[ind] = -1.0f;
-      else air[ind] = 0.0f;
+      if (material[ind] == 0) air[ind] = true;
+      else air[ind] = false;
    }
 }
 
@@ -146,12 +149,12 @@ void MAP::set_ground (void)
       for (int ind_y = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
          {
-            // Default is -1
-            ground[ind] = -1.0f;
+            // Default is not ground accessible
+            ground[ind] = false;
 
             // Set the ground value to the map value if there is ground below this cell
             if (ind_z == 0) ground[ind] = air[ind];
-            else if (air[ind - size[0] * size[1]] < 0) ground[ind] = air[ind];
+            else if (air[ind - size[0] * size[1]] == false) ground[ind] = air[ind];
          }
       }
    }
@@ -180,10 +183,10 @@ void MAP::local_change (int flattened_cell_index, float value)
 
    int next_z_ind = flattened_cell_index + size[0] * size[1];
 
-   if (air[flattened_cell_index] < 0) ground[next_z_ind] = air[next_z_ind];
+   if (air[flattened_cell_index] == false) ground[next_z_ind] = air[next_z_ind];
 }
 
-// This will prepare cells as "ready" but not committed to be promoted to an job
+// This will prepare cells as "ready" but not committed to be promoted to a job
 void MAP::ready_jobs (int cell_selections[2][3], bool control_down)
 {
    if (!control_down) uncommitted_jobs_size = 0;
