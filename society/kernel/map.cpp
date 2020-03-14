@@ -216,9 +216,10 @@ void MAP::ready_jobs (int cell_selections[2][3], bool control_down)
             for (int job = 0; job < uncommitted_jobs_size; job++)
                is_job |= uncommitted_jobs[job] == job_index;
 
+            // If the job is already selected, advance to the next one
             if (is_job) continue;
 
-            // Assign the uncommitted jobs
+            // Assign the uncommitted jobs if there's material
             if (material[job_index] > 0)
                uncommitted_jobs[uncommitted_jobs_size++] = job_index;
          }

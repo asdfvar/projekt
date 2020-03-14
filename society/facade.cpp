@@ -312,6 +312,23 @@ void Facade::mouseClick (int button, int state, int x, int y)
       mouse_wheel_backward_count = 0;
    }
 
+   int size[2] = {
+      society.get_size (0),
+      society.get_size (1) };
+
+   int cell_selections[2][3];
+   cell_selections[0][0] = (int)(window_to_cell (selection_box[0][0], size[0]) + 0.5f);
+   cell_selections[0][1] = (int)(window_to_cell (selection_box[0][1], size[1]) + 0.5f);
+   cell_selections[0][2] = (int)selection_box[0][2];
+
+   cell_selections[1][0] = (int)(window_to_cell (selection_box[1][0], size[0]) + 0.5f);
+   cell_selections[1][1] = (int)(window_to_cell (selection_box[1][1], size[1]) + 0.5f);
+   cell_selections[1][2] = map_layer;
+
+   // Remove mode
+   if (mode == 1)
+      society.select_cells (cell_selections, control_down);
+
    society.set_map_layer (map_layer);
 }
 

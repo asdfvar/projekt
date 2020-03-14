@@ -49,7 +49,6 @@ Society::Society (void)
    ibuffer = new   int[    size[0] * size[1] * size[2]];
    fbuffer = new float[2 * size[0] * size[1] * size[2]];
 
-std::cout << "units size = " << units.size () << std::endl;
    if (units.size () <= 0) return;
 }
 
