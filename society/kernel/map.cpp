@@ -25,8 +25,7 @@ MAP::MAP (int size_in[3])
    material   = new int  [size[0] * size[1] * size[2]];
    view_plain = new int  [size[0] * size[1]];
 
-   uncommitted_jobs      = new int[size[0] * size[1] * size[2]];
-   uncommitted_jobs_size = 0;
+   uncommitted_jobs = new bool[size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind]        = false;
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) ground[ind]     = false;
@@ -198,9 +197,9 @@ void MAP::ready_uncommited_job_cells (int cell_selections_in[2][3])
    cell_selections[1][2] = cell_selections_in[1][2];
 }
 
-void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs_size)
+void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs)
 {
-   if (reset_uncommitted_jobs_size) uncommitted_jobs_size = 0;
+   if (reset_uncommitted_jobs) unselect_uncommitted_jobs ();
 
    int start[3] = {
       MIN (cell_selections[0][0], cell_selections[1][0]),
@@ -221,18 +220,9 @@ void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs_size)
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            bool is_job = false;
-
-            // Search the uncommitted jobs to see if it's already selected
-            for (int job = 0; job < uncommitted_jobs_size; job++)
-               is_job |= uncommitted_jobs[job] == job_index;
-
-            // If the job is already selected, advance to the next one
-            if (is_job) continue;
-
             // Assign the uncommitted jobs if there's material
             if (material[job_index] > 0)
-               uncommitted_jobs[uncommitted_jobs_size++] = job_index;
+               uncommitted_jobs[job_index] = true;
          }
       }
    }
@@ -240,13 +230,13 @@ void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs_size)
 
 void MAP::unselect_uncommitted_jobs (void)
 {
-   uncommitted_jobs_size = 0;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++)
+      uncommitted_jobs[ind] = false;
 }
 
-const int *MAP::access_uncommitted_jobs (int *size)
+const bool *MAP::access_uncommitted_jobs (void)
 {
-   *size = uncommitted_jobs_size;
-   return (const int*)uncommitted_jobs;
+   return (const bool*)uncommitted_jobs;
 }
 
 int MAP::get_view_plain (int ind[2])

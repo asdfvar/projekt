@@ -169,12 +169,6 @@ void MAP::draw (float *transform, float *translation)
       }
    }
 
-int summ = 0;
-   for (int row = 0, ind = 0; row < row_max; row++)
-      for (int col = 0; col < col_max; col++, ind++)
-         summ += view_plain[ind];
-//std::cout << "summ = " << summ << std::endl;
-
    // Draw cells
    for (int row = 0, ind = 0; row < row_max; row++)
    {
@@ -227,46 +221,39 @@ void Society::draw_uncommitted_jobs (
 
    glColor3f (1.0f, 0.0f, 0.0f);
 
-   int num_uncommitted_jobs;
-
-   const int *uncommitted_job_ind =
-      Map->access_uncommitted_jobs (&num_uncommitted_jobs);
+   const bool *uncommitted_jobs = Map->access_uncommitted_jobs ();
 
    // Draw the job cells
-   for (int job_ind = 0; job_ind < num_uncommitted_jobs; job_ind++)
+   for (int indy = 0, job_ind = 0; indy < size[1]; indy++)
    {
-      int local_select = uncommitted_job_ind[job_ind];
+      for (int indx = 0; indx < size[0]; indx++, job_ind++)
+      {
+         bool local_select = uncommitted_jobs[size[0]*size[1] * map_layer + job_ind];
 
-      int ind[3];
-      ind[2] = local_select / (size[0] * size[1]);
-      ind[1] = local_select / size[0] % size[1];
-      ind[0] = local_select % size[0];
+         if (local_select == true)
+         {
+            float vertex_x = starting_col_loc + block_width  * (float)indx;
+            float vertex_y = starting_row_loc + block_height * (float)indy;
 
-      if (ind[2] != map_layer) continue;
+            glBegin (GL_POLYGON);
 
-      int col = ind[0];
-      int row = ind[1];
+            float point0[2] = { vertex_x,               vertex_y               };
+            float point1[2] = { vertex_x + block_width, vertex_y               };
+            float point2[2] = { vertex_x + block_width, vertex_y + block_width };
+            float point3[2] = { vertex_x,               vertex_y + block_width };
 
-      float vertex_x = starting_col_loc + block_width  * (float)col;
-      float vertex_y = starting_row_loc + block_height * (float)row;
+            transformation (point0, transform, translation);
+            transformation (point1, transform, translation);
+            transformation (point2, transform, translation);
+            transformation (point3, transform, translation);
 
-      glBegin (GL_POLYGON);
-
-      float point0[2] = { vertex_x,               vertex_y               };
-      float point1[2] = { vertex_x + block_width, vertex_y               };
-      float point2[2] = { vertex_x + block_width, vertex_y + block_width };
-      float point3[2] = { vertex_x,               vertex_y + block_width };
-
-      transformation (point0, transform, translation);
-      transformation (point1, transform, translation);
-      transformation (point2, transform, translation);
-      transformation (point3, transform, translation);
-
-      glVertex2f (point0[0], point0[1]);
-      glVertex2f (point1[0], point1[1]);
-      glVertex2f (point2[0], point2[1]);
-      glVertex2f (point3[0], point3[1]);
-      glEnd ();
+            glVertex2f (point0[0], point0[1]);
+            glVertex2f (point1[0], point1[1]);
+            glVertex2f (point2[0], point2[1]);
+            glVertex2f (point3[0], point3[1]);
+            glEnd ();
+         }
+      }
    }
 }
 

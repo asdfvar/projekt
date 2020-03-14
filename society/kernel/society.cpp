@@ -389,44 +389,57 @@ void Society::set_select_cells (bool reset_uncommitted_jobs_size)
 
 void Society::set_jobs (int job_type)
 {
-   int num_uncommitted_jobs;
+   const bool *new_job_location_cells =
+      Map->access_uncommitted_jobs ();
 
-   const int *new_job_location_ind =
-      Map->access_uncommitted_jobs (&num_uncommitted_jobs);
-
-   for (int ind = 0; ind < num_uncommitted_jobs; ind++)
+   for (int indz = 0, ind = 0; indz < size[2]; indz++)
    {
-      bool duplicate = false;
-
-      // Test if this is already in the committed-jobs list
-      for (int job_ind = 0; job_ind < queued_jobs.size (); job_ind++) {
-         Job *job = queued_jobs.access (job_ind);
-         int location_ind = job->get_flattened_loc_index ();
-         if (new_job_location_ind[ind] == location_ind) duplicate = true;
-      }
-
-      if (duplicate) continue;
-
-      // Test if this is already assigned to one of the units
-      for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+      for (int indy = 0; indy < size[1]; indy++)
       {
-         Unit *unit = units.access (unit_ind);
-         for (int job_ind = 0; job_ind < unit->num_jobs(); job_ind++)
+         for (int indx = 0; indx < size[0]; indx++, ind++)
          {
-            Job *job = unit->access_job (job_ind);
-            int location_ind = job->get_flattened_loc_index ();
-            if (new_job_location_ind[ind] == location_ind) duplicate = true;
+
+            // Continue if this is not a candidate for a new job
+            if (new_job_location_cells[ind] == false) continue;
+
+            bool duplicate = false;
+
+            // Test if this uncommitted job is already in the committed-jobs list
+            for (int job_ind = 0; job_ind < queued_jobs.size (); job_ind++) {
+               Job *job = queued_jobs.access (job_ind);
+               int location_ind = job->get_flattened_loc_index ();
+               if (ind == location_ind)
+               {
+                  duplicate = true;
+                  break;
+               }
+            }
+
+            // If the candidate job is already in the list, continue to the next one
+            if (duplicate) continue;
+
+            // Test if this is already assigned to one of the units
+            for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
+            {
+               Unit *unit = units.access (unit_ind);
+               for (int job_ind = 0; job_ind < unit->num_jobs(); job_ind++)
+               {
+                  Job *job = unit->access_job (job_ind);
+                  int location_ind = job->get_flattened_loc_index ();
+                  if (ind == location_ind) duplicate = true;
+               }
+            }
+
+            if (duplicate) continue;
+
+            int location[3];
+            location[2] = ind / (size[0] * size[1]);
+            location[1] = ind / size[0] % size[1];
+            location[0] = ind % size[0];
+
+            queued_jobs.push_front (new Job (ind, location, job_type));
          }
       }
-
-      if (duplicate) continue;
-
-      int location[3];
-      location[2] = new_job_location_ind[ind] / (size[0] * size[1]);
-      location[1] = new_job_location_ind[ind] / size[0] % size[1];
-      location[0] = new_job_location_ind[ind] % size[0];
-
-      queued_jobs.push_front (new Job (new_job_location_ind[ind], location, job_type));
    }
 
    Map->unselect_uncommitted_jobs ();
