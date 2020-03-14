@@ -327,7 +327,12 @@ void Facade::mouseClick (int button, int state, int x, int y)
 
    // Remove mode
    if (mode == 1)
-      society.select_cells (cell_selections, control_down);
+   {
+      society.select_cells (cell_selections);
+
+      if (button2_down == false)
+         society.set_select_cells (!control_down);
+   }
 
    society.set_map_layer (map_layer);
 }
@@ -423,7 +428,7 @@ void Facade::mouseMotion (int x, int y)
       if (mode == 1)
       {
          // Remove mode
-         society.select_cells (cell_selections, control_down);
+         society.select_cells (cell_selections);
       }
       else
       {

@@ -36,7 +36,8 @@ class MAP
 
       int  get_material (int ind) { return material[ind]; };
 
-      void       ready_jobs (int cell_selections[2][3], bool control_down);
+      void       ready_uncommited_job_cells (int cell_selections_in[2][3]);
+      void       set_uncommited_job_cells (bool reset_uncommitted_jobs_size);
       void       unselect_uncommitted_jobs (void);
       const int *access_uncommitted_jobs (int *size);
 
@@ -67,6 +68,8 @@ class MAP
       void set_ground (void);
 
       void local_change (int flattened_cell_index, float value);
+
+      int cell_selections[2][3];
 };
 
 #endif

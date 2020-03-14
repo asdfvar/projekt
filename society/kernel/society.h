@@ -36,7 +36,9 @@ class Society
 
       void select_group (int group_number);
 
-      void select_cells (int cell_selections[2][3], bool control_down);
+      void select_cells (int cell_selections[2][3]);
+
+      void set_select_cells (bool reset_uncommitted_jobs_size);
 
       void set_jobs (int job_type);
 

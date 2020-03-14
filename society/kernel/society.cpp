@@ -377,14 +377,18 @@ void Society::select_group (int group_number)
    }
 }
 
-void Society::select_cells (int cell_selections[2][3], bool control_down)
+void Society::select_cells (int cell_selections[2][3])
 {
-   Map->ready_jobs (cell_selections, control_down);
+   Map->ready_uncommited_job_cells (cell_selections);
+}
+
+void Society::set_select_cells (bool reset_uncommitted_jobs_size)
+{
+   Map->set_uncommited_job_cells (reset_uncommitted_jobs_size);
 }
 
 void Society::set_jobs (int job_type)
 {
-
    int num_uncommitted_jobs;
 
    const int *new_job_location_ind =

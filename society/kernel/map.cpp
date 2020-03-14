@@ -187,9 +187,20 @@ void MAP::local_change (int flattened_cell_index, float value)
 }
 
 // This will prepare cells as "ready" but not committed to be promoted to a job
-void MAP::ready_jobs (int cell_selections[2][3], bool control_down)
+void MAP::ready_uncommited_job_cells (int cell_selections_in[2][3])
 {
-   if (!control_down) uncommitted_jobs_size = 0;
+   cell_selections[0][0] = cell_selections_in[0][0];
+   cell_selections[0][1] = cell_selections_in[0][1];
+   cell_selections[0][2] = cell_selections_in[0][2];
+
+   cell_selections[1][0] = cell_selections_in[1][0];
+   cell_selections[1][1] = cell_selections_in[1][1];
+   cell_selections[1][2] = cell_selections_in[1][2];
+}
+
+void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs_size)
+{
+   if (reset_uncommitted_jobs_size) uncommitted_jobs_size = 0;
 
    int start[3] = {
       MIN (cell_selections[0][0], cell_selections[1][0]),
