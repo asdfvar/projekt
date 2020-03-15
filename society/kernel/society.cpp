@@ -2,6 +2,7 @@
 #include "society.h"
 #include "pathfinding.h"
 #include "timer.h"
+#include "utils.h"
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
@@ -432,10 +433,10 @@ void Society::set_jobs (int job_type)
 
             if (duplicate) continue;
 
-            int location[3];
-            location[2] = ind / (size[0] * size[1]);
-            location[1] = ind / size[0] % size[1];
-            location[0] = ind % size[0];
+            int location[3] = {
+               flat_ind_to_dim (0, ind, size),
+               flat_ind_to_dim (1, ind, size),
+               flat_ind_to_dim (2, ind, size) };
 
             queued_jobs.push_front (new Job (ind, location, job_type));
          }

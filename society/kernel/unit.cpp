@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include "map.h"
 #include "unit.h"
+#include "utils.h"
 #include "timer.h"
 #include "pathfinding.h"
 
@@ -113,9 +114,9 @@ void Unit::set_destination (int dest_in[3])
       for (path_size = 0; !done; path_size += 1)
       {
          int path_pos[3] = {
-            path[path_size] % dim[0],
-            path[path_size] % (dim[0] * dim[1]) / dim[0],
-            path[path_size] / (dim[0] * dim[1]) };
+            flat_ind_to_dim (0, path[path_size], dim),
+            flat_ind_to_dim (1, path[path_size], dim),
+            flat_ind_to_dim (2, path[path_size], dim) };
 
          float dist2 =
             (float)(dest_in[0] - path_pos[0]) *
@@ -130,13 +131,13 @@ void Unit::set_destination (int dest_in[3])
 
       path_size -= 1;
 
-      dest[0] = path[path_size] % dim[0];
-      dest[1] = path[path_size] % (dim[0] * dim[1]) / dim[0];
-      dest[2] = path[path_size] / (dim[0] * dim[1]);
+      dest[0] = flat_ind_to_dim (0, path[path_size], dim);
+      dest[1] = flat_ind_to_dim (1, path[path_size], dim);
+      dest[2] = flat_ind_to_dim (2, path[path_size], dim);
 
       trim_path_end = false;
 
-      // Temporary robustness fix
+      // Temporary robustness hot fix
       if (path_size > 100000)
       {
          std::cout << "some weird shit is going on" << std::endl;
@@ -285,9 +286,9 @@ void Unit::update (float time_step)
       {
          int next_cell[3];
 
-         next_cell[0] = (path[0] % dim[0]);
-         next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-         next_cell[2] = path[0] / (dim[0] * dim[1]);
+         next_cell[0] = flat_ind_to_dim (0, path[0], dim);
+         next_cell[1] = flat_ind_to_dim (1, path[0], dim);
+         next_cell[2] = flat_ind_to_dim (2, path[0], dim);
 
          local_dest[0] = (float)next_cell[0] + 0.5f;
          local_dest[1] = (float)next_cell[1] + 0.5f;
@@ -326,9 +327,9 @@ void Unit::update (float time_step)
          int next_cell[3];
 
          // Update the local destination to the next available cell
-         next_cell[0] = (path[0] % dim[0]);
-         next_cell[1] = (path[0] % (dim[0] * dim[1])) / dim[0];
-         next_cell[2] = path[0] / (dim[0] * dim[1]);
+         next_cell[0] = flat_ind_to_dim (0, path[0], dim);
+         next_cell[1] = flat_ind_to_dim (1, path[0], dim);
+         next_cell[2] = flat_ind_to_dim (2, path[0], dim);
 
          local_dest[0] = (float)next_cell[0] + 0.5f;
          local_dest[1] = (float)next_cell[1] + 0.5f;

@@ -15,5 +15,3 @@ put in robustness mitigators to determine if a unit is "trapped"
 define grounded cell as a cell that can draw a connected path (with adjacent cells only) to the bottom
 
 rename method "map_dim" to "size"
-
-write routine to convert flat index to 3-tuple index
