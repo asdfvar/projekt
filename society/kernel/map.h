@@ -28,7 +28,7 @@ class MAP
       bool get_ground_cell (int flattened_ind);
       bool get_ground_cell (int ind[3]);
 
-      int map_dim (int dim) { return size[dim]; };
+      int shape (int dim) { return size[dim]; };
 
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);

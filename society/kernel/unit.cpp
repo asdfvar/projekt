@@ -28,11 +28,11 @@ Unit::Unit (
 
    Map = Map_in;
 
-   int map_dims[3] = { Map->map_dim (0), Map->map_dim (1), Map->map_dim (2) };
+   int size[3] = { Map->shape (0), Map->shape (1), Map->shape (2) };
 
-   path   = new   int[map_dims[0] * map_dims[1] * map_dims[2]];
-   cost   = new float[map_dims[0] * map_dims[1] * map_dims[2]];
-   buffer = new float[map_dims[0] * map_dims[1] * map_dims[2]];
+   path   = new   int[size[0] * size[1] * size[2]];
+   cost   = new float[size[0] * size[1] * size[2]];
+   buffer = new float[size[0] * size[1] * size[2]];
 
    trim_path_end = false;
 
@@ -72,9 +72,9 @@ void Unit::set_destination (int dest_in[3])
 
    int dim[3];
 
-   dim[0] = Map->map_dim (0);
-   dim[1] = Map->map_dim (1);
-   dim[2] = Map->map_dim (2);
+   dim[0] = Map->shape (0);
+   dim[1] = Map->shape (1);
+   dim[2] = Map->shape (2);
 
    int start[3];
 
@@ -268,9 +268,9 @@ void Unit::update (float time_step)
 
       int dim[3];
 
-      dim[0] = Map->map_dim (0);
-      dim[1] = Map->map_dim (1);
-      dim[2] = Map->map_dim (2);
+      dim[0] = Map->shape (0);
+      dim[1] = Map->shape (1);
+      dim[2] = Map->shape (2);
 
       float local_dest[3];
 

@@ -69,9 +69,9 @@ void Society::set_destination (int destination[3])
 
    int size[3];
 
-   size[0] = Map->map_dim (0);
-   size[1] = Map->map_dim (1);
-   size[2] = Map->map_dim (2);
+   size[0] = Map->shape (0);
+   size[1] = Map->shape (1);
+   size[2] = Map->shape (2);
 
    int *cost_indices = ibuffer;
 
