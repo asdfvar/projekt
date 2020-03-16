@@ -177,6 +177,7 @@ void MAP::draw (float *transform, float *translation)
          float vertex_x = starting_col_loc + block_width  * (float)col;
          float vertex_y = starting_row_loc + block_height * (float)row;
 
+         // Determine the color of the cell. This will depend on the view depth and material
          glBegin (GL_POLYGON);
          if (view_plain[ind] == 0 || view_depth[ind] == 0) {
             glColor3f (0.2f, 0.2f, 0.2f);
