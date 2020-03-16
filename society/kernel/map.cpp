@@ -24,12 +24,14 @@ MAP::MAP (int size_in[3])
    ground     = new bool [size[0] * size[1] * size[2]];
    material   = new int  [size[0] * size[1] * size[2]];
    view_plain = new int  [size[0] * size[1]];
+   view_depth = new int  [size[0] * size[1]];
 
    uncommitted_jobs = new bool[size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind]        = false;
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) ground[ind]     = false;
    for (int ind = 0; ind < size[0] * size[1]; ind++)           view_plain[ind] = 0;
+   for (int ind = 0; ind < size[0] * size[1]; ind++)           view_depth[ind] = 0;
    for (int ind = 0; ind < size[0] * size[1]; ind++)           weight[ind]     = 0.0f;
 
    float *perlin_array = new float[size[0] * size[1]];
@@ -74,6 +76,7 @@ MAP::~MAP (void)
    delete[] material;
    delete[] uncommitted_jobs;
    delete[] view_plain;
+   delete[] view_depth;
 }
 
 void MAP::update (void)
@@ -81,6 +84,7 @@ void MAP::update (void)
    for (int ind = 0; ind < size[0] * size[1]; ind++)
    {
       view_plain[ind] = 0;
+      view_depth[ind] = 0;
 
       // set the view plain to the level of where the terrain is
       for (int depth = 0; depth < 20; depth++)
@@ -90,12 +94,14 @@ void MAP::update (void)
          int layer_ind = size[0] * size[1] * mod_map_layer + ind;
          if (material[layer_ind] != 0)
          {
-            view_plain[ind] = depth;
+            view_plain[ind] = material[layer_ind];
+            view_depth[ind] = depth;
             break;
          }
-         else if (material[layer_ind] == 0 && mod_map_layer <= 0)
+         else if (material[layer_ind] == 0 && mod_map_layer == 0)
          {
-            view_plain[ind] = 1;
+            view_plain[ind] = material[layer_ind];
+            view_depth[ind] = 1;
             break;
          }
       }

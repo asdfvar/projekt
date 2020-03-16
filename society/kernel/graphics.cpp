@@ -178,12 +178,13 @@ void MAP::draw (float *transform, float *translation)
          float vertex_y = starting_row_loc + block_height * (float)row;
 
          glBegin (GL_POLYGON);
-         if (view_plain[ind] == 0) {
+         if (view_plain[ind] == 0 || view_depth[ind] == 0) {
             glColor3f (0.2f, 0.2f, 0.2f);
          } else {
-            float scale = (1.0f - (float)view_plain[ind] / 8.0f);
+            float scale = (1.0f - (float)view_depth[ind] / 8.0f);
             if (scale < 0.0f) scale = 0.0f;
-            glColor3f (0.4f * scale, 0.7f * scale, 0.2f * scale);
+            if (view_plain[ind] == 1)
+               glColor3f (0.4f * scale, 0.7f * scale, 0.2f * scale);
          }
 
          float point0[2] = { vertex_x,               vertex_y               };

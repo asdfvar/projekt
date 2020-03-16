@@ -58,6 +58,7 @@ class MAP
       bool *uncommitted_jobs;
 
       int *view_plain;
+      int *view_depth;
 
       Lattice<Cell> *cells;
 
