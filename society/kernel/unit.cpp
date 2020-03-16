@@ -376,7 +376,6 @@ void Unit::update (float time_step)
       {
          state = 0;
       }
-
    }
 }
 
