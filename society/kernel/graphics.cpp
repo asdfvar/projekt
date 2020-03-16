@@ -181,7 +181,7 @@ void MAP::draw (float *transform, float *translation)
          if (view_plain[ind] == 0 || view_depth[ind] == 0) {
             glColor3f (0.2f, 0.2f, 0.2f);
          } else {
-            float scale = (1.0f - (float)view_depth[ind] / 8.0f);
+            float scale = (1.0f - (float)view_depth[ind] / (float)max_depth);
             if (scale < 0.0f) scale = 0.0f;
             if (view_plain[ind] == 1)
                glColor3f (0.4f * scale, 0.7f * scale, 0.2f * scale);

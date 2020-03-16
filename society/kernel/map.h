@@ -59,6 +59,7 @@ class MAP
 
       int *view_plain;
       int *view_depth;
+      int  max_depth;
 
       Lattice<Cell> *cells;
 

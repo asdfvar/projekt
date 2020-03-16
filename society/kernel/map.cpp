@@ -26,6 +26,8 @@ MAP::MAP (int size_in[3])
    view_plain = new int  [size[0] * size[1]];
    view_depth = new int  [size[0] * size[1]];
 
+   max_depth = 8;
+
    uncommitted_jobs = new bool[size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind]        = false;
@@ -87,7 +89,7 @@ void MAP::update (void)
       view_depth[ind] = 0;
 
       // set the view plain to the level of where the terrain is
-      for (int depth = 0; depth < 20; depth++)
+      for (int depth = 0; depth < map_layer; depth++)
       {
          int mod_map_layer = map_layer - depth;
          if (mod_map_layer < 0) mod_map_layer = 0;
