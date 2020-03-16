@@ -114,6 +114,20 @@ void MAP::update (void)
    set_ground ();
 }
 
+bool MAP::test_los (int cell[3])
+{
+   for (int depth = map_layer; depth >= cell[2]; depth--)
+   {
+      int flat_ind =
+         depth * size[0] * size[1] +
+         cell[1] * size[0]         +
+         cell[0];
+
+      if (material[flat_ind] != 0) return false;
+   }
+   return true;
+}
+
 bool MAP::get_air_cell (int flattened_ind)
 {
    return air[flattened_ind];

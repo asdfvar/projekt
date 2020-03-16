@@ -58,6 +58,11 @@ void Society::draw_units (
          unit->get_position (1),
          unit->get_position (2) };
 
+      int unit_cell[3] = {
+         (int)unit_pos[0],
+         (int)unit_pos[1],
+         (int)unit_pos[2] };
+
       if (floorf (unit_pos[2]) <= map_layer)
       {
          int map_2d_ind[2] = { (int)unit_pos[0], (int)unit_pos[1] };
@@ -89,7 +94,10 @@ void Society::draw_units (
             transformation (point3, transform, translation);
 
             glBegin (GL_POLYGON);
-            glColor3f (1.0f, 1.0f, 0.0f);
+            if (!Map->test_los (unit_cell))
+               glColor3f (0.3f, 0.3f, 0.0f);
+            else
+               glColor3f (1.0f, 1.0f, 0.0f);
             glVertex2f (point0[0], point0[1]);
             glVertex2f (point1[0], point1[1]);
             glVertex2f (point2[0], point2[1]);

@@ -3,10 +3,7 @@
 
 #include "container.h"
 
-class Cell
-{
-
-};
+class Cell { };
 
 class MAP
 {
@@ -22,6 +19,7 @@ class MAP
       const float *access_weight (void) { return (const float*)weight; };
 
       void set_map_layer (int map_layer_in) { map_layer = map_layer_in; };
+      bool test_los (int cell[3]);
 
       bool get_air_cell    (int ind);
       bool get_air_cell    (int ind[3]);
