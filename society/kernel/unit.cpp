@@ -15,7 +15,7 @@ Unit::Unit (
       float position_z_in,
       MAP *Map_in)
 {
-   state = 0;
+   state = STANDBY;
 
    direction = 0.0f;
 
@@ -172,7 +172,7 @@ void Unit::set_destination (int dest_in[3])
    residency[1] = dest_in[1];
    residency[2] = dest_in[2];
 
-   state = 1;
+   state = MOVING;
 };
 
 void Unit::get_destination (int *dest_out)
@@ -186,7 +186,7 @@ void Unit::get_destination (int *dest_out)
 void Unit::update (float time_step)
 {
    // Static state
-   if (state == 0)
+   if (state == STANDBY)
    {
       // Check if this unit is going to fall
       int position_cell[3] = {
@@ -200,7 +200,7 @@ void Unit::update (float time_step)
       if (ground_cell_value == false && air_cell_value == true)
       {
          // Set the state to "falling"
-         state = 2;
+         state = FALLING;
          return;
       }
 
@@ -262,7 +262,7 @@ void Unit::update (float time_step)
    }
 
    // Update the position
-   else if (state == 1)
+   else if (state == MOVING)
    {
       // Update position info
 
@@ -317,7 +317,7 @@ void Unit::update (float time_step)
          if (path_size > 0) path_size--;
          if (path_size <= 0)
          {
-            state = 0;
+            state = STANDBY;
             return;
          }
 
@@ -364,7 +364,7 @@ void Unit::update (float time_step)
    }
 
    // Fall
-   else if (state == 2)
+   else if (state == FALLING)
    {
       // Fall if there isn't ground space to support the unit
       int unit_position[3] = { (int)position[0], (int)position[1], (int)position[2] };
@@ -374,7 +374,7 @@ void Unit::update (float time_step)
       }
       else
       {
-         state = 0;
+         state = STANDBY;
       }
    }
 }
@@ -401,3 +401,11 @@ bool Unit::available_job_slots (void)
 
    return true;
 }
+
+Job *Unit::pop_active_job (void)
+{
+   active_job = nullptr;
+   state      = STANDBY;
+
+   return jobs.pop_back ();
+};

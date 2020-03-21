@@ -43,14 +43,15 @@ class Unit {
 
       int num_jobs (void) { return jobs.size (); };
 
-      Job *pop_active_job (void) { active_job = 0; state = 0; return jobs.pop_back (); };
+      Job *pop_active_job (void);
 
       int return_jobs_size (void) { return return_jobs.size (); };
       Job *return_job (void) { return return_jobs.pop_back (); };
 
    private:
 
-      int state;
+      enum State_type { STANDBY, MOVING, FALLING };
+      State_type state;
 
       MAP   *Map;
       float *cost;
