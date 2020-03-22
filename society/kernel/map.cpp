@@ -1,6 +1,6 @@
 #include "map.h"
 #include "math_utils.h"
-#include "math_utils.h"
+#include "utils.h"
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -118,14 +118,22 @@ bool MAP::test_los (int cell[3])
 {
    for (int depth = map_layer; depth >= cell[2]; depth--)
    {
-      int flat_ind =
-         depth * size[0] * size[1] +
-         cell[1] * size[0]         +
-         cell[0];
+      int ind[3] = { cell[0], cell[1], depth };
+      int flat_ind = dim_to_flat_ind (3, ind, size);
 
       if (material[flat_ind] != 0) return false;
    }
    return true;
+}
+
+bool MAP::test_los (float cell[3])
+{
+   int icell[3] = {
+      static_cast<int>(cell[0]),
+      static_cast<int>(cell[1]),
+      static_cast<int>(cell[2]) };
+
+   return test_los (icell);
 }
 
 bool MAP::get_air_cell (int flattened_ind)

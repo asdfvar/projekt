@@ -15,115 +15,15 @@
 #define WIDTH   1.0f
 #define HEIGHT  1.0f
 
-static inline void transformation (float point[2], float transform[4], float translation[2])
-{
-   point[0] += translation[0];
-   point[1] += translation[1];
-
-   float part1a = point[0] * transform[0];
-   float part1b = point[1] * transform[1];
-
-   float part2a = point[0] * transform[2];
-   float part2b = point[1] * transform[3];
-
-   point[0] = part1a + part1b;
-   point[1] = part2a + part2b;
-}
-
 void Society::draw_units (
       float *transform,
       float *translation,
       int    map_layer)
 {
-   int row_max = size[1];
-   int col_max = size[0];
-
-   float block_height = HEIGHT / static_cast<float>(row_max / 2);
-   float block_width  = WIDTH  / static_cast<float>(col_max / 2);
-
-   const float selected_width_offset  = 0.35f * block_width;
-   const float selected_height_offset = 0.35f * block_height;
-
-   glLineWidth (0.1f);
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
-
-      float unit_pos[3] = {
-         unit->get_position (0),
-         unit->get_position (1),
-         unit->get_position (2) };
-
-      int unit_cell[3] = {
-         (int)unit_pos[0],
-         (int)unit_pos[1],
-         (int)unit_pos[2] };
-
-      if (floorf (unit_pos[2]) <= map_layer)
-      {
-         int map_2d_ind[2] = { (int)unit_pos[0], (int)unit_pos[1] };
-
-         if (unit_pos[2] >= Map->get_view_plain (map_2d_ind))
-         {
-            // Transform map position to view-window position
-            float x_pos = map_to_window (unit->get_position (0), (float)col_max);
-
-            // Transform map position to view-window position
-            float y_pos = map_to_window (unit->get_position (1), (float)row_max);
-
-            float reduction_factor = 1.0f - (float)(map_layer - unit_pos[2]) / 8.0f;
-            if (reduction_factor < 0.05f) reduction_factor = 0.05f;
-
-            float width_offset  = 0.3f * block_width  * reduction_factor;
-            float height_offset = 0.3f * block_height * reduction_factor;
-
-            float point0[2] = { x_pos - width_offset, y_pos - height_offset };
-            float point1[2] = { x_pos - width_offset, y_pos + height_offset };
-            float point2[2] = { x_pos + width_offset, y_pos + height_offset };
-            float point3[2] = { x_pos + width_offset, y_pos - height_offset };
-
-            transformation (point0, transform, translation);
-            transformation (point1, transform, translation);
-            transformation (point2, transform, translation);
-            transformation (point3, transform, translation);
-
-            glBegin (GL_POLYGON);
-            if (!Map->test_los (unit_cell))
-               glColor3f (0.3f, 0.3f, 0.0f);
-            else
-               glColor3f (1.0f, 1.0f, 0.0f);
-            glVertex2f (point0[0], point0[1]);
-            glVertex2f (point1[0], point1[1]);
-            glVertex2f (point2[0], point2[1]);
-            glVertex2f (point3[0], point3[1]);
-            glEnd ();
-
-            if (unit->is_selected())
-            {
-               float point0[2] = { x_pos - selected_width_offset, y_pos - selected_height_offset };
-               float point1[2] = { x_pos - selected_width_offset, y_pos + selected_height_offset };
-               float point2[2] = { x_pos + selected_width_offset, y_pos + selected_height_offset };
-               float point3[2] = { x_pos + selected_width_offset, y_pos - selected_height_offset };
-
-               transformation (point0, transform, translation);
-               transformation (point1, transform, translation);
-               transformation (point2, transform, translation);
-               transformation (point3, transform, translation);
-
-               glBegin (GL_LINES);
-               glColor3f (1.0f, 0.0f, 0.0f);
-               glVertex2f (point0[0], point0[1]);
-               glVertex2f (point1[0], point1[1]);
-               glVertex2f (point1[0], point1[1]);
-               glVertex2f (point2[0], point2[1]);
-               glVertex2f (point2[0], point2[1]);
-               glVertex2f (point3[0], point3[1]);
-               glVertex2f (point3[0], point3[1]);
-               glVertex2f (point0[0], point0[1]);
-               glEnd ();
-            }
-         }
-      }
+      unit->draw (transform, translation);
    }
 }
 

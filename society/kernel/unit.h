@@ -48,7 +48,7 @@ class Unit
       int return_jobs_size (void) { return return_jobs.size (); };
       Job *return_job (void) { return return_jobs.pop_back (); };
 
-      void draw (float *transform, float *translation, int view_layer);
+      void draw (float *transform, float *translation);
 
    private:
 

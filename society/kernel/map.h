@@ -19,7 +19,9 @@ class MAP
       const float *access_weight (void) { return (const float*)weight; };
 
       void set_map_layer (int map_layer_in) { map_layer = map_layer_in; };
-      bool test_los (int cell[3]);
+      int  get_map_layer (void)             { return map_layer; };
+      bool test_los (int   cell[3]);
+      bool test_los (float cell[3]);
 
       bool get_air_cell    (int ind);
       bool get_air_cell    (int ind[3]);
