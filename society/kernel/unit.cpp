@@ -15,6 +15,8 @@ Unit::Unit (
       float position_z_in,
       MAP *Map_in)
 {
+   tick  = rand ();
+
    state = STANDBY;
 
    direction = 0.0f;
@@ -377,6 +379,8 @@ void Unit::update (float time_step)
          state = STANDBY;
       }
    }
+
+   tick++;
 }
 
 void Unit::assign_job (Job *job)
@@ -408,4 +412,9 @@ Job *Unit::pop_active_job (void)
    state      = STANDBY;
 
    return jobs.pop_back ();
-};
+}
+
+void draw (float *transform, float *translation, int view_layer)
+{
+
+}

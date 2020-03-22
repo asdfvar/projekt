@@ -7,6 +7,7 @@
 #include <fstream>
 #include <cmath>
 #include "map.h"
+#include "utils.h"
 
 #define X_START -1.0f
 #define Y_START -1.0f
@@ -40,11 +41,6 @@ void Society::draw_units (
    float block_height = HEIGHT / static_cast<float>(row_max / 2);
    float block_width  = WIDTH  / static_cast<float>(col_max / 2);
 
-   const float window_start_row = -1.0f;
-   const float window_end_row   =  1.0f;
-   const float window_start_col = -1.0f;
-   const float window_end_col   =  1.0f;
-
    const float selected_width_offset  = 0.35f * block_width;
    const float selected_height_offset = 0.35f * block_height;
 
@@ -69,13 +65,11 @@ void Society::draw_units (
 
          if (unit_pos[2] >= Map->get_view_plain (map_2d_ind))
          {
-            float x_pos = unit->get_position (0) / ((float)col_max) *
-               (window_end_col - window_start_col) +
-               window_start_col;
+            // Transform map position to view-window position
+            float x_pos = map_to_window (unit->get_position (0), (float)col_max);
 
-            float y_pos = unit->get_position (1) / ((float)row_max) *
-               (window_end_row - window_start_row) +
-               window_start_row;
+            // Transform map position to view-window position
+            float y_pos = map_to_window (unit->get_position (1), (float)row_max);
 
             float reduction_factor = 1.0f - (float)(map_layer - unit_pos[2]) / 8.0f;
             if (reduction_factor < 0.05f) reduction_factor = 0.05f;
