@@ -5,6 +5,7 @@ OBJDIR = objdir
 OBJS = $(OBJDIR)/society.o     \
        $(OBJDIR)/pathfinding.o \
        $(OBJDIR)/unit.o        \
+       $(OBJDIR)/x01.o         \
        $(OBJDIR)/map.o         \
        $(OBJDIR)/container.o   \
        $(OBJDIR)/jobs.o        \
