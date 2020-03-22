@@ -41,7 +41,7 @@ Society::Society (void)
                dest[1] = (float)ind_y     + 0.5f;
                dest[2] = (float)map_layer + 0.5f;
 
-               units.push_back (new Unit (dest[0], dest[1], dest[2], Map));
+               units.push_back (new X01 (dest[0], dest[1], dest[2], Map));
             }
          }
       }

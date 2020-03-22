@@ -7,8 +7,8 @@
 #include "jobs.h"
 #include "container.h"
 
-class Unit {
-
+class Unit
+{
    public:
 
       Unit (float position_x,
@@ -84,6 +84,18 @@ class Unit {
       Container<Job> return_jobs;
 
       bool solution_found;
+};
+
+class X01 : public Unit
+{
+   public:
+      X01 (
+            float position_x,
+            float position_y,
+            float position_z,
+            MAP* Map) : Unit { position_x, position_y, position_z, Map }
+      {
+      }
 };
 
 #endif
