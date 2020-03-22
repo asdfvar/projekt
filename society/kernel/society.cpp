@@ -23,7 +23,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 2;
+   int num_units = 40;
 
    current_job_unit_index = 0;
    current_job_index      = 0;
@@ -42,7 +42,10 @@ Society::Society (void)
                dest[1] = (float)ind_y     + 0.5f;
                dest[2] = (float)map_layer + 0.5f;
 
-               units.push_back (new X01 (dest[0], dest[1], dest[2], Map));
+               if (unit_count % 2 == 1)
+                  units.push_back (new X01 (dest[0], dest[1], dest[2], Map));
+               else
+                  units.push_back (new X02 (dest[0], dest[1], dest[2], Map));
             }
          }
       }

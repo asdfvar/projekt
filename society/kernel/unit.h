@@ -48,9 +48,9 @@ class Unit
       int return_jobs_size (void) { return return_jobs.size (); };
       Job *return_job (void) { return return_jobs.pop_back (); };
 
-      void draw (float *transform, float *translation);
+      virtual void draw (float *transform, float *translation) {};
 
-   private:
+   protected:
 
       unsigned int tick;
 
