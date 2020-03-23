@@ -84,6 +84,14 @@ void Society::set_destination (int destination[3])
    float *cost         = fbuffer;
    float *local_buffer = fbuffer + size[0] * size[1] * size[2];
 
+   // Modify the destination until it selects a valid location or surpases the range
+   for (int ind = 0; ind <= Map->get_map_layer () && Map->test_los (destination); ind++)
+   {
+      if (Map->get_ground_cell (destination)) break;
+
+      destination[2]--;
+   }
+
    // Create the selected cost indices equal to the number of units
    cost_function2 (
          ground_map,
