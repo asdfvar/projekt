@@ -383,6 +383,8 @@ void Unit::update (float time_step)
          state = STANDBY;
       }
    }
+
+   tic++;
 }
 
 void Unit::assign_job (Job *job)

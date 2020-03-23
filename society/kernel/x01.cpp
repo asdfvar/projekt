@@ -93,8 +93,6 @@ void X01::draw (float *transform, float *translation)
          }
       }
    }
-
-   tic++;
 }
 
 void X02::draw (float *transform, float *translation)
