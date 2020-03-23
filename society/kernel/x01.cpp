@@ -16,6 +16,7 @@ void X01::draw (float *transform, float *translation)
    float col_max = static_cast<float> (Map->shape (0));
    float row_max = static_cast<float> (Map->shape (1));
 
+   // Block sizes in the viewing window
    float block_width  = 2.0f / col_max;
    float block_height = 2.0f / row_max;
 
@@ -34,8 +35,10 @@ void X01::draw (float *transform, float *translation)
          float reduction_factor = 1.0f - (float)(map_layer - position[2]) / 8.0f;
          if (reduction_factor < 0.05f) reduction_factor = 0.05f;
 
-         float width_offset  = 0.3f * block_width  * reduction_factor;
-         float height_offset = 0.3f * block_height * reduction_factor;
+         float arg = static_cast<float> (tic % 100) * 0.01f * 3.14159f * 2.0f;
+         float sin_tic = sinf (arg);
+         float width_offset  = (0.25f + 0.05f * sin_tic) * block_width  * reduction_factor;
+         float height_offset = (0.25f + 0.05f * sin_tic) * block_height * reduction_factor;
 
          float point0[2] = { x_pos - width_offset, y_pos - height_offset };
          float point1[2] = { x_pos - width_offset, y_pos + height_offset };
@@ -90,6 +93,8 @@ void X01::draw (float *transform, float *translation)
          }
       }
    }
+
+   tic++;
 }
 
 void X02::draw (float *transform, float *translation)

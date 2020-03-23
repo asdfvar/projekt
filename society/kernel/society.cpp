@@ -23,7 +23,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 40;
+   int num_units = 4;
 
    current_job_unit_index = 0;
    current_job_index      = 0;

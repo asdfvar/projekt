@@ -19,7 +19,7 @@ Unit::Unit (
       float position_z_in,
       MAP *Map_in)
 {
-   tick  = rand ();
+   tic   = rand ();
 
    state = STANDBY;
 
@@ -383,8 +383,6 @@ void Unit::update (float time_step)
          state = STANDBY;
       }
    }
-
-   tick++;
 }
 
 void Unit::assign_job (Job *job)

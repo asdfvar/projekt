@@ -52,7 +52,7 @@ class Unit
 
    protected:
 
-      unsigned int tick;
+      unsigned int tic;
 
       enum State_type { STANDBY, MOVING, FALLING };
       State_type state;
