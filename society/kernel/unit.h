@@ -28,6 +28,7 @@ class Unit
 
       void unselect (void) { selected = false; };
       void select (void)   { selected = true;  };
+      void select (int bounding_box[2][3]);
 
       bool is_selected (void) { return selected; };
 

@@ -284,49 +284,44 @@ void Society::select_units (int cell_selections[2][3], int map_layer, bool contr
       }
    }
 
+   int min_x = cell_selections[0][0];
+   int max_x = cell_selections[1][0];
+
+   if (max_x < min_x) {
+      int temp = min_x;
+      min_x = max_x;
+      max_x = temp;
+   }
+
+   int min_y = cell_selections[0][1];
+   int max_y = cell_selections[1][1];
+
+   if (max_y < min_y) {
+      int temp = min_y;
+      min_y = max_y;
+      max_y = temp;
+   }
+
+   int min_z = cell_selections[0][2];
+   int max_z = cell_selections[1][2];
+
+   if (max_z < min_z) {
+      int temp = min_z;
+      min_z = max_z;
+      max_z = temp;
+   }
+
+   max_z += 1.0f;
+
+   int bounding_box[2][3] = {
+      { min_x, min_y, min_z },
+      { max_x, max_y, max_z } };
+
    for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
    {
       Unit *unit = units.access (unit_ind);
 
-      float x = unit->get_position (0);
-      float y = unit->get_position (1);
-      float z = unit->get_position (2);
-
-      float min_x = cell_selections[0][0];
-      float max_x = cell_selections[1][0];
-
-      if (max_x < min_x) {
-         float temp = min_x;
-         min_x = max_x;
-         max_x = temp;
-      }
-
-      float min_y = cell_selections[0][1];
-      float max_y = cell_selections[1][1];
-
-      if (max_y < min_y) {
-         float temp = min_y;
-         min_y = max_y;
-         max_y = temp;
-      }
-
-      float min_z = cell_selections[0][2];
-      float max_z = cell_selections[1][2];
-
-      if (max_z < min_z) {
-         float temp = min_z;
-         min_z = max_z;
-         max_z = temp;
-      }
-
-      max_z += 1.0f;
-
-      if (x >= min_x && x <= max_x &&
-          y >= min_y && y <= max_y &&
-          z >= min_z && z < max_z)
-      {
-         unit->select();
-      }
+      unit->select (bounding_box);
    }
 }
 

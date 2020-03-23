@@ -181,6 +181,17 @@ void Unit::set_destination (int dest_in[3])
    state = MOVING;
 };
 
+void Unit::select (int bounding_box[2][3])
+{
+   if (
+         position[0] >= bounding_box[0][0] && position[0] <= bounding_box[1][0] &&
+         position[1] >= bounding_box[0][1] && position[1] <= bounding_box[1][1] &&
+         position[2] >= bounding_box[0][2] && position[2] <= bounding_box[1][2])
+   {
+      selected = true;
+   }
+}
+
 void Unit::get_destination (int *dest_out)
 {
    dest_out[0] = dest[0];
