@@ -35,7 +35,7 @@ void X01::draw (float *transform, float *translation)
          float reduction_factor = 1.0f - (float)(map_layer - position[2]) / 8.0f;
          if (reduction_factor < 0.05f) reduction_factor = 0.05f;
 
-         float arg = static_cast<float> (tic % 100) * 0.01f * 3.14159f * 2.0f;
+         float arg = static_cast<float> (tic % 100) * 0.02f * 3.14159f * 2.0f;
          float sin_tic = sinf (arg);
          float width_offset  = (0.25f + 0.05f * sin_tic) * block_width  * reduction_factor;
          float height_offset = (0.25f + 0.05f * sin_tic) * block_height * reduction_factor;

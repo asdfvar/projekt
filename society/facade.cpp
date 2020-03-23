@@ -533,8 +533,6 @@ void Facade::display (void)
          translation,
          map_layer);
 
-   society.draw (transform, translation, map_layer);
-
    hud.draw_info ();
 
    // swap this buffer for the old one
