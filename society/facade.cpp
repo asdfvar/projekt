@@ -210,6 +210,13 @@ void Facade::specialUpFunc (int key, int x, int y)
    }
 }
 
+/*
+**   ********
+**   |  ||  |
+**   |0 1 2 |
+**   |      |
+**   +------+
+*/
 void Facade::mouseClick (int button, int state, int x, int y)
 {
    if (button == 0 && state == 0) button0_down = true;
@@ -220,8 +227,8 @@ void Facade::mouseClick (int button, int state, int x, int y)
    if (button == 1 && state == 1) button1_down = false;
    if (button == 2 && state == 1) button2_down = false;
 
-   if (button == 3) mouse_wheel_forward_count++;
-   if (button == 4) mouse_wheel_backward_count++;
+   if (button == 3 && state == 0) mouse_wheel_forward_count++;
+   if (button == 4 && state == 0) mouse_wheel_backward_count++;
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
@@ -270,7 +277,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    }
 
    // Zoom in
-   else if (mouse_wheel_forward_count >= 2 && z_down == true)
+   else if (mouse_wheel_forward_count > 0 && z_down == false)
    {
       if (transform[0] <= 10.0f && transform[3] <= 10.0f)
       {
@@ -284,7 +291,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    }
 
    // Zoom out
-   else if (mouse_wheel_backward_count >= 2 && z_down == true)
+   else if (mouse_wheel_backward_count > 0 && z_down == false)
    {
       if (transform[0] >= 0.1f && transform[3] >= 0.1f) {
          transform[0] *= 0.9f;
@@ -297,7 +304,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    }
 
    // Decrement the map layer
-   else if (mouse_wheel_forward_count >= 2 && z_down == false)
+   else if (mouse_wheel_forward_count > 0 && z_down == true)
    {
       if (map_layer > 0) map_layer--;
 
@@ -305,7 +312,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    }
 
    // Increment the map layer
-   else if (mouse_wheel_backward_count >= 2 && z_down == false)
+   else if (mouse_wheel_backward_count > 0 && z_down == true)
    {
       if (map_layer < society.get_size (2) - 1) map_layer++;
 
@@ -352,13 +359,6 @@ void Facade::mousePassive (int x, int y)
    selection_active = false;
 }
 
-/*
-**   ********
-**   |  ||  |
-**   |0 1 2 |
-**   |      |
-**   +------+
-*/
 void Facade::mouseMotion (int x, int y)
 {
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
@@ -380,7 +380,7 @@ void Facade::mouseMotion (int x, int y)
       -invDet * transform[2],  invDet * transform[0] };
 
    // Adjust the translation of the world
-   if (z_down == true && button0_down == true)
+   if (z_down == false && button0_down == true)
    {
       translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
       translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
@@ -413,7 +413,6 @@ void Facade::mouseMotion (int x, int y)
          society.get_size (0),
          society.get_size (1) };
 
-      // TODO: compute the min/max at float value then determine the descrete locations (address the CR)
       int cell_selections[2][3];
       cell_selections[0][0] = (int)(window_to_cell (selection_box[0][0], size[0]) + 0.5f);
       cell_selections[0][1] = (int)(window_to_cell (selection_box[0][1], size[1]) + 0.5f);
