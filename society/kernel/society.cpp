@@ -59,6 +59,9 @@ Society::Society (void)
 
 Society::~Society (void)
 {
+   while (units.size () > 0)
+      delete units.pop_back ();
+
    delete   Map;
    delete[] ibuffer;
    delete[] fbuffer;

@@ -40,7 +40,8 @@ Facade::Facade (void)
    button0_down = false;
    button1_down = false;
    button2_down = false;
-   z_down = false;
+   z_down       = false;
+   has_moved_passively    = false;
 
    mouse_wheel_backward_count = 0;
    mouse_wheel_forward_count = 0;
@@ -229,14 +230,15 @@ void Facade::mouseClick (int button, int state, int x, int y)
 
    if (button == 3 && state == 0) mouse_wheel_forward_count++;
    if (button == 4 && state == 0) mouse_wheel_backward_count++;
+
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
    // Set the destination for the selected units
-   if (button == 0 && state == 0 && z_down == false)
+   if (button == 0 && state == 1 && z_down == false && has_moved_passively == true)
    {
       float window[2];
-      window[0] = 2.0f * (float)x / (float)window_width - 1.0f;
+      window[0] =        2.0f * (float)x / (float)window_width - 1.0f;
       window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
 
       const float det = transform[0] * transform[3] - transform[1] * transform[2];
@@ -357,6 +359,8 @@ void Facade::mousePassive (int x, int y)
    mouse_pos[1] = y;
 
    selection_active = false;
+
+   has_moved_passively = true;
 }
 
 void Facade::mouseMotion (int x, int y)
@@ -480,6 +484,8 @@ void Facade::mouseMotion (int x, int y)
 
    mouse_pos[0] = x;
    mouse_pos[1] = y;
+
+   has_moved_passively = false;
 }
 
 /*
