@@ -99,7 +99,7 @@ void Unit::set_destination (int dest_in[3])
          start,
          buffer);
 
-   // Don't do anything if a solution is not found
+   // Return and don't do anything if a solution is not found
    if (!solution_found) return;
 
    // Compute the path based on the cost function
@@ -122,17 +122,17 @@ void Unit::set_destination (int dest_in[3])
             flat_ind_to_dim (2, path[path_size], dim) };
 
          float dist2 =
-            (float)(dest_in[0] - path_pos[0]) *
-            (float)(dest_in[0] - path_pos[0]) +
-            (float)(dest_in[1] - path_pos[1]) *
-            (float)(dest_in[1] - path_pos[1]) +
-            (float)(dest_in[2] - path_pos[2]) *
-            (float)(dest_in[2] - path_pos[2]);
+            (float)((dest_in[0] - path_pos[0]) *
+            (dest_in[0] - path_pos[0]) +
+            (dest_in[1] - path_pos[1]) *
+            (dest_in[1] - path_pos[1]) +
+            (dest_in[2] - path_pos[2]) *
+            (dest_in[2] - path_pos[2]));
 
          if (dist2 <= min_job_dist2) done = true;
       }
 
-      path_size -= 1;
+      path_size -= 1; // Undo the loop incrementer
 
       dest[0] = flat_ind_to_dim (0, path[path_size], dim);
       dest[1] = flat_ind_to_dim (1, path[path_size], dim);
@@ -231,8 +231,7 @@ void Unit::update (float time_step)
             jm.active_job_action (power * time_step);
          else
          {
-            // TODO: find a different way of handling this (something different than "trimming the end of the path")
-            // Set the final destination to one cell adjacent to the job location
+            // Set the final destination to the cell that is within reach by this unit to the job location
             trim_path_end = true;
 
             // set destination (note that this runs in a separate thread)
