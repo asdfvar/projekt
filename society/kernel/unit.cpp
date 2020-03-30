@@ -29,9 +29,6 @@ Unit::Unit (
    position[1] = position_y_in;
    position[2] = position_z_in;
 
-   jobs_limit = 1;
-   active_job = 0;
-
    Map = Map_in;
 
    int size[3] = { Map->shape (0), Map->shape (1), Map->shape (2) };
@@ -142,30 +139,6 @@ void Unit::set_destination (int dest_in[3])
       dest[2] = flat_ind_to_dim (2, path[path_size], dim);
 
       trim_path_end = false;
-
-      // Temporary robustness hot fix
-      if (path_size > 100000)
-      {
-         std::cout << "some weird shit is going on" << std::endl;
-         while (jobs.size () > 0) return_jobs.push_front (jobs.pop_back ());
-
-         std::ofstream weird_shit;
-         weird_shit.open ("weird_shit.txt", std::ios::out);
-
-         weird_shit << "start = " << "(" << start[0] << ", " << start[1] << ", " << start[2] << ")" << std::endl;
-         weird_shit << "dest_in = " << "(" << dest_in[0] << ", " << dest_in[1] << ", " << dest_in[2] << ")" << std::endl;
-         weird_shit << "path_size = " << path_size << std::endl;
-         weird_shit << "path:" << std::endl;
-
-         for (int ind = 0; ind < path_size; ind++)
-         {
-            dest[0] = path[ind] % dim[0];
-            dest[1] = path[ind] % (dim[0] * dim[1]) / dim[0];
-            dest[2] = path[ind] / (dim[0] * dim[1]);
-            weird_shit << "(" << dest[0] << ", " << dest[1] << ", " << dest[2] << "), ";
-         }
-         std::cout << std::endl;
-      }
    }
    else
    {
@@ -225,7 +198,7 @@ void Unit::update (float time_step)
       if (ground_cell_value == false && air_cell_value == false)
       {
          // Relinquish this unit from all its jobs
-         while (jobs.size () > 0) return_jobs.push_front (jobs.pop_back ());
+         jm.set_return_all_jobs ();
 
          // Push the unit upwards until it's no longer inside a block
          for (ground_cell_value = Map->get_ground_cell (position_cell);
@@ -236,27 +209,17 @@ void Unit::update (float time_step)
       }
 
       // Check for internal queued jobs
-      if (jobs.size () > 0)
+      if (jm.num_jobs () > 0)
       {
          int job_location[3];
 
-         if (jobs.size () > 0 && active_job != jobs.back ())
-         {
-            active_job = jobs.back ();
-
-            job_location[0] = active_job->get_position (0);
-            job_location[1] = active_job->get_position (1);
-            job_location[2] = active_job->get_position (2);
-
-         }
-
          // Return any jobs that don't have a path defined to their destination
          if (!solution_found)
-            return_jobs.push_front (jobs.pop_back ());
+            jm.set_return_last_job ();
 
-         job_location[0] = active_job->get_position (0);
-         job_location[1] = active_job->get_position (1);
-         job_location[2] = active_job->get_position (2);
+         job_location[0] = jm.get_active_job_position (0);
+         job_location[1] = jm.get_active_job_position (1);
+         job_location[2] = jm.get_active_job_position (2);
 
          // if location is within tolerance of the job location, work on it
          float dist2 =
@@ -265,7 +228,7 @@ void Unit::update (float time_step)
             (floorf (position[2]) - (float)job_location[2]) * (floorf (position[2]) - (float)job_location[2]);
 
          if (dist2 <= min_job_dist2)
-            active_job->act (power * time_step);
+            jm.active_job_action (power * time_step);
          else
          {
             // TODO: find a different way of handling this (something different than "trimming the end of the path")
@@ -400,31 +363,19 @@ void Unit::update (float time_step)
 
 void Unit::assign_job (Job *job)
 {
-   if (!available_job_slots ())
-   {
-      std::cout
-         << "Not enough available job slots"
-         << " available for unit "
-         << this << std::endl;
-
-      return;
-   }
-
-   jobs.push_front (job);
+   jm.assign_job (job);
 }
 
 bool Unit::available_job_slots (void)
 {
-   if (jobs.size () >= jobs_limit)
-      return false;
-
-   return true;
+   return jm.available_job_slots ();
 }
 
-Job *Unit::pop_active_job (void)
+Job *Unit::pop_return_job (void)
 {
-   active_job = nullptr;
    state      = STANDBY;
 
-   return jobs.pop_back ();
+   jm.set_return_all_jobs ();
+
+   return jm.pop_return_job ();
 }

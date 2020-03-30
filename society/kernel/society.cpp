@@ -23,7 +23,7 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 4;
+   int num_units = 40;
 
    current_job_unit_index = 0;
    current_job_index      = 0;
@@ -164,9 +164,9 @@ void Society::set_destination (int destination[3])
 
       if (location_value >= 0 && unit->is_selected ())
       {
-         // Return the active job if any
-         if (unit->num_jobs () > 0)
-            queued_jobs.push_front (unit->pop_active_job ());
+         // Return any jobs the unit has if any
+         while (unit->num_jobs () > 0)
+            queued_jobs.push_front (unit->pop_return_job ());
 
          // Set the unit destination
          unit->set_destination (dest);

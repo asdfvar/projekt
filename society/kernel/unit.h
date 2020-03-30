@@ -5,7 +5,7 @@
 #include <thread>
 #include "map.h"
 #include "jobs.h"
-#include "container.h"
+#include "job_manager.h"
 
 class Unit
 {
@@ -36,18 +36,20 @@ class Unit
 
       void assign_job (Job *job);
 
-      Job *access_job (int ind) { return jobs.access (ind); };
+      Job *access_job (int ind) { return jm.access_job (ind); };
 
-      Job *access_active_job (void) { return jobs.back (); };
+      Job *access_active_job (void) { return jm.access_active_job (); };
 
       bool available_job_slots (void);
 
-      int num_jobs (void) { return jobs.size (); };
+      int num_jobs (void) { return jm.num_total_jobs (); };
 
-      Job *pop_active_job (void);
+      Job *pop_return_job (void);
 
-      int return_jobs_size (void) { return return_jobs.size (); };
-      Job *return_job (void) { return return_jobs.pop_back (); };
+      Job *pop_active_job (void) { return jm.pop_active_job (); };
+
+      int return_jobs_size (void) { return jm.num_return_jobs (); };
+      Job *return_job (void)      { return jm.pop_return_job ();  };
 
       virtual void draw (float *transform, float *translation) {};
 
@@ -62,7 +64,7 @@ class Unit
       float *cost;
       float *buffer;
 
-      Job   *active_job;
+      Job_manager jm;
 
       int   *path;
       bool   trim_path_end;
@@ -83,10 +85,6 @@ class Unit
       bool selected;
 
       int path_size;
-
-      int jobs_limit;
-      Container<Job> jobs;
-      Container<Job> return_jobs;
 
       bool solution_found;
 };
