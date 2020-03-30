@@ -35,6 +35,8 @@ Facade::Facade (void)
 
    society.set_map_layer (map_layer);
 
+   society.set_view (transform, translation);
+
    control_down = false;
    shift_down   = false;
    button0_down = false;
@@ -275,7 +277,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
       destination[1] = cell[1];
       destination[2] = map_layer;
 
-      society.set_destination (destination);
+      society.set_destination (destination, true);
    }
 
    // Zoom in
@@ -380,7 +382,8 @@ void Facade::mouseMotion (int x, int y)
    const float det = transform[0] * transform[3] - transform[1] * transform[2];
    const float invDet = 1.0f / det;
 
-   const float inv_transform[4] = { invDet * transform[3], -invDet * transform[1],
+   const float inv_transform[4] = {
+      invDet * transform[3], -invDet * transform[1],
       -invDet * transform[2],  invDet * transform[0] };
 
    // Adjust the translation of the world

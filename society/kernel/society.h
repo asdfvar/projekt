@@ -16,11 +16,13 @@ class Society
       Society (void);
       ~Society (void);
 
+      void set_view (float transform[4], float translation[2]);
+
       void set_map_layer (int map_layer) { Map->set_map_layer (map_layer); };
 
       void update (float time_step);
 
-      void set_destination (int dest[3]);
+      void set_destination (int dest[3], bool selected_units);
 
       const bool *access_air ();
 

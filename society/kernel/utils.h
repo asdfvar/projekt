@@ -43,6 +43,12 @@ static float map_to_window (float position, float map_size)
    return position / map_size * 2.0f - 1.0f;
 }
 
+// Convert an *x* window point to an *x* map point in a single dimension
+static float window_to_map (float position, float map_size)
+{
+   return 0.5f * (position + 1.0f) * map_size;
+}
+
 // Apply 2-D transform with translation
 static inline void transformation (float point[2], float transform[4], float translation[2])
 {

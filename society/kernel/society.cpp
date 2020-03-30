@@ -23,38 +23,13 @@ Society::Society (void)
 
    int map_layer = 20;
 
-   int num_units = 40;
-
    current_job_unit_index = 0;
    current_job_index      = 0;
 
    const bool *ground_map = Map->access_ground ();
 
-   int unit_count = 0;
-   for (int ind_z = 0, ind = 0; ind_z < size[2]; ind_z++) {
-      for (int ind_y = 0; ind_y < size[1]; ind_y++) {
-         for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++)
-         {
-            if (ground_map[ind] == true && ind_z == map_layer && unit_count < num_units)
-            {
-               unit_count++;
-               dest[0] = (float)ind_x     + 0.5f;
-               dest[1] = (float)ind_y     + 0.5f;
-               dest[2] = (float)map_layer + 0.5f;
-
-               if (unit_count % 2 == 1)
-                  units.push_back (new X01 (dest[0], dest[1], dest[2], Map));
-               else
-                  units.push_back (new X02 (dest[0], dest[1], dest[2], Map));
-            }
-         }
-      }
-   }
-
    ibuffer = new   int[    size[0] * size[1] * size[2]];
    fbuffer = new float[2 * size[0] * size[1] * size[2]];
-
-   if (units.size () <= 0) return;
 }
 
 Society::~Society (void)
@@ -67,9 +42,59 @@ Society::~Society (void)
    delete[] fbuffer;
 }
 
+void Society::set_view (float transform[4], float translation[2])
+{
+   // Random (x,y) location in the window [-1, 1]
+   float rx = (float)(rand () % 1000) / 1000.0f;
+   float ry = (float)(rand () % 1000) / 1000.0f;
+
+   rx = 2.0f * rx - 1.0f;
+   ry = 2.0f * ry - 1.0f;
+
+   // Convert the random (x,y) location to the equivalent map location
+   float x = window_to_map (rx, size[0]);
+   float y = window_to_map (ry, size[1]);
+
+   float initial_x = x;
+   float initial_y = y;
+
+   const bool  *ground_map = Map->access_ground ();
+
+   const int num_units = 6;
+
+   for (int unit_ind = 0; unit_ind < num_units; unit_ind++)
+   {
+      int cell_ind[3] = { (int)x, (int)y, size[2] - 1 };
+
+      for (int layer = size[2] - 1; !Map->get_ground_cell (cell_ind) && layer >= 0; layer--)
+         cell_ind[2] = layer;
+
+      if (unit_ind % 2 == 1)
+         units.push_back (new X01 (cell_ind[0], cell_ind[1], cell_ind[2], Map)); // TODO: first three arguments should be just one with 3 elements
+      else
+         units.push_back (new X02 (cell_ind[0], cell_ind[1], cell_ind[2], Map));
+
+      // TODO: do this better and more robustly
+      x += 1.0f;
+   }
+
+   int cell_ind[3] = { (int)initial_x, (int)initial_y, size[2] - 1 };
+
+   for (int layer = size[2] - 1; !Map->get_ground_cell (cell_ind) && layer >= 0; layer--)
+      cell_ind[2] = layer;
+
+   set_destination (cell_ind, false);
+
+   transform[0] = 4.0f;
+   transform[3] = 4.0f;
+
+   translation[0] = -rx;
+   translation[1] = -ry;
+}
+
 // Destination is set by pooling out the available cells at and around the selected
 // destination to provide a unique cell destination for each unit
-void Society::set_destination (int destination[3])
+void Society::set_destination (int destination[3], bool selected_units)
 {
    const bool  *ground_map = Map->access_ground ();
    const float *weight_map = Map->access_weight ();
@@ -133,7 +158,7 @@ void Society::set_destination (int destination[3])
    {
       Unit *unit = units.access (unit_ind);
 
-      if (!unit->is_selected()) continue;
+      if (!unit->is_selected() && selected_units) continue;
 
       int dest_ind = cost_indices[ind++];
 
@@ -162,7 +187,7 @@ void Society::set_destination (int destination[3])
 
       int location_value = Map->get_ground_cell (dest);
 
-      if (location_value >= 0 && unit->is_selected ())
+      if (location_value >= 0)
       {
          // Return any jobs the unit has if any
          while (unit->num_jobs () > 0)

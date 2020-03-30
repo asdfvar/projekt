@@ -38,6 +38,7 @@ class Facade {
 
       int mode;
 
+      // Window-view transform and translation 
       float transform[4];
       float translation[2];
 
