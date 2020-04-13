@@ -4,7 +4,8 @@
 namespace tid
 {
    const unsigned int dirt  = 1;
-   const unsigned int stone = 2;
+   const unsigned int grass = 2;
+   const unsigned int stone = 3;
 };
 
 class Item

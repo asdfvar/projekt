@@ -52,8 +52,14 @@ MAP::MAP (int size_in[3])
       for (int ind_y = 0, ind2d = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++, ind2d++)
          {
-            if (ind_z < perlin_array[ind2d]) material[ind] = tid::stone;
-            else material[ind] = 0;
+            material[ind] = 0;
+
+            if (ind_z == (int)perlin_array[ind2d])
+               material[ind] = tid::grass;
+            if ((int)perlin_array[ind2d] > ind_z && ind_z > (int)perlin_array[ind2d] - 6)
+               material[ind] = tid::dirt;
+            if ((int)perlin_array[ind2d] - 3 >= ind_z)
+               material[ind] = tid::stone;
          }
       }
    }
