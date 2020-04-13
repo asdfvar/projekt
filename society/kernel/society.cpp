@@ -290,7 +290,7 @@ void Society::update (float time_step)
             {
 
                if (Map->get_material (flat_ind) == 1)
-                  unit->add_material (1, 1.0f);
+                  unit->add_item (1);
 
                Map->remove_cell (flat_ind);
             }

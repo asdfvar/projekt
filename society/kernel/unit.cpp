@@ -358,6 +358,12 @@ void Unit::update (float time_step)
    tic++;
 }
 
+void Unit::add_item (int type)
+{
+   // TODO: add this to the item list or add to an existing item
+   std::cout << "add material" << std::endl;
+}
+
 void Unit::assign_job (Job *job)
 {
    jm.assign_job (job);
