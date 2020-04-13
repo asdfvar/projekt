@@ -1,3 +1,7 @@
+BASE_DIR = ../
+
+include $(BASE_DIR)/directives.mk
+
 CC = g++
 
 OBJDIR = objdir
@@ -18,4 +22,4 @@ objdir:
 	mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $^ -c -o $@
+	$(CC) $^ $(DIRECTIVES) -c -o $@

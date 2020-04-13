@@ -1,3 +1,7 @@
+BASE_DIR = ../
+
+include $(BASE_DIR)/directives.mk
+
 CC = g++
 
 OBJDIR = objdir
@@ -26,4 +30,4 @@ clean:
 	rm $(OBJS) $(LIBNAME)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $^ -g -c -o $@
+	$(CC) $^ $(DIRECTIVES) -c -o $@

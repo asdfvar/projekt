@@ -39,6 +39,7 @@ void MAP::draw (float *transform, float *translation)
    float starting_row_loc = Y_START;
    float starting_col_loc = X_START;
 
+#ifdef DEVELOPER
    // Draw grid lines
    glLineWidth (0.1f);
    for (int row = 0; row < row_max; row++)
@@ -71,6 +72,7 @@ void MAP::draw (float *transform, float *translation)
          glEnd();
       }
    }
+#endif
 
    // Draw cells
    for (int row = 0, ind = 0; row < row_max; row++)

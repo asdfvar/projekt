@@ -3,7 +3,8 @@
 
 namespace tid
 {
-   const unsigned int stone = 1;
+   const unsigned int dirt  = 1;
+   const unsigned int stone = 2;
 };
 
 class Item
