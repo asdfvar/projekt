@@ -6,8 +6,8 @@
 #include <GL/glext.h>
 #include <cmath>
 
-X01::X01 (float position_x, float position_y, float position_z, MAP* Map) : Unit { position_x, position_y, position_z, Map } { }
-X02::X02 (float position_x, float position_y, float position_z, MAP* Map) : Unit { position_x, position_y, position_z, Map } { }
+X01::X01 (float position[3], MAP* Map) : Unit { position, Map } { }
+X02::X02 (float position[3], MAP* Map) : Unit { position, Map } { }
 
 void X01::draw (float *transform, float *translation)
 {

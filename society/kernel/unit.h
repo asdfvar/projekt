@@ -11,10 +11,7 @@ class Unit
 {
    public:
 
-      Unit (float position_x,
-            float position_y,
-            float position_z,
-            MAP*);
+      Unit (float position[3], MAP*);
 
      ~Unit (void);
 

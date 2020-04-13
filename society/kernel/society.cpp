@@ -69,10 +69,15 @@ void Society::set_view (float transform[4], float translation[2])
       for (int layer = size[2] - 1; !Map->get_ground_cell (cell_ind) && layer >= 0; layer--)
          cell_ind[2] = layer;
 
+      float location[3] = {
+         static_cast<float> (cell_ind[0]),
+         static_cast<float> (cell_ind[1]),
+         static_cast<float> (cell_ind[2]) };
+
       if (unit_ind % 2 == 1)
-         units.push_back (new X01 (cell_ind[0], cell_ind[1], cell_ind[2], Map)); // TODO: first three arguments should be just one with 3 elements
+         units.push_back (new X01 (location, Map));
       else
-         units.push_back (new X02 (cell_ind[0], cell_ind[1], cell_ind[2], Map));
+         units.push_back (new X02 (location, Map));
 
       // TODO: do this better and more robustly
       x += 1.0f;

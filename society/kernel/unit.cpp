@@ -14,9 +14,7 @@
 #include "pathfinding.h"
 
 Unit::Unit (
-      float position_x_in,
-      float position_y_in,
-      float position_z_in,
+      float position_in[3],
       MAP *Map_in)
 {
    tic   = rand ();
@@ -25,9 +23,9 @@ Unit::Unit (
 
    direction = 0.0f;
 
-   position[0] = position_x_in;
-   position[1] = position_y_in;
-   position[2] = position_z_in;
+   position[0] = position_in[0];
+   position[1] = position_in[1];
+   position[2] = position_in[2];
 
    Map = Map_in;
 
