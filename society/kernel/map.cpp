@@ -173,6 +173,16 @@ bool MAP::get_ground_cell (int ind[3])
    return ground[flattened_ind];
 }
 
+unsigned int MAP::get_material (int ind[3])
+{
+   int flattened_ind =
+      ind[2] * size[0] * size[1] +
+      ind[1] * size[0]           +
+      ind[0];
+
+   return material[flattened_ind];
+}
+
 // Ground map is dependent on the air map. It is the same with the exception that
 // open spaces not supported by ground are set as invalid (ground)
 void MAP::set_map (void)

@@ -282,7 +282,6 @@ void Society::update (float time_step)
 
          if (job->is_complete ())
          {
-
             int flat_ind = job->get_flattened_loc_index ();
 
             // Perform the complete action for the job
@@ -483,7 +482,7 @@ void Society::set_jobs (int job_type)
                flat_ind_to_dim (1, ind, size),
                flat_ind_to_dim (2, ind, size) };
 
-            queued_jobs.push_front (new Job (ind, location, job_type));
+            queued_jobs.push_front (new Job (ind, location, job_type, Map->get_material (location)));
          }
       }
    }

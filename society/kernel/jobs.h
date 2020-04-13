@@ -9,7 +9,7 @@ class Job
 {
    public:
 
-      Job (int flattened_index, int location_in[3], int type);
+      Job (int flattened_index, int location_in[3], int type, unsigned int material);
 
       bool is_complete (void) { return complete; };
 
@@ -23,12 +23,13 @@ class Job
 
    protected:
 
-      int   type;                // type of job
-      int   location[3];         // location the job takes place
-      int   flattened_loc_index; // index (flattened location)
-      float work;                // Work towards completing the job (Joules)
-      float energy;              // Energy needed to complete the job (Joules)
-      bool  complete;            // flag to determine if the job is complete
+      int          type;                // type of job
+      unsigned int material;
+      int          location[3];         // location the job takes place
+      int          flattened_loc_index; // index (flattened location)
+      float        work;                // Work towards completing the job (Joules)
+      float        energy;              // Energy needed to complete the job (Joules)
+      bool         complete;            // flag to determine if the job is complete
 };
 
 #endif
