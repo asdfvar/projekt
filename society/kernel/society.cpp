@@ -285,7 +285,7 @@ void Society::update (float time_step)
             int flat_ind = job->get_flattened_loc_index ();
 
             // Perform the complete action for the job
-            if (job->get_type () == 1) // remove cell
+            if (job->get_type () == 1) // remove cell TODO: have this determined by the implicit class type
             {
                unit->add_item (Map->get_material (flat_ind));
 

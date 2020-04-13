@@ -15,3 +15,5 @@ define grounded cell as a cell that can draw a connected path (with adjacent cel
 rename method "map_dim" to "size"
 
 write conversion routine between window view and map position
+
+make job subclass specific to the type of job it is
