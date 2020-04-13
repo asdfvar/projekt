@@ -19,22 +19,21 @@ class MAP
       const float *access_weight (void) { return (const float*)weight; };
 
       void set_map_layer (int map_layer_in) { map_layer = map_layer_in; };
-      int  get_map_layer (void)             { return map_layer; };
       bool test_los (int   cell[3]);
       bool test_los (float cell[3]);
 
+      int  get_map_layer (void)             { return map_layer; };
       bool get_air_cell    (int ind);
       bool get_air_cell    (int ind[3]);
       bool get_ground_cell (int flattened_ind);
       bool get_ground_cell (int ind[3]);
+      int  get_material (int ind) { return material[ind]; };
 
       int shape (int dim) { return size[dim]; };
 
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);
       void remove_cell (int flat_ind);
-
-      int  get_material (int ind) { return material[ind]; };
 
       void        ready_uncommited_job_cells (int cell_selections_in[2][3]);
       void        set_uncommited_job_cells (bool reset_uncommitted_jobs_size);

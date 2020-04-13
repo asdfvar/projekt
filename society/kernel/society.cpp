@@ -277,11 +277,18 @@ void Society::update (float time_step)
 
          if (job->is_complete ())
          {
+
+            int flat_ind = job->get_flattened_loc_index ();
+
             // Perform the complete action for the job
             if (job->get_type () == 1) // remove cell
-               Map->remove_cell (job->get_flattened_loc_index ());
+            {
 
-            // TODO: Add cell
+               if (Map->get_material (flat_ind) == 1)
+                  unit->add_material (1, 1.0f);
+
+               Map->remove_cell (flat_ind);
+            }
 
             // Remove the job from the unit's list
             unit->pop_active_job ();

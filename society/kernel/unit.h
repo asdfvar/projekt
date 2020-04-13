@@ -34,6 +34,12 @@ class Unit
 
       void update (float time_step);
 
+      void add_material (int type, float density)
+      {
+         // TODO: add this to the item list or add to an existing item
+         std::cout << "add material" << std::endl;
+      }
+
       void assign_job (Job *job);
 
       Job *access_job (int ind) { return jm.access_job (ind); };
