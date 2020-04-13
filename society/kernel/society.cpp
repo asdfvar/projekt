@@ -289,8 +289,8 @@ void Society::update (float time_step)
             if (job->get_type () == 1) // remove cell
             {
 
-               if (Map->get_material (flat_ind) == 1)
-                  unit->add_item (1);
+               if (Map->get_material (flat_ind) == tid::stone)
+                  unit->add_item (tid::stone);
 
                Map->remove_cell (flat_ind);
             }

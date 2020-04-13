@@ -1,6 +1,7 @@
 #include "map.h"
 #include "math_utils.h"
 #include "utils.h"
+#include "item.h"
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -22,8 +23,8 @@ MAP::MAP (int size_in[3])
    weight     = new float[size[0] * size[1] * size[2]];
    air        = new bool [size[0] * size[1] * size[2]];
    ground     = new bool [size[0] * size[1] * size[2]];
-   material   = new int  [size[0] * size[1] * size[2]];
-   view_plain = new int  [size[0] * size[1]];
+   material   = new unsigned int  [size[0] * size[1] * size[2]];
+   view_plain = new unsigned int  [size[0] * size[1]];
    view_depth = new int  [size[0] * size[1]];
 
    max_depth = 8;
@@ -51,7 +52,7 @@ MAP::MAP (int size_in[3])
       for (int ind_y = 0, ind2d = 0; ind_y < size[1]; ind_y++) {
          for (int ind_x = 0; ind_x < size[0]; ind_x++, ind++, ind2d++)
          {
-            if (ind_z < perlin_array[ind2d]) material[ind] = 1;
+            if (ind_z < perlin_array[ind2d]) material[ind] = tid::stone;
             else material[ind] = 0;
          }
       }
@@ -274,7 +275,7 @@ const bool *MAP::access_uncommitted_jobs (void)
    return (const bool*)uncommitted_jobs;
 }
 
-int MAP::get_view_plain (int ind[2])
+unsigned int MAP::get_view_plain (int ind[2])
 {
    int flat_ind = ind[1] * size[0] + ind[0];
    return view_plain[flat_ind];

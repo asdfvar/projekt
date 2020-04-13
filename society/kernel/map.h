@@ -27,7 +27,7 @@ class MAP
       bool get_air_cell    (int ind[3]);
       bool get_ground_cell (int flattened_ind);
       bool get_ground_cell (int ind[3]);
-      int  get_material (int ind) { return material[ind]; };
+      unsigned int  get_material (int ind) { return material[ind]; };
 
       int shape (int dim) { return size[dim]; };
 
@@ -40,23 +40,23 @@ class MAP
       void        unselect_uncommitted_jobs (void);
       const bool *access_uncommitted_jobs (void);
 
-      int get_view_plain (int ind)    { return view_plain[ind]; };
-      int get_view_plain (int ind[2]);
+      unsigned int get_view_plain (int ind)    { return view_plain[ind]; };
+      unsigned int get_view_plain (int ind[2]);
 
       void draw (float *transform, float *translation);
 
    private:
 
-      float *weight;
-      bool  *air;
-      bool  *ground;
-      int   *material;
+      float        *weight;
+      bool         *air;
+      bool         *ground;
+      unsigned int *material;
 
       int map_layer;
 
       bool *uncommitted_jobs;
 
-      int *view_plain;
+      unsigned int *view_plain;
       int *view_depth;
       int  max_depth;
 

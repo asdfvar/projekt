@@ -1,5 +1,6 @@
 #include "container.h"
 #include "jobs.h"
+#include "item.h"
 #include "unit.h"
 #include "map.h"
 #include <iostream>
@@ -365,6 +366,19 @@ template void  Container<Unit>::reset           (void      );
 template bool  Container<Unit>::advance         (int       );
 template void  Container<Unit>::list_contents   (void      );
 template void  Container<Unit>::test_ends       (void      );
+
+// Define container types for the items class
+template void  Container<Item>::insert          (Item*, int);
+template void  Container<Item>::push_front      (Item*     );
+template void  Container<Item>::push_back       (Item*     );
+template Item *Container<Item>::access          (int       );
+template Item *Container<Item>::back            (void      );
+template Item *Container<Item>::pop             (int       );
+template Item *Container<Item>::pop_back        (void      );
+template void  Container<Item>::reset           (void      );
+template bool  Container<Item>::advance         (int       );
+template void  Container<Item>::list_contents   (void      );
+template void  Container<Item>::test_ends       (void      );
 
 // Lattice for the Cell type
 template Lattice<Cell>::Lattice (int *size_in, int dim_in);

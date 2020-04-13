@@ -5,6 +5,7 @@
 #include <thread>
 #include "map.h"
 #include "jobs.h"
+#include "item.h"
 #include "job_manager.h"
 
 class Unit
@@ -64,6 +65,8 @@ class Unit
       float *buffer;
 
       Job_manager jm;
+
+      Container<Item> items;
 
       int   *path;
       bool   trim_path_end;

@@ -11,6 +11,7 @@
 #include "unit.h"
 #include "utils.h"
 #include "timer.h"
+#include "item.h"
 #include "pathfinding.h"
 
 Unit::Unit (
@@ -360,8 +361,7 @@ void Unit::update (float time_step)
 
 void Unit::add_item (int type)
 {
-   // TODO: add this to the item list or add to an existing item
-   std::cout << "add material" << std::endl;
+   items.push_front (new Item (type));
 }
 
 void Unit::assign_job (Job *job)
