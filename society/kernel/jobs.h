@@ -5,11 +5,16 @@
  ** static in nature (usually performed on objects that
  ** don't move in the environment)
  */
+
+namespace jid {
+   enum jid { REMOVE };
+}
+
 class Job
 {
    public:
 
-      Job (int flattened_index, int location_in[3], int type, unsigned int material);
+      Job (int flattened_index, int location_in[3]);
 
       bool is_complete (void) { return complete; };
 
@@ -17,19 +22,34 @@ class Job
 
       int get_flattened_loc_index (void) { return flattened_loc_index; };
 
-      int get_type (void) { return type; };
+      int get_type (void) { return job_type; };
 
       void act (float power);
 
    protected:
 
-      int          type;                // type of job
+      void init (int flattened_index, int location_in[3]);
+
+      enum jid::jid job_type;
+      int              location[3];         // location the job takes place
+      int              flattened_loc_index; // index (flattened location)
+      float            work;                // Work towards completing the job (Joules)
+      float            energy;              // Energy needed to complete the job (Joules)
+      bool             complete;            // flag to determine if the job is complete
+};
+
+class JobRemove : public Job
+{
+   public:
+
+      JobRemove (
+            int flattened_index,
+            int location_in[3],
+            unsigned int material);
+
+   private:
+
       unsigned int material;
-      int          location[3];         // location the job takes place
-      int          flattened_loc_index; // index (flattened location)
-      float        work;                // Work towards completing the job (Joules)
-      float        energy;              // Energy needed to complete the job (Joules)
-      bool         complete;            // flag to determine if the job is complete
 };
 
 #endif

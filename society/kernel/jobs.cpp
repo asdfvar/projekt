@@ -2,11 +2,13 @@
 #include "item.h"
 #include <iostream>
 
-Job::Job (int flattened_index_in, int location_in[3], int type_in, unsigned int material_in)
+Job::Job (int flattened_index_in, int location_in[3])
 {
-   type = type_in; // TODO: have the type be implicit by the *subclass*
-   material = material_in;
+   init (flattened_index_in, location_in);
+}
 
+void Job::init (int flattened_index_in, int location_in[3])
+{
    flattened_loc_index = flattened_index_in;
 
    location[0] = location_in[0];
@@ -16,10 +18,6 @@ Job::Job (int flattened_index_in, int location_in[3], int type_in, unsigned int 
    energy     = 0.2f;
    work       = 0.0f;
    complete   = false;
-
-   if      (material == tid::stone) energy = 0.4f;
-   else if (material == tid::dirt)  energy = 0.2f;
-   else if (material == tid::grass) energy = 0.25f;
 }
 
 void Job::act (float Qin)
@@ -28,3 +26,15 @@ void Job::act (float Qin)
 
    if (work >= energy) complete = true;
 }
+
+JobRemove::JobRemove (int flattened_index_in, int location_in[3], unsigned int material_in) : Job (flattened_index_in, location_in)
+{
+   job_type = jid::REMOVE;
+
+   material = material_in;
+
+   if      (material == tid::stone) energy = 0.4f;
+   else if (material == tid::dirt)  energy = 0.2f;
+   else if (material == tid::grass) energy = 0.25f;
+}
+

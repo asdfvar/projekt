@@ -285,7 +285,7 @@ void Society::update (float time_step)
             int flat_ind = job->get_flattened_loc_index ();
 
             // Perform the complete action for the job
-            if (job->get_type () == 1) // remove cell TODO: have this determined by the implicit class type
+            if (job->get_type () == jid::REMOVE)
             {
                unit->add_item (Map->get_material (flat_ind));
 
@@ -482,7 +482,10 @@ void Society::set_jobs (int job_type)
                flat_ind_to_dim (1, ind, size),
                flat_ind_to_dim (2, ind, size) };
 
-            queued_jobs.push_front (new Job (ind, location, job_type, Map->get_material (location)));
+            if (job_type == jid::REMOVE)
+               queued_jobs.push_front (new JobRemove (ind, location, Map->get_material (location)));
+            else
+               std::cout << "resolve this" << std::endl;
          }
       }
    }

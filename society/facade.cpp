@@ -81,7 +81,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    // Enter key
    if (!control_down && key == 13)
    {
-      if (mode == 1) society.set_jobs (1);
+      if (mode == 1) society.set_jobs (jid::REMOVE);
 
       mode = 0;
    }
