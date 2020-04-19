@@ -6,7 +6,8 @@
  ** don't move in the environment)
  */
 
-namespace jid {
+namespace jid
+{
    enum jid { REMOVE, BUILD };
 }
 
@@ -30,7 +31,7 @@ class Job
 
       void init (int flattened_index, int location_in[3]);
 
-      enum jid::jid job_type;
+      enum jid::jid    job_type;
       int              location[3];         // location the job takes place
       int              flattened_loc_index; // index (flattened location)
       float            work;                // Work towards completing the job (Joules)
