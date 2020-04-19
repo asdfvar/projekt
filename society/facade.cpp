@@ -178,6 +178,8 @@ void Facade::keyboardDown (const char key, int x, int y)
    // Remove mode
    else if (key == 'd') mode = 1;
 
+   else if (key == 'b') mode = 2;
+
    hud.set_mode (mode);
 }
 

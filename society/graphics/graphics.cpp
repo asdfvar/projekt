@@ -87,6 +87,14 @@ void HUD::draw_info (void)
       remove.populate ("remove mode");
       remove.display_contents (0.60f, 0.95f, 0.7f, 1.0f);
    }
+
+   if (mode == 2)
+   {
+      Text build;
+
+      build.populate ("build mode");
+      build.display_contents (0.60f, 0.95f, 0.7f, 1.0f);
+   }
 }
 
 void HUD::update (float time_step, int map_layer_in)

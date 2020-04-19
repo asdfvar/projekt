@@ -485,7 +485,7 @@ void Society::set_jobs (int job_type)
             if (job_type == jid::REMOVE)
                queued_jobs.push_front (new JobRemove (ind, location, Map->get_material (location)));
             else
-               std::cout << "resolve this" << std::endl;
+               std::cout << __FILE__ << __LINE__ << ":resolve this" << std::endl;
          }
       }
    }

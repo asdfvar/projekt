@@ -7,7 +7,7 @@
  */
 
 namespace jid {
-   enum jid { REMOVE };
+   enum jid { REMOVE, BUILD };
 }
 
 class Job
@@ -43,6 +43,20 @@ class JobRemove : public Job
    public:
 
       JobRemove (
+            int flattened_index,
+            int location_in[3],
+            unsigned int material);
+
+   private:
+
+      unsigned int material;
+};
+
+class JobBuild : public Job
+{
+   public:
+
+      JobBuild (
             int flattened_index,
             int location_in[3],
             unsigned int material);
