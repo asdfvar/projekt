@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include "text.h"
+#include "mode.h"
 #include <iostream>
 #include <cmath>
 
@@ -80,7 +81,7 @@ void HUD::draw_info (void)
       elevation.display_contents (-0.95f, 0.95f, alpha, 1.0f);
    }
 
-   if (mode == 1)
+   if (mode == mode::REMOVE)
    {
       Text remove;
 
@@ -88,7 +89,7 @@ void HUD::draw_info (void)
       remove.display_contents (0.60f, 0.95f, 0.7f, 1.0f);
    }
 
-   if (mode == 2)
+   if (mode == mode::BUILD)
    {
       Text build;
 

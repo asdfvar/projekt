@@ -4,6 +4,8 @@ include $(BASE_DIR)/directives.mk
 
 CC = g++
 
+INC = -I$(BASE_DIR)
+
 OBJDIR = objdir
 
 OBJS = $(OBJDIR)/graphics.o \
@@ -22,4 +24,4 @@ objdir:
 	mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $^ $(DIRECTIVES) -c -o $@
+	$(CC) $^ $(INC) $(DIRECTIVES) -c -o $@

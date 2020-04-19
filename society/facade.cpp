@@ -9,6 +9,7 @@
 #include <cmath>
 #include "facade.h"
 #include "graphics.h"
+#include "mode.h"
 
 // Change perspective from a point on the [-1, 1] scale to the corresponding cell
 static float window_to_cell (
@@ -53,7 +54,7 @@ Facade::Facade (void)
 
    selection_active = false;
 
-   mode = 0;
+   mode = mode::NONE;
 }
 
 /*
@@ -75,15 +76,15 @@ void Facade::keyboardDown (const char key, int x, int y)
    // Escape key
    if (!control_down && key == 27) {
       society.unselect_all ();
-      mode = 0;
+      mode = mode::NONE;
    }
 
    // Enter key
    if (!control_down && key == 13)
    {
-      if (mode == 1) society.set_jobs (jid::REMOVE);
+      if (mode == mode::REMOVE) society.set_jobs (jid::REMOVE);
 
-      mode = 0;
+      mode = mode::NONE;
    }
 
    // Control 'a'
@@ -176,9 +177,9 @@ void Facade::keyboardDown (const char key, int x, int y)
       society.select_group (0);
 
    // Remove mode
-   else if (key == 'd') mode = 1;
+   else if (key == 'd') mode = mode::REMOVE;
 
-   else if (key == 'b') mode = 2;
+   else if (key == 'b') mode = mode::BUILD;
 
    hud.set_mode (mode);
 }
@@ -339,7 +340,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
    cell_selections[1][2] = map_layer;
 
    // Remove mode
-   if (mode == 1)
+   if (mode == mode::REMOVE)
    {
       society.select_cells (cell_selections);
 
@@ -433,7 +434,7 @@ void Facade::mouseMotion (int x, int y)
 
       selection_active = true;
 
-      if (mode == 1)
+      if (mode == mode::REMOVE)
       {
          // Remove mode
          society.select_cells (cell_selections);
