@@ -10,7 +10,6 @@
 #include "facade.h"
 #include "graphics.h"
 #include "mode.h"
-#include "menu_system.h"
 
 // Change perspective from a point on the [-1, 1] scale to the corresponding cell
 static float window_to_cell (
