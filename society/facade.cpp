@@ -77,6 +77,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    if (!control_down && key == 27) {
       society.unselect_all ();
       mode = mode::NONE;
+      society.unset_menu ();
    }
 
    // Enter key
@@ -180,6 +181,10 @@ void Facade::keyboardDown (const char key, int x, int y)
    else if (key == 'd') mode = mode::REMOVE;
 
    else if (key == 'b') mode = mode::BUILD;
+
+   else if (key == 'm') {
+      society.set_menu ();
+   }
 
    hud.set_mode (mode);
 }

@@ -8,6 +8,7 @@
 #include "unit.h"
 #include "jobs.h"
 #include "container.h"
+#include "menu_system.h"
 
 class Society
 {
@@ -43,6 +44,9 @@ class Society
       void set_select_cells (bool reset_uncommitted_jobs_size);
 
       void set_jobs (int job_type);
+
+      void set_menu (void)   { active_menu = &main_menu; };
+      void unset_menu (void) { active_menu = nullptr;    };
 
       // Graphics
       void draw (
@@ -101,6 +105,10 @@ class Society
       // Array of containers that contain pointers to the units assigned
       // to the the specified group number
       Container<Unit> group[10];
+
+      // Menu system. The base pointer is the active menu which is null if no menu is open
+      BaseMenu *active_menu;
+      MainMenu  main_menu;
 };
 
 #endif

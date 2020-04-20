@@ -30,6 +30,8 @@ Society::Society (void)
 
    ibuffer = new   int[    size[0] * size[1] * size[2]];
    fbuffer = new float[2 * size[0] * size[1] * size[2]];
+
+   active_menu = nullptr;
 }
 
 Society::~Society (void)

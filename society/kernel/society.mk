@@ -4,6 +4,8 @@ include $(BASE_DIR)/directives.mk
 
 CC = g++
 
+INC = -I$(BASE_DIR)/graphics/
+
 OBJDIR = objdir
 
 OBJS = $(OBJDIR)/society.o     \
@@ -30,4 +32,4 @@ clean:
 	rm $(OBJS) $(LIBNAME)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $^ $(DIRECTIVES) -c -o $@
+	$(CC) $^ $(INC) $(DIRECTIVES) -c -o $@
