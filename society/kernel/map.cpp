@@ -16,7 +16,7 @@ MAP::MAP (int size_in[3])
    size[1] = size_in[1];
    size[2] = size_in[2];
 
-   cells = new Lattice<Cell> (size, 3);
+//   cells = new Lattice<Cell> (size, 3);
 
    map_layer = 0;
 

@@ -43,7 +43,21 @@ class Button
 
       void show (void)
       {
-         text.display_contents (ul[0], ul[1], 1.0f, 1.0f);
+
+         text.display_contents (
+               ul[0], // x
+               ul[1], // y
+               1.0f,  // alpha
+               1.0f); // scale
+         // draw the boundary of the button
+         glColor3f (0.9f, 0.9f, 0.9f);
+
+         glBegin (GL_POLYGON);
+         glVertex2f (ul[0],         ul[1]          + 0.02f);
+         glVertex2f (ul[0] + width, ul[1]          + 0.02f);
+         glVertex2f (ul[0] + width, ul[1] - height + 0.02f);
+         glVertex2f (ul[0],         ul[1] - height + 0.02f);
+         glEnd ();
       }
 
   private:
@@ -57,17 +71,19 @@ class BaseMenu
 {
    public:
 
-      virtual void lclick (float x, float y) { };
+      virtual bool lclick (float x, float y)   { return false; };
 
-      virtual void lunclick (float x, float y) { };
+      virtual bool lunclick (float x, float y) { return false; };
 
       virtual void show (void) { };
+
+      virtual int get_menu_id (void) { return 0; };
 
    protected:
 
       float ul[2];
       float width, height;
-
+      int menu_id;
 };
 
 class MainMenu : public BaseMenu
@@ -76,43 +92,51 @@ class MainMenu : public BaseMenu
 
       MainMenu (void)
       {
+         menu_id = 1;
+
          float ul[2] = { 0.0f, 0.0f };
          float button_width = 0.2f;
          float button_height = 0.1f;
 
-         build = new Button ("build", ul, button_width, button_height);
+         remove = new Button ("remove", ul, button_width, button_height);
       }
 
       ~MainMenu (void)
       {
-         delete build;
+         delete remove;
       }
 
-      void lclick (float x, float y) override
+      int get_menu_id (void) override { return menu_id; };
+
+      bool lclick (float x, float y) override
       {
-         if (build->lclick (x, y))
+         if (remove->lclick (x, y))
          {
             // do stuff
+            return true;
          }
+         return false;
       }
 
-      void lunclick (float x, float y) override
+      bool lunclick (float x, float y) override
       {
-         if (build->lunclick (x, y))
+         if (remove->lunclick (x, y))
          {
             // do stuff
+            return true;
          }
+         return false;
       }
 
 
       void show (void) override
       {
-         build->show ();
+         remove->show ();
       }
 
    private:
 
-      Button *build;
+      Button *remove;
 };
 
 #endif

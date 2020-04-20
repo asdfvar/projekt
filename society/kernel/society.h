@@ -45,8 +45,9 @@ class Society
 
       void set_jobs (int job_type);
 
-      void set_menu (void)   { active_menu = &main_menu; };
+      void set_menu   (void) { active_menu = &main_menu; };
       void unset_menu (void) { active_menu = nullptr;    };
+      int  lunclick   (float x, float y); // TODO: flesh this out more
 
       // Graphics
       void draw (

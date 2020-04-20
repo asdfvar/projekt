@@ -244,13 +244,24 @@ void Facade::mouseClick (int button, int state, int x, int y)
    int window_width  = glutGet (GLUT_WINDOW_WIDTH);
    int window_height = glutGet (GLUT_WINDOW_HEIGHT);
 
+   float window[2];
+   window[0] =        2.0f * (float)x / (float)window_width - 1.0f;
+   window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
+
+   // TODO: Flesh this out more
+   if (button0_down == false)
+   {
+      int val = society.lunclick (window[0], window[1]);
+      if (val == 1) {
+         mode = mode::REMOVE;
+         society.unset_menu ();
+         hud.set_mode (mode);
+      }
+   }
+
    // Set the destination for the selected units
    if (button == 0 && state == 1 && z_down == false && has_moved_passively == true)
    {
-      float window[2];
-      window[0] =        2.0f * (float)x / (float)window_width - 1.0f;
-      window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
-
       const float det = transform[0] * transform[3] - transform[1] * transform[2];
       const float invDet = 1.0f / det;
 

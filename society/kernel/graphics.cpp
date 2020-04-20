@@ -217,9 +217,9 @@ void Society::draw_queued_jobs (
 }
 
 void Society::draw_unit_jobs (
-      float       *transform,
-      float       *translation,
-      int          map_layer)
+      float *transform,
+      float *translation,
+      int    map_layer)
 {
    int row_max = size[1];
    int col_max = size[0];
