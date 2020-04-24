@@ -26,6 +26,8 @@ Facade::Facade (void)
 {
    gettimeofday (&start, NULL);
 
+   active_menu = nullptr;
+
    transform[0] = 1.0f; transform[1] = 0.0f;
    transform[2] = 0.0f; transform[3] = 1.0f;
 
@@ -77,7 +79,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    if (!control_down && key == 27) {
       society.unselect_all ();
       mode = mode::NONE;
-      society.unset_menu ();
+      active_menu = nullptr;
    }
 
    // Enter key
@@ -183,7 +185,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    else if (key == 'b') mode = mode::BUILD;
 
    else if (key == 'm') {
-      society.set_menu ();
+      active_menu = &main_menu;
    }
 
    hud.set_mode (mode);
@@ -248,14 +250,20 @@ void Facade::mouseClick (int button, int state, int x, int y)
    window[0] =        2.0f * (float)x / (float)window_width - 1.0f;
    window[1] = 1.0f - 2.0f * (float)y / (float)window_height;
 
-   // TODO: Flesh this out more
    if (button0_down == false)
    {
-      int val = society.lunclick (window[0], window[1]);
-      if (val == 1) {
-         mode = mode::REMOVE;
-         society.unset_menu ();
-         hud.set_mode (mode);
+      if (active_menu != nullptr)
+      {
+         // "build" menu
+         if (active_menu->get_menu_id () == 1)
+         {
+            if (active_menu->lunclick (window[0], window[1]))
+            {
+               mode = mode::REMOVE;
+               active_menu = nullptr;
+               hud.set_mode (mode);
+            }
+         }
       }
    }
 
@@ -546,6 +554,10 @@ void Facade::display (void)
 {
    // clear this openGL buffer
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+   if (active_menu != nullptr) {
+      active_menu->show ();
+   }
 
    if (selection_active == true)
    {

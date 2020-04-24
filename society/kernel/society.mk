@@ -32,4 +32,4 @@ clean:
 	rm $(OBJS) $(LIBNAME)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $^ $(INC) $(DIRECTIVES) -c -o $@
+	$(CC) $^ $(DIRECTIVES) -c -o $@

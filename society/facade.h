@@ -3,6 +3,7 @@
 
 #include "society.h"
 #include "graphics.h"
+#include "menu_system.h"
 #include <queue>
 #include <mutex>
 #include <sys/time.h>
@@ -25,6 +26,9 @@ class Facade {
    private:
 
       Society society;
+
+      BaseMenu *active_menu;
+      MainMenu  main_menu;
 
       struct timeval start, end;
       double time_step = 0.01f;

@@ -284,10 +284,6 @@ void Society::draw (
       int    map_layer)
 {
 
-   if (active_menu != nullptr) {
-      active_menu->show ();
-   }
-
    draw_unit_jobs (
          transform,
          translation,

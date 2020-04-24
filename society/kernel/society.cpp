@@ -30,8 +30,6 @@ Society::Society (void)
 
    ibuffer = new   int[    size[0] * size[1] * size[2]];
    fbuffer = new float[2 * size[0] * size[1] * size[2]];
-
-   active_menu = nullptr;
 }
 
 Society::~Society (void)
@@ -493,22 +491,4 @@ void Society::set_jobs (int job_type)
    }
 
    Map->unselect_uncommitted_jobs ();
-}
-
-// TODO: flesh this out more
-int Society::lunclick (float x, float y)
-{
-   if (active_menu != nullptr) {
-
-      // build menu
-      if (active_menu->get_menu_id () == 1)
-      {
-         if (active_menu->lunclick (x, y))
-         {
-            return 1; // remove mode
-         }
-      }
-   }
-
-   return 0;
 }
