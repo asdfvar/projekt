@@ -5,8 +5,9 @@ LIBPATHS = -L./kernel/ -L./graphics/
 INC      = -I./kernel/ -I./graphics/
 OBJDIR   = objdir
 
-OBJS = $(OBJDIR)/main.o   \
-       $(OBJDIR)/facade.o \
+OBJS = $(OBJDIR)/main.o        \
+       $(OBJDIR)/facade.o      \
+       $(OBJDIR)/menu_system.o \
 #
 
 EXE = whee
