@@ -21,6 +21,8 @@ class Button
 
          width  = width_in;
          height = height_in;
+
+         alpha = 0.7f;
       }
 
       bool lclick (float x, float y)
@@ -43,14 +45,16 @@ class Button
 
       void show (void)
       {
-
          text.display_contents (
                ul[0], // x
                ul[1], // y
                1.0f,  // alpha
                1.0f); // scale
+
          // draw the boundary of the button
-         glColor3f (0.9f, 0.9f, 0.9f);
+         glEnable (GL_BLEND);
+         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glColor4f (0.9f, 0.9f, 0.9f, alpha);
 
          glBegin (GL_POLYGON);
          glVertex2f (ul[0],         ul[1]          + 0.02f);
@@ -65,6 +69,7 @@ class Button
       Text text;
       float ul[2];
       float width, height;
+      float alpha;
 };
 
 class BaseMenu
@@ -84,6 +89,7 @@ class BaseMenu
       float ul[2];
       float width, height;
       int menu_id;
+      float alpha;
 };
 
 class MainMenu : public BaseMenu
@@ -93,24 +99,35 @@ class MainMenu : public BaseMenu
       MainMenu (void)
       {
          menu_id = 1;
+         alpha = 0.7f;
 
-         float ul[2] = { 0.0f, 0.0f };
+         width  = 0.5f;
+         height = 0.5f;
+
+         ul[0] = -0.8f;
+         ul[1] =  0.8f;
+
          float button_width = 0.2f;
          float button_height = 0.1f;
 
-         remove = new Button ("remove", ul, button_width, button_height);
+         float button_ul[2];
+
+         button_ul[0] = ul[0] + 0.1f;
+         button_ul[1] = ul[1] - 0.1f;
+
+         button_remove = new Button ("remove", button_ul, button_width, button_height);
       }
 
       ~MainMenu (void)
       {
-         delete remove;
+         delete button_remove;
       }
 
       int get_menu_id (void) override { return menu_id; };
 
       bool lclick (float x, float y) override
       {
-         if (remove->lclick (x, y))
+         if (button_remove->lclick (x, y))
          {
             // do stuff
             return true;
@@ -120,7 +137,7 @@ class MainMenu : public BaseMenu
 
       bool lunclick (float x, float y) override
       {
-         if (remove->lunclick (x, y))
+         if (button_remove->lunclick (x, y))
          {
             // do stuff
             return true;
@@ -131,12 +148,25 @@ class MainMenu : public BaseMenu
 
       void show (void) override
       {
-         remove->show ();
+         // Draw the remove-button menu
+         button_remove->show ();
+
+         glEnable (GL_BLEND);
+         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glColor4f (0.7f, 0.2f, 0.3f, alpha);
+
+         // Draw the border
+         glBegin (GL_POLYGON);
+         glVertex2f (ul[0],         ul[1]);
+         glVertex2f (ul[0] + width, ul[1]);
+         glVertex2f (ul[0] + width, ul[1] - height);
+         glVertex2f (ul[0],         ul[1] - height);
+         glEnd ();
       }
 
    private:
 
-      Button *remove;
+      Button *button_remove;
 };
 
 #endif
