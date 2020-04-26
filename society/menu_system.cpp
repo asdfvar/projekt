@@ -16,7 +16,7 @@ Button::Button (const std::string input_text, float ul_in[2], float width_in, fl
    width  = width_in;
    height = height_in;
 
-   alpha = 0.7f;
+   alpha = 0.6f;
 }
 
 bool Button::lclick (float x, float y)
@@ -51,17 +51,17 @@ void Button::show (void)
    glColor4f (0.9f, 0.9f, 0.9f, alpha);
 
    glBegin (GL_POLYGON);
-   glVertex2f (ul[0],         ul[1]          + 0.02f);
-   glVertex2f (ul[0] + width, ul[1]          + 0.02f);
-   glVertex2f (ul[0] + width, ul[1] - height + 0.02f);
-   glVertex2f (ul[0],         ul[1] - height + 0.02f);
+   glVertex3f (ul[0],         ul[1]          + 0.02f, -0.5f);
+   glVertex3f (ul[0] + width, ul[1]          + 0.02f, -0.5f);
+   glVertex3f (ul[0] + width, ul[1] - height + 0.02f, -0.5f);
+   glVertex3f (ul[0],         ul[1] - height + 0.02f, -0.5f);
    glEnd ();
 }
 
 MainMenu::MainMenu (void)
 {
    menu_id = 1;
-   alpha = 0.7f;
+   alpha = 0.6f;
 
    width  = 0.5f;
    height = 0.5f;
@@ -122,9 +122,9 @@ void MainMenu::show (void)
 
    // Draw the border
    glBegin (GL_POLYGON);
-   glVertex2f (ul[0],         ul[1]);
-   glVertex2f (ul[0] + width, ul[1]);
-   glVertex2f (ul[0] + width, ul[1] - height);
-   glVertex2f (ul[0],         ul[1] - height);
+   glVertex3f (ul[0],         ul[1],          -0.5f);
+   glVertex3f (ul[0] + width, ul[1],          -0.5f);
+   glVertex3f (ul[0] + width, ul[1] - height, -0.5f);
+   glVertex3f (ul[0],         ul[1] - height, -0.5f);
    glEnd ();
 }

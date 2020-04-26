@@ -555,10 +555,6 @@ void Facade::display (void)
    // clear this openGL buffer
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   if (active_menu != nullptr) {
-      active_menu->show ();
-   }
-
    if (selection_active == true)
    {
       graphics.draw_selection_box (
@@ -573,6 +569,10 @@ void Facade::display (void)
          map_layer);
 
    hud.draw_info ();
+
+   if (active_menu != nullptr) {
+      active_menu->show ();
+   }
 
    // swap this buffer for the old one
    glutSwapBuffers();
