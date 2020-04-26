@@ -8,7 +8,21 @@
 #include <GL/glext.h>
 #include <iostream>
 
-class Button
+class MenuSystem
+{
+   public:
+
+      MenuSystem (void)
+      {
+         alpha = 0.7f;
+      }
+
+   protected:
+
+      float alpha;
+};
+
+class Button : public MenuSystem
 {
    public:
 
@@ -22,15 +36,16 @@ class Button
 
   private:
 
-      Text text;
+      Text  text;
       float ul[2];
       float width, height;
-      float alpha;
 };
 
-class BaseMenu
+class BaseMenu : public MenuSystem
 {
    public:
+
+      BaseMenu (void) : MenuSystem () { };
 
       virtual bool lclick (float x, float y)   { return false; };
 
@@ -45,7 +60,6 @@ class BaseMenu
       float ul[2];
       float width, height;
       int menu_id;
-      float alpha;
 };
 
 class MainMenu : public BaseMenu

@@ -6,7 +6,7 @@
 #include <GL/glext.h>
 #include <iostream>
 
-Button::Button (const std::string input_text, float ul_in[2], float width_in, float height_in)
+Button::Button (const std::string input_text, float ul_in[2], float width_in, float height_in) : MenuSystem ()
 {
    text.populate (input_text);
 
@@ -15,8 +15,6 @@ Button::Button (const std::string input_text, float ul_in[2], float width_in, fl
 
    width  = width_in;
    height = height_in;
-
-   alpha = 0.6f;
 }
 
 bool Button::lclick (float x, float y)
@@ -58,10 +56,9 @@ void Button::show (void)
    glEnd ();
 }
 
-MainMenu::MainMenu (void)
+MainMenu::MainMenu (void) : BaseMenu ()
 {
    menu_id = 1;
-   alpha = 0.6f;
 
    width  = 0.5f;
    height = 0.5f;
