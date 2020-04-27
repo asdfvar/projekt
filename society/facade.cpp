@@ -172,8 +172,6 @@ void Facade::keyboardDown (const char key, int x, int y)
    else if (shift_down && key == 41)
       society.select_group (0);
 
-   else if (key == 'b') mode = mode::BUILD;
-
    else if (key == 'm') {
       active_menu = &main_menu;
    }
@@ -244,12 +242,19 @@ void Facade::mouseClick (int button, int state, int x, int y)
    {
       if (active_menu != nullptr)
       {
-         // "build" menu
+         // main menu
          if (active_menu->get_menu_id () == 1)
          {
-            if (active_menu->lunclick (window[0], window[1]))
+            if (active_menu->lunclick (window[0], window[1]) == 1)
             {
                mode = mode::REMOVE;
+               active_menu = nullptr;
+               hud.set_mode (mode);
+            }
+
+            else if (active_menu->lunclick (window[0], window[1]) == 2)
+            {
+               mode = mode::BUILD;
                active_menu = nullptr;
                hud.set_mode (mode);
             }

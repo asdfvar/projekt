@@ -20,7 +20,7 @@ Button::Button (const std::string input_text, float ul_in[2], float width_in, fl
 bool Button::lclick (float x, float y)
 {
    if (ul[0] + width >= x && x >= ul[0] &&
-         ul[1] >= y && y >= ul[0] - height)
+         ul[1] >= y && y >= ul[1] - height)
       return true;
 
    return false;
@@ -29,7 +29,7 @@ bool Button::lclick (float x, float y)
 bool Button::lunclick (float x, float y)
 {
    if (ul[0] + width >= x && x >= ul[0] &&
-         ul[1] >= y && y >= ul[0] - height)
+         ul[1] >= y && y >= ul[1] - height)
       return true;
 
    return false;
@@ -75,11 +75,17 @@ MainMenu::MainMenu (void) : BaseMenu ()
    button_ul[1] = ul[1] - 0.1f;
 
    button_remove = new Button ("remove", button_ul, button_width, button_height);
+
+   button_ul[0] = ul[0] + 0.1f;
+   button_ul[1] = ul[1] - 0.4f;
+
+   button_build  = new Button ("build", button_ul, button_width, button_height);
 }
 
 MainMenu::~MainMenu (void)
 {
    delete button_remove;
+   delete button_build;
 }
 
 int MainMenu::get_menu_id (void)
@@ -87,24 +93,26 @@ int MainMenu::get_menu_id (void)
    return menu_id;
 };
 
-bool MainMenu::lclick (float x, float y)
+int MainMenu::lclick (float x, float y)
 {
    if (button_remove->lclick (x, y))
-   {
-      // do stuff
-      return true;
-   }
-   return false;
+      return 1;
+
+   if (button_build->lclick (x, y))
+      return 2;
+
+   return 0;
 }
 
-bool MainMenu::lunclick (float x, float y)
+int MainMenu::lunclick (float x, float y)
 {
    if (button_remove->lunclick (x, y))
-   {
-      // do stuff
-      return true;
-   }
-   return false;
+      return 1;
+
+   if (button_build->lunclick (x, y))
+      return 2;
+
+   return 0;
 }
 
 
@@ -112,6 +120,7 @@ void MainMenu::show (void)
 {
    // Draw the remove-button menu
    button_remove->show ();
+   button_build->show ();
 
    glEnable (GL_BLEND);
    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

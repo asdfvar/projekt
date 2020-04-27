@@ -47,9 +47,9 @@ class BaseMenu : public MenuSystem
 
       BaseMenu (void) : MenuSystem () { };
 
-      virtual bool lclick (float x, float y)   { return false; };
+      virtual int lclick (float x, float y)   { return false; };
 
-      virtual bool lunclick (float x, float y) { return false; };
+      virtual int lunclick (float x, float y) { return false; };
 
       virtual void show (void) { };
 
@@ -72,15 +72,16 @@ class MainMenu : public BaseMenu
 
       int get_menu_id (void) override;
 
-      bool lclick (float x, float y) override;
+      int lclick (float x, float y) override;
 
-      bool lunclick (float x, float y) override;
+      int lunclick (float x, float y) override;
 
       void show (void) override;
 
    private:
 
       Button *button_remove;
+      Button *button_build;
 };
 
 #endif
