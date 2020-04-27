@@ -17,6 +17,12 @@ class MenuSystem
          alpha = 0.8f;
       }
 
+      void move (float dx, float dy)
+      {
+         ul[0] += dx;
+         ul[1] += dy;
+      }
+
    protected:
 
       float alpha;
@@ -55,6 +61,8 @@ class BaseMenu : public MenuSystem
 
       virtual int get_menu_id (void) { return 0; };
 
+      virtual void translate (float dx, float dy) { };
+
    protected:
 
       float width, height;
@@ -74,6 +82,8 @@ class MainMenu : public BaseMenu
       int lclick (float x, float y) override;
 
       int lunclick (float x, float y) override;
+
+      void translate (float dx, float dy) override;
 
       void show (void) override;
 

@@ -115,6 +115,13 @@ int MainMenu::lunclick (float x, float y)
    return 0;
 }
 
+void MainMenu::translate (float dx, float dy)
+{
+   move (dx, dy);
+
+   button_remove->move (dx, dy);
+   button_build->move  (dx, dy);
+}
 
 void MainMenu::show (void)
 {
