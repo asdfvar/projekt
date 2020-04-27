@@ -43,131 +43,133 @@ static void LCD_font (
    const float hor = 0.01f;
    const float ver = 0.02f;
 
+   const float depth = -0.5f;
+
    switch (plick)
    {
       case 1:
-         glVertex3f (x,                      y,                      -0.5f);
-         glVertex3f (x + hor * scale,        y,                      -0.5f);
+         glVertex3f (x,                      y,                      depth);
+         glVertex3f (x + hor * scale,        y,                      depth);
         break;
 
       case 2:
-         glVertex3f (x +        hor * scale, y,                      -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y,                      -0.5f);
+         glVertex3f (x +        hor * scale, y,                      depth);
+         glVertex3f (x + 2.0f * hor * scale, y,                      depth);
         break;
 
       case 3:
-         glVertex3f (x,                      y,                      -0.5f);
-         glVertex3f (x,                      y - ver * scale,        -0.5f);
+         glVertex3f (x,                      y,                      depth);
+         glVertex3f (x,                      y - ver * scale,        depth);
         break;
 
       case 4:
-         glVertex3f (x,                      y,                      -0.5f);
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
+         glVertex3f (x,                      y,                      depth);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
         break;
 
       case 5:
-         glVertex3f (x + hor * scale,        y,                      -0.5f);
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
+         glVertex3f (x + hor * scale,        y,                      depth);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
         break;
 
       case 6:
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y,                      -0.5f);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
+         glVertex3f (x + 2.0f * hor * scale, y,                      depth);
         break;
 
       case 7:
-         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y,                      -0.5f);
+         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        depth);
+         glVertex3f (x + 2.0f * hor * scale, y,                      depth);
         break;
 
       case 8:
-         glVertex3f (x,                      y - ver * scale,        -0.5f);
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
+         glVertex3f (x,                      y - ver * scale,        depth);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
         break;
 
       case 9:
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        -0.5f);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
+         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        depth);
         break;
 
       case 10:
-         glVertex3f (x,                      y - ver * scale,        -0.5f);
-         glVertex3f (x,                      y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x,                      y - ver * scale,        depth);
+         glVertex3f (x,                      y - 2.0f * ver * scale, depth);
         break;
 
       case 11:
-         glVertex3f (x,                      y - 2.0f * ver * scale, -0.5f);
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
+         glVertex3f (x,                      y - 2.0f * ver * scale, depth);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
         break;
 
       case 12:
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
-         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
+         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, depth);
         break;
 
       case 13:
-         glVertex3f (x + hor * scale,        y - ver * scale,        -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x + hor * scale,        y - ver * scale,        depth);
+         glVertex3f (x + 2.0f * hor * scale, y - 2.0f * ver * scale, depth);
         break;
 
       case 14:
-         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        depth);
+         glVertex3f (x + 2.0f * hor * scale, y - 2.0f * ver * scale, depth);
         break;
 
       case 15:
-         glVertex3f (x,                      y - 2.0f * ver * scale, -0.5f);
-         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x,                      y - 2.0f * ver * scale, depth);
+         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, depth);
         break;
 
       case 16:
-         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, depth);
+         glVertex3f (x + 2.0f * hor * scale, y - 2.0f * ver * scale, depth);
         break;
 
       // SPECIAL CHARACTERS
 
       // right side of the "v" character's slope
       case 17:
-         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, -0.5f);
-         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        -0.5f);
+         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, depth);
+         glVertex3f (x + 2.0f * hor * scale, y - ver * scale,        depth);
         break;
 
       // left side of the "v" character's slope
       case 18:
-         glVertex3f (x,                      y - ver * scale,        -0.5f);
-         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, -0.5f);
+         glVertex3f (x,                      y - ver * scale,        depth);
+         glVertex3f (x + hor * scale,        y - 2.0f * ver * scale, depth);
         break;
 
       // "." period
       case 19:
-         glVertex3f (x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   -0.5f);
-         glVertex3f (x + 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   -0.5f);
-         glVertex3f (x + 0.002f * scale, y - (2.0f * ver * scale),            -0.5f);
-         glVertex3f (x - 0.002f * scale, y - (2.0f * ver * scale),            -0.5f);
-         glVertex3f (x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   -0.5f);
+         glVertex3f (x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   depth);
+         glVertex3f (x + 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   depth);
+         glVertex3f (x + 0.002f * scale, y - (2.0f * ver * scale),            depth);
+         glVertex3f (x - 0.002f * scale, y - (2.0f * ver * scale),            depth);
+         glVertex3f (x - 0.002f * scale, y - (2.0f * ver - 0.002f) * scale,   depth);
         break;
 
       // "," comma
       case 20:
-         glVertex3f (x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   -0.5f);
-         glVertex3f (x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   -0.5f);
+         glVertex3f (x + 0.006f * scale, y - (2.0f * ver - 0.006f) * scale,   depth);
+         glVertex3f (x - 0.004f * scale, y - (2.0f * ver + 0.004f) * scale,   depth);
         break;
 
       // ":" colon
       case 21:
-         glVertex3f (x + hor * scale, y - 0.333f * ver * scale,   -0.5f);
-         glVertex3f (x + hor * scale, y - 0.666f * ver * scale,   -0.5f);
-         glVertex3f (x + hor * scale, y - 1.333f * ver * scale,   -0.5f);
-         glVertex3f (x + hor * scale, y - 1.666f * ver * scale,   -0.5f);
+         glVertex3f (x + hor * scale, y - 0.333f * ver * scale,   depth);
+         glVertex3f (x + hor * scale, y - 0.666f * ver * scale,   depth);
+         glVertex3f (x + hor * scale, y - 1.333f * ver * scale,   depth);
+         glVertex3f (x + hor * scale, y - 1.666f * ver * scale,   depth);
         break;
 
       // "=" equal
       case 22:
-         glVertex3f (x + 0.25f * hor * scale, y - 0.75f * ver * scale,   -0.5f);
-         glVertex3f (x + 1.75f * hor * scale, y - 0.75f * ver * scale,   -0.5f);
-         glVertex3f (x + 0.25f * hor * scale, y - 1.25f * ver * scale,   -0.5f);
-         glVertex3f (x + 1.75f * hor * scale, y - 1.25f * ver * scale,   -0.5f);
+         glVertex3f (x + 0.25f * hor * scale, y - 0.75f * ver * scale,   depth);
+         glVertex3f (x + 1.75f * hor * scale, y - 0.75f * ver * scale,   depth);
+         glVertex3f (x + 0.25f * hor * scale, y - 1.25f * ver * scale,   depth);
+         glVertex3f (x + 1.75f * hor * scale, y - 1.25f * ver * scale,   depth);
         break;
    }
 }

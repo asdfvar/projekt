@@ -40,7 +40,7 @@ void Button::show (void)
    text.display_contents (
          ul[0], // x
          ul[1], // y
-         1.0f,  // alpha
+         alpha, // alpha
          1.0f); // scale
 
    // draw the boundary of the button
@@ -49,10 +49,10 @@ void Button::show (void)
    glColor4f (0.9f, 0.9f, 0.9f, alpha);
 
    glBegin (GL_POLYGON);
-   glVertex3f (ul[0],         ul[1]          + 0.02f, -0.5f);
-   glVertex3f (ul[0] + width, ul[1]          + 0.02f, -0.5f);
-   glVertex3f (ul[0] + width, ul[1] - height + 0.02f, -0.5f);
-   glVertex3f (ul[0],         ul[1] - height + 0.02f, -0.5f);
+   glVertex3f (ul[0],         ul[1]          + 0.02f, -0.3f);
+   glVertex3f (ul[0] + width, ul[1]          + 0.02f, -0.3f);
+   glVertex3f (ul[0] + width, ul[1] - height + 0.02f, -0.3f);
+   glVertex3f (ul[0],         ul[1] - height + 0.02f, -0.3f);
    glEnd ();
 }
 
@@ -60,8 +60,8 @@ MainMenu::MainMenu (void) : BaseMenu ()
 {
    menu_id = 1;
 
-   width  = 0.5f;
-   height = 0.5f;
+   width  = 0.25f;
+   height = 0.3f;
 
    ul[0] = -0.8f;
    ul[1] =  0.8f;
@@ -71,13 +71,13 @@ MainMenu::MainMenu (void) : BaseMenu ()
 
    float button_ul[2];
 
-   button_ul[0] = ul[0] + 0.1f;
-   button_ul[1] = ul[1] - 0.1f;
+   button_ul[0] = ul[0] + 0.02f;
+   button_ul[1] = ul[1] - 0.09f;
 
    button_remove = new Button ("remove", button_ul, button_width, button_height);
 
-   button_ul[0] = ul[0] + 0.1f;
-   button_ul[1] = ul[1] - 0.4f;
+   button_ul[0] = ul[0] + 0.02f;
+   button_ul[1] = ul[1] - 0.2f;
 
    button_build  = new Button ("build", button_ul, button_width, button_height);
 }
@@ -124,13 +124,13 @@ void MainMenu::show (void)
 
    glEnable (GL_BLEND);
    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glColor4f (0.7f, 0.2f, 0.3f, alpha);
+   glColor4f (0.7f, 0.3f, 0.3f, alpha);
 
    // Draw the border
    glBegin (GL_POLYGON);
-   glVertex3f (ul[0],         ul[1],          -0.5f);
-   glVertex3f (ul[0] + width, ul[1],          -0.5f);
-   glVertex3f (ul[0] + width, ul[1] - height, -0.5f);
-   glVertex3f (ul[0],         ul[1] - height, -0.5f);
+   glVertex3f (ul[0],         ul[1],          -0.2f);
+   glVertex3f (ul[0] + width, ul[1],          -0.2f);
+   glVertex3f (ul[0] + width, ul[1] - height, -0.2f);
+   glVertex3f (ul[0],         ul[1] - height, -0.2f);
    glEnd ();
 }

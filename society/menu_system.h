@@ -14,12 +14,13 @@ class MenuSystem
 
       MenuSystem (void)
       {
-         alpha = 0.7f;
+         alpha = 0.8f;
       }
 
    protected:
 
       float alpha;
+      float ul[2];
 };
 
 class Button : public MenuSystem
@@ -37,7 +38,6 @@ class Button : public MenuSystem
   private:
 
       Text  text;
-      float ul[2];
       float width, height;
 };
 
@@ -57,7 +57,6 @@ class BaseMenu : public MenuSystem
 
    protected:
 
-      float ul[2];
       float width, height;
       int menu_id;
 };
