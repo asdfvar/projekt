@@ -172,9 +172,6 @@ void Facade::keyboardDown (const char key, int x, int y)
    else if (shift_down && key == 41)
       society.select_group (0);
 
-   // Remove mode
-   else if (key == 'd') mode = mode::REMOVE;
-
    else if (key == 'b') mode = mode::BUILD;
 
    else if (key == 'm') {
