@@ -416,7 +416,7 @@ void Facade::mouseMotion (int x, int y)
    }
 
    // Activate and define the selection box
-   if (z_down == false && button2_down == true)
+   else if (z_down == false && button2_down == true)
    {
       float fxt = fx;
       float fyt = fy;
@@ -465,7 +465,7 @@ void Facade::mouseMotion (int x, int y)
    }
 
    // Adjust the rotation of the world
-   if (z_down == true && button1_down == true)
+   else if (z_down == true && button1_down == true)
    {
       float norm_f2   = fx * fx + fy * fy;
       float norm_d2   = delta[0] * delta[0] + delta[1] * delta[1];
@@ -497,7 +497,7 @@ void Facade::mouseMotion (int x, int y)
    }
 
    // Shear the world map
-   if (z_down == true && button2_down == true)
+   else if (z_down == true && button2_down == true)
    {
       float inv_norm_f = 1.0f / sqrtf (fx * fx + fy * fy);
 
