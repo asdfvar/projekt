@@ -5,6 +5,14 @@
  * Simple utility routines
  */
 
+// Change perspective from a point on the [-1, 1] scale to the corresponding cell
+static float window_to_cell (
+      float  point, // point in the window
+      int    dim)   // number of cells that make up the map
+{
+   return (point + 1.0f) / 2.0f * (float)dim;
+}
+
 // Convert a flattened index to the specified Cartesian index
 static int flat_ind_to_dim (int dim, int flat_ind, int *size)
 {
