@@ -71,7 +71,7 @@ void Facade::keyboardDown (const char key, int x, int y)
    // Escape key
    if (!control_down && key == 27) {
       society.unselect_all ();
-      mode = mode::NONE;
+      mode        = mode::NONE;
       active_menu = nullptr;
    }
 
@@ -255,7 +255,7 @@ void Facade::mouseClick (int button, int state, int x, int y)
             else if (active_menu->lunclick (window[0], window[1]) == 2)
             {
                mode = mode::BUILD;
-               active_menu = nullptr;
+               active_menu = &build_menu;
                hud.set_mode (mode);
             }
          }

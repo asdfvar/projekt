@@ -74,23 +74,37 @@ class MainMenu : public BaseMenu
    public:
 
       MainMenu (void);
-
       ~MainMenu (void);
 
-      int get_menu_id (void) override;
-
-      int lclick (float x, float y) override;
-
-      int lunclick (float x, float y) override;
-
-      void translate (float dx, float dy) override;
-
-      void show (void) override;
+      int  get_menu_id (void)               override;
+      int  lclick      (float x,  float y ) override;
+      int  lunclick    (float x,  float y ) override;
+      void translate   (float dx, float dy) override;
+      void show        (void)               override;
 
    private:
 
       Button *button_remove;
       Button *button_build;
+};
+
+class BuildMenu : public BaseMenu
+{
+   public:
+
+      BuildMenu (void);
+      ~BuildMenu (void);
+
+      int  get_menu_id (void)               override;
+      int  lclick      (float x,  float y ) override;
+      int  lunclick    (float x,  float y ) override;
+      void translate   (float dx, float dy) override;
+      void show        (void)               override;
+
+   private:
+
+      Button *button_material;
+      Button *button_item;
 };
 
 #endif

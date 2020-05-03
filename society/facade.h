@@ -27,8 +27,9 @@ class Facade {
 
       Society society;
 
-      BaseMenu *active_menu;
-      MainMenu  main_menu;
+      BaseMenu  *active_menu;
+      MainMenu   main_menu;
+      BuildMenu  build_menu;
 
       struct timeval start, end;
       double time_step = 0.01f;
