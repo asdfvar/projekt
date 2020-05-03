@@ -4,8 +4,6 @@ include $(BASE_DIR)/directives.mk
 
 CC = g++
 
-INC = -I$(BASE_DIR)/graphics/
-
 OBJDIR = objdir
 
 OBJS = $(OBJDIR)/society.o     \
