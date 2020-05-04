@@ -90,4 +90,6 @@ void MainMenu::show (void)
    glVertex3f (ul[0] + width, ul[1] - height, -0.2f);
    glVertex3f (ul[0],         ul[1] - height, -0.2f);
    glEnd ();
+
+   menuBar.show (ul, width);
 }

@@ -47,26 +47,31 @@ class Button : public MenuSystem
       float width, height;
 };
 
+class MenuBar : MenuSystem
+{
+   public:
+
+      MenuBar (void);
+      void show (float ul[2], float width);
+};
+
 class BaseMenu : public MenuSystem
 {
    public:
 
       BaseMenu (void) : MenuSystem () { };
 
-      virtual int lclick (float x, float y)   { return false; };
-
-      virtual int lunclick (float x, float y) { return false; };
-
-      virtual void show (void) { };
-
-      virtual int get_menu_id (void) { return 0; };
-
-      virtual void translate (float dx, float dy) { };
+      virtual int  lclick      (float x, float y) { return false; };
+      virtual int  lunclick    (float x, float y) { return false; };
+      virtual void show        (void) { };
+      virtual int  get_menu_id (void) { return 0; };
+      virtual void translate   (float dx, float dy) { };
 
    protected:
 
-      float width, height;
-      int menu_id;
+      float   width, height;
+      int     menu_id;
+      MenuBar menuBar;
 };
 
 class MainMenu : public BaseMenu
