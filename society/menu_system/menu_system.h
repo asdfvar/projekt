@@ -23,6 +23,8 @@ class MenuSystem
          ul[1] += dy;
       }
 
+      virtual void show        (void) { };
+
    protected:
 
       float alpha;
@@ -63,7 +65,6 @@ class BaseMenu : public MenuSystem
 
       virtual int  lclick      (float x, float y) { return false; };
       virtual int  lunclick    (float x, float y) { return false; };
-      virtual void show        (void) { };
       virtual int  get_menu_id (void) { return 0; };
       virtual void translate   (float dx, float dy) { };
 
