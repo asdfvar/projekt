@@ -45,6 +45,8 @@ int MainMenu::get_menu_id (void)
 
 int MainMenu::lclick (float x, float y)
 {
+   if (menuBar.hit (x, y, ul, width)) hit_menuBar = true;
+
    if (button_remove->lclick (x, y))
       return 1;
 
@@ -56,6 +58,8 @@ int MainMenu::lclick (float x, float y)
 
 int MainMenu::lunclick (float x, float y)
 {
+   hit_menuBar = false;
+
    if (button_remove->lunclick (x, y))
       return 1;
 
@@ -67,10 +71,14 @@ int MainMenu::lunclick (float x, float y)
 
 void MainMenu::translate (float dx, float dy)
 {
-   move (dx, dy);
+   if (hit_menuBar)
+   {
+      move (dx, dy);
 
-   button_remove->move (dx, dy);
-   button_build->move  (dx, dy);
+      menuBar.move        (dx, dy);
+      button_remove->move (dx, dy);
+      button_build->move  (dx, dy);
+   }
 }
 
 void MainMenu::show (void)

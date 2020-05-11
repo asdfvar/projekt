@@ -262,6 +262,11 @@ void Facade::mouseClick (int button, int state, int x, int y)
       }
    }
 
+   if (button0_down == true)
+   {
+      if (active_menu != nullptr) active_menu->lclick (window[0], window[1]);
+   }
+
    // Set the destination for the selected units
    if (button == 0 && state == 1 && z_down == false && has_moved_passively == true)
    {
@@ -411,8 +416,14 @@ void Facade::mouseMotion (int x, int y)
    // Adjust the translation of the world
    if (z_down == false && button0_down == true)
    {
-      translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
-      translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
+      if (active_menu != nullptr)
+      {
+         active_menu->translate (2.0f * delta[0], 2.0f * delta[1]);
+      }
+      else {
+         translation[0] += 2.0f * (delta[0] * inv_transform[0] + delta[1] * inv_transform[1]);
+         translation[1] += 2.0f * (delta[0] * inv_transform[2] + delta[1] * inv_transform[3]);
+      }
    }
 
    // Activate and define the selection box

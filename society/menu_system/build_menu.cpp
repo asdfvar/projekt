@@ -66,6 +66,8 @@ void BuildMenu::show (void)
 
 int BuildMenu::lclick (float x, float y)
 {
+   if (menuBar.hit (x, y, ul, width)) hit_menuBar = true;
+
    if (button_material->lclick (x, y))
       return 1;
 
@@ -77,6 +79,8 @@ int BuildMenu::lclick (float x, float y)
 
 int BuildMenu::lunclick (float x, float y)
 {
+   hit_menuBar = false;
+
    if (button_material->lunclick (x, y))
       return 1;
 
@@ -88,8 +92,12 @@ int BuildMenu::lunclick (float x, float y)
 
 void BuildMenu::translate (float dx, float dy)
 {
-   move (dx, dy);
+   if (hit_menuBar)
+   {
+      move (dx, dy);
 
-   button_material->move (dx, dy);
-   button_item->move     (dx, dy);
+      menuBar.move          (dx, dy);
+      button_material->move (dx, dy);
+      button_item->move     (dx, dy);
+   }
 }

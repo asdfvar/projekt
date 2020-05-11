@@ -72,3 +72,11 @@ void MenuBar::show (float ul[2], float width)
    glVertex3f (ul[0]         + 0.01f, ul[1] - 0.04f, -0.3f);
    glEnd ();
 }
+
+bool MenuBar::hit (float x, float y, float ul[2], float width)
+{
+   if (ul[0] <= x && x <= ul[0] + width &&
+         ul[1] - 0.04f <= y && y <= ul[1]) return true;
+
+   return false;
+}

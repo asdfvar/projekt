@@ -29,6 +29,8 @@ class MenuSystem
 
       float alpha;
       float ul[2];
+      float width;
+      float height;
 };
 
 class Button : public MenuSystem
@@ -36,12 +38,9 @@ class Button : public MenuSystem
    public:
 
       Button (const std::string input_text, float ul_in[2], float width_in, float height_in);
-
-      bool lclick (float x, float y);
-
+      bool lclick   (float x, float y);
       bool lunclick (float x, float y);
-
-      void show (void);
+      void show     (void);
 
   private:
 
@@ -49,19 +48,20 @@ class Button : public MenuSystem
       float width, height;
 };
 
-class MenuBar : MenuSystem
+class MenuBar : public MenuSystem
 {
    public:
 
       MenuBar (void);
       void show (float ul[2], float width);
+      bool hit  (float x, float y, float ul[2], float width);
 };
 
 class BaseMenu : public MenuSystem
 {
    public:
 
-      BaseMenu (void) : MenuSystem () { };
+      BaseMenu (void) : MenuSystem () { hit_menuBar = false; };
 
       virtual int  lclick      (float x, float y) { return false; };
       virtual int  lunclick    (float x, float y) { return false; };
@@ -73,6 +73,7 @@ class BaseMenu : public MenuSystem
       float   width, height;
       int     menu_id;
       MenuBar menuBar;
+      bool    hit_menuBar;
 };
 
 class MainMenu : public BaseMenu
