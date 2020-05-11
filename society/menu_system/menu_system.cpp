@@ -17,29 +17,31 @@ Button::Button (const std::string input_text, float ul_in[2], float width_in, fl
    height = height_in;
 }
 
-bool Button::lclick (float x, float y)
+bool Button::lclick (float x, float y, float menu_ul[2])
 {
-   if (ul[0] + width >= x && x >= ul[0] &&
-         ul[1] >= y && y >= ul[1] - height)
+   if (menu_ul[0] + ul[0] + width >= x && x >= menu_ul[0] + ul[0] &&
+         menu_ul[1] + ul[1] >= y && y >= menu_ul[1] + ul[1] - height)
       return true;
 
    return false;
 }
 
-bool Button::lunclick (float x, float y)
+bool Button::lunclick (float x, float y, float menu_ul[2])
 {
-   if (ul[0] + width >= x && x >= ul[0] &&
-         ul[1] >= y && y >= ul[1] - height)
+std::cout << "menu_ul = " << menu_ul[0] << ", " << menu_ul[1] << std::endl;
+std::cout << "ul = " << ul[0] << ", " << ul[1] << std::endl;
+   if (menu_ul[0] + ul[0] + width >= x && x >= menu_ul[0] + ul[0] &&
+         menu_ul[1] + ul[1] >= y && y >= menu_ul[1] + ul[1] - height)
       return true;
 
    return false;
 }
 
-void Button::show (void)
+void Button::show (float menu_ul[2])
 {
    text.display_contents (
-         ul[0], // x
-         ul[1], // y
+         menu_ul[0] + ul[0], // x
+         menu_ul[1] + ul[1], // y
          alpha, // alpha
          1.0f); // scale
 
@@ -49,10 +51,10 @@ void Button::show (void)
    glColor4f (0.9f, 0.9f, 0.9f, alpha);
 
    glBegin (GL_POLYGON);
-   glVertex3f (ul[0],         ul[1]          + 0.02f, -0.3f);
-   glVertex3f (ul[0] + width, ul[1]          + 0.02f, -0.3f);
-   glVertex3f (ul[0] + width, ul[1] - height + 0.02f, -0.3f);
-   glVertex3f (ul[0],         ul[1] - height + 0.02f, -0.3f);
+   glVertex3f (menu_ul[0] + ul[0],         menu_ul[1] + ul[1]          + 0.02f, -0.3f);
+   glVertex3f (menu_ul[0] + ul[0] + width, menu_ul[1] + ul[1]          + 0.02f, -0.3f);
+   glVertex3f (menu_ul[0] + ul[0] + width, menu_ul[1] + ul[1] - height + 0.02f, -0.3f);
+   glVertex3f (menu_ul[0] + ul[0],         menu_ul[1] + ul[1] - height + 0.02f, -0.3f);
    glEnd ();
 }
 

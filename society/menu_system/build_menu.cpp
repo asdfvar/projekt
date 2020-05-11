@@ -13,21 +13,18 @@ BuildMenu::BuildMenu (void) : BaseMenu ()
    width  = 0.3f;
    height = 0.3f;
 
-   ul[0] = -0.8f;
-   ul[1] =  0.8f;
-
    float button_width = 0.25f;
    float button_height = 0.1f;
 
    float button_ul[2];
 
-   button_ul[0] = ul[0] + 0.02f;
-   button_ul[1] = ul[1] - 0.09f;
+   button_ul[0] =  0.02f;
+   button_ul[1] = -0.09f;
 
    button_material = new Button ("material", button_ul, button_width, button_height);
 
-   button_ul[0] = ul[0] + 0.02f;
-   button_ul[1] = ul[1] - 0.2f;
+   button_ul[0] =  0.02f;
+   button_ul[1] = -0.2f;
 
    button_item  = new Button ("item", button_ul, button_width, button_height);
 }
@@ -46,8 +43,8 @@ int BuildMenu::get_menu_id (void)
 void BuildMenu::show (void)
 {
    // Draw the remove-button menu
-   button_material->show ();
-   button_item->show ();
+   button_material->show (ul);
+   button_item->show     (ul);
 
    glEnable (GL_BLEND);
    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -68,10 +65,10 @@ int BuildMenu::lclick (float x, float y)
 {
    if (menuBar.hit (x, y, ul, width)) hit_menuBar = true;
 
-   if (button_material->lclick (x, y))
+   if (button_material->lclick (x, y, ul))
       return 1;
 
-   if (button_item->lclick (x, y))
+   if (button_item->lclick (x, y, ul))
       return 2;
 
    return 0;
@@ -81,10 +78,10 @@ int BuildMenu::lunclick (float x, float y)
 {
    hit_menuBar = false;
 
-   if (button_material->lunclick (x, y))
+   if (button_material->lunclick (x, y, ul))
       return 1;
 
-   if (button_item->lunclick (x, y))
+   if (button_item->lunclick (x, y, ul))
       return 2;
 
    return 0;
@@ -95,9 +92,6 @@ void BuildMenu::translate (float dx, float dy)
    if (hit_menuBar)
    {
       move (dx, dy);
-
-      menuBar.move          (dx, dy);
-      button_material->move (dx, dy);
-      button_item->move     (dx, dy);
+      menuBar.move (dx, dy);
    }
 }

@@ -15,6 +15,15 @@ class MenuSystem
       MenuSystem (void)
       {
          alpha = 0.8f;
+
+         ul[0] = -0.8f;
+         ul[1] =  0.8f;
+      }
+
+      void reset (void)
+      {
+         ul[0] = -0.8f;
+         ul[1] =  0.8f;
       }
 
       void move (float dx, float dy)
@@ -38,9 +47,9 @@ class Button : public MenuSystem
    public:
 
       Button (const std::string input_text, float ul_in[2], float width_in, float height_in);
-      bool lclick   (float x, float y);
-      bool lunclick (float x, float y);
-      void show     (void);
+      bool lclick   (float x, float y, float ul[2]);
+      bool lunclick (float x, float y, float ul[2]);
+      void show     (float ul[2]);
 
   private:
 
