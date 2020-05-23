@@ -138,6 +138,7 @@ class BuildMaterialMenu : public BaseMenu
 
    private:
 
+      Button *button_dirt;
       Button *button_stone;
 };
 

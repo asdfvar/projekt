@@ -1,5 +1,5 @@
 CC       = g++
-FLAGS    = -O3 -Wall -g -Wno-unused-function
+FLAGS    = -Wall -g -Wno-unused-function
 LIBS     = -lm -pthread -lGL -lGLU -lglut -lsociety -lgraphics -lmenu_system
 LIBPATHS = -L./kernel/ -L./graphics/ -L./menu_system/
 INC      = -I./kernel/ -I./graphics/ -I./menu_system/

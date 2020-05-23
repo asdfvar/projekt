@@ -21,11 +21,17 @@ BuildMaterialMenu::BuildMaterialMenu (void) : BaseMenu ()
    button_ul[0] =  0.02f;
    button_ul[1] = -0.09f;
 
+   button_dirt  = new Button ("dirt",  button_ul, button_width, button_height);
+
+   button_ul[0] =  0.02f;
+   button_ul[1] = -0.2f;
+
    button_stone = new Button ("stone", button_ul, button_width, button_height);
 }
 
 BuildMaterialMenu::~BuildMaterialMenu (void)
 {
+   delete button_dirt;
    delete button_stone;
 }
 
@@ -37,6 +43,7 @@ int BuildMaterialMenu::get_menu_id (void)
 void BuildMaterialMenu::show (void)
 {
    // Draw the remove-button menu
+   button_dirt->show  (ul);
    button_stone->show (ul);
 
    glEnable (GL_BLEND);
@@ -58,8 +65,8 @@ int BuildMaterialMenu::lclick (float x, float y)
 {
    if (menuBar.hit (x, y, ul, width)) hit_menuBar = true;
 
-   if (button_stone->lclick (x, y, ul))
-      return 1;
+   if (button_dirt->lclick  (x, y, ul)) return 1;
+   if (button_stone->lclick (x, y, ul)) return 2;
 
    return 0;
 }
@@ -68,8 +75,8 @@ int BuildMaterialMenu::lunclick (float x, float y)
 {
    hit_menuBar = false;
 
-   if (button_stone->lunclick (x, y, ul))
-      return 1;
+   if (button_dirt->lunclick  (x, y, ul)) return 1;
+   if (button_stone->lunclick (x, y, ul)) return 2;
 
    return 0;
 }
