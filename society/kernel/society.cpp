@@ -280,10 +280,29 @@ void Society::update (float time_step)
       {
          Job *job = unit->access_active_job ();
 
+         int flat_ind = job->get_flattened_loc_index ();
+
+         bool unit_coincides = false;
+
+         // Check if there are any units at this index
+         for (int unit_ind2 = 0; unit_ind2 < units.size (); unit_ind2++)
+         {
+            Unit *unit = units.access (unit_ind2);
+            int unit_location[3] = {
+               (int)unit->get_position (0),
+               (int)unit->get_position (1),
+               (int)unit->get_position (2) };
+
+            int unit_flat_ind = dim_to_flat_ind (3, unit_location, size);
+
+            if (unit_flat_ind == flat_ind) unit_coincides = true;
+         }
+
+         if (unit_coincides) continue;
+
+         // Complete the job if it's done
          if (job->is_complete ())
          {
-            int flat_ind = job->get_flattened_loc_index ();
-
             // Perform the complete action for the job
             if (job->get_type () == jid::REMOVE)
             {
