@@ -29,15 +29,17 @@ class MAP
       bool get_ground_cell (int ind[3]);
       unsigned int get_material (int ind) { return material[ind]; };
       unsigned int get_material (int ind[3]);
+      void set_build_job        (int ind[3], unsigned int material);
 
       int shape (int dim) { return size[dim]; };
 
       void change (int flattened_cell_index, float value);
       void change (int cell[3], float value);
+      void add_cell (unsigned int material_in, int flat_ind);
       void remove_cell (int flat_ind);
 
       void        ready_uncommited_job_cells (int cell_selections_in[2][3]);
-      void        set_uncommited_job_cells (bool reset_uncommitted_jobs_size);
+      void        set_uncommited_job_cells (bool reset_uncommitted_jobs_size, int mode);
       void        unselect_uncommitted_jobs (void);
       const bool *access_uncommitted_jobs (void);
 
@@ -56,6 +58,7 @@ class MAP
       int map_layer;
 
       bool *uncommitted_jobs;
+      unsigned int  *build_jobs;
 
       unsigned int *view_plain;
       int *view_depth;

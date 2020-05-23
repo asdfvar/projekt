@@ -72,14 +72,18 @@ void Facade::keyboardDown (const char key, int x, int y)
    if (!control_down && key == 27) {
       society.unselect_all ();
       mode        = mode::NONE;
-      active_menu->reset ();
+
+      if (active_menu != nullptr)
+         active_menu->reset ();
+
       active_menu = nullptr;
    }
 
    // Enter key
    if (!control_down && key == 13)
    {
-      if (mode == mode::REMOVE) society.set_jobs (jid::REMOVE);
+      if (mode == mode::REMOVE) society.set_jobs (jid::REMOVE, 0);
+      if (mode == mode::BUILD ) society.set_jobs (jid::BUILD, jobmaterial);
 
       mode = mode::NONE;
    }
@@ -243,9 +247,10 @@ void Facade::mouseClick (int button, int state, int x, int y)
    {
       if (active_menu != nullptr)
       {
-         // main menu
+         // "main" menu
          if (active_menu->get_menu_id () == 1)
          {
+            // "Remove" button
             if (active_menu->lunclick (window[0], window[1]) == 1)
             {
                mode = mode::REMOVE;
@@ -253,11 +258,34 @@ void Facade::mouseClick (int button, int state, int x, int y)
                hud.set_mode (mode);
             }
 
+            // "Build" button
             else if (active_menu->lunclick (window[0], window[1]) == 2)
             {
-               mode = mode::BUILD;
                active_menu->reset ();
                active_menu = &build_menu;
+               hud.set_mode (mode);
+            }
+         }
+
+         // "build" menu
+         else if (active_menu->get_menu_id () == 2)
+         {
+            // "material" button
+            if (active_menu->lunclick (window[0], window[1]) == 1)
+            {
+               active_menu = &build_material_menu;
+            }
+         }
+
+         // "build material" menu
+         else if (active_menu->get_menu_id () == 3)
+         {
+            // "Stone" button
+            if (active_menu->lunclick (window[0], window[1]) == 1)
+            {
+               mode        = mode::BUILD;
+               jobmaterial = mid::stone;
+               active_menu = nullptr;
                hud.set_mode (mode);
             }
          }
@@ -365,13 +393,16 @@ void Facade::mouseClick (int button, int state, int x, int y)
    cell_selections[1][1] = (int)(window_to_cell (selection_box[1][1], size[1]) + 0.5f);
    cell_selections[1][2] = map_layer;
 
-   // Remove mode
+   society.select_cells (cell_selections);
    if (mode == mode::REMOVE)
    {
-      society.select_cells (cell_selections);
-
       if (button2_down == false)
-         society.set_select_cells (!control_down);
+         society.set_select_cells (!control_down, mode::REMOVE);
+   }
+   else if (mode == mode::BUILD)
+   {
+      if (button2_down == false)
+         society.set_select_cells (!control_down, mode::BUILD);
    }
 
    society.set_map_layer (map_layer);
@@ -468,7 +499,6 @@ void Facade::mouseMotion (int x, int y)
 
       if (mode == mode::REMOVE)
       {
-         // Remove mode
          society.select_cells (cell_selections);
       }
       else

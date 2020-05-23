@@ -17,32 +17,21 @@ class Society
       ~Society (void);
 
       void set_view (float transform[4], float translation[2]);
-
       void set_map_layer (int map_layer) { Map->set_map_layer (map_layer); };
-
       void update (float time_step);
-
       void set_destination (int dest[3], bool selected_units);
-
       const bool *access_air ();
-
       const int get_size (int ind) { return size[ind]; };
-
       void select_units (int cell_selections[2][3], int map_layer, bool control_down);
-
       void select_all (void);
-
       void unselect_all (void);
-
       void set_group (int group_number);
-
       void select_group (int group_number);
-
       void select_cells (int cell_selections[2][3]);
+      void set_select_cells (bool reset_uncommitted_jobs_size, int mode);
+      void set_build_cells (int cell_selections[2][3], int material);
 
-      void set_select_cells (bool reset_uncommitted_jobs_size);
-
-      void set_jobs (int job_type);
+      void set_jobs (int job_type, unsigned int jobmaterial);
 
       // Graphics
       void draw (

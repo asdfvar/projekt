@@ -16,15 +16,11 @@ class Job
    public:
 
       Job (int flattened_index, int location_in[3]);
-
       bool is_complete (void) { return complete; };
-
       int get_position (int ind) { return location[ind]; };
-
       int get_flattened_loc_index (void) { return flattened_loc_index; };
-
       int get_type (void) { return job_type; };
-
+      unsigned int get_material (void) { return material; };
       void act (float power);
 
    protected:
@@ -37,6 +33,7 @@ class Job
       float            work;                // Work towards completing the job (Joules)
       float            energy;              // Energy needed to complete the job (Joules)
       bool             complete;            // flag to determine if the job is complete
+      unsigned int     material;
 };
 
 class JobRemove : public Job
@@ -44,13 +41,9 @@ class JobRemove : public Job
    public:
 
       JobRemove (
-            int flattened_index,
-            int location_in[3],
+            int          flattened_index,
+            int          location_in[3],
             unsigned int material);
-
-   private:
-
-      unsigned int material;
 };
 
 class JobBuild : public Job
@@ -58,13 +51,9 @@ class JobBuild : public Job
    public:
 
       JobBuild (
-            int flattened_index,
-            int location_in[3],
+            int          flattened_index,
+            int          location_in[3],
             unsigned int material);
-
-   private:
-
-      unsigned int material;
 };
 
 #endif

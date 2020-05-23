@@ -288,8 +288,13 @@ void Society::update (float time_step)
             if (job->get_type () == jid::REMOVE)
             {
                unit->add_item (Map->get_material (flat_ind));
-
                Map->remove_cell (flat_ind);
+            }
+
+            if (job->get_type () == jid::BUILD)
+            {
+               // TODO: unit->remove_item (...)
+               Map->add_cell (job->get_material (), flat_ind);
             }
 
             // Remove the job from the unit's list
@@ -427,12 +432,25 @@ void Society::select_cells (int cell_selections[2][3])
    Map->ready_uncommited_job_cells (cell_selections);
 }
 
-void Society::set_select_cells (bool reset_uncommitted_jobs_size)
+void Society::set_select_cells (bool reset_uncommitted_jobs_size, int mode)
 {
-   Map->set_uncommited_job_cells (reset_uncommitted_jobs_size);
+   Map->set_uncommited_job_cells (reset_uncommitted_jobs_size, mode);
 }
 
-void Society::set_jobs (int job_type)
+void Society::set_build_cells (int cell_selections[2][3], int material)
+{
+   // Set the build jobs
+   for (int cell = 0, cellz = cell_selections[0][2]; cellz <= cell_selections[1][2]; cellz++) {
+      for (int celly = cell_selections[0][1]; celly <= cell_selections[1][1]; celly++) {
+         for (int cellx = cell_selections[0][1]; cellx <= cell_selections[1][1]; cellx++, cell++) {
+            int cells[3] = { cellx, celly, cellz };
+            if (Map->get_material (cells) == 0) Map->set_build_job (cells, material);
+         }
+      }
+   }
+}
+
+void Society::set_jobs (int job_type, unsigned int jobmaterial)
 {
    const bool *new_job_location_cells =
       Map->access_uncommitted_jobs ();
@@ -482,10 +500,14 @@ void Society::set_jobs (int job_type)
                flat_ind_to_dim (1, ind, size),
                flat_ind_to_dim (2, ind, size) };
 
-            if (job_type == jid::REMOVE)
+            if      (job_type == jid::REMOVE)
                queued_jobs.push_front (new JobRemove (ind, location, Map->get_material (location)));
+            else if (job_type == jid::BUILD) {
+               // TODO: condition for the material for this job
+               queued_jobs.push_front (new JobBuild (ind, location, jobmaterial));
+            }
             else
-               std::cout << __FILE__ << __LINE__ << ":resolve this" << std::endl;
+               std::cout << __FILE__ << __LINE__ << ":job ID not supported, resolve this" << std::endl;
          }
       }
    }

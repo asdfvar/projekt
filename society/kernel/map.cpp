@@ -2,6 +2,7 @@
 #include "math_utils.h"
 #include "utils.h"
 #include "item.h"
+#include "mode.h"
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -29,13 +30,16 @@ MAP::MAP (int size_in[3])
 
    max_depth = 8;
 
-   uncommitted_jobs = new bool[size[0] * size[1] * size[2]];
+   uncommitted_jobs = new bool         [size[0] * size[1] * size[2]];
+   build_jobs       = new unsigned int [size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind]        = false;
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) ground[ind]     = false;
-   for (int ind = 0; ind < size[0] * size[1]; ind++)           view_plain[ind] = 0;
-   for (int ind = 0; ind < size[0] * size[1]; ind++)           view_depth[ind] = 0;
-   for (int ind = 0; ind < size[0] * size[1]; ind++)           weight[ind]     = 0.0f;
+   for (int ind = 0; ind < size[0] * size[1]; ind++          ) view_plain[ind] = 0;
+   for (int ind = 0; ind < size[0] * size[1]; ind++          ) view_depth[ind] = 0;
+   for (int ind = 0; ind < size[0] * size[1]; ind++          ) weight[ind]     = 0.0f;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) material[ind]   = 0;
+   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) build_jobs[ind] = 0;
 
    float *perlin_array = new float[size[0] * size[1]];
    int num_grid_cells[2] = { 4, 4 };
@@ -55,11 +59,11 @@ MAP::MAP (int size_in[3])
             material[ind] = 0;
 
             if (ind_z == (int)perlin_array[ind2d])
-               material[ind] = tid::grass;
+               material[ind] = mid::grass;
             if ((int)perlin_array[ind2d] > ind_z && ind_z > (int)perlin_array[ind2d] - 6)
-               material[ind] = tid::dirt;
+               material[ind] = mid::dirt;
             if ((int)perlin_array[ind2d] - 3 >= ind_z)
-               material[ind] = tid::stone;
+               material[ind] = mid::stone;
          }
       }
    }
@@ -84,6 +88,7 @@ MAP::~MAP (void)
    delete[] ground;
    delete[] material;
    delete[] uncommitted_jobs;
+   delete[] build_jobs;
    delete[] view_plain;
    delete[] view_depth;
 }
@@ -183,6 +188,16 @@ unsigned int MAP::get_material (int ind[3])
    return material[flattened_ind];
 }
 
+void MAP::set_build_job (int ind[3], unsigned int material)
+{
+   int flattened_ind =
+      ind[2] * size[0] * size[1] +
+      ind[1] * size[0]           +
+      ind[0];
+
+   build_jobs[flattened_ind] = material;
+}
+
 // Ground map is dependent on the air map. It is the same with the exception that
 // open spaces not supported by ground are set as invalid (ground)
 void MAP::set_map (void)
@@ -247,34 +262,40 @@ void MAP::ready_uncommited_job_cells (int cell_selections_in[2][3])
    cell_selections[1][0] = cell_selections_in[1][0];
    cell_selections[1][1] = cell_selections_in[1][1];
    cell_selections[1][2] = cell_selections_in[1][2];
+
+   // Order the cell selections s.t. [0][*] is in the LL and [1][*] is in the UR
+   for (int ind = 0; ind < 3; ind++) {
+      if (cell_selections[1][ind] < cell_selections[0][ind]) {
+         int temp = cell_selections[0][ind];
+         cell_selections[0][ind] = cell_selections[1][ind];
+         cell_selections[1][ind] = temp;
+      }
+   }
+
 }
 
-void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs)
+void MAP::set_uncommited_job_cells (bool reset_uncommitted_jobs, int mode)
 {
    if (reset_uncommitted_jobs) unselect_uncommitted_jobs ();
 
-   int start[3] = {
-      MIN (cell_selections[0][0], cell_selections[1][0]),
-      MIN (cell_selections[0][1], cell_selections[1][1]),
-      MIN (cell_selections[0][2], cell_selections[1][2]) };
-
-   int end[3] = {
-      MAX (cell_selections[0][0], cell_selections[1][0]),
-      MAX (cell_selections[0][1], cell_selections[1][1]),
-      MAX (cell_selections[0][2], cell_selections[1][2]) };
-
-   for (int ind_z = start[2]; ind_z <= end[2]; ind_z++) {
-      for (int ind_y = start[1]; ind_y < end[1]; ind_y++) {
-         for (int ind_x = start[0]; ind_x < end[0]; ind_x++)
+   for (int ind_z = cell_selections[0][2]; ind_z <= cell_selections[1][2]; ind_z++) {
+      for (int ind_y = cell_selections[0][1]; ind_y < cell_selections[1][1]; ind_y++) {
+         for (int ind_x = cell_selections[0][0]; ind_x < cell_selections[1][0]; ind_x++)
          {
             int job_index =
                ind_x                     +
                ind_y * size[0]           +
                ind_z * size[0] * size[1];
 
-            // Assign the uncommitted jobs if there's material
-            if (material[job_index] > 0)
-               uncommitted_jobs[job_index] = true;
+            if (mode == mode::REMOVE) {
+               if (material[job_index] > 0)
+                  uncommitted_jobs[job_index] = true;
+            }
+
+            else if (mode == mode::BUILD) {
+               if (material[job_index] == 0)
+                  uncommitted_jobs[job_index] = true;
+            }
          }
       }
    }
@@ -300,5 +321,11 @@ unsigned int MAP::get_view_plain (int ind[2])
 void MAP::remove_cell (int flat_ind)
 {
    material[flat_ind] = 0;
+   update ();
+}
+
+void MAP::add_cell (unsigned int in_material, int flat_ind)
+{
+   material[flat_ind] = in_material;
    update ();
 }

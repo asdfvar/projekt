@@ -28,8 +28,6 @@ bool Button::lclick (float x, float y, float menu_ul[2])
 
 bool Button::lunclick (float x, float y, float menu_ul[2])
 {
-std::cout << "menu_ul = " << menu_ul[0] << ", " << menu_ul[1] << std::endl;
-std::cout << "ul = " << ul[0] << ", " << ul[1] << std::endl;
    if (menu_ul[0] + ul[0] + width >= x && x >= menu_ul[0] + ul[0] &&
          menu_ul[1] + ul[1] >= y && y >= menu_ul[1] + ul[1] - height)
       return true;

@@ -123,4 +123,22 @@ class BuildMenu : public BaseMenu
       Button *button_item;
 };
 
+class BuildMaterialMenu : public BaseMenu
+{
+   public:
+
+      BuildMaterialMenu (void);
+      ~BuildMaterialMenu (void);
+
+      int  get_menu_id (void)               override;
+      int  lclick      (float x,  float y ) override;
+      int  lunclick    (float x,  float y ) override;
+      void translate   (float dx, float dy) override;
+      void show        (void)               override;
+
+   private:
+
+      Button *button_stone;
+};
+
 #endif

@@ -1,7 +1,7 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-namespace tid
+namespace mid
 {
    const unsigned int dirt  = 1;
    const unsigned int grass = 2;
@@ -15,7 +15,7 @@ class Item
       {
          type = type_in;
 
-         if (type == tid::stone) weight = 1.0f;
+         if (type == mid::stone) weight = 1.0f;
          else weight = 0.0f;
       };
 

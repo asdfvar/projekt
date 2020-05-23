@@ -27,14 +27,30 @@ void Job::act (float Qin)
    if (work >= energy) complete = true;
 }
 
-JobRemove::JobRemove (int flattened_index_in, int location_in[3], unsigned int material_in) : Job (flattened_index_in, location_in)
+JobRemove::JobRemove (
+      int flattened_index_in,
+      int location_in[3],
+      unsigned int material_in) : Job (flattened_index_in, location_in)
 {
    job_type = jid::REMOVE;
 
    material = material_in;
 
-   if      (material == tid::stone) energy = 0.4f;
-   else if (material == tid::dirt)  energy = 0.2f;
-   else if (material == tid::grass) energy = 0.25f;
+   if      (material == mid::stone) energy = 0.4f;
+   else if (material == mid::dirt)  energy = 0.2f;
+   else if (material == mid::grass) energy = 0.25f;
 }
 
+JobBuild::JobBuild (
+      int flattened_index_in,
+      int location_in[3],
+      unsigned int material_in) : Job (flattened_index_in, location_in)
+{
+   job_type = jid::BUILD;
+
+   material = material_in;
+
+   if      (material == mid::stone) energy = 0.4f;
+   else if (material == mid::dirt)  energy = 0.2f;
+   else if (material == mid::grass) energy = 0.25f;
+}
