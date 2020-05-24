@@ -17,3 +17,5 @@ rename method "map_dim" to "size"
 write conversion routine between window view and map position
 
 make job subclass specific to the type of job it is
+
+update air and ground cells individually rather than recompute them everytime so that they can be managed independently of actual cell material (i.e. a job in the process of filling in a space)
