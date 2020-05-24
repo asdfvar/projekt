@@ -298,10 +298,8 @@ void Society::update (float time_step)
             if (unit_flat_ind == flat_ind) unit_coincides = true;
          }
 
-         if (unit_coincides) continue;
-
-         // Complete the job if it's done
-         if (job->is_complete ())
+         // Complete the job if it's done and no other units conflict with its completion
+         if (job->is_complete () && !unit_coincides)
          {
             // Perform the complete action for the job
             if (job->get_type () == jid::REMOVE)
