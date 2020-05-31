@@ -29,7 +29,6 @@ class MAP
       bool get_ground_cell (int ind[3]);
       unsigned int get_material (int ind) { return material[ind]; };
       unsigned int get_material (int ind[3]);
-      void set_build_job        (int ind[3], unsigned int material);
 
       int shape (int dim) { return size[dim]; };
 
@@ -58,7 +57,6 @@ class MAP
       int map_layer;
 
       bool *uncommitted_jobs;
-      unsigned int  *build_jobs;
 
       unsigned int *view_plain;
       int *view_depth;

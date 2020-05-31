@@ -6,18 +6,89 @@
 // #define USE_GENERAL
 #define USE_EUCLIDEAN
 
+#define SEARCH_RADIUS 10
+
 static inline int ijk_to_ind (int i, int j, int k, int I, int J, int K)
 {
    int ind = (k * I * J) + (j * I) + i;
    return ind;
 }
 
-static inline int ind_to_axis (int index, int *dim, int size, int select_axis_ind)
+static inline int ind_to_axis (int index, int *dim, int select_axis_ind)
 {
    int denomitator = 1;
    for (int ind = 0; ind < select_axis_ind; ind++) denomitator *= dim[ind];
    
    return (index / denomitator) % dim[select_axis_ind];
+}
+
+int search (
+      const bool *nodes,
+      int         dim[3],
+      int         src[3])
+{
+   bool found = false;
+
+   int mod_ind;
+
+   enum directions {
+      UP,
+      LEFT,
+      FORWARD,
+      RIGHT,
+      BACK,
+      DOWN,
+      SIZE };
+
+   int perm[SEARCH_RADIUS];
+
+   for (int radius = 0; !found && radius <= SEARCH_RADIUS; radius++)
+   {
+      unsigned int combinations = 1;
+      for (int ind = 0; ind < radius; ind++) combinations *= 6;
+
+      for (int ind = 0; ind < radius; ind++) perm[ind] = 0;
+
+      for (int itt = 0; itt < combinations; itt++)
+      {
+         int curr_ind = 
+            ijk_to_ind (src[0], src[1], src[2], dim[0], dim[1], dim[2]);
+
+         mod_ind = curr_ind;
+
+         // traverse the current permutation to produce the modified index
+         for (int ind = 0; ind < radius; ind++) {
+            int x = ind_to_axis (mod_ind, dim, 0);
+            int y = ind_to_axis (mod_ind, dim, 1);
+            int z = ind_to_axis (mod_ind, dim, 2);
+
+            if      (perm[ind] == UP     ) { z++; if (z >= dim[2]) z = dim[2] - 1; }
+            else if (perm[ind] == LEFT   ) { x--; if (x < 0      ) x = 0;          }
+            else if (perm[ind] == FORWARD) { y++; if (y >= dim[1]) y = dim[1] - 1; }
+            else if (perm[ind] == RIGHT  ) { x++; if (x >= dim[0]) x = dim[0] - 1; }
+            else if (perm[ind] == BACK   ) { y--; if (y < 0      ) y = 0;          }
+            else if (perm[ind] == DOWN   ) { z--; if (z < 0      ) z = 0;          }
+
+            mod_ind = ijk_to_ind (x, y, z, dim[0], dim[1], dim[2]);
+         }
+
+         // Check the current permutation
+         if (nodes[mod_ind] == true) {
+            found = true;
+            break;
+         }
+
+         // Increment the permutation
+         perm[0]++;
+         for (int ind = 0; ind < radius; ind++) {
+            if (perm[ind] == SIZE) {
+               perm[ind+1]++;
+               perm[ind] = 0;
+            }
+         }
+      }
+   }
+   return mod_ind;
 }
 
 int cost_function_one_step (

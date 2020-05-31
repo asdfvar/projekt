@@ -19,6 +19,10 @@ inline int ind_to_k (int ind, int I, int J, int K)
    return k;
 }
 
+int search (
+      const bool *nodes,
+      int         dim[3],
+      int         src[3]);
 
 int cost_function_one_step (
       const bool  *nodes,

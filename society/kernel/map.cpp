@@ -31,7 +31,6 @@ MAP::MAP (int size_in[3])
    max_depth = 8;
 
    uncommitted_jobs = new bool         [size[0] * size[1] * size[2]];
-   build_jobs       = new unsigned int [size[0] * size[1] * size[2]];
 
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) air[ind]        = false;
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) ground[ind]     = false;
@@ -39,7 +38,6 @@ MAP::MAP (int size_in[3])
    for (int ind = 0; ind < size[0] * size[1]; ind++          ) view_depth[ind] = 0;
    for (int ind = 0; ind < size[0] * size[1]; ind++          ) weight[ind]     = 0.0f;
    for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) material[ind]   = 0;
-   for (int ind = 0; ind < size[0] * size[1] * size[2]; ind++) build_jobs[ind] = 0;
 
    float *perlin_array = new float[size[0] * size[1]];
    int num_grid_cells[2] = { 4, 4 };
@@ -88,7 +86,6 @@ MAP::~MAP (void)
    delete[] ground;
    delete[] material;
    delete[] uncommitted_jobs;
-   delete[] build_jobs;
    delete[] view_plain;
    delete[] view_depth;
 }
@@ -186,16 +183,6 @@ unsigned int MAP::get_material (int ind[3])
       ind[0];
 
    return material[flattened_ind];
-}
-
-void MAP::set_build_job (int ind[3], unsigned int material)
-{
-   int flattened_ind =
-      ind[2] * size[0] * size[1] +
-      ind[1] * size[0]           +
-      ind[0];
-
-   build_jobs[flattened_ind] = material;
 }
 
 // Ground map is dependent on the air map. It is the same with the exception that

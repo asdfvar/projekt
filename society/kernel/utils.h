@@ -14,22 +14,21 @@ static float window_to_cell (
 }
 
 // Convert a flattened index to the specified Cartesian index
-static int flat_ind_to_dim (int dim, int flat_ind, int *size)
+static int flat_ind_to_dim (int select_dim, int flat_ind, int *size)
 {
-
    int prod = 1;
 
-   for (int ind = 0; ind < dim; ind++)
+   for (int ind = 0; ind < select_dim; ind++)
       prod *= size[ind];
 
    int ret = flat_ind / prod;
 
-   ret %= size[dim];
+   ret %= size[select_dim];
 
    return ret;
 }
 
-// Convert a flattened index to the specified Cartesian index
+// Convert a specified Cartesian index to the corresponding flattened index to the 
 static int dim_to_flat_ind (int dim, int *ind, int *size)
 {
    int prod = 1;

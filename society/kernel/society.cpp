@@ -317,6 +317,7 @@ void Society::update (float time_step)
             // Remove the job from the unit's list
             unit->pop_active_job ();
 
+std::cout << "about to delete job at " << job << std::endl;
             delete job;
          }
       }
@@ -452,19 +453,6 @@ void Society::select_cells (int cell_selections[2][3])
 void Society::set_select_cells (bool reset_uncommitted_jobs_size, int mode)
 {
    Map->set_uncommited_job_cells (reset_uncommitted_jobs_size, mode);
-}
-
-void Society::set_build_cells (int cell_selections[2][3], int material)
-{
-   // Set the build jobs
-   for (int cell = 0, cellz = cell_selections[0][2]; cellz <= cell_selections[1][2]; cellz++) {
-      for (int celly = cell_selections[0][1]; celly <= cell_selections[1][1]; celly++) {
-         for (int cellx = cell_selections[0][1]; cellx <= cell_selections[1][1]; cellx++, cell++) {
-            int cells[3] = { cellx, celly, cellz };
-            if (Map->get_material (cells) == 0) Map->set_build_job (cells, material);
-         }
-      }
-   }
 }
 
 void Society::set_jobs (int job_type, unsigned int jobmaterial)

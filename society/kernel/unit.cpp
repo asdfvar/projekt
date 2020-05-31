@@ -194,17 +194,32 @@ void Unit::update (float time_step)
       }
 
       // Check if this unit is inside a block
-      if (ground_cell_value == false && air_cell_value == false)
+      if (ground_cell_value == false || air_cell_value == false)
       {
          // Relinquish this unit from all its jobs
          jm.set_return_all_jobs ();
 
+std::cout << __FILE__ << __LINE__ << ":" << this << " got_here" << std::endl;
+#if 0
          // Push the unit upwards until it's no longer inside a block
          for (ground_cell_value = Map->get_ground_cell (position_cell);
                ground_cell_value == false; position_cell[2] += 1)
          {
             position[2] += 1.0f;
          }
+#else
+         int size[3] = {
+            Map->shape (0),
+            Map->shape (1),
+            Map->shape (2) };
+
+         const bool *ground_cells = Map->access_ground ();
+         int flat_ind = search (ground_cells, size, position_cell);
+         position[0] = static_cast<float> (flat_ind_to_dim (0, flat_ind, size));
+         position[1] = static_cast<float> (flat_ind_to_dim (1, flat_ind, size));
+         position[2] = static_cast<float> (flat_ind_to_dim (2, flat_ind, size));
+#endif
+std::cout << __FILE__ << __LINE__ << ":" << this << " got_here" << std::endl;
       }
 
       // Check for internal queued jobs

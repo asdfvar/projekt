@@ -29,7 +29,6 @@ class Society
       void select_group (int group_number);
       void select_cells (int cell_selections[2][3]);
       void set_select_cells (bool reset_uncommitted_jobs_size, int mode);
-      void set_build_cells (int cell_selections[2][3], int material);
 
       void set_jobs (int job_type, unsigned int jobmaterial);
 
