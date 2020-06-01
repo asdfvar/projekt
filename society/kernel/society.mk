@@ -6,6 +6,8 @@ CC = g++
 
 INC = -I $(BASE_DIR)
 
+FLAGS = -g
+
 OBJDIR = objdir
 
 OBJS = $(OBJDIR)/society.o     \
@@ -32,4 +34,4 @@ clean:
 	rm $(OBJS) $(LIBNAME)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CC) $(INC) $^ $(DIRECTIVES) -c -o $@
+	$(CC) $(INC) $(FLAGS) $^ $(DIRECTIVES) -c -o $@

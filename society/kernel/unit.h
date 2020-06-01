@@ -30,11 +30,12 @@ class Unit
       Job *access_job (int ind) { return jm.access_job (ind); };
       Job *access_active_job (void) { return jm.access_active_job (); };
       bool available_job_slots (void);
-      int num_jobs (void) { return jm.num_total_jobs (); };
+      int num_jobs (void) { return jm.num_jobs (); };
+      int num_return_jobs (void) { return jm.num_return_jobs (); };
+      int num_total_jobs (void) { return jm.num_total_jobs (); };
       Job *pop_return_job (void);
       Job *pop_active_job (void) { return jm.pop_active_job (); };
-      int return_jobs_size (void) { return jm.num_return_jobs (); };
-      Job *return_job (void)      { return jm.pop_return_job ();  };
+      Job *return_job (void)     { return jm.pop_return_job (); };
       virtual void draw (float *transform, float *translation) {};
 
    protected:

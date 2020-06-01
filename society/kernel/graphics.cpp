@@ -188,6 +188,8 @@ void Society::draw_queued_jobs (
    for (int job_ind = 0; job_ind < queued_jobs.size (); job_ind++)
    {
       Job *job = queued_jobs.access (job_ind);
+//if (queued_jobs.test_nulls ()) std::cout << "NULLS!" << std::endl;
+if (job == nullptr) std::cout << __FILE__ << __LINE__ << ":queued_jobs size = " << queued_jobs.size () << std::endl;
       if (job->get_position (2) != map_layer) continue;
 
       int col = job->get_position (0);
@@ -235,45 +237,49 @@ void Society::draw_unit_jobs (
    {
       Unit *unit = units.access (unit_ind);
 
-      for (int job_ind = 0; job_ind < unit->num_jobs (); job_ind++)
-      {
-         Job *job;
-         if (job_ind == 0)
+      if (unit->num_jobs () > 0) {
+         for (int job_ind = 0; job_ind < unit->num_jobs (); job_ind++)
          {
-            job = unit->access_active_job ();
-            glColor3f (0.0f, 1.0f, 1.0f);
+            Job *job;
+            if (job_ind == 0)
+            {
+               job = unit->access_active_job ();
+               glColor3f (0.0f, 1.0f, 1.0f);
+            }
+            else
+            {
+               job = unit->access_job (job_ind - 1);
+               glColor3f (0.0f, 0.5f, 0.5f);
+            }
+
+            if (job == nullptr) return;
+
+            if (job->get_position (2) != map_layer) continue;
+
+            int col = job->get_position (0);
+            int row = job->get_position (1);
+
+            float vertex_x = starting_col_loc + block_width  * (float)col;
+            float vertex_y = starting_row_loc + block_height * (float)row;
+
+            glBegin (GL_POLYGON);
+
+            float point0[2] = { vertex_x,               vertex_y               };
+            float point1[2] = { vertex_x + block_width, vertex_y               };
+            float point2[2] = { vertex_x + block_width, vertex_y + block_width };
+            float point3[2] = { vertex_x,               vertex_y + block_width };
+
+            transformation (point0, transform, translation);
+            transformation (point1, transform, translation);
+            transformation (point2, transform, translation);
+            transformation (point3, transform, translation);
+
+            glVertex2f (point0[0], point0[1]);
+            glVertex2f (point1[0], point1[1]);
+            glVertex2f (point2[0], point2[1]);
+            glVertex2f (point3[0], point3[1]);
+            glEnd ();
          }
-         else
-         {
-            job = unit->access_job (job_ind - 1);
-            glColor3f (0.0f, 0.5f, 0.5f);
-         }
-
-         if (job->get_position (2) != map_layer) continue;
-
-         int col = job->get_position (0);
-         int row = job->get_position (1);
-
-         float vertex_x = starting_col_loc + block_width  * (float)col;
-         float vertex_y = starting_row_loc + block_height * (float)row;
-
-         glBegin (GL_POLYGON);
-
-         float point0[2] = { vertex_x,               vertex_y               };
-         float point1[2] = { vertex_x + block_width, vertex_y               };
-         float point2[2] = { vertex_x + block_width, vertex_y + block_width };
-         float point3[2] = { vertex_x,               vertex_y + block_width };
-
-         transformation (point0, transform, translation);
-         transformation (point1, transform, translation);
-         transformation (point2, transform, translation);
-         transformation (point3, transform, translation);
-
-         glVertex2f (point0[0], point0[1]);
-         glVertex2f (point1[0], point1[1]);
-         glVertex2f (point2[0], point2[1]);
-         glVertex2f (point3[0], point3[1]);
-         glEnd ();
       }
    }
 }

@@ -150,7 +150,10 @@ Type *Container<Type>::access (int index)
 {
    // advance to the desired object node index
    bool stat = advance (index);
-   if (!stat) return nullptr;
+   if (!stat) {
+      std::cout << "advancement error, returning null" << std::endl;
+      return nullptr;
+   }
 
    return current_node->object;
 }
@@ -219,6 +222,44 @@ void Container<Type>::test_ends (void)
          << " not defined " << current_node->object
          << std::endl;
    }
+}
+
+   template <typename Type>
+bool Container<Type>::test_duplicates (void)
+{
+   bool duplicate = false;
+
+   Node *node1 = front_node;
+   Node *node2 = front_node;
+   
+   while (node1 != back_node) {
+      node2 = node1;
+      while (node2 != back_node) {
+         node2 = node2->next;
+         if (node1->object == node2->object) {
+            std::cout << "duplicate found: node1 object = "
+               << node1->object << " = " << node2->object
+               << " = node2 object" << std::endl;
+            duplicate = true;
+         }
+      }
+   }
+
+   return duplicate;
+}
+
+   template <typename Type>
+bool Container<Type>::test_nulls (void)
+{
+   bool nulls = false;
+   Node *node = front_node;
+
+   while (node != back_node) {
+      if (node->object == nullptr) nulls = true;
+      node = node->next;
+   }
+
+   return nulls;
 }
 
    template <typename Type>
@@ -353,6 +394,8 @@ template void  Container<Job>::reset            (void     );
 template bool  Container<Job>::advance          (int      );
 template void  Container<Job>::list_contents    (void     );
 template void  Container<Job>::test_ends        (void     );
+template bool  Container<Job>::test_duplicates  (void     );
+template bool  Container<Job>::test_nulls       (void     );
 
 // Define container types for the unit class
 template void  Container<Unit>::insert          (Unit*, int);
@@ -366,6 +409,8 @@ template void  Container<Unit>::reset           (void      );
 template bool  Container<Unit>::advance         (int       );
 template void  Container<Unit>::list_contents   (void      );
 template void  Container<Unit>::test_ends       (void      );
+template bool  Container<Unit>::test_duplicates (void      );
+template bool  Container<Unit>::test_nulls      (void      );
 
 // Define container types for the items class
 template void  Container<Item>::insert          (Item*, int);
@@ -379,6 +424,8 @@ template void  Container<Item>::reset           (void      );
 template bool  Container<Item>::advance         (int       );
 template void  Container<Item>::list_contents   (void      );
 template void  Container<Item>::test_ends       (void      );
+template bool  Container<Item>::test_duplicates (void      );
+template bool  Container<Item>::test_nulls      (void      );
 
 // Lattice for the Cell type
 template Lattice<Cell>::Lattice (int *size_in, int dim_in);

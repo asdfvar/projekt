@@ -3,6 +3,7 @@
 
 #include "container.h"
 #include "jobs.h"
+#include <pthread.h>
 
 class Job_manager
 {
@@ -12,6 +13,16 @@ class Job_manager
       {
          jobs_limit = 1;
          active_job = 0;
+         initialize ();
+      };
+
+     ~Job_manager (void)
+     {
+        pthread_mutex_destroy (&lock);
+     }
+
+      void initialize (void) {
+         pthread_mutex_init (&lock, nullptr);
       };
 
       void assign_job (Job *job)
@@ -52,10 +63,16 @@ class Job_manager
 
       Job *pop_return_job (void)
       {
-         if (return_jobs.size () > 0)
-            return return_jobs.back ();
+         Job *job = nullptr;
 
-         else return nullptr;
+         pthread_mutex_lock (&lock);
+
+         if (return_jobs.size () > 0)
+            job = return_jobs.pop_back ();
+
+         pthread_mutex_unlock (&lock);
+
+         return job;
       };
 
       Job *pop_active_job (void)
@@ -71,7 +88,8 @@ class Job_manager
 
       void set_return_all_jobs (void)
       {
-         while (jobs_list.size () > 0) return_jobs.push_front (jobs_list.pop_back ());
+         Job *job = jobs_list.pop_back ();
+         while (jobs_list.size () > 0) return_jobs.push_front (job);
       };
 
       int get_active_job_position (int ind)
@@ -87,19 +105,30 @@ class Job_manager
 
       Job *access_job (int ind)
       {
+         if (jobs_list.size () <= 0) {
+            std::cout << "error: no jobs to access" << std::endl;
+            return nullptr;
+         }
          return jobs_list.access (ind);
       };
 
-      Job *access_active_job (void) { return jobs_list.back (); };
+      Job *access_active_job (void)
+      {
+         if (jobs_list.size () <= 0) {
+            std::cout << "error: no active jobs to access" << std::endl;
+            return nullptr;
+         }
 
-private:
+         return jobs_list.back ();
+      };
 
-      Job *active_job;
+   private:
 
-      int jobs_limit;
-      Container<Job> jobs_list;
-      Container<Job> return_jobs;
+      pthread_mutex_t lock;
+
+      Job            *active_job;
+      int             jobs_limit;
+      Container<Job>  jobs_list;
+      Container<Job>  return_jobs;
 };
-
-
 #endif

@@ -20,6 +20,8 @@ Unit::Unit (
 {
    tic   = rand ();
 
+   jm.initialize ();
+
    state = STANDBY;
 
    direction = 0.0f;
@@ -193,13 +195,13 @@ void Unit::update (float time_step)
          return;
       }
 
-      // Check if this unit is inside a block
+      // Check if this unit is in an invalid block
       if (ground_cell_value == false || air_cell_value == false)
       {
          // Relinquish this unit from all its jobs
          jm.set_return_all_jobs ();
 
-std::cout << __FILE__ << __LINE__ << ":" << this << " got_here" << std::endl;
+std::cout << __FILE__ << __LINE__ << ":unit " << this << " is in an invalid block" << std::endl;
 #if 0
          // Push the unit upwards until it's no longer inside a block
          for (ground_cell_value = Map->get_ground_cell (position_cell);
@@ -219,7 +221,7 @@ std::cout << __FILE__ << __LINE__ << ":" << this << " got_here" << std::endl;
          position[1] = static_cast<float> (flat_ind_to_dim (1, flat_ind, size));
          position[2] = static_cast<float> (flat_ind_to_dim (2, flat_ind, size));
 #endif
-std::cout << __FILE__ << __LINE__ << ":" << this << " got_here" << std::endl;
+std::cout << __FILE__ << __LINE__ << ":resolved unit " << this << " invalid block issue" << std::endl;
       }
 
       // Check for internal queued jobs

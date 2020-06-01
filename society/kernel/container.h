@@ -30,8 +30,10 @@ class Container
 
       int size (void) { return container_size; };
 
-      void list_contents (void);
-      void test_ends     (void);
+      void list_contents   (void);
+      void test_ends       (void);
+      bool test_duplicates (void);
+      bool test_nulls      (void);
 
    private:
 

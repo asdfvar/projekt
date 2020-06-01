@@ -195,8 +195,11 @@ void Society::set_destination (int destination[3], bool selected_units)
       if (location_value >= 0)
       {
          // Return any jobs the unit has if any
-         while (unit->num_jobs () > 0)
-            queued_jobs.push_front (unit->pop_return_job ());
+         while (unit->num_return_jobs () > 0) {
+            Job *job = unit->pop_return_job ();
+std::cout << __FILE__ << __LINE__ << ":returning job " << job << " to the queued jobs" << std::endl;
+            queued_jobs.push_front (job);
+         }
 
          // Set the unit destination
          unit->set_destination (dest);
@@ -251,10 +254,12 @@ void Society::update (float time_step)
 
             if (accessible)
             {
+std::cout << __FILE__ << __LINE__ << ":assigning job " << job << " to unit " << unit << " num queued jobs = " << queued_jobs.size () << std::endl;
                // The job is accessible to the unit, assign it to the unit
                // and remove this job from the list since it now belongs to the unit
                unit->assign_job (queued_jobs.pop (current_job_index--));
                if (current_job_index < 0) current_job_index = 0;
+std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
             }
          }
       }
@@ -317,15 +322,21 @@ void Society::update (float time_step)
             // Remove the job from the unit's list
             unit->pop_active_job ();
 
-std::cout << "about to delete job at " << job << std::endl;
+std::cout << __FILE__ << __LINE__ << "unit " << unit << " about to delete job " << job << " num jobs = " << unit->num_jobs () << std::endl;
             delete job;
          }
       }
 
-      // Return an undoable job from this unit
-      if (unit->return_jobs_size () > 0)
+      // Return all undoable jobs from this unit
+      while (unit->num_return_jobs () > 0)
       {
-         queued_jobs.push_front (unit->return_job ());
+//bool duplicate = queued_jobs.test_duplicates ();
+//if (duplicate) std::cout << __FILE__ << __LINE__ << ":duplicate found here" << std::endl;
+         Job *job = unit->return_job ();
+std::cout << __FILE__ << __LINE__ << ":returning unit " << unit << "'s job " << job << ". num queued jobs = " << queued_jobs.size() << std::endl;
+         queued_jobs.push_front (job);
+//duplicate = queued_jobs.test_duplicates ();
+//if (duplicate) std::cout << __FILE__ << __LINE__ << ":duplicate found here" << std::endl;
       }
 
       // Update the unit's position and path planning
@@ -490,7 +501,7 @@ void Society::set_jobs (int job_type, unsigned int jobmaterial)
             for (int unit_ind = 0; unit_ind < units.size (); unit_ind++)
             {
                Unit *unit = units.access (unit_ind);
-               for (int job_ind = 0; job_ind < unit->num_jobs(); job_ind++)
+               for (int job_ind = 0; job_ind < unit->num_total_jobs(); job_ind++)
                {
                   Job *job = unit->access_job (job_ind);
                   int location_ind = job->get_flattened_loc_index ();
@@ -505,11 +516,15 @@ void Society::set_jobs (int job_type, unsigned int jobmaterial)
                flat_ind_to_dim (1, ind, size),
                flat_ind_to_dim (2, ind, size) };
 
-            if      (job_type == jid::REMOVE)
-               queued_jobs.push_front (new JobRemove (ind, location, Map->get_material (location)));
+            if (job_type == jid::REMOVE) {
+               Job *job = new JobRemove (ind, location, Map->get_material (location));
+std::cout << __FILE__ << __LINE__ << "creating new REMOVE job " << job << " to append to the jobs list. num queued jobs = " << queued_jobs.size () << std::endl;
+               queued_jobs.push_front (job);
+            }
             else if (job_type == jid::BUILD) {
-               // TODO: condition for the material for this job
-               queued_jobs.push_front (new JobBuild (ind, location, jobmaterial));
+               Job *job = new JobBuild (ind, location, jobmaterial);
+std::cout << __FILE__ << __LINE__ << "creating new BUILD job " << job << " to append to the jobs list. num queued jobs = " << queued_jobs.size () << std::endl;
+               queued_jobs.push_front (job);
             }
             else
                std::cout << __FILE__ << __LINE__ << ":job ID not supported, resolve this" << std::endl;
