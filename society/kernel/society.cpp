@@ -259,7 +259,6 @@ std::cout << __FILE__ << __LINE__ << ":assigning job " << job << " to unit " << 
                // and remove this job from the list since it now belongs to the unit
                unit->assign_job (queued_jobs.pop (current_job_index--));
                if (current_job_index < 0) current_job_index = 0;
-std::cout << __FILE__ << __LINE__ << ":got_here" << std::endl;
             }
          }
       }
